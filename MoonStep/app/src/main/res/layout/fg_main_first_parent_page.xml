@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <View
+        android:id="@+id/div_tab_bar"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_above="@id/rg_tab_bar"
+        android:background="@color/div_white"/>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/div_tab_bar"/>
+
+    <RadioGroup
+        android:id="@+id/rg_tab_bar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="#fff"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+        <RadioButton
+            android:id="@+id/rb_moon"
+            style="@style/tab_menu_item"
+            android:drawableTop="@drawable/tab_menu_moon"
+            android:text="@string/tab_menu_moon" />
+
+        <RadioButton
+            android:id="@+id/rb_pet"
+            style="@style/tab_menu_item"
+            android:drawableTop="@drawable/tab_menu_pet"
+            android:text="@string/tab_menu_pet" />
+
+        <RadioButton
+            android:id="@+id/rb_heart"
+            style="@style/tab_menu_item"
+            android:drawableTop="@drawable/tab_menu_heart"
+            android:text="@string/tab_menu_heart" />
+
+        <RadioButton
+            android:id="@+id/rb_me"
+            style="@style/tab_menu_item"
+            android:drawableTop="@drawable/tab_menu_me"
+            android:text="@string/tab_menu_me" />
+    </RadioGroup>
+
+</RelativeLayout>

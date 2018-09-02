@@ -1,0 +1,70 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        app:titleTextColor="@color/white"/>
+
+    <ImageView
+        android:id="@+id/ivPhoto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
+        android:transitionName="shared"
+        tools:layout_height="100dp" />
+
+    <RelativeLayout
+        android:id="@+id/scopeHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/Black"
+        android:layout_below="@+id/ivPhoto">
+
+        <TextView
+            android:id="@+id/titleName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:textColor="@color/white"
+            android:padding="16dp"
+            android:text="@string/title_name"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/titleLevel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:textColor="@color/white"
+            android:padding="16dp"
+            android:text="@string/title_level"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_below="@+id/scopeHeader"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:padding="10dp"
+        android:background="@mipmap/full_into_fragment_tv_background">
+        <TextView
+            android:id="@+id/title_description"
+            android:layout_width="215dp"
+            android:layout_height="170dp"
+            android:gravity="center"
+            android:textSize="22sp"
+            android:textColor="#fff"
+            />
+    </LinearLayout>
+
+
+</RelativeLayout>

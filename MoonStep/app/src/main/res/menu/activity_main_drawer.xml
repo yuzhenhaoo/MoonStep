@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_place"
+            android:icon="@drawable/place"
+            android:title="@string/moon_place" />
+        <item
+            android:id="@+id/nav_real_world"
+            android:icon="@drawable/real_world"
+            android:title="@string/real_world" />
+        <item
+            android:id="@+id/nav_wangguan"
+            android:icon="@drawable/wangguan"
+            android:title="@string/moon_title" />
+        <item
+            android:id="@+id/nav_task"
+            android:icon="@drawable/task"
+            android:title="@string/moon_task" />
+    </group>
+
+    <item android:title="@string/contact_us">
+        <menu>
+            <item
+                android:id="@+id/nav_kefu"
+                android:icon="@drawable/kefu"
+                android:title="@string/moon_customer" />
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/share"
+                android:title="@string/share"/>
+        </menu>
+    </item>
+
+</menu>

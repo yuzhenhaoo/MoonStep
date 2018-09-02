@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true">
+        <layer-list android:layout_height="match_parent">
+            <!-- 呈现内容-->
+            <item>
+                <shape xmlns:android="http://schemas.android.com/apk/res/android" android:innerRadius="0dp" android:shape="ring" android:thickness="20dp" android:useLevel="false">
+                    <gradient android:angle="-90" android:endColor="#97e4f9" android:startColor="#f70105" />
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+    <item>
+        <layer-list android:layout_height="match_parent">
+            <!--阴影部分-->
+            <item>
+                <shape xmlns:android="http://schemas.android.com/apk/res/android" android:innerRadius="0dp" android:shape="ring" android:thickness="20dp" android:useLevel="false">
+                    <solid android:color="#598b8a8a" />
+                </shape>
+            </item>
+            <!-- 呈现内容-->
+            <item android:bottom="4dp" android:right="4dp">
+                <shape xmlns:android="http://schemas.android.com/apk/res/android" android:innerRadius="0dp" android:shape="ring" android:thickness="20dp" android:useLevel="false">
+                    <gradient android:angle="-90" android:endColor="#67d3f1" android:startColor="#ff000d" />
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+</selector>
