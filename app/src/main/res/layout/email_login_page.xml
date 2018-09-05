@@ -17,13 +17,15 @@
             android:paddingEnd="30dp"
             android:background="@drawable/register_background">
             <EditText
+                android:id="@+id/account"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="50dp"
                 android:textColorHint="#ffffff"
-                android:hint="@string/input_phone"
+                android:hint="@string/input_email"
                 android:inputType="number"/>
             <EditText
+                android:id="@+id/password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="50dp"
@@ -34,9 +36,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:gravity="center"
                 android:layout_marginTop="50dp"
+                android:gravity="center"
                 android:orientation="vertical">
                 <Button
                     android:id="@+id/click_login"
@@ -44,9 +45,8 @@
                     android:layout_height="35dp"
                     android:textColor="#fff"
                     android:text="@string/click_login"
-                    android:elevation="10dp"
+                    android:translationZ="10dp"
                     android:background="@drawable/black_or_white_button_background"/>
-
             </LinearLayout>
         </LinearLayout>
 

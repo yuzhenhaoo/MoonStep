@@ -19,10 +19,37 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:appcompat-v7:28.0.0-rc02'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    configurations {
+        all*.exclude group: 'com.android.support', module: 'support-v4'
+    }
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support:appcompat-v7:28.0.0-rc01'
+    implementation 'com.android.support:design:28.0.0-rc01'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    //为了使用CircleImageView引入其jar包
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
+    //导入recycleView的包
+    implementation 'com.android.support:recyclerview-v7:28.0.0-rc01'
+    //导入fanLayoutManager的包
+    implementation 'com.cleveroad:fan-layout-manager:1.0.5'
+    //导入CardView的包
+    implementation 'com.android.support:cardview-v7:28.0.0-rc01'
+    implementation 'com.android.support:design:28.0.0-rc01'
+    //导入传送带风格的LayoutManager的包
+    implementation 'com.azoft.carousellayoutmanager:carousel:1.2.4'
+    //导入流体形式的button包
+    implementation 'com.nightonke:jellytogglebutton:1.0.2'
+    implementation 'com.yalantis:phoenix:1.2.3'
+    //黄油刀
+    implementation 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    //ContextMenuDialogFragment
+    implementation 'com.github.Yalantis:Context-Menu.Android:1.0.8'
+    //NiftyDialogEffects
+    implementation 'com.github.sd6352051:NiftyDialogEffects:v1.0.3'
+    //volley
+    implementation 'com.mcxiaoke.volley:library:1.0.19'
 }
