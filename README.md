@@ -6,9 +6,17 @@
 
 ###　程序界面
 
-- 开始页面
+- 引导页
 
-![](/images/start_page.png)
+![](/images/guide_page0.png)
+
+![](/images/guide_page1.png)
+
+![](/images/guide_page2.png)
+
+![](/images/guide_page3.png)
+
+![](/images/guide_page4.png)
 
 - 登录界面
 
@@ -120,16 +128,6 @@ UI设计工具：墨刀
 8/23/2018 8:19:01 AM 
 
 背包界面完成，采用网格布局，内置功能尚未完成，方格采用ImageView的组件实现，物品栏目使用前景进行填充，并对每个item进行监控，点击后进行弹窗，尚未进行设置。
-
-2018/9/2 23:38:07 PM
-
-为了打造后台，申请付费云服务器进行配置，并映射到外网，可通过外网打开配置服务器。（公网ip:http://xxx.xxx.xxx.xxx,很抱歉为了安全起见这里不能贴出来实际的公网ip）
-
-2018/9/5 11:31:25 
-
-后台基本打造完成，过程使用的后台资源：
-MySQL+JAVAWeb+Tomcat
-客户端使用网络请求框架：Volley
 
 #### Bug流程一览
 
