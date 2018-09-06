@@ -19,17 +19,14 @@
     <string name="login_weixin">微信登录</string>
     <string name="login_qq">QQ登录</string>
     <string name="login_weibo">微博登录</string>
-    <string name="register">还没有账号，使用手机号码注册</string>
-    <string name="other_login_way">使用其它方法登录</string>
-    <string name="login_phone">使用手机号码登录</string>
-    <string name="login_email">使用邮箱登录</string>
-    <string name="forget_passwd">忘记密码</string>
+    <string name="reg_phone">手机注册</string>
     <string name="register_email">邮箱注册</string>
     <string name="phone_account">手机账号</string>
     <string name="input_phone">输入手机号</string>
     <string name="send_message">发送验证码</string>
     <string name="input_email">输入邮箱</string>
-    <string name="input_password">输入密码</string>
+    <string name="input_password">输入密码(6-16位)</string>
+    <string name="forget_password">忘记了密码？</string>
     <string name="click_login">点击登录</string>
     <string name="input_message">输入验证码</string>
     <string name="input_password_again">再次输入密码</string>
@@ -65,4 +62,5 @@
     <string name="message_record">消息记录</string>
     <string name="nowday_moon">此时月</string>
     <string name="tomorrom_moon">彼时月</string>
+    <string name="input_account">输入用户名</string>
 </resources>

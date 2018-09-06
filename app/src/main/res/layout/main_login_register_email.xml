@@ -16,44 +16,38 @@
             android:paddingStart="30dp"
             android:paddingEnd="30dp"
             android:background="@drawable/register_background">
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="50dp"
-                android:orientation="horizontal">
-                <EditText
-                    android:id="@+id/pho_num"
-                    android:layout_width="140dp"
-                    android:layout_height="wrap_content"
-                    android:textColorHint="#ffffff"
-                    android:hint="@string/input_email"
-                    android:inputType="number"/>
-
-                <Button
-                    android:id="@+id/send_num"
-                    android:layout_width="80dp"
-                    android:layout_height="35dp"
-                    android:layout_marginStart="20dp"
-                    android:textColor="#fff"
-                    android:text="@string/send_message"
-                    android:translationZ="10dp"
-                    android:background="@drawable/black_or_white_button_background"/>
-            </LinearLayout>
 
             <EditText
-                android:id="@+id/check_"
+                android:id="@+id/input_mailBox"
+                android:layout_marginTop="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:theme="@style/MyEditText"
+                android:drawableStart="@mipmap/message"
+                android:textColor="@color/white"
                 android:textColorHint="#ffffff"
-                android:hint="@string/input_message"
-                android:inputType="number"/>
+                android:hint="@string/input_email"
+                android:inputType="textEmailAddress"/>
+            <EditText
+                android:id="@+id/account"
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/MyEditText"
+                android:textColor="@color/white"
+                android:drawableStart="@mipmap/account"
+                android:textColorHint="#ffffff"
+                android:hint="@string/input_account"
+                android:inputType="text"/>
 
             <EditText
                 android:id="@+id/password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:theme="@style/MyEditText"
+                android:textColor="@color/white"
+                android:drawableStart="@mipmap/password"
+                android:layout_marginTop="10dp"
                 android:textColorHint="#ffffff"
                 android:hint="@string/input_password"
                 android:inputType="textPassword"/>
@@ -62,13 +56,17 @@
                 android:id="@+id/password_check"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:textColor="@color/white"
+                android:theme="@style/MyEditText"
+                android:drawableStart="@mipmap/password"
+                android:layout_marginTop="10dp"
                 android:textColorHint="#ffffff"
                 android:hint="@string/input_password_again"
                 android:inputType="textPassword"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center"
                 android:orientation="vertical">
@@ -79,16 +77,16 @@
                     android:textColor="#fff"
                     android:text="@string/click_register"
                     android:translationZ="10dp"
-                    android:background="@drawable/black_or_white_button_background"/>
+                    android:background="@drawable/login_button"/>
                 <Button
                     android:id="@+id/return_login_page"
                     android:layout_width="160dp"
                     android:layout_height="35dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="20dp"
                     android:textColor="#fff"
                     android:text="@string/return_login"
                     android:translationZ="10dp"
-                    android:background="@drawable/black_or_white_button_background"/>
+                    android:background="@drawable/login_button"/>
             </LinearLayout>
         </LinearLayout>
 

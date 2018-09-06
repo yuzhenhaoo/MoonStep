@@ -22,7 +22,6 @@ public class ForgetPwdActivity extends AppCompatActivity {
     }
 
     public void initView(){
-//        final Switch button = findViewById(R.id.phone_or_email);
         final JellyToggleButton button = findViewById(R.id.jellytogglebt);
         final TextView phone_num = findViewById(R.id.pho_num);
         final TextView title_name = findViewById(R.id.title_name);
