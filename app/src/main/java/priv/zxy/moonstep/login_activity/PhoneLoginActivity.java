@@ -39,7 +39,6 @@ public class PhoneLoginActivity extends AppCompatActivity {
     private void getData(){
         account = inputAccount.getText().toString();
         passwd = inputPassword.getText().toString();
-        passwd = inputPassword.getText().toString();
     }
 
     private void checkAndOperateData(){
