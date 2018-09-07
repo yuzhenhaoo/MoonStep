@@ -59,10 +59,10 @@ public class LoginActivity extends AppCompatActivity{
                 switch(motionEvent.getAction()){
                     case MotionEvent.ACTION_DOWN:
                         register_phone.setTextSize(24);
-//                        jump_to_register_phone_page();
+                        jump_to_register_phone_page();
 
                         //调用Mob官方的GUI进行手机界面的注册
-                        mobGUI();
+//                        mobGUI();
                         break;
                     case MotionEvent.ACTION_UP:
                         register_phone.setTextSize(20);
@@ -144,7 +144,7 @@ public class LoginActivity extends AppCompatActivity{
      * 点击进入手机注册页面
      */
     public void jump_to_register_phone_page(){
-        Intent intent = new Intent(this, RegisterPhoneActivity.class);
+        Intent intent = new Intent(this, RegisterPhone1.class);
         startActivity(intent);
     }
 

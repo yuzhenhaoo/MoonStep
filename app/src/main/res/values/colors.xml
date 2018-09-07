@@ -28,6 +28,7 @@
     <color name="Red">#FF0000</color>
     <color name="Gray">#808080</color>
     <color name="Black">#000000</color>
+    <color name="LittleBlack">#414040</color>
     <color name="LightGreen">#7ed321</color>
     <color name="menu_fragment_background">#B3000000</color>
     <color name="menu_item_background">#f2f2f2</color>
