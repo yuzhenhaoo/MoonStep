@@ -11,53 +11,47 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.Utils.EmailRegisterUtil;
 
+/**
+ * 这个类有问题，需要重写
+ */
 public class RegisterEmailActivity extends AppCompatActivity {
-
-    @BindView(R.id.input_mailBox)
-    EditText mailBox;
-    @BindView(R.id.account)
-    EditText account;
-    @BindView(R.id.password)
-    EditText password;
-    @BindView(R.id.password_check)
-    EditText passwordCheck;
-    @BindView(R.id.click_register)
-    Button clickRegister;
-    @BindView(R.id.return_login_page)
-    Button returnLoginPage;
 
     private String emailNumber;
     private String accountNumber;
     private String passwordNumber;
     private String confirmPasswordNumber;
+    private EditText inputMailBox;
+    private EditText account;
+    private EditText password;
+    private EditText passwordCheck;
+    private Button clickRegister;
+    private Button returnLoginPage;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_login_register_email);
-        ButterKnife.bind(this);
         initData();
+        initView();
     }
 
-    private void getData(){
-        emailNumber = mailBox.getText().toString();
+    private void getData() {
+        emailNumber = inputMailBox.getText().toString();
         accountNumber = account.getText().toString();
         passwordNumber = password.getText().toString();
         confirmPasswordNumber = passwordCheck.getText().toString();
     }
 
-    private void checkAndOperateData(){
-        if(emailNumber == null || accountNumber == null
-                || passwordNumber == null || confirmPasswordNumber == null){
+    private void checkAndOperateData() {
+        if (emailNumber == null || accountNumber == null
+                || passwordNumber == null || confirmPasswordNumber == null) {
             Toast.makeText(this, "以上输入不能为空哦！请重新尝试", Toast.LENGTH_SHORT).show();
-        }else{
+        } else {
             EmailRegisterUtil emailRegister = new EmailRegisterUtil(this.getApplicationContext(), this);
-            emailRegister.RegisterRequest(emailNumber, accountNumber, passwordNumber, confirmPasswordNumber);
+            emailRegister.RegisterRequest(emailNumber, accountNumber, "男", passwordNumber, confirmPasswordNumber);
         }
     }
 
@@ -66,7 +60,7 @@ public class RegisterEmailActivity extends AppCompatActivity {
         clickRegister.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                switch (motionEvent.getAction()){
+                switch (motionEvent.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         clickRegister.setTextSize(16);
                         //这里进行邮箱的注册
@@ -84,7 +78,7 @@ public class RegisterEmailActivity extends AppCompatActivity {
         returnLoginPage.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                switch (motionEvent.getAction()){
+                switch (motionEvent.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         returnLoginPage.setTextSize(16);
                         jump_to_loginPage();
@@ -106,4 +100,12 @@ public class RegisterEmailActivity extends AppCompatActivity {
     }
 
 
+    private void initView() {
+        inputMailBox = (EditText) findViewById(R.id.input_mailBox);
+        account = (EditText) findViewById(R.id.account);
+        password = (EditText) findViewById(R.id.password);
+        passwordCheck = (EditText) findViewById(R.id.password_check);
+        clickRegister = (Button) findViewById(R.id.click_register);
+        returnLoginPage = (Button) findViewById(R.id.return_login_page);
+    }
 }

@@ -30,7 +30,7 @@
             android:textSize="16sp"
             android:text="@string/country"/>
         <TextView
-            android:id="@+id/country_choice"
+            android:id="@+id/countryChoice"
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:textSize="16sp"

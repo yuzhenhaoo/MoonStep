@@ -3,6 +3,8 @@ package priv.zxy.moonstep.login_activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Looper;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -13,11 +15,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mob.MobSDK;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
 import priv.zxy.moonstep.R;
@@ -29,37 +30,51 @@ import priv.zxy.moonstep.R;
  */
 public class RegisterPhone2 extends AppCompatActivity {
 
-
-    @BindView(R.id.header)
-    TextView header;
-    @BindView(R.id.phone_number)
-    TextView phoneNumber;
-    @BindView(R.id.content1)
-    LinearLayout content1;
-    @BindView(R.id.phone_line)
-    View phoneLine;
-    @BindView(R.id.code)
-    TextView code;
-    @BindView(R.id.code_number)
-    EditText codeNumber;
-    @BindView(R.id.send_code)
-    Button sendCode;
-    @BindView(R.id.content2)
-    RelativeLayout content2;
-    @BindView(R.id.password_line)
-    View passwordLine;
-    @BindView(R.id.back_button)
-    ImageView backButton;
-    @BindView(R.id.submit)
-    Button submit;
     private String phone;
+    private TextView header;
+    private LinearLayout content1;
+    private TextView phoneNumber;
+    private View phoneLine;
+    private RelativeLayout content2;
+    private TextView code;
+    private EditText codeNumber;
+    private Button sendCode;
+    private View passwordLine;
+    private ImageView backButton;
+    private Button submit;
+    private String country = "86";
+
+    EventHandler eventHandler=new EventHandler(){
+
+        @Override
+        public void afterEvent(int event, int result, Object data) {
+
+            if (result == SMSSDK.RESULT_COMPLETE) {
+                //回调完成
+                if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
+                    //提交验证码成功
+                    Toast.makeText(RegisterPhone2.this, "提交验证码成功", Toast.LENGTH_SHORT).show();
+
+                    //页面跳转
+                    jumpToTheRegisterPage();
+                }else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE){
+                    //获取验证码成功
+                    Toast.makeText(RegisterPhone2.this, "获取验证码成功", Toast.LENGTH_SHORT).show();
+                }else if (event ==SMSSDK.EVENT_GET_SUPPORTED_COUNTRIES){
+                    //返回支持发送验证码的国家列表
+                    Toast.makeText(RegisterPhone2.this, "返回支持发送验证码的国家列表", Toast.LENGTH_SHORT).show();
+                }
+            }else{
+                ((Throwable)data).printStackTrace();
+            }
+        }
+    };
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ButterKnife.bind(this);
         setContentView(R.layout.register_phone2);
-        initSMSSDK();
+        initView();
         initData();
     }
 
@@ -74,7 +89,8 @@ public class RegisterPhone2 extends AppCompatActivity {
         sendCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SMSSDK.getVerificationCode("86", phone);//发送短信验证码到手机号
+                SMSSDK.getVerificationCode(country, phone);//发送短信验证码到手机号
+                sendCode.setEnabled(false);
                 timer.start();//使用计时器 设置验证码的时间限制
             }
         });
@@ -82,37 +98,14 @@ public class RegisterPhone2 extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                submitInfo(phone);
+                submitInfo(country, phone);
             }
         });
-    }
 
-    private void initSMSSDK() {
-        //初始化短信验证
-        MobSDK.init(this);
-
-        //注册短信回调
-        SMSSDK.registerEventHandler(new EventHandler() {
+        backButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void afterEvent(int event, int result, Object data) {
-                switch (event) {
-                    case SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE:
-                        if (result == SMSSDK.RESULT_COMPLETE) {
-                            Log.i("TAG","验证成功");
-                            //验证成功的话我们就应该做相应的页面跳转了
-                            jumpToTheRegisterPage();
-                        } else {
-                            Log.i("TAG","验证失败");
-                        }
-                        break;
-                    case SMSSDK.EVENT_GET_VERIFICATION_CODE:
-                        if (result == SMSSDK.RESULT_COMPLETE) {
-                            Log.i("TAG","获取验证成功");
-                        } else {
-                            Log.i("TAG","获取验证失败");
-                        }
-                        break;
-                }
+            public void onClick(View view) {
+                finishThis();
             }
         });
     }
@@ -121,11 +114,11 @@ public class RegisterPhone2 extends AppCompatActivity {
      * 验证用户的其他信息
      * 这里验证两次密码是否一致 以及验证码判断
      */
-    private void submitInfo(String phone) {
+    private void submitInfo(String country, String phone) {
         //密码验证
-        Log.i("TAG","提交按钮被点击了");
+        Log.i("TAG", "提交按钮被点击了");
         String code = codeNumber.getText().toString().trim();
-        SMSSDK.submitVerificationCode("86", phone, code);//提交验证码  在eventHandler里面查看验证结果
+        SMSSDK.submitVerificationCode(country, phone, code);//提交验证码  在eventHandler里面查看验证结果
     }
 
     /**
@@ -157,6 +150,28 @@ public class RegisterPhone2 extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         //防止使用短信验证 产生内存溢出问题
-        SMSSDK.unregisterAllEventHandler();
+        SMSSDK.unregisterEventHandler(eventHandler);
+    }
+
+    private void initView() {
+        MobSDK.init(this);
+
+        //对SMSSDK进行注册，与unregisterEventHandler配套使用
+        SMSSDK.registerEventHandler(eventHandler);
+        header = (TextView) findViewById(R.id.header);
+        content1 = (LinearLayout) findViewById(R.id.content1);
+        phoneNumber = (TextView) findViewById(R.id.phone_number);
+        phoneLine = (View) findViewById(R.id.phone_line);
+        content2 = (RelativeLayout) findViewById(R.id.content2);
+        code = (TextView) findViewById(R.id.code);
+        codeNumber = (EditText) findViewById(R.id.code_number);
+        sendCode = (Button) findViewById(R.id.send_code);
+        passwordLine = (View) findViewById(R.id.password_line);
+        backButton = (ImageView) findViewById(R.id.back_button);
+        submit = (Button) findViewById(R.id.submit);
+    }
+
+    private void finishThis(){
+        this.finish();
     }
 }

@@ -13,47 +13,31 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.Utils.PhoneRegisterUtil;
 
 public class RegisterPage extends AppCompatActivity {
 
 
-    @BindView(R.id.check_username)
-    Button checkUsername;
-    @BindView(R.id.accountName)
-    EditText accountName;
-    @BindView(R.id.man)
-    RadioButton man;
-    @BindView(R.id.woman)
-    RadioButton woman;
-    @BindView(R.id.radioGroup)
-    RadioGroup radioGroup;
-    @BindView(R.id.password)
-    EditText password;
-    @BindView(R.id.password_check)
-    EditText passwordCheck;
-    @BindView(R.id.click_register)
-    Button clickRegister;
-    @BindView(R.id.return_login_page)
-    Button returnLoginPage;
-    @BindView(R.id.back_button)
-    ImageView backButton;
-
     private String phoneNumber;
     private String userName;
     private String userGender;
     private String userPassword;
     private String confirmPassword;
+    private Button checkUsername;
+    private EditText accountName;
+    private RadioGroup radioGroup;
+    private EditText password;
+    private EditText passwordCheck;
+    private Button clickRegister;
+    private Button returnLoginPage;
+    private ImageView backButton;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_login_register_page);
-        ButterKnife.bind(this);
-
+        initView();
         initData();
     }
 
@@ -115,7 +99,7 @@ public class RegisterPage extends AppCompatActivity {
         });
     }
 
-    private void getData(){
+    private void getData() {
         userName = accountName.getText().toString();
         userPassword = password.getText().toString();
         confirmPassword = passwordCheck.getText().toString();
@@ -123,7 +107,7 @@ public class RegisterPage extends AppCompatActivity {
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
-                switch (checkedId){
+                switch (checkedId) {
                     case R.id.man:
                         userGender = "男";
                         break;
@@ -135,13 +119,23 @@ public class RegisterPage extends AppCompatActivity {
         });
     }
 
-    private void checkAndOpeateData(){
+    private void checkAndOpeateData() {
         PhoneRegisterUtil prUtil = new PhoneRegisterUtil(this.getApplicationContext(), this);
-        prUtil.RegisterRequest(phoneNumber,userName,userGender,userPassword,confirmPassword);
+        prUtil.RegisterRequest(phoneNumber, userName, userGender, userPassword, confirmPassword);
     }
 
     private void FinistThisActivity() {
         this.finish();
     }
 
+    private void initView() {
+        checkUsername = (Button) findViewById(R.id.check_username);
+        accountName = (EditText) findViewById(R.id.accountName);
+        radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
+        password = (EditText) findViewById(R.id.password);
+        passwordCheck = (EditText) findViewById(R.id.password_check);
+        clickRegister = (Button) findViewById(R.id.click_register);
+        returnLoginPage = (Button) findViewById(R.id.return_login_page);
+        backButton = (ImageView) findViewById(R.id.back_button);
+    }
 }
