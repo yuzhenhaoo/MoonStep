@@ -41,7 +41,7 @@ public class PhoneRegisterUtil {
      */
     public void RegisterRequest(final String phone, final  String userName, final String gender, final String password, final String confirmPassword){
         //请求地址
-        String url = "http://120.79.154.236:8080/MoonStep/PhoneRegisterServlet";
+        String url = "http://120.79.154.236:8080/MoonStep/RegisterServlet";
         String tag = "Login";
         //取得请求队列
         RequestQueue requestQueue = Volley.newRequestQueue(mContext);

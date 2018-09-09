@@ -3,7 +3,9 @@ package priv.zxy.moonstep.Utils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -31,7 +33,7 @@ public class LoginUtil {
         this.mActivity = activity;
     }
 
-    public void LoginRequest(final  String accountNumber, final String password){
+    public void LoginRequest(final  String accountNumber, final String password, final EditText inputAccount, final EditText inputPassword){
         //请求地址
         String url = "http://120.79.154.236:8080/MoonStep/LoginServlet";
         String tag = "Login";
@@ -52,6 +54,9 @@ public class LoginUtil {
                             if (result.equals("success")) {
                                 //做自己的登录成功操作，如页面跳转
                                 jump_to_mainPage(mActivity);
+                                SharedPreferencesUtil sp = new SharedPreferencesUtil(mContext);
+                                //将数据存入
+                                sp.saveSuccessedLoginAccountAndPassword(accountNumber, password);
                             } else {
                                 //做自己的登录失败操作
                                 FailToast1();

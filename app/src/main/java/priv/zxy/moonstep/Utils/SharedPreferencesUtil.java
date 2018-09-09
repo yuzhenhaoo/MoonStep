@@ -3,6 +3,9 @@ package priv.zxy.moonstep.Utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class SharedPreferencesUtil {
     private Context context;
 
@@ -29,5 +32,21 @@ public class SharedPreferencesUtil {
         }else{
             return true;
         }
+    }
+
+    public void saveSuccessedLoginAccountAndPassword(String username, String passwd){
+        SharedPreferences sp = context.getSharedPreferences("mysp",Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString("UserName", username);
+        editor.putString("PassWd", passwd);
+        editor.commit();
+    }
+
+    public Map<String, String> readLoginInfo(){
+        Map<String, String> data = new HashMap<String, String>();
+        SharedPreferences sp = context.getSharedPreferences("mysp", Context.MODE_PRIVATE);
+        data.put("UserName", sp.getString("UserName", ""));
+        data.put("PassWd", sp.getString("PassWd",""));
+        return data;
     }
 }

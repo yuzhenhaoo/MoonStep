@@ -17,18 +17,6 @@
             android:paddingStart="30dp"
             android:paddingEnd="30dp"
             android:background="@drawable/register_background">
-            <!--<Switch-->
-                <!--android:id="@+id/phone_or_email"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="@string/phone_account"-->
-                <!--android:layout_marginTop="20dp"-->
-                <!--android:textSize="20sp"-->
-                <!--android:checked="false"-->
-                <!--android:track="@drawable/track"-->
-                <!--android:thumb="@drawable/thumb"-->
-                <!--android:switchMinWidth="60dp"-->
-                <!--android:switchPadding="100dp"/>-->
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

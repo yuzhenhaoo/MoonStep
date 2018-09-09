@@ -3,6 +3,7 @@ package priv.zxy.moonstep.Utils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -20,28 +21,19 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import priv.zxy.moonstep.main_page.MainActivity;
+import priv.zxy.moonstep.login_activity.RegisterPhone2;
 
-public class EmailRegisterUtil {
-
+public class PhoneCheckUtil {
     private Context mContext;
     private Activity mActivity;
-    public EmailRegisterUtil(Context context, Activity activity){
+    public PhoneCheckUtil(Context context, Activity activity){
         this.mContext = context;
         this.mActivity = activity;
     }
 
-    /**
-     * 用来处理邮箱注册的请求
-     *
-     * @param email 邮箱账号
-     * @param userName 用户名
-     * @param password 密码
-     * @param confirmPassword 确认密码
-     */
-    public void RegisterRequest(final String email, final  String userName, final String gender, final String password, final String confirmPassword){
+    public void phoneOrEmailCheck(final String phoneNumber){
         //请求地址
-        String url = "http://120.79.154.236:8080/MoonStep/EmailRegisterServlet";
+        String url = "http://120.79.154.236:8080/MoonStep/CheckPhoneServlet";
         String tag = "Login";
         //取得请求队列
         RequestQueue requestQueue = Volley.newRequestQueue(mContext);
@@ -49,9 +41,6 @@ public class EmailRegisterUtil {
         //防止重复请求，所以先取消tag标识的请求队列
         requestQueue.cancelAll(tag);
 
-        /**
-         * 响应错误，进入onErrorResponse函数中，查看错误的原因
-         */
         //创建StringRequest，定义字符串请求的请求方式为POST(省略第一个参数会默认为GET方式)
         final StringRequest request = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
@@ -61,19 +50,18 @@ public class EmailRegisterUtil {
                             JSONObject jsonObject = (JSONObject) new JSONObject(response).get("params");
                             String result = jsonObject.getString("Result");
                             if (result.equals("success")) {
-                                //做自己的登录成功操作，如页面跳转
-                                jump_to_mainPage(mActivity);
-                                /**
-                                 * 这里应该跳出一个Dialog的弹窗来提示用户已经注册成功了
-                                 */
-                            } else if(result.equals("erro0")){
-                                ToastErro0();
-                            }else if(result.equals("erro1")){
-                                ToastErro1();
+                                //检验成功
+                                if( !phoneNumber.equals(""))
+                                    jumpToTheSecondPhonePage(mActivity, phoneNumber);
+                                else
+                                    Warning();
+                            } else {
+                                //检验失败
+                                Fail();
                             }
                         } catch (JSONException e) {
                             //做自己的请求异常操作
-                            FailToast();
+                            Error();
                             Log.e("TAG", e.getMessage(), e);
                         }
                     }
@@ -81,22 +69,17 @@ public class EmailRegisterUtil {
             @Override
             public void onErrorResponse(VolleyError error) {
                 //做自己的响应错误操作，如Toast提示（“请稍后重试”等）
-                FailToast1();
+                Error();
                 Log.e("TAG", error.getMessage(), error);
             }
         }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("Email", email);
-                params.put("UserName",userName);
-                params.put("PassWord", password);
-                params.put("Gender",gender);
-                params.put("ConfirmPassword", confirmPassword);
+                params.put("PhoneNumber", phoneNumber);
                 return params;
             }
         };
-
         //设置Tag标签
         request.setTag(tag);
 
@@ -104,30 +87,23 @@ public class EmailRegisterUtil {
         requestQueue.add(request);
     }
 
-
-    private void FailToast(){
-        Toast.makeText(mContext, "请检查您的网络是否连接！", Toast.LENGTH_SHORT).show();
+    private void Error(){
+        Toast.makeText(mContext, "服务器响应错误，稍后重试", Toast.LENGTH_SHORT).show();
     }
 
-    private void FailToast1(){
-        Toast.makeText(mContext, "响应错误，请稍后重试", Toast.LENGTH_SHORT).show();
+    private void Fail(){
+        Toast.makeText(mContext, "您的号码已经注册过了，请换一个重试", Toast.LENGTH_SHORT).show();
     }
 
-    private void ToastErro0(){
-        Toast.makeText(mContext, "用户名已经存在/用户名不能为空", Toast.LENGTH_SHORT).show();
-    }
-
-    private void ToastErro1(){
-        Toast.makeText(mContext, "密码格式不正确(6-16位)", Toast.LENGTH_SHORT).show();
-    }
-
-    /**
-     * 跳转到主页，将之前所有的activity全部清空
-     */
-    private void jump_to_mainPage(Activity thisActivity){
-        Intent intent = new Intent(thisActivity, MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    private void jumpToTheSecondPhonePage(Activity thisActivity, String phoneNumber){
+        Bundle bundle = new Bundle();
+        bundle.putString("phoneNumber", phoneNumber);
+        Intent intent = new Intent(thisActivity, RegisterPhone2.class);
+        intent.putExtras(bundle);
         thisActivity.startActivity(intent);
+    }
+
+    private void Warning(){
+        Toast.makeText(mContext, "手机账号不能位空", Toast.LENGTH_SHORT).show();
     }
 }

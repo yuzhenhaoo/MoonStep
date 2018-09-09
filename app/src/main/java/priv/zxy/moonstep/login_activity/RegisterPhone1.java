@@ -11,9 +11,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import butterknife.ButterKnife;
 import priv.zxy.moonstep.R;
-import priv.zxy.moonstep.Utils.PhoneOrEmailCheckUtil;
+import priv.zxy.moonstep.Utils.PhoneCheckUtil;
 
 public class RegisterPhone1 extends AppCompatActivity {
 
@@ -74,8 +73,8 @@ public class RegisterPhone1 extends AppCompatActivity {
      * phoneOrEmail传递的参数为:phoneNumber不能为空，而email必须为空
      */
     private void checkAndOperatePhoneNumber() {
-        PhoneOrEmailCheckUtil peUtil = new PhoneOrEmailCheckUtil(this.getApplicationContext(), this);
-        peUtil.phoneOrEmailCheck("", phoneNumberText);
+        PhoneCheckUtil peUtil = new PhoneCheckUtil(this.getApplicationContext(), this);
+        peUtil.phoneOrEmailCheck(phoneNumberText);
     }
 
     private void jump_to_country_choice_page() {

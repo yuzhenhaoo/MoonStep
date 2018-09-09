@@ -163,20 +163,8 @@
                 android:text="@string/reg_phone"
                 android:textColor="#fff"
                 android:textSize="20sp"/>
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_horizontal"
-                android:background="#fff"/>
-            <Button
-                android:id="@+id/register_email"
-                android:layout_width="wrap_content"
-                android:layout_weight="1"
-                android:layout_height="match_parent"
-                android:background="@drawable/forget_pwd_and_email_register_background"
-                android:text="@string/register_email"
-                android:textColor="#fff"
-                android:textSize="20sp"/>
+
+
         </LinearLayout>
 
 </RelativeLayout>

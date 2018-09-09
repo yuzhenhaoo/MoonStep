@@ -18,13 +18,13 @@ import cn.smssdk.SMSSDK;
 import cn.smssdk.gui.RegisterPage;
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.Utils.LoginUtil;
+import priv.zxy.moonstep.Utils.SharedPreferencesUtil;
 import priv.zxy.moonstep.main_page.MainActivity;
 
 public class LoginActivity extends AppCompatActivity{
 
     private Button login;
     Button register_phone;
-    Button register_email;
     Button forget_password;
     private EditText inputAccount;
     private EditText inputPassword;
@@ -42,13 +42,17 @@ public class LoginActivity extends AppCompatActivity{
     public void initView(){
         login = findViewById(R.id.click_login);
         register_phone = findViewById(R.id.register_phone);
-        register_email = findViewById(R.id.register_email);
         forget_password = findViewById(R.id.forget_password);
         inputAccount = findViewById(R.id.account);
         inputPassword = findViewById(R.id.password);
 
         //MobSDK的初始化
         MobSDK.init(this);
+
+        //实现之前成功存下的账户和密码的读取
+        SharedPreferencesUtil sp = new SharedPreferencesUtil(this.getApplicationContext());
+        inputAccount.setText(sp.readLoginInfo().get("UserName"));
+        inputPassword.setText(sp.readLoginInfo().get("PassWd"));
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -82,22 +86,6 @@ public class LoginActivity extends AppCompatActivity{
                         break;
                     case MotionEvent.ACTION_UP:
                         forget_password.setTextSize(20);
-                        break;
-                }
-                return true;
-            }
-        });
-
-        register_email.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                switch(motionEvent.getAction()){
-                    case MotionEvent.ACTION_DOWN:
-                        register_email.setTextSize(22);
-                        jump_to_register_email_page();
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        register_email.setTextSize(20);
                         break;
                 }
                 return true;
@@ -138,14 +126,6 @@ public class LoginActivity extends AppCompatActivity{
         startActivity(intent);
     }
 
-    /**
-     * 点击进入邮箱注册页面
-     */
-    public void jump_to_register_email_page(){
-        Intent intent = new Intent(this, RegisterEmail1.class);
-        startActivity(intent);
-    }
-
     private void getData(){
         account = inputAccount.getText().toString();
         passwd = inputPassword.getText().toString();
@@ -154,7 +134,7 @@ public class LoginActivity extends AppCompatActivity{
     private void checkAndOperateData(){
         if(account != null && passwd != null){
             LoginUtil loginUtil = new LoginUtil(this.getApplicationContext(), this);
-            loginUtil.LoginRequest(account, passwd);
+            loginUtil.LoginRequest(account, passwd, inputAccount, inputPassword);
         }else{
             Toast.makeText(this, "您的账户和密码不能为空哦！", Toast.LENGTH_SHORT).show();
         }
