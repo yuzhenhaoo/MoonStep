@@ -135,7 +135,7 @@ public class RegisterPhone2 extends AppCompatActivity {
         @Override
         public void onFinish() {
             sendCode.setEnabled(true);
-            sendCode.setText("获取验证码");
+            sendCode.setText("发送");
         }
     };
 

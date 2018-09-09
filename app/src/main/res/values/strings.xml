@@ -25,7 +25,8 @@
     <string name="country">国家</string>
     <string name="input_phone">请输入手机号</string>
     <string name="send_message">发送验证码</string>
-    <string name="input_email">输入邮箱</string>
+    <string name="input_email">请输入邮箱</string>
+    <string name="email">邮箱</string>
     <string name="input_password">输入密码(6-16位)</string>
     <string name="forget_password">忘记了密码？</string>
     <string name="verification_code">验证码</string>

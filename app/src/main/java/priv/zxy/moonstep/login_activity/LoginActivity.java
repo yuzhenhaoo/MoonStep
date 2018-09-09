@@ -142,7 +142,7 @@ public class LoginActivity extends AppCompatActivity{
      * 点击进入邮箱注册页面
      */
     public void jump_to_register_email_page(){
-        Intent intent = new Intent(this, RegisterEmailActivity.class);
+        Intent intent = new Intent(this, RegisterEmail1.class);
         startActivity(intent);
     }
 

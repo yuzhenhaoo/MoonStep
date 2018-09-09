@@ -68,6 +68,12 @@
         <activity android:name=".login_activity.RegisterPhone2"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
             android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity android:name=".login_activity.RegisterEmail1"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity android:name=".login_activity.RegisterEmail2"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
     </application>
 
 </manifest>
