@@ -122,24 +122,6 @@ public class LoginActivity extends AppCompatActivity{
             }
         });
     }
-
-    private void mobGUI(){
-        RegisterPage registerPage = new RegisterPage();
-        //回调函数
-        registerPage.setRegisterCallback(new EventHandler() {
-            public void afterEvent(int event, int result, Object data) {
-                // 解析结果
-                if (result == SMSSDK.RESULT_COMPLETE) {
-                    Toast.makeText(LoginActivity.this, "验证成功", Toast.LENGTH_SHORT).show();
-                    jump_to_register_phone_page();
-                }else{
-                    Toast.makeText(LoginActivity.this, "服务器故障，稍后重试", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-        registerPage.show(LoginActivity.this);
-    }
     /**
      * 点击进入手机注册页面
      */

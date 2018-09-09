@@ -42,7 +42,7 @@
         <activity android:name=".login_activity.LoginActivity"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
             android:configChanges="keyboardHidden|orientation|screenSize"/>
-        <activity android:name=".login_activity.RegisterPhoneActivity"
+        <activity android:name=".login_activity.RegisterPage"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
         <activity android:name=".login_activity.RegisterEmailActivity"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>

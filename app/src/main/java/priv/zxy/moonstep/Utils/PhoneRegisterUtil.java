@@ -22,26 +22,26 @@ import java.util.Map;
 
 import priv.zxy.moonstep.main_page.MainActivity;
 
-public class EmailRegisterUtil {
+public class PhoneRegisterUtil {
 
     private Context mContext;
     private Activity mActivity;
-    public EmailRegisterUtil(Context context, Activity activity){
+    public PhoneRegisterUtil(Context context, Activity activity){
         this.mContext = context;
         this.mActivity = activity;
     }
 
     /**
-     * 用来处理邮箱注册的请求
+     * 用来处理手机注册的请求
      *
-     * @param email 邮箱账号
+     * @param phone 手机账号
      * @param userName 用户名
      * @param password 密码
      * @param confirmPassword 确认密码
      */
-    public void RegisterRequest(final String email, final  String userName, final String gender, final String password, final String confirmPassword){
+    public void RegisterRequest(final String phone, final  String userName, final String gender, final String password, final String confirmPassword){
         //请求地址
-        String url = "http://120.79.154.236:8080/MoonStep/EmailRegisterServlet";
+        String url = "http://120.79.154.236:8080/MoonStep/PhoneRegisterServlet";
         String tag = "Login";
         //取得请求队列
         RequestQueue requestQueue = Volley.newRequestQueue(mContext);
@@ -74,7 +74,7 @@ public class EmailRegisterUtil {
                         } catch (JSONException e) {
                             //做自己的请求异常操作
                             FailToast();
-                            Log.e("TAG", e.getMessage(), e);
+                            Log.i("TAG", e.getMessage(), e);
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -82,13 +82,13 @@ public class EmailRegisterUtil {
             public void onErrorResponse(VolleyError error) {
                 //做自己的响应错误操作，如Toast提示（“请稍后重试”等）
                 FailToast1();
-                Log.e("TAG", error.getMessage(), error);
+                Log.i("TAG", error.getMessage(), error);
             }
         }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("Email", email);
+                params.put("PhoneNumber", phone);
                 params.put("UserName",userName);
                 params.put("PassWord", password);
                 params.put("Gender",gender);

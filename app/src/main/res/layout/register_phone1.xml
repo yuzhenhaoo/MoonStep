@@ -17,21 +17,27 @@
         android:id="@+id/content1"
         android:layout_width="match_parent"
         android:layout_height="40dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
         android:gravity="center"
         android:layout_below="@+id/input_text">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:layout_marginStart="10dp"
+            android:textColor="@color/LittleBlack"
             android:layout_marginEnd="20dp"
             android:textSize="16sp"
-            android:text="@string/phone_account"/>
-        <Spinner
+            android:text="@string/country"/>
+        <TextView
+            android:id="@+id/country_choice"
             android:layout_width="match_parent"
             android:layout_height="30dp"
-            android:id="@+id/spinner2"
-            android:entries="@array/country"/>
+            android:textSize="16sp"
+            android:textColor="@color/LittleBlack"
+            android:gravity="center_vertical"
+            android:text="中国"
+            android:drawableEnd="@mipmap/right_key"/>
     </LinearLayout>
     <View
         android:id="@+id/country_line"
@@ -55,11 +61,14 @@
             android:gravity="center"
             android:text="+86"
             android:textSize="16sp"
-            android:layout_marginEnd="40dp"/>
+            android:textColor="@color/LittleBlack"
+            android:layout_marginEnd="25dp"/>
         <EditText
             android:id="@+id/phone_number"
             android:layout_width="match_parent"
             android:layout_height="30dp"
+            android:textColor="@color/LittleBlack"
+            android:inputType="phone"
             android:background="@color/transparent"/>
     </LinearLayout>
     <View
@@ -82,4 +91,12 @@
         android:translationZ="10dp"
         android:background="@drawable/green_button"
         android:textColor="@color/white" />
+
+    <ImageView
+        android:id="@+id/back_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/back"
+        android:layout_margin="5dp"
+        android:contentDescription="@string/nothing"/>
 </RelativeLayout>

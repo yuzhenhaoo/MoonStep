@@ -22,6 +22,7 @@
     <string name="reg_phone">手机注册</string>
     <string name="register_email">邮箱注册</string>
     <string name="phone_account">手机号</string>
+    <string name="country">国家</string>
     <string name="input_phone">请输入手机号</string>
     <string name="send_message">发送验证码</string>
     <string name="input_email">输入邮箱</string>
@@ -63,5 +64,8 @@
     <string name="message_record">消息记录</string>
     <string name="nowday_moon">此时月</string>
     <string name="tomorrom_moon">彼时月</string>
-    <string name="input_account">输入用户名</string>
+    <string name="input_account">输入用户名(8字以内)</string>
+    <string name="check_username">检测用户名</string>
+    <string name="man">男</string>
+    <string name="woman">女</string>
 </resources>
