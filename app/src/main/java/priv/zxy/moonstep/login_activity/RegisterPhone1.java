@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.Utils.PhoneCheckUtil;
+import priv.zxy.moonstep.Utils.ToastUtil;
 
 public class RegisterPhone1 extends AppCompatActivity {
 
@@ -68,13 +69,15 @@ public class RegisterPhone1 extends AppCompatActivity {
         phoneNumberText = phoneNumber.getText().toString();
     }
 
-    /**
-     * 调用PhoneOrEmailCheckUtil的工具类，通过调用函数phoneOrEmailCheck来对是否进行跳转和可能进行的错误进行判断
-     * phoneOrEmail传递的参数为:phoneNumber不能为空，而email必须为空
-     */
     private void checkAndOperatePhoneNumber() {
-        PhoneCheckUtil peUtil = new PhoneCheckUtil(this.getApplicationContext(), this);
-        peUtil.phoneOrEmailCheck(phoneNumberText);
+        if(phoneNumberText.equals("")){
+            ToastUtil toastUtil = new ToastUtil(this.getApplicationContext(), this);
+            toastUtil.showToast("手机号不能为空，请重试");
+        }
+        else{
+            PhoneCheckUtil peUtil = new PhoneCheckUtil(this.getApplicationContext(), this);
+            peUtil.phoneOrEmailCheck(phoneNumberText);
+        }
     }
 
     private void jump_to_country_choice_page() {

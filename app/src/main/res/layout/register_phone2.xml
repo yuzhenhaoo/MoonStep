@@ -103,12 +103,32 @@
         android:layout_margin="5dp"
         android:contentDescription="@string/nothing"/>
 
+    <LinearLayout
+        android:id="@+id/voice_mode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_below="@id/password_line"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="无法接收到短信验证?点击这里"/>
+        <TextView
+            android:id="@+id/voice_code"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="进行语音验证"
+            android:textSize="14sp"
+            android:textColor="@color/DoderBlue"/>
+    </LinearLayout>
+
     <Button
         android:id="@+id/submit"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:text="提交认证"
-        android:layout_below="@id/password_line"
+        android:layout_below="@id/voice_mode"
         android:layout_marginTop="30dp"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"

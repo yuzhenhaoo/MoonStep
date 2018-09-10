@@ -2,10 +2,7 @@ package priv.zxy.moonstep.Utils;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -21,19 +18,20 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import priv.zxy.moonstep.login_activity.RegisterPhone2;
 
-public class PhoneCheckUtil {
+public class UserNameCheckUtil {
     private Context mContext;
     private Activity mActivity;
-    public PhoneCheckUtil(Context context, Activity activity){
+    public Boolean checkResult = false;
+
+    public UserNameCheckUtil(Context context, Activity activity){
         this.mContext = context;
         this.mActivity = activity;
     }
 
-    public void phoneOrEmailCheck(final String phoneNumber){
+    public void UserNameCheck(final String userName){
         //请求地址
-        String url = "http://120.79.154.236:8080/MoonStep/CheckPhoneServlet";
+        String url = "http://120.79.154.236:8080/MoonStep/CheckUserNameServlet";
         String tag = "Login";
         //取得请求队列
         RequestQueue requestQueue = Volley.newRequestQueue(mContext);
@@ -51,8 +49,10 @@ public class PhoneCheckUtil {
                             String result = jsonObject.getString("Result");
                             if (result.equals("success")) {
                                 //检验成功
-                                if( !phoneNumber.equals(""))
-                                    jumpToTheSecondPhonePage(mActivity, phoneNumber);
+                                if( !userName.equals("")) {
+                                    //跳出弹窗
+                                    checkResult = true;
+                                }
                                 else
                                     Warning();
                             } else {
@@ -76,7 +76,7 @@ public class PhoneCheckUtil {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("PhoneNumber", phoneNumber);
+                params.put("UserName", userName);
                 return params;
             }
         };
@@ -94,21 +94,16 @@ public class PhoneCheckUtil {
 
     private void Fail(){
         ToastUtil toastUtil = new ToastUtil(mContext, mActivity);
-        toastUtil.showToast("您的号码已经注册过了，请换一个重试");
+        toastUtil.showToast("您的账号已经注册过了，请换一个重试");
     }
 
-    private void jumpToTheSecondPhonePage(Activity thisActivity, String phoneNumber){
+    public void SuccessTip(){
         ToastUtil toastUtil = new ToastUtil(mContext, mActivity);
-        toastUtil.showToast("将要向您的手机发送验证信息，注意查收！");
-        Bundle bundle = new Bundle();
-        bundle.putString("phoneNumber", phoneNumber);
-        Intent intent = new Intent(thisActivity, RegisterPhone2.class);
-        intent.putExtras(bundle);
-        thisActivity.startActivity(intent);
+        toastUtil.showToast("恭喜！您的账号可以使用");
     }
 
     private void Warning(){
         ToastUtil toastUtil = new ToastUtil(mContext, mActivity);
-        toastUtil.showToast("手机账号不能为空");
+        toastUtil.showToast("输入账号不能为空");
     }
 }

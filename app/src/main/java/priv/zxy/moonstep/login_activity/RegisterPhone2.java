@@ -1,5 +1,8 @@
 package priv.zxy.moonstep.login_activity;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -8,6 +11,9 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,11 +23,18 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.gitonway.lee.niftymodaldialogeffects.lib.Effectstype;
+import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
 import com.mob.MobSDK;
+
+import java.util.zip.Inflater;
 
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
 import priv.zxy.moonstep.R;
+import priv.zxy.moonstep.Utils.ToastUtil;
+
+import static cn.smssdk.SMSSDK.getVoiceVerifyCode;
 
 /**
  * RegisterPhone2用来调用Mob端口的无GUI接口
@@ -42,7 +55,11 @@ public class RegisterPhone2 extends AppCompatActivity {
     private View passwordLine;
     private ImageView backButton;
     private Button submit;
+    private TextView voice_code;
     private String country = "86";
+
+    private Context mContext;
+    private Activity mActivity;
 
     EventHandler eventHandler=new EventHandler(){
 
@@ -54,7 +71,6 @@ public class RegisterPhone2 extends AppCompatActivity {
                 if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
                     //提交验证码成功
                     Toast.makeText(RegisterPhone2.this, "提交验证码成功", Toast.LENGTH_SHORT).show();
-
                     //页面跳转
                     jumpToTheRegisterPage();
                 }else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE){
@@ -63,6 +79,8 @@ public class RegisterPhone2 extends AppCompatActivity {
                 }else if (event ==SMSSDK.EVENT_GET_SUPPORTED_COUNTRIES){
                     //返回支持发送验证码的国家列表
                     Toast.makeText(RegisterPhone2.this, "返回支持发送验证码的国家列表", Toast.LENGTH_SHORT).show();
+                }else if(event == SMSSDK.EVENT_GET_VOICE_VERIFICATION_CODE){
+                    Toast.makeText(RegisterPhone2.this, "获取语音验证码成功", Toast.LENGTH_SHORT).show();
                 }
             }else{
                 ((Throwable)data).printStackTrace();
@@ -78,6 +96,7 @@ public class RegisterPhone2 extends AppCompatActivity {
         initData();
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void initData() {
         //获取RegisterPhone1中传递的电话号码
         Intent intent = getIntent();
@@ -94,6 +113,8 @@ public class RegisterPhone2 extends AppCompatActivity {
                 timer.start();//使用计时器 设置验证码的时间限制
             }
         });
+        sendCode.performClick();//模拟点击
+
         //必须要在满足条件的情况下才能做跳转(验证码发送正确)
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,6 +129,26 @@ public class RegisterPhone2 extends AppCompatActivity {
                 finishThis();
             }
         });
+
+        //对于语音发送案件的监听：
+        voice_code.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                switch(motionEvent.getAction()){
+                    case MotionEvent.ACTION_DOWN:
+                        voice_code.setTextSize(15);
+                        getVoiceVerifyCode(country,phone);
+                        ToastUtil toastUtil = new ToastUtil(mContext, mActivity);
+                        toastUtil.showToast("正在向您的手机发送语音信息，请注意接收");
+                        break;
+                    case MotionEvent.ACTION_POINTER_UP:
+                        voice_code.setTextSize(15);
+                        break;
+                }
+                return true;
+            }
+        });
+
     }
 
     /**
@@ -115,10 +156,13 @@ public class RegisterPhone2 extends AppCompatActivity {
      * 这里验证两次密码是否一致 以及验证码判断
      */
     private void submitInfo(String country, String phone) {
-        //密码验证
-        Log.i("TAG", "提交按钮被点击了");
         String code = codeNumber.getText().toString().trim();
-        SMSSDK.submitVerificationCode(country, phone, code);//提交验证码  在eventHandler里面查看验证结果
+        if(code.equals("")){
+            ToastUtil toastUtil = new ToastUtil(this.getApplicationContext(), this);
+            toastUtil.showToast("验证码不能为空，请重新尝试!");
+        }else{
+            SMSSDK.submitVerificationCode(country, phone, code);//提交验证码  在eventHandler里面查看验证结果
+        }
     }
 
     /**
@@ -169,6 +213,11 @@ public class RegisterPhone2 extends AppCompatActivity {
         passwordLine = (View) findViewById(R.id.password_line);
         backButton = (ImageView) findViewById(R.id.back_button);
         submit = (Button) findViewById(R.id.submit);
+        voice_code = (TextView) findViewById(R.id.voice_code);
+
+        mContext = this.getApplicationContext();
+
+        mActivity = this;
     }
 
     private void finishThis(){

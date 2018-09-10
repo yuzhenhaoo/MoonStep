@@ -65,8 +65,6 @@ public class LoginActivity extends AppCompatActivity{
                         register_phone.setTextSize(24);
                         jump_to_register_phone_page();
 
-                        //调用Mob官方的GUI进行手机界面的注册
-//                        mobGUI();
                         break;
                     case MotionEvent.ACTION_UP:
                         register_phone.setTextSize(20);

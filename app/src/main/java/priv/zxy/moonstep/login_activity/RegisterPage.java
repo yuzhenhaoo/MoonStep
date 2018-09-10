@@ -1,6 +1,8 @@
 package priv.zxy.moonstep.login_activity;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,6 +17,7 @@ import android.widget.RadioGroup;
 
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.Utils.PhoneRegisterUtil;
+import priv.zxy.moonstep.Utils.UserNameCheckUtil;
 
 public class RegisterPage extends AppCompatActivity {
 
@@ -32,6 +35,9 @@ public class RegisterPage extends AppCompatActivity {
     private Button clickRegister;
     private Button returnLoginPage;
     private ImageView backButton;
+    private Context mContext;
+    private Activity mActivity;
+    private Boolean userNameCheckResult = false;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,6 +58,11 @@ public class RegisterPage extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //检测用户名是否已经存在于数据库中，并跳出弹窗对用户进行提示
+                UserNameCheckUtil userNameCheckUtil = new UserNameCheckUtil(mContext, mActivity);
+                userNameCheckUtil.UserNameCheck(userName);
+                if(userNameCheckUtil.checkResult){
+                    userNameCheckUtil.SuccessTip();//只有成功的时候才跳出弹窗
+                }
             }
         });
 
@@ -120,8 +131,13 @@ public class RegisterPage extends AppCompatActivity {
     }
 
     private void checkAndOpeateData() {
-        PhoneRegisterUtil prUtil = new PhoneRegisterUtil(this.getApplicationContext(), this);
-        prUtil.RegisterRequest(phoneNumber, userName, userGender, userPassword, confirmPassword);
+        UserNameCheckUtil userNameCheckUtil = new UserNameCheckUtil(mContext, mActivity);
+        userNameCheckUtil.UserNameCheck(userName);
+
+        if(userNameCheckUtil.checkResult){ // 在点击提交按钮的时候，我们只检测用户名是否不符合要求，并有相应的弹窗，如果用户名符合要求，就不弹窗
+            PhoneRegisterUtil prUtil = new PhoneRegisterUtil(this.getApplicationContext(), this);
+            prUtil.RegisterRequest(phoneNumber, userName, userGender, userPassword, confirmPassword);
+        }
     }
 
     private void FinistThisActivity() {
@@ -137,5 +153,8 @@ public class RegisterPage extends AppCompatActivity {
         clickRegister = (Button) findViewById(R.id.click_register);
         returnLoginPage = (Button) findViewById(R.id.return_login_page);
         backButton = (ImageView) findViewById(R.id.back_button);
+
+        mContext = this.getApplicationContext();
+        mActivity = this;
     }
 }
