@@ -6,13 +6,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -23,14 +23,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.gitonway.lee.niftymodaldialogeffects.lib.Effectstype;
-import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
 import com.mob.MobSDK;
 
-import java.util.zip.Inflater;
+import org.json.JSONObject;
+
+import java.util.Set;
 
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
+import cn.smssdk.utils.SMSLog;
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.Utils.ToastUtil;
 
@@ -47,12 +48,10 @@ public class RegisterPhone2 extends AppCompatActivity {
     private TextView header;
     private LinearLayout content1;
     private TextView phoneNumber;
-    private View phoneLine;
     private RelativeLayout content2;
     private TextView code;
     private EditText codeNumber;
     private Button sendCode;
-    private View passwordLine;
     private ImageView backButton;
     private Button submit;
     private TextView voice_code;
@@ -62,36 +61,20 @@ public class RegisterPhone2 extends AppCompatActivity {
     private Activity mActivity;
 
     EventHandler eventHandler=new EventHandler(){
-
-        @Override
-        public void afterEvent(int event, int result, Object data) {
-
-            if (result == SMSSDK.RESULT_COMPLETE) {
-                //回调完成
-                if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
-                    //提交验证码成功
-                    Toast.makeText(RegisterPhone2.this, "提交验证码成功", Toast.LENGTH_SHORT).show();
-                    //页面跳转
-                    jumpToTheRegisterPage();
-                }else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE){
-                    //获取验证码成功
-                    Toast.makeText(RegisterPhone2.this, "获取验证码成功", Toast.LENGTH_SHORT).show();
-                }else if (event ==SMSSDK.EVENT_GET_SUPPORTED_COUNTRIES){
-                    //返回支持发送验证码的国家列表
-                    Toast.makeText(RegisterPhone2.this, "返回支持发送验证码的国家列表", Toast.LENGTH_SHORT).show();
-                }else if(event == SMSSDK.EVENT_GET_VOICE_VERIFICATION_CODE){
-                    Toast.makeText(RegisterPhone2.this, "获取语音验证码成功", Toast.LENGTH_SHORT).show();
-                }
-            }else{
-                ((Throwable)data).printStackTrace();
+            @Override
+            public void afterEvent(int event, int result, Object data) {
+                Message msg = new Message();
+                msg.arg1 = event;
+                msg.arg2 = result;
+                msg.obj = data;
+                mHandler.sendMessage(msg);
             }
-        }
-    };
-
+        };
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register_phone2);
+        SMSSDK.registerEventHandler(eventHandler);
         initView();
         initData();
     }
@@ -198,19 +181,15 @@ public class RegisterPhone2 extends AppCompatActivity {
     }
 
     private void initView() {
-        MobSDK.init(this);
-
         //对SMSSDK进行注册，与unregisterEventHandler配套使用
         SMSSDK.registerEventHandler(eventHandler);
         header = (TextView) findViewById(R.id.header);
         content1 = (LinearLayout) findViewById(R.id.content1);
         phoneNumber = (TextView) findViewById(R.id.phone_number);
-        phoneLine = (View) findViewById(R.id.phone_line);
         content2 = (RelativeLayout) findViewById(R.id.content2);
         code = (TextView) findViewById(R.id.code);
         codeNumber = (EditText) findViewById(R.id.code_number);
         sendCode = (Button) findViewById(R.id.send_code);
-        passwordLine = (View) findViewById(R.id.password_line);
         backButton = (ImageView) findViewById(R.id.back_button);
         submit = (Button) findViewById(R.id.submit);
         voice_code = (TextView) findViewById(R.id.voice_code);
@@ -219,6 +198,41 @@ public class RegisterPhone2 extends AppCompatActivity {
 
         mActivity = this;
     }
+
+    @SuppressLint("HandlerLeak")
+    Handler mHandler = new Handler()
+    {
+        public void handleMessage(Message msg) {
+
+            // TODO Auto-generated method stub
+            super.handleMessage(msg);
+            int event = msg.arg1;
+            int result = msg.arg2;
+            Object data = msg.obj;
+            Log.e("event", "event=" + event);
+            if (result == SMSSDK.RESULT_COMPLETE) {
+                System.out.println("--------result"+event);
+                //短信注册成功后，返回MainActivity,然后提示新好友
+                if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {//提交验证码成功
+                    //提交验证码成功
+                    ToastUtil toastUtil = new ToastUtil(mContext, mActivity);
+                    toastUtil.showToast("提交验证码成功");
+//                    //页面跳转
+                    jumpToTheRegisterPage();
+                } else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE){
+                    //已经验证
+                    Toast.makeText(getApplicationContext(), "验证码已经发送", Toast.LENGTH_SHORT).show();
+                }else{
+                    ToastUtil toastUtil = new ToastUtil(mContext, mActivity);
+                    toastUtil.showToast("验证码错误(猜测您点了语音验证码，以最后得到的验证码为准)");
+                }
+            } else {
+                ((Throwable)data).printStackTrace();
+            }
+
+
+        }
+    };
 
     private void finishThis(){
         this.finish();

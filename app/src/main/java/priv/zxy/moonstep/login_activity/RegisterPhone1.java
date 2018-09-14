@@ -43,6 +43,7 @@ public class RegisterPhone1 extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 getData();
+
                 checkAndOperatePhoneNumber();
             }
         });
@@ -95,6 +96,11 @@ public class RegisterPhone1 extends AppCompatActivity {
         phoneLine = (View) findViewById(R.id.phone_line);
         submit = (Button) findViewById(R.id.submit);
         backButton = (ImageView) findViewById(R.id.back_button);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
     }
 
     private void finishThis(){

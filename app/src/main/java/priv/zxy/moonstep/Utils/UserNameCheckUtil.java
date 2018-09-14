@@ -22,7 +22,7 @@ import java.util.Map;
 public class UserNameCheckUtil {
     private Context mContext;
     private Activity mActivity;
-    public Boolean checkResult = false;
+    public static boolean checkResult = false;
 
     public UserNameCheckUtil(Context context, Activity activity){
         this.mContext = context;
@@ -51,6 +51,7 @@ public class UserNameCheckUtil {
                                 //检验成功
                                 if( !userName.equals("")) {
                                     //跳出弹窗
+//                                    SuccessTip();
                                     checkResult = true;
                                 }
                                 else

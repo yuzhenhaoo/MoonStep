@@ -37,11 +37,10 @@ public class PhoneRegisterUtil {
      * @param phone 手机账号
      * @param userName 用户名
      * @param password 密码
-     * @param confirmPassword 确认密码
      */
-    public void RegisterRequest(final String phone, final  String userName, final String gender, final String password, final String confirmPassword){
+    public void RegisterRequest(final String phone, final  String userName, final String gender, final String password){
         //请求地址
-        String url = "http://120.79.154.236:8080/MoonStep/RegisterServlet";
+        String url = "http://120.79.154.236:8080/MoonStep/NewServlet";
         String tag = "Login";
         //取得请求队列
         RequestQueue requestQueue = Volley.newRequestQueue(mContext);
@@ -60,16 +59,20 @@ public class PhoneRegisterUtil {
                         try {
                             JSONObject jsonObject = (JSONObject) new JSONObject(response).get("params");
                             String result = jsonObject.getString("Result");
-                            if (result.equals("success")) {
-                                //做自己的登录成功操作，如页面跳转
-                                jump_to_mainPage(mActivity);
-                                /**
-                                 * 这里应该跳出一个Dialog的弹窗来提示用户已经注册成功了
-                                 */
-                            } else if(result.equals("erro0")){
-                                ToastErro0();
-                            }else if(result.equals("erro1")){
-                                ToastErro1();
+                            switch (result) {
+                                case "success":
+                                    //做自己的登录成功操作，如页面跳转
+                                    jump_to_mainPage(mActivity);
+                                    //提示用户已经注册成功了
+                                    ToastUtil toastUtil = new ToastUtil(mContext, mActivity);
+                                    toastUtil.showToast("恭喜您，可以进入圆月世界了！");
+                                    break;
+                                case "erro0":
+                                    ToastErro0();
+                                    break;
+                                case "erro1":
+                                    ToastErro1();
+                                    break;
                             }
                         } catch (JSONException e) {
                             //做自己的请求异常操作
@@ -92,7 +95,6 @@ public class PhoneRegisterUtil {
                 params.put("UserName",userName);
                 params.put("PassWord", password);
                 params.put("Gender",gender);
-                params.put("ConfirmPassword", confirmPassword);
                 return params;
             }
         };

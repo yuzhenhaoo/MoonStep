@@ -21,6 +21,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import priv.zxy.moonstep.login_activity.LoginActivity;
 import priv.zxy.moonstep.login_activity.RegisterPhone2;
 
 public class PhoneCheckUtil {
@@ -47,14 +48,12 @@ public class PhoneCheckUtil {
                     @Override
                     public void onResponse(String response) {
                         try {
+                            Log.i("TAG","onResponse");
                             JSONObject jsonObject = (JSONObject) new JSONObject(response).get("params");
                             String result = jsonObject.getString("Result");
                             if (result.equals("success")) {
                                 //检验成功
-                                if( !phoneNumber.equals(""))
-                                    jumpToTheSecondPhonePage(mActivity, phoneNumber);
-                                else
-                                    Warning();
+                                jumpToTheSecondPhonePage(mActivity, phoneNumber);
                             } else {
                                 //检验失败
                                 Fail();
@@ -97,9 +96,24 @@ public class PhoneCheckUtil {
         toastUtil.showToast("您的号码已经注册过了，请换一个重试");
     }
 
-    private void jumpToTheSecondPhonePage(Activity thisActivity, String phoneNumber){
+    private void jumpToTheSecondPhonePage(final Activity thisActivity,final String phoneNumber){
         ToastUtil toastUtil = new ToastUtil(mContext, mActivity);
-        toastUtil.showToast("将要向您的手机发送验证信息，注意查收！");
+        toastUtil.showToast("已经向您的手机发送验证信息，注意查收！");
+//        final MyDialog myDialog = new MyDialog(thisActivity);
+//        myDialog.setContent("将要向您的手机发送验证信息，注意查收！");
+//        myDialog.setNegativeClickLister("取消", new MyDialog.onNegativeClickListener() {
+//            @Override
+//            public void onNegativeClick() {
+//                myDialog.dismiss();
+//            }
+//        });
+//        myDialog.setPositiveClickLister("确认", new MyDialog.onPostiveClickListener() {
+//            @Override
+//            public void onPositiveClick() {
+//
+//            }
+//        });
+//        myDialog.show();
         Bundle bundle = new Bundle();
         bundle.putString("phoneNumber", phoneNumber);
         Intent intent = new Intent(thisActivity, RegisterPhone2.class);

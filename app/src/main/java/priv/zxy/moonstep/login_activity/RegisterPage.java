@@ -7,17 +7,20 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.Utils.PhoneRegisterUtil;
+import priv.zxy.moonstep.Utils.ToastUtil;
 import priv.zxy.moonstep.Utils.UserNameCheckUtil;
+
+import static java.lang.Thread.sleep;
 
 public class RegisterPage extends AppCompatActivity {
 
@@ -37,7 +40,7 @@ public class RegisterPage extends AppCompatActivity {
     private ImageView backButton;
     private Context mContext;
     private Activity mActivity;
-    private Boolean userNameCheckResult = false;
+    private boolean userNameCheckResult = false;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,16 +56,18 @@ public class RegisterPage extends AppCompatActivity {
         Intent intent = getIntent();
         phoneNumber = intent.getStringExtra("phoneNumber");
 
-
         checkUsername.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //检测用户名是否已经存在于数据库中，并跳出弹窗对用户进行提示
+                userName = accountName.getText().toString();
                 UserNameCheckUtil userNameCheckUtil = new UserNameCheckUtil(mContext, mActivity);
                 userNameCheckUtil.UserNameCheck(userName);
-                if(userNameCheckUtil.checkResult){
-                    userNameCheckUtil.SuccessTip();//只有成功的时候才跳出弹窗
-                }
+                ThreadRefresh();
+                userNameCheckResult = userNameCheckUtil.checkResult;
+                if (userNameCheckResult)
+                    userNameCheckUtil.SuccessTip();
+
             }
         });
 
@@ -110,6 +115,19 @@ public class RegisterPage extends AppCompatActivity {
         });
     }
 
+    private void ThreadRefresh(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.currentThread().sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
     private void getData() {
         userName = accountName.getText().toString();
         userPassword = password.getText().toString();
@@ -133,10 +151,15 @@ public class RegisterPage extends AppCompatActivity {
     private void checkAndOpeateData() {
         UserNameCheckUtil userNameCheckUtil = new UserNameCheckUtil(mContext, mActivity);
         userNameCheckUtil.UserNameCheck(userName);
-
-        if(userNameCheckUtil.checkResult){ // 在点击提交按钮的时候，我们只检测用户名是否不符合要求，并有相应的弹窗，如果用户名符合要求，就不弹窗
-            PhoneRegisterUtil prUtil = new PhoneRegisterUtil(this.getApplicationContext(), this);
-            prUtil.RegisterRequest(phoneNumber, userName, userGender, userPassword, confirmPassword);
+        userNameCheckResult = userNameCheckUtil.checkResult;
+        if(userNameCheckResult){ // 在点击提交按钮的时候，我们只检测用户名是否不符合要求，并有相应的弹窗，如果用户名符合要求，就不弹窗
+            if(userPassword.equals(confirmPassword)){
+                PhoneRegisterUtil prUtil = new PhoneRegisterUtil(this.getApplicationContext(), this);
+                prUtil.RegisterRequest(phoneNumber, userName, userGender, userPassword);
+            }else{
+                ToastUtil toastUtil = new ToastUtil(mContext,mActivity);
+                toastUtil.showToast("您的密码和验证密码不符，请重新输入");
+            }
         }
     }
 

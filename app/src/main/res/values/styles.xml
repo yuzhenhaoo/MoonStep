@@ -30,5 +30,15 @@
         <item name="android:textSize">18sp</item>
     </style>
 
+    <!--无边框全透明背景-->
+    <style name="MyDialog" parent="android:style/Theme.Dialog">
+            <item name="android:windowFrame">@null</item>
+            <item name="android:windowIsFloating">true</item>
+            <item name="android:windowIsTranslucent">false</item>
+            <item name="android:windowNoTitle">true</item><!--除去title-->
+            <item name="android:backgroundDimEnabled">true</item><!--半透明-->
+            <item name="android:windowBackground">@color/transparent</item><!--除去背景色-->
+            <item name="android:radius">10dp</item>
+    </style>
 
 </resources>

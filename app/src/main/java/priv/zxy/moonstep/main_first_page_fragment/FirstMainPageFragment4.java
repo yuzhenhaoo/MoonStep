@@ -22,10 +22,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.gitonway.lee.niftymodaldialogeffects.lib.Effectstype;
-import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
 import com.yalantis.contextmenu.lib.ContextMenuDialogFragment;
 import com.yalantis.contextmenu.lib.MenuObject;
 import com.yalantis.contextmenu.lib.MenuParams;
@@ -36,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import priv.zxy.moonstep.R;
+import priv.zxy.moonstep.Utils.MyDialog;
 import priv.zxy.moonstep.login_activity.LoginActivity;
 
 public class FirstMainPageFragment4 extends Fragment implements OnMenuItemClickListener, OnMenuItemLongClickListener{
@@ -144,38 +142,59 @@ public class FirstMainPageFragment4 extends Fragment implements OnMenuItemClickL
     }
 
     private void popupDialog(){
-        Effectstype effect = Effectstype.Newspager;
-        NiftyDialogBuilder dialogBuilder=NiftyDialogBuilder.getInstance(mContext);
-        dialogBuilder
-                .withTitle("Ask you once!")                                  //.withTitle(null)  no title
-                .withTitleColor("#f2f2f2")                                  //def
-                .withDividerColor("#4B0082")                              //def
-                .withMessage("您确定要退出吗？")                     //.withMessage(null)  no Msg
-                .withMessageColor("#f2f2f2")                              //def  | withMessageColor(int resid))
-                .withDialogColor("#742DD2")                               //def  | withDialogColor(int resid)
-                .withIcon(getResources().getDrawable(R.mipmap.warning))
-                .withDuration(700)                                          //def
-                .withEffect(effect)                                         //def Effectstype.Slidetop
-                .withButton1Text("取消")                                      //def gone
-                .withButton2Text("确认")                                  //def gone
-                .isCancelableOnTouchOutside(true)                           //def    | isCancelable(true)
-//                .setCustomView(R.layout.custom_view,v.getContext())         //.setCustomView(View or ResId,context)
-                .setButton1Click(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(v.getContext(), "i'm btn1", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .setButton2Click(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        menuObjects.clear();
+        final MyDialog myDialog = new MyDialog(mActivity);
+        myDialog.setTitle("退出提示!");
+        myDialog.setContent("退出登陆后我们会继续保留您的账户数据，记得常回来看看哦！");
+        myDialog.setNegativeClickLister("取消", new MyDialog.onNegativeClickListener() {
+            @Override
+            public void onNegativeClick() {
+                myDialog.dismiss();
+            }
+        });
+        myDialog.setPositiveClickLister("确认", new MyDialog.onPostiveClickListener() {
+            @Override
+            public void onPositiveClick() {
+                menuObjects.clear();
                         Intent intent = new Intent(mActivity, LoginActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
-                    }
-                }).show();
+            }
+        });
+        myDialog.show();
+
+//        Effectstype effect = Effectstype.Newspager;
+//        NiftyDialogBuilder dialogBuilder=NiftyDialogBuilder.getInstance(mContext);
+//        dialogBuilder
+//                .withTitle("退出提示!")                                  //.withTitle(null)  no title
+//                .withTitleColor("#f2f2f2")                                  //def
+//                .withDividerColor("#4B0082")                              //def
+//                .withMessage("退出登陆后我们会继续保留您的账户数据，记得常回来看看哦！")                     //.withMessage(null)  no Msg
+//                .withMessageColor("#f2f2f2")                              //def  | withMessageColor(int resid))
+//                .withDialogColor("#742DD2")                               //def  | withDialogColor(int resid)
+//                .withIcon(getResources().getDrawable(R.mipmap.warning))
+//                .withDuration(700)                                          //def
+//                .withEffect(effect)                                         //def Effectstype.Slidetop
+//                .withButton1Text("取消")                                      //def gone
+//                .withButton2Text("确认")                                  //def gone
+//                .isCancelableOnTouchOutside(true)                           //def    | isCancelable(true)
+////                .setCustomView(R.layout.custom_view,v.getContext())         //.setCustomView(View or ResId,context)
+//                .setButton1Click(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Toast.makeText(v.getContext(), "i'm btn1", Toast.LENGTH_SHORT).show();
+//                    }
+//                })
+//                .setButton2Click(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        menuObjects.clear();
+//                        Intent intent = new Intent(mActivity, LoginActivity.class);
+//                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                        startActivity(intent);
+//                    }
+//                }).show();
     }
 
     private List<MenuObject> getMenuObjects(){
