@@ -28,6 +28,7 @@ public class LoginUtil {
 
     private Context mContext;
     private Activity mActivity;
+    public static boolean isSuccess = false;
     public LoginUtil(Context context, Activity activity){
         this.mContext = context;
         this.mActivity = activity;
@@ -52,6 +53,7 @@ public class LoginUtil {
                             JSONObject jsonObject = (JSONObject) new JSONObject(response).get("params");
                             String result = jsonObject.getString("Result");
                             if (result.equals("success")) {
+                                isSuccess = false;
                                 //做自己的登录成功操作，如页面跳转
                                 jump_to_mainPage(mActivity);
                                 SharedPreferencesUtil sp = new SharedPreferencesUtil(mContext);

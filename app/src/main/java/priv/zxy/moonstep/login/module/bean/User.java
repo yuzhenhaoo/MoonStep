@@ -1,4 +1,4 @@
-package priv.zxy.moonstep.login.module;
+package priv.zxy.moonstep.login.module.bean;
 
 /**
  *  Created by Zxy on 2018/9/20

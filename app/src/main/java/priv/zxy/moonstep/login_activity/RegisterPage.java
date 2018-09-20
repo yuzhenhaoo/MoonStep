@@ -15,7 +15,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import priv.zxy.moonstep.R;
@@ -76,7 +75,7 @@ public class RegisterPage extends AppCompatActivity {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_login_register_page);
+        setContentView(R.layout.register_activity);
         initView();
         initData();
     }
