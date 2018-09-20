@@ -5,22 +5,23 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.Utils.PhoneRegisterUtil;
 import priv.zxy.moonstep.Utils.ToastUtil;
 import priv.zxy.moonstep.Utils.UserNameCheckUtil;
-
-import static java.lang.Thread.sleep;
 
 public class RegisterPage extends AppCompatActivity {
 
@@ -40,7 +41,37 @@ public class RegisterPage extends AppCompatActivity {
     private ImageView backButton;
     private Context mContext;
     private Activity mActivity;
+    private View deepBackground;
+    private View plainBackground;
+    private ContentLoadingProgressBar progressBar;
     private boolean userNameCheckResult = false;
+
+    @SuppressLint("HandlerLeak")
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case 0x01:
+                    progressBar.hide();
+                    deepBackground.setVisibility(View.GONE);
+                    plainBackground.setVisibility(View.GONE);
+                    break;
+            }
+        }
+    };
+
+    private Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            try {
+                Thread.currentThread().sleep(1500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            handler.obtainMessage(0x01).sendToTarget();
+        }
+    };
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,7 +94,12 @@ public class RegisterPage extends AppCompatActivity {
                 userName = accountName.getText().toString();
                 UserNameCheckUtil userNameCheckUtil = new UserNameCheckUtil(mContext, mActivity);
                 userNameCheckUtil.UserNameCheck(userName);
-                ThreadRefresh();
+                try {
+                    refreshPage();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                new Thread(runnable).start();//刷新界面
                 userNameCheckResult = userNameCheckUtil.checkResult;
                 if (userNameCheckResult)
                     userNameCheckUtil.SuccessTip();
@@ -115,17 +151,14 @@ public class RegisterPage extends AppCompatActivity {
         });
     }
 
-    private void ThreadRefresh(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.currentThread().sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
+    /**
+     * 刷新页面
+     */
+    private void refreshPage() throws InterruptedException {
+        progressBar.show();
+        Thread.sleep(200);
+        deepBackground.setVisibility(View.VISIBLE);
+        plainBackground.setVisibility(View.VISIBLE);
     }
 
     private void getData() {
@@ -148,16 +181,26 @@ public class RegisterPage extends AppCompatActivity {
         });
     }
 
+    /**
+     * 对数据进行检测并验证用户名和密码是否合法
+     * 如果合法的话，满足注册的需求，给予用户分配一个账户，并对结果进行提示
+     */
     private void checkAndOpeateData() {
         UserNameCheckUtil userNameCheckUtil = new UserNameCheckUtil(mContext, mActivity);
         userNameCheckUtil.UserNameCheck(userName);
+        try {
+            refreshPage();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        new Thread(runnable).start();//刷新界面
         userNameCheckResult = userNameCheckUtil.checkResult;
-        if(userNameCheckResult){ // 在点击提交按钮的时候，我们只检测用户名是否不符合要求，并有相应的弹窗，如果用户名符合要求，就不弹窗
-            if(userPassword.equals(confirmPassword)){
+        if (userNameCheckResult) { // 在点击提交按钮的时候，我们只检测用户名是否不符合要求，并有相应的弹窗，如果用户名符合要求，就不弹窗
+            if (userPassword.equals(confirmPassword)) {
                 PhoneRegisterUtil prUtil = new PhoneRegisterUtil(this.getApplicationContext(), this);
                 prUtil.RegisterRequest(phoneNumber, userName, userGender, userPassword);
-            }else{
-                ToastUtil toastUtil = new ToastUtil(mContext,mActivity);
+            } else {
+                ToastUtil toastUtil = new ToastUtil(mContext, mActivity);
                 toastUtil.showToast("您的密码和验证密码不符，请重新输入");
             }
         }
@@ -179,5 +222,8 @@ public class RegisterPage extends AppCompatActivity {
 
         mContext = this.getApplicationContext();
         mActivity = this;
+        deepBackground = (View) findViewById(R.id.deepBackground);
+        plainBackground = (View) findViewById(R.id.plainBackground);
+        progressBar = (ContentLoadingProgressBar) findViewById(R.id.progressBar);
     }
 }

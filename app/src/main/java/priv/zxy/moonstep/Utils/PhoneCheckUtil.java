@@ -32,7 +32,7 @@ public class PhoneCheckUtil {
         this.mActivity = activity;
     }
 
-    public void phoneOrEmailCheck(final String phoneNumber){
+    public void phoneCheck(final String phoneNumber){
         //请求地址
         String url = "http://120.79.154.236:8080/MoonStep/CheckPhoneServlet";
         String tag = "Login";

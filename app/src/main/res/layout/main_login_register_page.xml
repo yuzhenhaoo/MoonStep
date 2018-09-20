@@ -118,4 +118,23 @@
         android:src="@mipmap/back"
         android:layout_margin="5dp"
         android:contentDescription="@string/nothing"/>
+    <View
+        android:id="@+id/deepBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#927c7a7a" />
+
+    <View
+        android:id="@+id/plainBackground"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/deep_gray_background" />
+
+    <android.support.v4.widget.ContentLoadingProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleLargeInverse"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true" />
 </RelativeLayout>

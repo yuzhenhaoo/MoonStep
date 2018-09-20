@@ -133,12 +133,16 @@ public class LoginActivity extends AppCompatActivity {
                     case MotionEvent.ACTION_DOWN:
                         clickLogin.setTextSize(24);
                         getData();
-                        refreshPage();
+                        try {
+                            refreshPage();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
                                 try {
-                                    Thread.sleep(1300);
+                                    Thread.currentThread().sleep(1300);
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
                                 }
@@ -183,8 +187,9 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * 刷新页面
      */
-    private void refreshPage(){
+    private void refreshPage() throws InterruptedException {
         progressBar.show();
+        Thread.sleep(200);
         deepBackground.setVisibility(View.VISIBLE);
         plainBackground.setVisibility(View.VISIBLE);
     }

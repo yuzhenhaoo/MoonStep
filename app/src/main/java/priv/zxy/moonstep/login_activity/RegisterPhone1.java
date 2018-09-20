@@ -1,7 +1,11 @@
 package priv.zxy.moonstep.login_activity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -29,6 +33,36 @@ public class RegisterPhone1 extends AppCompatActivity {
     private View phoneLine;
     private Button submit;
     private ImageView backButton;
+    private View deepBackground;
+    private View plainBackground;
+    private ContentLoadingProgressBar progressBar;
+
+    @SuppressLint("HandlerLeak")
+    private Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch(msg.what){
+                case 0x01:
+                    progressBar.hide();
+                    deepBackground.setVisibility(View.GONE);
+                    plainBackground.setVisibility(View.GONE);
+                    break;
+            }
+        }
+    };
+
+    private Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            try {
+                Thread.currentThread().sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            handler.obtainMessage(0x01).sendToTarget();
+        }
+    };
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,8 +77,11 @@ public class RegisterPhone1 extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 getData();
-
-                checkAndOperatePhoneNumber();
+                try {
+                    checkAndOperatePhoneNumber();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -70,15 +107,26 @@ public class RegisterPhone1 extends AppCompatActivity {
         phoneNumberText = phoneNumber.getText().toString();
     }
 
-    private void checkAndOperatePhoneNumber() {
-        if(phoneNumberText.equals("")){
+    private void checkAndOperatePhoneNumber() throws InterruptedException {
+        if (phoneNumberText.equals("")) {
             ToastUtil toastUtil = new ToastUtil(this.getApplicationContext(), this);
             toastUtil.showToast("手机号不能为空，请重试");
-        }
-        else{
+        } else {
             PhoneCheckUtil peUtil = new PhoneCheckUtil(this.getApplicationContext(), this);
-            peUtil.phoneOrEmailCheck(phoneNumberText);
+            peUtil.phoneCheck(phoneNumberText);
+            refreshPage();
+            new Thread(runnable).start();
         }
+    }
+
+    /**
+     * 刷新页面
+     */
+    private void refreshPage() throws InterruptedException {
+        progressBar.show();
+        Thread.sleep(200);
+        deepBackground.setVisibility(View.VISIBLE);
+        plainBackground.setVisibility(View.VISIBLE);
     }
 
     private void jump_to_country_choice_page() {
@@ -96,6 +144,9 @@ public class RegisterPhone1 extends AppCompatActivity {
         phoneLine = (View) findViewById(R.id.phone_line);
         submit = (Button) findViewById(R.id.submit);
         backButton = (ImageView) findViewById(R.id.back_button);
+        deepBackground = (View) findViewById(R.id.deepBackground);
+        plainBackground = (View) findViewById(R.id.plainBackground);
+        progressBar = (ContentLoadingProgressBar) findViewById(R.id.progressBar);
     }
 
     @Override
@@ -103,7 +154,7 @@ public class RegisterPhone1 extends AppCompatActivity {
         super.onPause();
     }
 
-    private void finishThis(){
+    private void finishThis() {
         this.finish();
     }
 }
