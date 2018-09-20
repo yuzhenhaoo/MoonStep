@@ -76,7 +76,7 @@ public class FirstMainPageFragment3 extends Fragment {
     }
 
     private void RadioButtonSelectedSettings(int index){
-        Drawable bottomDrawable = getResources().getDrawable(R.drawable.divider_line);
+        Drawable bottomDrawable = getResources().getDrawable(R.drawable.red_rectangle_line);
         switch(index){
             case 0:
                 rb1.setTextColor(Color.parseColor("#000000"));

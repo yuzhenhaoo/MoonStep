@@ -3,115 +3,163 @@ package priv.zxy.moonstep.login_activity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.mob.MobSDK;
 
-import cn.smssdk.EventHandler;
-import cn.smssdk.SMSSDK;
-import cn.smssdk.gui.RegisterPage;
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.Utils.LoginUtil;
 import priv.zxy.moonstep.Utils.SharedPreferencesUtil;
-import priv.zxy.moonstep.main_page.MainActivity;
+import priv.zxy.moonstep.Utils.ToastUtil;
 
-public class LoginActivity extends AppCompatActivity{
+public class LoginActivity extends AppCompatActivity {
 
-    private Button login;
-    Button register_phone;
-    Button forget_password;
-    private EditText inputAccount;
-    private EditText inputPassword;
-    private String account;
-    private String passwd;
+    private Button loginWeixin;
+    private Button loginQQ;
+    private Button loginWeibo;
+    private EditText account;
+    private EditText password;
+    private Button clickLogin;
+    private Button forgetPassword;
+    private Button registerPhone;
+    private View deepBackground;
+    private View plainBackground;
+    private ContentLoadingProgressBar progressBar;
+    private String inputAccount;
+    private String inputPassword;
+
+    @SuppressLint("HandlerLeak")
+    private Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch(msg.what){
+                case 0x01:
+                    progressBar.hide();
+                    deepBackground.setVisibility(View.GONE);
+                    plainBackground.setVisibility(View.GONE);
+                    break;
+            }
+        }
+    };
+
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_login_page);
 
         initView();
+
         jumpPage();
     }
 
-    public void initView(){
-        login = findViewById(R.id.click_login);
-        register_phone = findViewById(R.id.register_phone);
-        forget_password = findViewById(R.id.forget_password);
-        inputAccount = findViewById(R.id.account);
-        inputPassword = findViewById(R.id.password);
-
+    public void initView() {
+        loginWeixin = (Button) findViewById(R.id.login_weixin);
+        loginQQ = (Button) findViewById(R.id.login_QQ);
+        loginWeibo = (Button) findViewById(R.id.login_weibo);
+        account = (EditText) findViewById(R.id.account);
+        password = (EditText) findViewById(R.id.password);
+        clickLogin = (Button) findViewById(R.id.click_login);
+        forgetPassword = (Button) findViewById(R.id.forget_password);
+        registerPhone = (Button) findViewById(R.id.register_phone);
+        deepBackground = (View) findViewById(R.id.deepBackground);
+        plainBackground = (View) findViewById(R.id.plainBackground);
+        progressBar = (ContentLoadingProgressBar) findViewById(R.id.progressBar);
         //MobSDK的初始化
         MobSDK.init(this);
 
         //实现之前成功存下的账户和密码的读取
         SharedPreferencesUtil sp = new SharedPreferencesUtil(this.getApplicationContext());
-        inputAccount.setText(sp.readLoginInfo().get("UserName"));
-        inputPassword.setText(sp.readLoginInfo().get("PassWd"));
+        account.setText(sp.readLoginInfo().get("UserName"));
+        password.setText(sp.readLoginInfo().get("PassWd"));
+
+        //隐藏两个为了刷新而产生的View布局和ProgressBar
+        deepBackground.setVisibility(View.GONE);
+        plainBackground.setVisibility(View.GONE);
+        progressBar.hide();
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private void jumpPage(){
-        register_phone.setOnTouchListener(new View.OnTouchListener() {
+    private void jumpPage() {
+        registerPhone.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                switch(motionEvent.getAction()){
+                switch (motionEvent.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        register_phone.setTextSize(24);
+                        registerPhone.setTextSize(24);
                         jump_to_register_phone_page();
 
                         break;
                     case MotionEvent.ACTION_UP:
-                        register_phone.setTextSize(20);
+                        registerPhone.setTextSize(20);
                         break;
                 }
                 return true;
             }
         });
 
-        forget_password.setOnTouchListener(new View.OnTouchListener() {
+        forgetPassword.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                switch(motionEvent.getAction()){
+                switch (motionEvent.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        forget_password.setTextSize(22);
+                        forgetPassword.setTextSize(22);
                         jump_to_forget_pwd_page();
                         break;
                     case MotionEvent.ACTION_UP:
-                        forget_password.setTextSize(20);
+                        forgetPassword.setTextSize(20);
                         break;
                 }
                 return true;
             }
         });
 
-        login.setOnTouchListener(new View.OnTouchListener() {
+        clickLogin.setOnTouchListener(new View.OnTouchListener() {
             //返回值改为true，否则在执行了DOWN以后不再执行UP和MOVE操作。
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                switch(motionEvent.getAction()){
+                switch (motionEvent.getAction()) {
                     case MotionEvent.ACTION_DOWN:
+                        clickLogin.setTextSize(24);
                         getData();
+                        refreshPage();
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    Thread.sleep(1300);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                handler.obtainMessage(0x01).sendToTarget();
+                            }
+                        }).start();
                         checkAndOperateData();
-                        login.setTextSize(24);
                         break;
                     case MotionEvent.ACTION_UP:
-                        login.setTextSize(20);
+                        clickLogin.setTextSize(20);
                         break;
                 }
                 return true;
             }
         });
     }
+
     /**
      * 点击进入手机注册页面
      */
-    public void jump_to_register_phone_page(){
+    public void jump_to_register_phone_page() {
         Intent intent = new Intent(this, RegisterPhone1.class);
         startActivity(intent);
     }
@@ -119,23 +167,35 @@ public class LoginActivity extends AppCompatActivity{
     /**
      * 点击进入忘记密码页面
      */
-    public void jump_to_forget_pwd_page(){
+    public void jump_to_forget_pwd_page() {
         Intent intent = new Intent(this, ForgetPwdActivity.class);
         startActivity(intent);
     }
 
-    private void getData(){
-        account = inputAccount.getText().toString();
-        passwd = inputPassword.getText().toString();
+    /**
+     * 获得用户名和用户密码
+     */
+    private void getData() {
+        inputAccount = account.getText().toString();
+        inputPassword = password.getText().toString();
     }
 
-    private void checkAndOperateData(){
-        if(account != null && passwd != null){
+    /**
+     * 刷新页面
+     */
+    private void refreshPage(){
+        progressBar.show();
+        deepBackground.setVisibility(View.VISIBLE);
+        plainBackground.setVisibility(View.VISIBLE);
+    }
+
+    private void checkAndOperateData() {
+        if (inputAccount != null && inputPassword != null) {
             LoginUtil loginUtil = new LoginUtil(this.getApplicationContext(), this);
-            loginUtil.LoginRequest(account, passwd, inputAccount, inputPassword);
-        }else{
-            Toast.makeText(this, "您的账户和密码不能为空哦！", Toast.LENGTH_SHORT).show();
+            loginUtil.LoginRequest(inputAccount, inputPassword);
+        } else {
+            ToastUtil toastUtil = new ToastUtil(this.getApplicationContext(), this);
+            toastUtil.showToast("您的账户/密码不能为空哦！");
         }
     }
-
 }

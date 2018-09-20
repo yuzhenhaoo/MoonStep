@@ -19,5 +19,5 @@
         android:text="@string/click_jump"
         android:layout_alignParentEnd="true"
         android:textColor="@color/white"
-        android:background="@drawable/gray_button"/>
+        android:background="@drawable/gray_rectangle1"/>
 </RelativeLayout>

@@ -46,7 +46,7 @@
                     android:textColor="#fff"
                     android:text="@string/click_login"
                     android:translationZ="10dp"
-                    android:background="@drawable/black_or_white_button_background"/>
+                    android:background="@drawable/custom_rectangle0"/>
             </LinearLayout>
         </LinearLayout>
 

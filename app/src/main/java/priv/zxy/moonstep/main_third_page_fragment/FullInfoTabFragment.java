@@ -66,7 +66,7 @@ public class FullInfoTabFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         toolbar.setTitle(moon_title_model.getTitleName());
-        toolbar.setNavigationIcon(R.drawable.ic_back);
+        toolbar.setNavigationIcon(R.drawable.white_back_key_round);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

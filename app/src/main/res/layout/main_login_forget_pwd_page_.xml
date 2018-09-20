@@ -59,7 +59,7 @@
                         android:elevation="10dp"
                         android:textColor="#fff"
                         android:text="@string/send_message"
-                        android:background="@drawable/black_or_white_button_background"/>
+                        android:background="@drawable/custom_rectangle0"/>
                 </LinearLayout>
                 <EditText
                     android:id="@+id/check_message"
@@ -99,7 +99,7 @@
                         android:layout_gravity="center"
                         android:text="@string/confirm"
                         android:translationZ="10dp"
-                        android:background="@drawable/black_or_white_button_background"/>
+                        android:background="@drawable/custom_rectangle0"/>
                 </LinearLayout>
             </LinearLayout>
     </LinearLayout>

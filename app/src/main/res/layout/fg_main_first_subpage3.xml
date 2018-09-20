@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
-    android:background="@drawable/colorful_title_background">
+    android:background="@drawable/custom_title_rectangle">
     <RelativeLayout
         android:id="@+id/viewHeader"
         android:layout_width="match_parent"
@@ -48,7 +48,7 @@
                 android:button="@null"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="30dp"
-                android:drawableBottom="@drawable/divider_line"
+                android:drawableBottom="@drawable/red_rectangle_line"
                 android:textColor="@color/Gray"
                 android:textSize="14sp"
                 android:text="@string/message_record"/>
@@ -59,7 +59,7 @@
                 android:button="@null"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="30dp"
-                android:drawableBottom="@drawable/divider_line"
+                android:drawableBottom="@drawable/red_rectangle_line"
                 android:textColor="@color/Gray"
                 android:textSize="14sp"
                 android:text="@string/my_moon_friend"/>

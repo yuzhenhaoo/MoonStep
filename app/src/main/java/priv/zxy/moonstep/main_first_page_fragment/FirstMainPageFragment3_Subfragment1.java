@@ -79,7 +79,7 @@ public class FirstMainPageFragment3_Subfragment1 extends Fragment {
         recyclerView.setAdapter(mAdapter);
         //自定义recyclerView的分割线
         DividerItemDecoration divide_line = new DividerItemDecoration(this.getActivity(),DividerItemDecoration.VERTICAL);
-        divide_line.setDrawable(this.getActivity().getDrawable(R.drawable.colored_dividing_line));
+        divide_line.setDrawable(this.getActivity().getDrawable(R.drawable.gradient_rectangle1));
         recyclerView.addItemDecoration(divide_line);
 
         //设置刷新事件的监听

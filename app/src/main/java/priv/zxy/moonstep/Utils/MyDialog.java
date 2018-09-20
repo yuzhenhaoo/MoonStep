@@ -51,7 +51,6 @@ public class MyDialog extends Dialog {
     }
     /*----------------------事件处理-----------------------*/
     public MyDialog(@NonNull Context context) {
-//        super(context, R.style.MyDialog);
         super(context, R.style.MyDialog);
     }
 
@@ -79,7 +78,7 @@ public class MyDialog extends Dialog {
     }
 
     /**
-     * 初始化姐买你控件的显示数据
+     * 初始化控件的显示数据
      */
     private void initData(){
         Log.i("TAG","initData");

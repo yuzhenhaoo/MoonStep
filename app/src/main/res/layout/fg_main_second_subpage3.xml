@@ -10,7 +10,7 @@
         android:id="@+id/scopeHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/blue_gradient_background">
+        android:background="@drawable/gradient_rectangle0">
         <TextView
             android:layout_width="70dp"
             android:layout_height="wrap_content"
@@ -32,7 +32,7 @@
             android:layout_marginTop="3dp"
             android:layout_marginStart="3dp"
             android:layout_marginEnd="8dp"
-            android:background="@drawable/deep_blue_background"
+            android:background="@drawable/deepblue_rectangle0"
             android:textSize="20sp"/>
     </RelativeLayout>
 
@@ -48,7 +48,7 @@
             android:layout_height="wrap_content"
             android:columnCount="5"
             android:orientation="horizontal"
-            android:background="@drawable/deep_blue_gredient_background">
+            android:background="@drawable/gredient_rectangle2">
             <ImageView
                 android:layout_width="70dp"
                 android:layout_margin="1dp"
@@ -308,7 +308,7 @@
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/blue_gradient_background">
+        android:background="@drawable/gradient_rectangle0">
         <Button
             android:id="@+id/bt_auction"
             android:layout_margin="5dp"

@@ -20,7 +20,7 @@
             android:id="@+id/back"
             android:layout_width="28dp"
             android:layout_height="28dp"
-            android:background="@drawable/back_button"
+            android:background="@drawable/black_back_key_round"
             android:contentDescription="@string/click_back"/>
     </LinearLayout>
     <LinearLayout
@@ -84,7 +84,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_gravity="center"
-            android:background="@drawable/cross_button"/>
+            android:background="@drawable/custom_icon0"/>
         <EditText
             android:layout_width="250dp"
             android:layout_height="50dp"

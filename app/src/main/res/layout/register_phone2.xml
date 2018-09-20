@@ -84,7 +84,7 @@
             android:text="@string/send"
             android:layout_marginEnd="10dp"
             android:textColor="@color/white"
-            android:background="@drawable/black_login_button"
+            android:background="@drawable/black_rectangle0"
             android:layout_alignParentEnd="true" />
 
     </RelativeLayout>
@@ -133,7 +133,7 @@
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:translationZ="10dp"
-        android:background="@drawable/green_button"
+        android:background="@drawable/green_rectangle0"
         android:textColor="@color/white" />
 
 </RelativeLayout>

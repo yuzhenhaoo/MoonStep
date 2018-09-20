@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:background="@drawable/dialog_background">
+        android:background="@drawable/white_rectangle0">
 
         <TextView
             android:id="@+id/title"
@@ -47,7 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="55dp"
                 android:layout_weight="1"
-                android:background="@drawable/dialog_background"
+                android:background="@drawable/white_rectangle0"
                 android:text="消极"
                 android:textColor="@color/Crimson"
                 android:textSize="18sp" />
@@ -62,7 +62,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="55dp"
                 android:layout_weight="1"
-                android:background="@drawable/dialog_background"
+                android:background="@drawable/white_rectangle0"
                 android:text="积极"
                 android:textColor="@color/Crimson"
                 android:textSize="18sp" />

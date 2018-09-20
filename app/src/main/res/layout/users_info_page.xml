@@ -32,7 +32,7 @@
             android:layout_centerVertical="true"
             android:layout_alignParentStart="true"
             android:textColor="@color/white"
-            android:background="@drawable/back_button"/>
+            android:background="@drawable/black_back_key_round"/>
         <Button
             android:layout_width="32dp"
             android:layout_height="32dp"
