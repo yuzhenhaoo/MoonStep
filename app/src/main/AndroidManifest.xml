@@ -66,6 +66,21 @@
         <activity android:name=".login_activity.RegisterPhone2"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
             android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity android:name=".login.view.UserLoginActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity android:name=".login.view.SendMessageActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity android:name=".login.view.UserRegisterActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity android:name=".login.view.ConfirmPhoneActivity"
+        android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
+        android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity android:name=".login.view.ForgetPasswordActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
     </application>
 
 </manifest>
