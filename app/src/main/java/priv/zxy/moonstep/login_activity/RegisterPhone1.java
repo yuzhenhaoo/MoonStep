@@ -78,7 +78,7 @@ public class RegisterPhone1 extends AppCompatActivity {
             public void onClick(View view) {
                 getData();
                 try {
-                    checkAndOperatePhoneNumber();
+                    checkAndVerifyPhoneNumber();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -107,7 +107,7 @@ public class RegisterPhone1 extends AppCompatActivity {
         phoneNumberText = phoneNumber.getText().toString();
     }
 
-    private void checkAndOperatePhoneNumber() throws InterruptedException {
+    private void checkAndVerifyPhoneNumber() throws InterruptedException {
         if (phoneNumberText.equals("")) {
             ToastUtil toastUtil = new ToastUtil(this.getApplicationContext(), this);
             toastUtil.showToast("手机号不能为空，请重试");

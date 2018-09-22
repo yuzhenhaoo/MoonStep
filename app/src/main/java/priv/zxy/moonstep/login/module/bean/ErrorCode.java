@@ -6,4 +6,6 @@ package priv.zxy.moonstep.login.module.bean;
  * 一方面不能产生额外的错误码编号。
  */
 public enum ErrorCode {
+    PhoneNumberISEmpty,
+    NetNotResponse
 }

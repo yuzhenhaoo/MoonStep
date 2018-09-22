@@ -46,7 +46,6 @@ public class RegisterPhone2 extends AppCompatActivity {
     private Button sendCode;
     private ImageView backButton;
     private Button submit;
-    private TextView voice_code;
     private String country = "86";
 
     private Context mContext;
@@ -118,7 +117,6 @@ public class RegisterPhone2 extends AppCompatActivity {
         sendCode = (Button) findViewById(R.id.send_code);
         backButton = (ImageView) findViewById(R.id.back_button);
         submit = (Button) findViewById(R.id.submit);
-        voice_code = (TextView) findViewById(R.id.voice_code);
 
         mContext = this.getApplicationContext();
 
@@ -173,18 +171,18 @@ public class RegisterPhone2 extends AppCompatActivity {
         });
 
         //对于语音发送案件的监听：
-        voice_code.setOnTouchListener(new View.OnTouchListener() {
+        voiceCode.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 switch (motionEvent.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        voice_code.setTextSize(15);
+                        voiceCode.setTextSize(15);
                         getVoiceVerifyCode(country, phone);
                         ToastUtil toastUtil = new ToastUtil(mContext, mActivity);
                         toastUtil.showToast("正在向您的手机发送语音信息，请注意接收");
                         break;
                     case MotionEvent.ACTION_POINTER_UP:
-                        voice_code.setTextSize(15);
+                        voiceCode.setTextSize(15);
                         break;
                 }
                 return true;

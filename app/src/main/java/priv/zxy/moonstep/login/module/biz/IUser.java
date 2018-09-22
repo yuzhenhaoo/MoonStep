@@ -28,4 +28,14 @@ public interface IUser {
      * @param registerListener 注册监听
      */
     public void doRegister(Activity mActivity, Context mContext, String userName, String userPassword, String gender, OnRegisterListener registerListener);
+
+    /**
+     * doVerifyPhoneNumber用来处理手机号的验证问题，功能是连接到服务器上的数据库中并对用户的手机输入在数据库中进行查询，检查是否已经在数据库中存在
+     * 属于纯粹的逻辑操作，所以把它放在module层
+     * @param phoneNumber 手机账号
+     * @param mContext 上下文环境
+     * @param mActivity 调用当前方法的Activity
+     * @param verifyPhoneNumber 验证监听
+     */
+    public void doVerifyPhoneNumber(String phoneNumber, Context mContext, Activity mActivity, OnVerifyPhoneNumber verifyPhoneNumber);
 }

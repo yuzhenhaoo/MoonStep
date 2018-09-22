@@ -24,9 +24,16 @@ import java.util.Map;
 import priv.zxy.moonstep.login_activity.LoginActivity;
 import priv.zxy.moonstep.login_activity.RegisterPhone2;
 
+/**
+ * 工具类的逻辑尚有问题：
+ * 如果要将工具类应用到mvp的设计模式中，对于错误的处理必须有一个相应的规范
+ * 在网络相应过程中产生的所有错误必须使用枚举类来进行约束
+ * 并在presenter的相应的调用过程中对当前错误码进行判断，并真醉错误码进行输出
+ */
 public class PhoneCheckUtil {
     private Context mContext;
     private Activity mActivity;
+    public static boolean isSuccess = false;
     public PhoneCheckUtil(Context context, Activity activity){
         this.mContext = context;
         this.mActivity = activity;
@@ -53,7 +60,7 @@ public class PhoneCheckUtil {
                             String result = jsonObject.getString("Result");
                             if (result.equals("success")) {
                                 //检验成功
-                                jumpToTheSecondPhonePage(mActivity, phoneNumber);
+                                isSuccess = true;
                             } else {
                                 //检验失败
                                 Fail();
