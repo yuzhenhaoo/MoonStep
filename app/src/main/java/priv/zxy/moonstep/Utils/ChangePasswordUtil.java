@@ -20,21 +20,20 @@ import java.util.Map;
 
 import priv.zxy.moonstep.login.module.bean.ErrorCode;
 
-
-public class UserNameCheckUtil {
+public class ChangePasswordUtil {
     private Context mContext;
     private Activity mActivity;
-    public static boolean checkResult = false;
+    public static boolean isSuccess = false;
     public static ErrorCode errorCode;
 
-    public UserNameCheckUtil(Context context, Activity activity){
+    public ChangePasswordUtil(Context context, Activity activity) {
         this.mContext = context;
         this.mActivity = activity;
     }
 
-    public void UserNameCheck(final String userName){
+    public void changePassword(final String phoneNumber, final String password) {
         //请求地址
-        String url = "http://120.79.154.236:8080/MoonStep/CheckUserNameServlet";
+        String url = "http://120.79.154.236:8080/MoonStep/ChangePasswordServlet";
         String tag = "Login";
         //取得请求队列
         RequestQueue requestQueue = Volley.newRequestQueue(mContext);
@@ -48,18 +47,15 @@ public class UserNameCheckUtil {
                     @Override
                     public void onResponse(String response) {
                         try {
+                            Log.i("TAG", "onResponse");
                             JSONObject jsonObject = (JSONObject) new JSONObject(response).get("params");
                             String result = jsonObject.getString("Result");
                             if (result.equals("success")) {
                                 //检验成功
-                                if( !userName.equals("")) {
-                                    checkResult = true;
-                                }
-                                else
-                                    errorCode = ErrorCode.UserNameIsEmpty;
+                                isSuccess = true;
                             } else {
                                 //检验失败
-                                errorCode = ErrorCode.UserNameIsExisted;
+                                errorCode = ErrorCode.ChangePasswordFail;
                             }
                         } catch (JSONException e) {
                             //做自己的请求异常操作
@@ -78,7 +74,8 @@ public class UserNameCheckUtil {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("UserName", userName);
+                params.put("PhoneNumber", phoneNumber);
+                params.put("PassWord", password);
                 return params;
             }
         };

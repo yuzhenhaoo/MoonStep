@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@mipmap/login_background">
+
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="400dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/register_background"
+        android:orientation="vertical"
+        android:paddingEnd="30dp"
+        android:paddingStart="30dp"
+        android:translationZ="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/deepBackground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/deepBackground">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/pho_num"
+                android:layout_width="140dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/input_phone"
+                android:inputType="number"
+                android:textColorHint="#ffffff"
+                android:theme="@style/MyEditText" />
+
+            <Button
+                android:id="@+id/send_num"
+                android:layout_width="80dp"
+                android:layout_height="35dp"
+                android:layout_marginStart="20dp"
+                android:background="@drawable/purple_rectangle0"
+                android:elevation="10dp"
+                android:text="@string/send_message"
+                android:textColor="#fff" />
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/check_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:hint="@string/input_message"
+            android:inputType="number"
+            android:textColorHint="#ffffff"
+            android:theme="@style/MyEditText" />
+
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:hint="@string/input_password"
+            android:inputType="textPassword"
+            android:textColorHint="#ffffff"
+            android:theme="@style/MyEditText" />
+
+        <EditText
+            android:id="@+id/password_check"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:hint="@string/input_password_again"
+            android:inputType="textPassword"
+            android:textColorHint="#ffffff"
+            android:theme="@style/MyEditText" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/click_check"
+                android:layout_width="100dp"
+                android:layout_height="35dp"
+                android:layout_gravity="center"
+                android:background="@drawable/purple_rectangle0"
+                android:text="@string/confirm"
+                android:textColor="#fff"
+                android:translationZ="10dp" />
+        </LinearLayout>
+    </LinearLayout>
+    <ImageView
+        android:id="@+id/back_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/back"
+        android:layout_margin="5dp"
+        android:contentDescription="@string/nothing"/>
+    <View
+        android:id="@+id/deepBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#927c7a7a" />
+
+    <View
+        android:id="@+id/plainBackground"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/deep_gray_background"
+        app:layout_constraintBottom_toBottomOf="@+id/deepBackground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/deepBackground" />
+
+    <android.support.v4.widget.ContentLoadingProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleLargeInverse"
+        android:layout_width="79dp"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/deepBackground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/deepBackground"
+        app:layout_constraintTop_toTopOf="@+id/deepBackground" />
+</android.support.constraint.ConstraintLayout>

@@ -2,6 +2,10 @@ package priv.zxy.moonstep.login.view;
 
 import priv.zxy.moonstep.Utils.SharedPreferencesUtil;
 
+/**
+ *  Created by Zxy on 2018/9/21
+ */
+
 public interface IUserLoginView {
 
     String getUserName();

@@ -7,6 +7,10 @@ import priv.zxy.moonstep.login.module.biz.IUser;
 import priv.zxy.moonstep.login.module.biz.UserBiz;
 import priv.zxy.moonstep.login.view.ISendMessageView;
 
+/**
+ *  Created by Zxy on 2018/9/21
+ */
+
 public class UserSendMessagePresenter {
     private IUser userBiz;
     private ISendMessageView sendMessageView;//创建与ConfrirmView交互的View对象
@@ -45,8 +49,8 @@ public class UserSendMessagePresenter {
      * 从上衣页面继承电话号码
      */
     public void initPhoneNumber(){
-        sendMessageView.getPhoneNumber();
-        sendMessageView.setPhoneNumber();
+        String phoneNumber = sendMessageView.getPhoneNumber();
+        sendMessageView.setPhoneNumber(phoneNumber);
     }
 
     /**
@@ -54,7 +58,7 @@ public class UserSendMessagePresenter {
      * @param country 国家电话号头（如中国86)
      * @param phoneNumber 电话号码
      */
-    public void submitInfo(String country, String phoneNumber){
-        sendMessageView.submitInfo(country, phoneNumber);
+    public void submitInfo(String country, String phoneNumber, String code, Context mContext, Activity mActivity) throws InterruptedException {
+        userBiz.submitInfo(country,phoneNumber, code, mContext, mActivity);
     }
 }

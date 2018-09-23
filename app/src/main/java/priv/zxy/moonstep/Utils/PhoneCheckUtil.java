@@ -21,8 +21,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import priv.zxy.moonstep.login_activity.LoginActivity;
-import priv.zxy.moonstep.login_activity.RegisterPhone2;
+import priv.zxy.moonstep.login.module.bean.ErrorCode;
 
 /**
  * 工具类的逻辑尚有问题：
@@ -34,6 +33,7 @@ public class PhoneCheckUtil {
     private Context mContext;
     private Activity mActivity;
     public static boolean isSuccess = false;
+    public static ErrorCode errorCode;
     public PhoneCheckUtil(Context context, Activity activity){
         this.mContext = context;
         this.mActivity = activity;
@@ -63,11 +63,11 @@ public class PhoneCheckUtil {
                                 isSuccess = true;
                             } else {
                                 //检验失败
-                                Fail();
+                                errorCode = ErrorCode.PhoneNumberIsRegistered;
                             }
                         } catch (JSONException e) {
                             //做自己的请求异常操作
-                            Error();
+                            errorCode = ErrorCode.JSONException;
                             Log.e("TAG", e.getMessage(), e);
                         }
                     }
@@ -75,7 +75,7 @@ public class PhoneCheckUtil {
             @Override
             public void onErrorResponse(VolleyError error) {
                 //做自己的响应错误操作，如Toast提示（“请稍后重试”等）
-                Error();
+                errorCode = ErrorCode.NetNotResponse;
                 Log.e("TAG", error.getMessage(), error);
             }
         }) {
@@ -91,45 +91,5 @@ public class PhoneCheckUtil {
 
         //将请求添加到队列中
         requestQueue.add(request);
-    }
-
-    private void Error(){
-        ToastUtil toastUtil = new ToastUtil(mContext, mActivity);
-        toastUtil.showToast("服务器响应错误，稍后重试");
-    }
-
-    private void Fail(){
-        ToastUtil toastUtil = new ToastUtil(mContext, mActivity);
-        toastUtil.showToast("您的号码已经注册过了，请换一个重试");
-    }
-
-    private void jumpToTheSecondPhonePage(final Activity thisActivity,final String phoneNumber){
-        ToastUtil toastUtil = new ToastUtil(mContext, mActivity);
-        toastUtil.showToast("已经向您的手机发送验证信息，注意查收！");
-//        final MyDialog myDialog = new MyDialog(thisActivity);
-//        myDialog.setContent("将要向您的手机发送验证信息，注意查收！");
-//        myDialog.setNegativeClickLister("取消", new MyDialog.onNegativeClickListener() {
-//            @Override
-//            public void onNegativeClick() {
-//                myDialog.dismiss();
-//            }
-//        });
-//        myDialog.setPositiveClickLister("确认", new MyDialog.onPostiveClickListener() {
-//            @Override
-//            public void onPositiveClick() {
-//
-//            }
-//        });
-//        myDialog.show();
-        Bundle bundle = new Bundle();
-        bundle.putString("phoneNumber", phoneNumber);
-        Intent intent = new Intent(thisActivity, RegisterPhone2.class);
-        intent.putExtras(bundle);
-        thisActivity.startActivity(intent);
-    }
-
-    private void Warning(){
-        ToastUtil toastUtil = new ToastUtil(mContext, mActivity);
-        toastUtil.showToast("手机账号不能为空");
     }
 }

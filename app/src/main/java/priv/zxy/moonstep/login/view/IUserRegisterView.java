@@ -1,5 +1,9 @@
 package priv.zxy.moonstep.login.view;
 
+/**
+ *  Created by Zxy on 2018/9/21
+ */
+
 public interface IUserRegisterView {
 
     String getUserName();
@@ -21,5 +25,11 @@ public interface IUserRegisterView {
     void toMainActivity();
 
     void showFailedError(int code);
+
+    String getPhoneNumber();
+
+    void getData();
+
+    void finishActivitySelf();
 
 }

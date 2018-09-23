@@ -2,14 +2,20 @@ package priv.zxy.moonstep.login.presenter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Looper;
 import android.widget.Toast;
 
+import priv.zxy.moonstep.Utils.ShowErrorReason;
 import priv.zxy.moonstep.Utils.ToastUtil;
 import priv.zxy.moonstep.login.module.bean.ErrorCode;
 import priv.zxy.moonstep.login.module.biz.IUser;
 import priv.zxy.moonstep.login.module.biz.OnVerifyPhoneNumber;
 import priv.zxy.moonstep.login.module.biz.UserBiz;
 import priv.zxy.moonstep.login.view.IVerifyPhoneView;
+
+/**
+ *  Created by Zxy on 2018/9/21
+ */
 
 public class UserVerifyPhoneNumberPresenter {
     private IUser userBiz;
@@ -44,24 +50,24 @@ public class UserVerifyPhoneNumberPresenter {
      * doVerifyPhoneNumber是用来做Module和View层交互的一个Presenter的函数
      * 它本质上要实现ConfrimPhoneActivity的一个主要逻辑功能：对于电话号码合法性的判断
      */
-    public void doVerifyPhoneNumber(){
-        verifyPhoneView.showLoading();
+    public void doVerifyPhoneNumber() throws InterruptedException {
         userBiz.doVerifyPhoneNumber(verifyPhoneView.getPhoneNumber(), mContext, mActivity, new OnVerifyPhoneNumber() {
             @Override
             public void verifySuccess() {
+                Looper.prepare();
                 ToastUtil toastUtil = new ToastUtil(mContext, mActivity);
                 toastUtil.showToast("已经向您的手机发送验证信息，注意查收！");
                 verifyPhoneView.toSendMessageActivity();
+                Looper.loop();
             }
 
             @Override
             public void verifyFail(ErrorCode errorCode) {
-                if (errorCode == ErrorCode.PhoneNumberISEmpty){
-                    ToastUtil toastUtil = new ToastUtil(mContext, mActivity);
-                    toastUtil.showToast("手机号不能为空，请重试");
-                }
+                Looper.prepare();
+                ShowErrorReason showErrorReason = new ShowErrorReason(mContext, mActivity);
+                showErrorReason.show(errorCode);
+                Looper.loop();
             }
         });
-        verifyPhoneView.hideLoading();
     }
 }

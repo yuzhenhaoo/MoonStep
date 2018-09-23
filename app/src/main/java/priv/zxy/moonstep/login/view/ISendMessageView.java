@@ -1,5 +1,9 @@
 package priv.zxy.moonstep.login.view;
 
+/**
+ *  Created by Zxy on 2018/9/21
+ */
+
 public interface ISendMessageView {
 
     void toRegisterPage();
@@ -10,9 +14,7 @@ public interface ISendMessageView {
 
     String getPhoneNumber();
 
-    void setPhoneNumber();
-
-    void submitInfo(String country, String phone);
+    void setPhoneNumber(String phoneNumber);
 
     void showLoading();
 

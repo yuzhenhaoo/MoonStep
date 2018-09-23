@@ -22,6 +22,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import priv.zxy.moonstep.login.module.bean.ErrorCode;
 import priv.zxy.moonstep.main_page.MainActivity;
 
 public class LoginUtil {
@@ -29,6 +30,7 @@ public class LoginUtil {
     private Context mContext;
     private Activity mActivity;
     public static boolean isSuccess = false;
+    public static ErrorCode errorCode;
     public LoginUtil(Context context, Activity activity){
         this.mContext = context;
         this.mActivity = activity;
@@ -55,17 +57,16 @@ public class LoginUtil {
                             if (result.equals("success")) {
                                 isSuccess = false;
                                 //做自己的登录成功操作，如页面跳转
-                                jump_to_mainPage(mActivity);
                                 SharedPreferencesUtil sp = new SharedPreferencesUtil(mContext);
                                 //将数据存入
                                 sp.saveSuccessedLoginAccountAndPassword(inputAccount, inputPassword);
                             } else {
                                 //做自己的登录失败操作
-                                FailToast1();
+                                errorCode = ErrorCode.UserNameOrPasswordIsWrong;
                             }
                         } catch (JSONException e) {
                             //做自己的请求异常操作
-                            FailToast2();
+                            errorCode = ErrorCode.JSONException;
                             Log.e("TAG", e.getMessage(), e);
                         }
                     }
@@ -73,7 +74,7 @@ public class LoginUtil {
             @Override
             public void onErrorResponse(VolleyError error) {
                 //做自己的响应错误操作，如Toast提示（“请稍后重试”等）
-                FailTast3();
+                errorCode = ErrorCode.NetNotResponse;
                 Log.e("TAG", error.getMessage(), error);
             }
         }) {
@@ -91,26 +92,5 @@ public class LoginUtil {
 
         //将请求添加到队列中
         requestQueue.add(request);
-    }
-
-    private void FailToast1(){
-        Toast.makeText(mContext, "您的用户名或密码错误，请重新输入！", Toast.LENGTH_SHORT).show();
-    }
-
-    private void FailToast2(){
-        Toast.makeText(mContext, "请检查您的网络是否连接！", Toast.LENGTH_SHORT).show();
-    }
-
-    private void FailTast3(){
-        Toast.makeText(mContext, "请稍后重试", Toast.LENGTH_SHORT).show();
-    }
-    /**
-     * 跳转到主页，将之前所有的activity全部清空
-     */
-    private void jump_to_mainPage(Activity thisActivity){
-        Intent intent = new Intent(thisActivity, MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        thisActivity.startActivity(intent);
     }
 }

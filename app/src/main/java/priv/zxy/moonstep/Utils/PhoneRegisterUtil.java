@@ -20,6 +20,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import priv.zxy.moonstep.login.module.bean.ErrorCode;
 import priv.zxy.moonstep.main_page.MainActivity;
 
 public class PhoneRegisterUtil {
@@ -31,6 +32,8 @@ public class PhoneRegisterUtil {
         this.mActivity = activity;
     }
 
+    public static boolean registeResult = false;
+    public static ErrorCode errorCode;
     /**
      * 用来处理手机注册的请求
      *
@@ -48,9 +51,6 @@ public class PhoneRegisterUtil {
         //防止重复请求，所以先取消tag标识的请求队列
         requestQueue.cancelAll(tag);
 
-        /**
-         * 响应错误，进入onErrorResponse函数中，查看错误的原因
-         */
         //创建StringRequest，定义字符串请求的请求方式为POST(省略第一个参数会默认为GET方式)
         final StringRequest request = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
@@ -62,21 +62,22 @@ public class PhoneRegisterUtil {
                             switch (result) {
                                 case "success":
                                     //做自己的登录成功操作，如页面跳转
-                                    jump_to_mainPage(mActivity);
+//                                    jump_to_mainPage(mActivity);
                                     //提示用户已经注册成功了
-                                    ToastUtil toastUtil = new ToastUtil(mContext, mActivity);
-                                    toastUtil.showToast("恭喜您，可以进入圆月世界了！");
+                                    registeResult = true;
                                     break;
                                 case "erro0":
-                                    ToastErro0();
+                                    if(userName.equals("")) errorCode = ErrorCode.UserNameIsEmpty;
+                                    else errorCode = ErrorCode.UserNameIsExisted;
+
                                     break;
                                 case "erro1":
-                                    ToastErro1();
+                                    errorCode = ErrorCode.PasswordFormatISNotRight;
                                     break;
                             }
                         } catch (JSONException e) {
                             //做自己的请求异常操作
-                            FailToast();
+                            errorCode = ErrorCode.JSONException;
                             Log.i("TAG", e.getMessage(), e);
                         }
                     }
@@ -84,7 +85,7 @@ public class PhoneRegisterUtil {
             @Override
             public void onErrorResponse(VolleyError error) {
                 //做自己的响应错误操作，如Toast提示（“请稍后重试”等）
-                FailToast1();
+                errorCode = ErrorCode.NetNotResponse;
                 Log.i("TAG", error.getMessage(), error);
             }
         }) {
@@ -104,32 +105,5 @@ public class PhoneRegisterUtil {
 
         //将请求添加到队列中
         requestQueue.add(request);
-    }
-
-
-    private void FailToast(){
-        Toast.makeText(mContext, "请检查您的网络是否连接！", Toast.LENGTH_SHORT).show();
-    }
-
-    private void FailToast1(){
-        Toast.makeText(mContext, "响应错误，请稍后重试", Toast.LENGTH_SHORT).show();
-    }
-
-    private void ToastErro0(){
-        Toast.makeText(mContext, "用户名已经存在/用户名不能为空", Toast.LENGTH_SHORT).show();
-    }
-
-    private void ToastErro1(){
-        Toast.makeText(mContext, "密码格式不正确(6-16位)", Toast.LENGTH_SHORT).show();
-    }
-
-    /**
-     * 跳转到主页，将之前所有的activity全部清空
-     */
-    private void jump_to_mainPage(Activity thisActivity){
-        Intent intent = new Intent(thisActivity, MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        thisActivity.startActivity(intent);
     }
 }

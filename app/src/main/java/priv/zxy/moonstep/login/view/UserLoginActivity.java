@@ -5,9 +5,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -21,6 +24,10 @@ import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.Utils.SharedPreferencesUtil;
 import priv.zxy.moonstep.login.presenter.UserLoginPresenter;
 import priv.zxy.moonstep.main_page.MainActivity;
+
+/**
+ *  Created by Zxy on 2018/9/23
+ */
 
 public class UserLoginActivity extends AppCompatActivity implements IUserLoginView {
 
@@ -47,6 +54,14 @@ public class UserLoginActivity extends AppCompatActivity implements IUserLoginVi
     //加载动画资源文件
     Animation shake;
 
+    @SuppressLint("HandlerLeak")
+    private Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            hideLoading();
+        }
+    };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,6 +70,10 @@ public class UserLoginActivity extends AppCompatActivity implements IUserLoginVi
         initView();
     }
 
+    /**
+     * 关于clickLogin中的逻辑处理，本来showLoading和hideLoading都是要放在presenter中减少activity的冗余度的，但是这里要做网络请求的话，必须要用到
+     * handler来处理UI界面的变化，不然可能会引起ANR，然而handler又必须使用在View中，所以showLoading和hideLoading不得不写在activity中。
+     */
     @SuppressLint("ClickableViewAccessibility")
     private void initView() {
         //MobSDK的初始化
@@ -86,12 +105,29 @@ public class UserLoginActivity extends AppCompatActivity implements IUserLoginVi
 
         userLoginPresenter.hideLoading();
 
-        clickLogin.setOnClickListener(new View.OnClickListener() {
+        clickLogin.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
-                clickLogin.startAnimation(shake);
-                userLoginPresenter.showLoading();
-                userLoginPresenter.login();
+            public boolean onTouch(View v, MotionEvent event) {
+                switch(event.getAction()){
+                    case MotionEvent.ACTION_DOWN:
+                        clickLogin.startAnimation(shake);
+                        userLoginPresenter.showLoading();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    userLoginPresenter.login();
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                mHandler.sendEmptyMessage(0x01);
+                            }
+                        }).start();
+                        break;
+                }
+                return true;
             }
         });
 
@@ -136,7 +172,7 @@ public class UserLoginActivity extends AppCompatActivity implements IUserLoginVi
     public void showLoading() {
         progressBar.show();
         try {
-            Thread.sleep(200);
+            Thread.sleep(300);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

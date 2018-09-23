@@ -1,13 +1,17 @@
 package priv.zxy.moonstep.login.view;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.widget.Button;
@@ -19,6 +23,10 @@ import android.widget.TextView;
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.login.presenter.UserVerifyPhoneNumberPresenter;
 import priv.zxy.moonstep.login_activity.RegisterPhone2;
+
+/**
+ *  Created by Zxy on 2018/9/23
+ */
 
 public class VerifyPhoneActivity extends AppCompatActivity implements IVerifyPhoneView {
 
@@ -44,6 +52,15 @@ public class VerifyPhoneActivity extends AppCompatActivity implements IVerifyPho
     //加载动画资源
     private Animation shake;
 
+    @SuppressLint("HandlerLeak")
+    private Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            hideLoading();
+        }
+    };
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +68,7 @@ public class VerifyPhoneActivity extends AppCompatActivity implements IVerifyPho
         initView();
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void initView() {
         inputText = (TextView) findViewById(R.id.input_text);
         content1 = (LinearLayout) findViewById(R.id.content1);
@@ -76,7 +94,7 @@ public class VerifyPhoneActivity extends AppCompatActivity implements IVerifyPho
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                userVerifyPhoneNumberPresenter.toLoginActivity();
+                finishActivitySelf();
             }
         });
 
@@ -88,12 +106,29 @@ public class VerifyPhoneActivity extends AppCompatActivity implements IVerifyPho
             }
         });
 
-        submit.setOnClickListener(new View.OnClickListener() {
+        submit.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
-//                submit.setAnimation(shake);
-
-                userVerifyPhoneNumberPresenter.doVerifyPhoneNumber();
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()){
+                    case MotionEvent.ACTION_DOWN:
+                        submit.setAnimation(shake);
+                        showLoading();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    userVerifyPhoneNumberPresenter.doVerifyPhoneNumber();
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                mHandler.sendEmptyMessage(0x01);
+                            }
+                        }).start();
+                        break;
+                }
+                return true;
             }
         });
     }
@@ -134,8 +169,19 @@ public class VerifyPhoneActivity extends AppCompatActivity implements IVerifyPho
     public void toSendMessageActivity() {
         Bundle bundle = new Bundle();
         bundle.putString("phoneNumber", phoneNum);
-        Intent intent = new Intent(mActivity, RegisterPhone2.class);
+        Intent intent = new Intent(mActivity, SendMessageActivity.class);
         intent.putExtras(bundle);
         startActivity(intent);
+    }
+
+    @Override
+    public void finishActivitySelf() {
+        this.finish();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        hideLoading();
     }
 }

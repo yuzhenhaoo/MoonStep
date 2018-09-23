@@ -1,17 +1,19 @@
 package priv.zxy.moonstep.login.module.biz;
 
-import android.app.Activity;
-import android.content.Context;
-import android.view.View;
-
-import priv.zxy.moonstep.Utils.LoginUtil;
-import priv.zxy.moonstep.Utils.PhoneCheckUtil;
-import priv.zxy.moonstep.Utils.ToastUtil;
-import priv.zxy.moonstep.login.module.bean.ErrorCode;
-
 /**
  * Created by Zxy on 2018/9/20
  */
+
+import android.app.Activity;
+import android.content.Context;
+
+import cn.smssdk.SMSSDK;
+import priv.zxy.moonstep.Utils.LoginUtil;
+import priv.zxy.moonstep.Utils.PhoneCheckUtil;
+import priv.zxy.moonstep.Utils.PhoneRegisterUtil;
+import priv.zxy.moonstep.Utils.ToastUtil;
+import priv.zxy.moonstep.Utils.UserNameCheckUtil;
+import priv.zxy.moonstep.login.module.bean.ErrorCode;
 public class UserBiz implements IUser {
 
     /**
@@ -30,12 +32,12 @@ public class UserBiz implements IUser {
             loginUtil.LoginRequest(userName, userPassword);
             boolean isSuccess = false;
             //这里开启一个延迟，用来获得正确的反馈结果,注意这个Thread的执行实际上是异步的
-            Thread.currentThread().sleep(1300);
+            Thread.sleep(1300);
             isSuccess = loginUtil.isSuccess;//获得反馈的结果
             if(isSuccess){
                 loginListener.loginSuccess();
             }else{
-                loginListener.loginFail();
+                loginListener.loginFail(loginUtil.errorCode);
             }
         } else {
             ToastUtil toastUtil = new ToastUtil(mContext, mActivity);
@@ -54,8 +56,27 @@ public class UserBiz implements IUser {
      * @param registerListener 注册监听
      */
     @Override
-    public void doRegister(Activity mActivity, Context mContext, String userName, String userPassword, String gender, OnRegisterListener registerListener) {
-
+    public void doRegister(Activity mActivity, Context mContext, String userName, String userPassword,String confirmUserPassword, String gender, OnRegisterListener registerListener) throws InterruptedException {
+        UserNameCheckUtil userNameCheckUtil = new UserNameCheckUtil(mContext, mActivity);
+        userNameCheckUtil.UserNameCheck(userName);
+        Thread.sleep(1000);
+        boolean checkResult = userNameCheckUtil.checkResult;
+        if(checkResult){
+            if (userPassword.equals(confirmUserPassword)) {
+                PhoneRegisterUtil prUtil = new PhoneRegisterUtil(mContext, mActivity);
+                prUtil.RegisterRequest(confirmUserPassword, userName, gender, userPassword);
+                Thread.sleep(1000);
+                boolean registerResult = prUtil.registeResult;
+                if(registerResult){
+                    registerListener.registerSuccess();
+                }else{
+                    registerListener.registerFail(prUtil.errorCode);
+                }
+            } else {
+                ToastUtil toastUtil = new ToastUtil(mContext, mActivity);
+                toastUtil.showToast("您的密码和验证密码不符，请重新输入");
+            }
+        }
     }
 
     /**
@@ -72,27 +93,59 @@ public class UserBiz implements IUser {
      * @param verifyPhoneNumber 对于phoneNumber的事件监听，这里应该根据实际的状况向verifyPhoneNumber的两个函数传递具体的事件监听的状态码，并根据实际的状态码来处理实际的事件，状态吗可以由bean层中的枚举类来承接
      */
     @Override
-    public void doVerifyPhoneNumber(String phoneNumber, Context mContext, Activity mActivity, OnVerifyPhoneNumber verifyPhoneNumber) {
+    public void doVerifyPhoneNumber(String phoneNumber, Context mContext, Activity mActivity, OnVerifyPhoneNumber verifyPhoneNumber) throws InterruptedException {
         if (phoneNumber.equals("")) {
             // 这里应该设置一个具体的状态码：手机号为空
             verifyPhoneNumber.verifyFail(ErrorCode.PhoneNumberISEmpty);
         } else {
             PhoneCheckUtil peUtil = new PhoneCheckUtil(mContext, mActivity);
             peUtil.phoneCheck(phoneNumber);
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        Thread.sleep(1500);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }).start();
+            Thread.sleep(1500);
             boolean isSuccess = false;
             isSuccess = peUtil.isSuccess;
             if(isSuccess){
                 verifyPhoneNumber.verifySuccess();
+            }else{
+                verifyPhoneNumber.verifyFail(peUtil.errorCode);
+            }
+        }
+    }
+
+    @Override
+    public void submitInfo(String country, String phone, String code, Context mContext, Activity mActivity) throws InterruptedException {
+        if (code.equals("")) {
+            ToastUtil toastUtil = new ToastUtil(mContext, mActivity);
+            toastUtil.showToast("验证码不能为空，请重新尝试!");
+        } else {
+            SMSSDK.submitVerificationCode(country, phone, code);//提交验证码  在eventHandler里面查看验证结果
+        }
+        Thread.sleep(1000);
+    }
+
+    @Override
+    public void checkUserName(String userName, Context mContext, Activity mActivity, OnUserNameCheckListener userNameCheckListener) throws InterruptedException {
+        UserNameCheckUtil userNameCheckUtil = new UserNameCheckUtil(mContext, mActivity);
+        userNameCheckUtil.UserNameCheck(userName);
+        Thread.sleep(1500);
+        boolean checkResult = userNameCheckUtil.checkResult;
+        if(checkResult){
+            userNameCheckListener.success();
+        }else{
+            userNameCheckListener.fail(userNameCheckUtil.errorCode);
+        }
+    }
+
+    @Override
+    public void fixPassword(String country, String phoneNumber, String codeNum, String password, String confirmPassword, Context mContext, Activity mActivity) {
+        if(codeNum.equals("")){
+            ToastUtil toastUtil = new ToastUtil(mContext, mActivity);
+            toastUtil.showToast("验证码不能为空，请重新尝试!");
+        }else{
+            if (!password.equals(confirmPassword)){
+                ToastUtil toastUtil = new ToastUtil(mContext, mActivity);
+                toastUtil.showToast("两次密码输入不一致，请重新输入");
+            }else{
+                SMSSDK.submitVerificationCode(country, phoneNumber, codeNum);//提交验证码  在eventHandler里面查看验证结果
             }
         }
     }

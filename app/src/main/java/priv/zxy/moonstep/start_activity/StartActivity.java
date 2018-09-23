@@ -13,7 +13,6 @@ import priv.zxy.moonstep.TitanicTextView.Titanic;
 import priv.zxy.moonstep.TitanicTextView.TitanicTextView;
 import priv.zxy.moonstep.custom_textView.FontCache;
 import priv.zxy.moonstep.login.view.UserLoginActivity;
-import priv.zxy.moonstep.login_activity.LoginActivity;
 
 public class StartActivity extends AppCompatActivity {
 
@@ -61,7 +60,6 @@ public class StartActivity extends AppCompatActivity {
     }
 
     public  void jump_to_login_page(){
-//        Intent intent = new Intent(this, LoginActivity.class);
         Intent intent = new Intent(this, UserLoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

@@ -1,5 +1,7 @@
 package priv.zxy.moonstep.login.module.biz;
 
+import priv.zxy.moonstep.login.module.bean.ErrorCode;
+
 /**
  * Created by Zxy on 2018/9/20
  */
@@ -11,5 +13,5 @@ public interface OnLoginListener {
      */
     public void loginSuccess();
 
-    public void loginFail();
+    public void loginFail(ErrorCode errorCode);
 }

@@ -16,7 +16,7 @@ public interface IUser {
      * @param userPassword 用户密码
      * @param loginListener 登陆监听
      */
-    public void doLogin(Activity mActivity, Context mContext, String userName, String userPassword, OnLoginListener loginListener);
+    void doLogin(Activity mActivity, Context mContext, String userName, String userPassword, OnLoginListener loginListener) throws InterruptedException;
 
     /**
      * doRegister也是纯粹的逻辑层，所以我们把它写在biz层中，用来获取网络上的数据
@@ -27,7 +27,7 @@ public interface IUser {
      * @param gender 性别
      * @param registerListener 注册监听
      */
-    public void doRegister(Activity mActivity, Context mContext, String userName, String userPassword, String gender, OnRegisterListener registerListener);
+    void doRegister(Activity mActivity, Context mContext, String userName, String userPassword, String confirmUserPassword,String gender, OnRegisterListener registerListener) throws InterruptedException;
 
     /**
      * doVerifyPhoneNumber用来处理手机号的验证问题，功能是连接到服务器上的数据库中并对用户的手机输入在数据库中进行查询，检查是否已经在数据库中存在
@@ -37,5 +37,11 @@ public interface IUser {
      * @param mActivity 调用当前方法的Activity
      * @param verifyPhoneNumber 验证监听
      */
-    public void doVerifyPhoneNumber(String phoneNumber, Context mContext, Activity mActivity, OnVerifyPhoneNumber verifyPhoneNumber);
+    void doVerifyPhoneNumber(String phoneNumber, Context mContext, Activity mActivity, OnVerifyPhoneNumber verifyPhoneNumber) throws InterruptedException;
+
+    void submitInfo(String country, String phone, String code, Context mContext, Activity mActivity) throws InterruptedException;
+
+    void checkUserName(String userName, Context mContext, Activity mActivity, OnUserNameCheckListener userNameCheckListener) throws InterruptedException;
+
+    void fixPassword(String country, String phoneNumber, String codeNum, String password, String confirmPassword, Context mContext, Activity mActivity);
 }

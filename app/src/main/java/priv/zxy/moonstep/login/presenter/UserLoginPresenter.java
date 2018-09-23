@@ -1,6 +1,20 @@
 package priv.zxy.moonstep.login.presenter;
 
+import android.app.Activity;
+import android.content.Context;
+import android.os.Handler;
+
+import priv.zxy.moonstep.Utils.SharedPreferencesUtil;
+import priv.zxy.moonstep.Utils.ShowErrorReason;
+import priv.zxy.moonstep.login.module.bean.ErrorCode;
+import priv.zxy.moonstep.login.module.biz.IUser;
+import priv.zxy.moonstep.login.module.biz.OnLoginListener;
+import priv.zxy.moonstep.login.module.biz.UserBiz;
+import priv.zxy.moonstep.login.view.IUserLoginView;
+
 /**
+ * Created by Zxy on 2018/9/21
+ *
  * LoginPresenter：
  * 用来处理Login逻辑的Module和View层之间的交互关系
  * 处理的方式是通过Module层和View层的接口
@@ -11,22 +25,11 @@ package priv.zxy.moonstep.login.presenter;
  * 却没有View层和自身进行的交互，尽管这一点是切实可行的
  */
 
-import android.app.Activity;
-import android.content.Context;
-import android.os.Handler;
-
-import priv.zxy.moonstep.Utils.SharedPreferencesUtil;
-import priv.zxy.moonstep.login.module.biz.IUser;
-import priv.zxy.moonstep.login.module.biz.OnLoginListener;
-import priv.zxy.moonstep.login.module.biz.UserBiz;
-import priv.zxy.moonstep.login.view.IUserLoginView;
-
 public class UserLoginPresenter {
     private IUser userBiz;
     private IUserLoginView userLoginView;//创建与LoginView交互的View对象
     private Activity mActivity;
     private Context mContext;
-    private Handler handler = new Handler();
 
     public UserLoginPresenter(IUserLoginView userLoginView, Activity mActivity, Context mContext){
         this.userLoginView = userLoginView;
@@ -38,8 +41,7 @@ public class UserLoginPresenter {
     /**
      * 这个函数里实现View层和Module层的交互
      */
-    public void login(){
-        userLoginView.showLoading();//登陆的开始，开启加载
+    public void login() throws InterruptedException {
         userBiz.doLogin(mActivity, mContext, userLoginView.getUserName(), userLoginView.getUserPassword(), new OnLoginListener() {
             @Override
             public void loginSuccess() {
@@ -47,11 +49,11 @@ public class UserLoginPresenter {
             }
 
             @Override
-            public void loginFail() {
-
+            public void loginFail(ErrorCode errorCode) {
+                ShowErrorReason showErrorReason = new ShowErrorReason(mContext, mActivity);
+                showErrorReason.show(errorCode);
             }
         });
-        userLoginView.hideLoading();
     }
 
     /**
@@ -92,21 +94,4 @@ public class UserLoginPresenter {
         userLoginView.toForgetPasswordActivity();
     }
 
-    /**
-     * 封装了一个线程休眠的函数
-     * @param millis 线程休眠的时间，单位是ms
-     */
-    public void threadSleep(final long millis){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.currentThread().sleep(millis);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                handler.obtainMessage(0x01).sendToTarget();
-            }
-        }).start();
-    }
 }

@@ -1,5 +1,9 @@
 package priv.zxy.moonstep.login.view;
 
+/**
+ *  Created by Zxy on 2018/9/21
+ */
+
 public interface IVerifyPhoneView {
 
     void showLoading();
@@ -11,4 +15,6 @@ public interface IVerifyPhoneView {
     void toLoginActivity();
 
     void toSendMessageActivity();
+
+    void finishActivitySelf();
 }

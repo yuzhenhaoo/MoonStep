@@ -1,5 +1,6 @@
 package priv.zxy.moonstep.login.view;
 
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -7,11 +8,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.widget.Button;
@@ -28,6 +31,10 @@ import priv.zxy.moonstep.Utils.ToastUtil;
 import priv.zxy.moonstep.login.presenter.UserSendMessagePresenter;
 
 import static cn.smssdk.SMSSDK.getVoiceVerifyCode;
+
+/**
+ *  Created by Zxy on 2018/9/23
+ */
 
 public class SendMessageActivity extends AppCompatActivity implements ISendMessageView {
     private TextView header;
@@ -72,9 +79,17 @@ public class SendMessageActivity extends AppCompatActivity implements ISendMessa
     };
 
     @SuppressLint("HandlerLeak")
+    private Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            hideLoading();
+        }
+    };
+
+    @SuppressLint("HandlerLeak")
     Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {
-
             // TODO Auto-generated method stub
             super.handleMessage(msg);
             int event = msg.arg1;
@@ -97,9 +112,7 @@ public class SendMessageActivity extends AppCompatActivity implements ISendMessa
             } else {
                 ((Throwable) data).printStackTrace();
             }
-
-
-        }
+    }
     };
 
     @Override
@@ -109,6 +122,7 @@ public class SendMessageActivity extends AppCompatActivity implements ISendMessa
         initView();
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void initView() {
         //对SMSSDK进行注册，与unregisterEventHandler配套使用
         SMSSDK.registerEventHandler(eventHandler);
@@ -132,29 +146,51 @@ public class SendMessageActivity extends AppCompatActivity implements ISendMessa
         mContext = this.getApplicationContext();
         mActivity = this;
         userSendMessagePresenter = new UserSendMessagePresenter(this, mContext, mActivity);
+
         userSendMessagePresenter.initPhoneNumber();
+
+        phoneNum = phoneNumber.getText().toString();
 
         hideLoading();
 
         sendCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendCode.setAnimation(shake);
                 SMSSDK.getVerificationCode(country, phoneNum);//发送短信验证码到手机号
                 sendCode.setEnabled(false);
                 timer.start();//使用计时器 设置验证码的时间限制
             }
         });
-//        sendCode.performClick();//模拟点击
+
+        sendCode.performClick();//模拟点击
 
         //必须要在满足条件的情况下才能做跳转(验证码发送正确)
-        submit.setOnClickListener(new View.OnClickListener() {
+        submit.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View view) {
-                sendCode.setAnimation(shake);
-                userSendMessagePresenter.showLoading();
-                userSendMessagePresenter.submitInfo(country, phoneNum);
-                userSendMessagePresenter.hideLoading();
+            public boolean onTouch(View v, MotionEvent event) {
+                switch(event.getAction()){
+                    case MotionEvent.ACTION_DOWN:
+                        submit.setAnimation(shake);
+                        showLoading();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Looper.prepare();
+                                try {
+                                    String codeNum = codeNumber.getText().toString();
+                                    userSendMessagePresenter.submitInfo(country,phoneNum, codeNum, mContext, mActivity);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                handler.sendEmptyMessage(0x01);
+                                Looper.loop();
+                            }
+                        }).start();
+                        break;
+                }
+                return true;
             }
         });
 
@@ -167,13 +203,20 @@ public class SendMessageActivity extends AppCompatActivity implements ISendMessa
         });
 
         //对于语音验证的事件监听
-        voiceCode.setOnClickListener(new View.OnClickListener() {
+        voiceCode.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
-                sendCode.setAnimation(shake);
-                getVoiceVerifyCode(country, phoneNum);
-                ToastUtil toastUtil = new ToastUtil(mContext, mActivity);
-                toastUtil.showToast("正在向您的手机发送语音信息，请注意接收");
+            public boolean onTouch(View v, MotionEvent event) {
+                switch(event.getAction()){
+                    case MotionEvent.ACTION_DOWN:
+                        submit.setAnimation(shake);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        getVoiceVerifyCode(country, phoneNum);
+                        ToastUtil toastUtil = new ToastUtil(mContext, mActivity);
+                        toastUtil.showToast("正在向您的手机发送语音信息，请注意接收");
+                        break;
+                }
+                return true;
             }
         });
     }
@@ -199,6 +242,7 @@ public class SendMessageActivity extends AppCompatActivity implements ISendMessa
     @Override
     public void toRegisterPage() {
         Intent intent = new Intent(this, UserRegisterActivity.class);
+        intent.putExtra("phoneNumber", phoneNum);
         startActivity(intent);
     }
 
@@ -222,30 +266,8 @@ public class SendMessageActivity extends AppCompatActivity implements ISendMessa
     }
 
     @Override
-    public void setPhoneNumber() {
-        phoneNumber.setText(phoneNum);
-    }
-
-    @Override
-    public void submitInfo(String country, String phone) {
-        String code = codeNumber.getText().toString().trim();
-        if (code.equals("")) {
-            ToastUtil toastUtil = new ToastUtil(this.getApplicationContext(), this);
-            toastUtil.showToast("验证码不能为空，请重新尝试!");
-        } else {
-            SMSSDK.submitVerificationCode(country, phone, code);//提交验证码  在eventHandler里面查看验证结果
-        }
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
+    public void setPhoneNumber(String phone) {
+        phoneNumber.setText(phone);
     }
 
     @Override
