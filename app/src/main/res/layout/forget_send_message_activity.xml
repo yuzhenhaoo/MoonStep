@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="得到验证码后，请在输入框中进行验证"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginBottom="40dp"
+        android:layout_alignParentTop="true"
+        android:textSize="24sp"
+        android:gravity="center"
+        android:textColor="@color/LittleBlack"/>
+
+    <LinearLayout
+        android:id="@+id/content1"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:layout_below="@+id/header">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="20dp"
+            android:textColor="@color/Black"
+            android:textSize="16sp"
+            android:text="@string/phone_account"/>
+        <EditText
+            android:id="@+id/phone_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/input_phone"
+            android:textSize="16sp"
+            android:text=""
+            android:textColor="@color/LittleBlack"
+            android:layout_marginEnd="10dp"
+            android:background="@color/transparent"/>
+    </LinearLayout>
+    <View
+        android:id="@+id/phone_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_margin="10dp"
+        android:layout_below="@+id/content1"
+        android:background="@color/Gray"/>
+    <RelativeLayout
+        android:id="@+id/content2"
+        android:layout_width="match_parent"
+        android:layout_marginTop="5dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/phone_line">
+        <TextView
+            android:id="@+id/code"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="20dp"
+            android:textColor="@color/Black"
+            android:textSize="16sp"
+            android:text="@string/verification_code"/>
+        <EditText
+            android:id="@+id/code_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/code"
+            android:layout_toLeftOf="@+id/send_code"
+            android:layout_centerVertical="true"
+            android:hint="@string/input_message"
+            android:text=""
+            android:layout_marginEnd="10dp"
+            android:background="@color/transparent"
+            android:inputType="phone"/>
+        <Button
+            android:id="@+id/send_code"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/send"
+            android:layout_marginEnd="10dp"
+            android:textColor="@color/white"
+            android:background="@drawable/black_rectangle0"
+            android:layout_alignParentEnd="true" />
+
+    </RelativeLayout>
+    <View
+        android:id="@+id/password_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_margin="10dp"
+        android:layout_below="@+id/content2"
+        android:background="@color/Gray"/>
+    <ImageView
+        android:id="@+id/back_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/back"
+        android:layout_margin="5dp"
+        android:contentDescription="@string/nothing"/>
+
+    <LinearLayout
+        android:id="@+id/voice_mode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_below="@id/password_line"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="无法接收到短信验证?点击这里"/>
+        <TextView
+            android:id="@+id/voice_code"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="进行语音验证"
+            android:textSize="14sp"
+            android:textColor="@color/DoderBlue"/>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/submit"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:text="提交认证"
+        android:layout_below="@id/voice_mode"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:translationZ="10dp"
+        android:background="@drawable/green_rectangle0"
+        android:textColor="@color/white" />
+
+    <View
+        android:id="@+id/deepBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:translationZ="20dp"
+        android:background="#927c7a7a" />
+
+    <View
+        android:id="@+id/plainBackground"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerInParent="true"
+        android:translationZ="20dp"
+        android:background="@drawable/deep_gray_background" />
+
+    <android.support.v4.widget.ContentLoadingProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleLargeInverse"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:translationZ="20dp"
+        android:layout_centerInParent="true" />
+</RelativeLayout>

@@ -9,12 +9,30 @@ package priv.zxy.moonstep.login.module.bean;
  */
 public enum ErrorCode {
     PhoneNumberISEmpty,
+
     NetNotResponse,
+
     ChangePasswordFail,
+
     JSONException,
+
     PhoneNumberIsRegistered,
+
+    PhoneNumberIsNotRegistered,
+
     UserNameIsEmpty,
+
     UserNameIsExisted,
+
     UserNameOrPasswordIsWrong,
-    PasswordFormatISNotRight
+
+    PasswordFormatISNotRight,
+
+    PasswordIsEmpty,
+
+    ConfirmPasswordIsEmpty,
+
+    PasswordIsNotEqualsConfirmPassword,
+
+    ServerIsFault
 }

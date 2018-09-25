@@ -1,5 +1,7 @@
 package priv.zxy.moonstep.login.view;
 
+import priv.zxy.moonstep.login.module.bean.ErrorCode;
+
 /**
  *  Created by Zxy on 2018/9/21
  */
@@ -24,12 +26,18 @@ public interface IUserRegisterView {
 
     void toMainActivity();
 
-    void showFailedError(int code);
-
     String getPhoneNumber();
 
     void getData();
 
     void finishActivitySelf();
+
+    void showUserNameSuccessTip();
+
+    void showUserNameFailTip(ErrorCode errorCode);
+
+    void showRegisterSuccessTip();
+
+    void showRegisterFailTip(ErrorCode errorCode);
 
 }

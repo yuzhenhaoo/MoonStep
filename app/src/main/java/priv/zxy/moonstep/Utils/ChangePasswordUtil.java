@@ -24,7 +24,7 @@ public class ChangePasswordUtil {
     private Context mContext;
     private Activity mActivity;
     public static boolean isSuccess = false;
-    public static ErrorCode errorCode;
+    public static ErrorCode errorCode = null;
 
     public ChangePasswordUtil(Context context, Activity activity) {
         this.mContext = context;
@@ -53,9 +53,11 @@ public class ChangePasswordUtil {
                             if (result.equals("success")) {
                                 //检验成功
                                 isSuccess = true;
-                            } else {
+                            } else if(result.equals("erro0")){
                                 //检验失败
-                                errorCode = ErrorCode.ChangePasswordFail;
+                                errorCode = ErrorCode.PhoneNumberIsNotRegistered;
+                            }else if(result.equals("erro1")){
+                                errorCode = ErrorCode.ServerIsFault;
                             }
                         } catch (JSONException e) {
                             //做自己的请求异常操作

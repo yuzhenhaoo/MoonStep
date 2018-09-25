@@ -43,5 +43,7 @@ public interface IUser {
 
     void checkUserName(String userName, Context mContext, Activity mActivity, OnUserNameCheckListener userNameCheckListener) throws InterruptedException;
 
-    void fixPassword(String country, String phoneNumber, String codeNum, String password, String confirmPassword, Context mContext, Activity mActivity);
+    void setChangePassword(Context mContext, Activity mActivity, String phoneNumber, String password, String confirmPassword, OnChangePasswordListener onChangePasswordListener) throws InterruptedException;
+
+    void judgeCanJumpToChangePasswordActivity(String phoneNumber, Context mContext, Activity mActivity, OnPhoneCheckListener onPhoneCheckListener) throws InterruptedException;
 }

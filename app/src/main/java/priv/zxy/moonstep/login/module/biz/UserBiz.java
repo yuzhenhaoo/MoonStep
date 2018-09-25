@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.content.Context;
 
 import cn.smssdk.SMSSDK;
+import priv.zxy.moonstep.Utils.ChangePasswordUtil;
 import priv.zxy.moonstep.Utils.LoginUtil;
 import priv.zxy.moonstep.Utils.PhoneCheckUtil;
 import priv.zxy.moonstep.Utils.PhoneRegisterUtil;
@@ -36,7 +37,7 @@ public class UserBiz implements IUser {
             isSuccess = loginUtil.isSuccess;//获得反馈的结果
             if(isSuccess){
                 loginListener.loginSuccess();
-            }else{
+            }else if(loginUtil.errorCode != null){
                 loginListener.loginFail(loginUtil.errorCode);
             }
         } else {
@@ -113,13 +114,17 @@ public class UserBiz implements IUser {
 
     @Override
     public void submitInfo(String country, String phone, String code, Context mContext, Activity mActivity) throws InterruptedException {
-        if (code.equals("")) {
-            ToastUtil toastUtil = new ToastUtil(mContext, mActivity);
-            toastUtil.showToast("验证码不能为空，请重新尝试!");
-        } else {
-            SMSSDK.submitVerificationCode(country, phone, code);//提交验证码  在eventHandler里面查看验证结果
+        ToastUtil toastUtil = new ToastUtil(mContext, mActivity);
+        if(phone.equals("")){
+            toastUtil.showToast("手机号不能为空哦，请重新尝试");
+        }else{
+            if (code.equals("")) {
+                toastUtil.showToast("验证码不能为空，请重新尝试!");
+            } else {
+                SMSSDK.submitVerificationCode(country, phone, code);//提交验证码  在eventHandler里面查看验证结果
+            }
+            Thread.sleep(1000);
         }
-        Thread.sleep(1000);
     }
 
     @Override
@@ -136,17 +141,44 @@ public class UserBiz implements IUser {
     }
 
     @Override
-    public void fixPassword(String country, String phoneNumber, String codeNum, String password, String confirmPassword, Context mContext, Activity mActivity) {
-        if(codeNum.equals("")){
-            ToastUtil toastUtil = new ToastUtil(mContext, mActivity);
-            toastUtil.showToast("验证码不能为空，请重新尝试!");
+    public void setChangePassword(Context mContext, Activity mActivity, String phoneNumber, String password, String confirmPassword, OnChangePasswordListener changePasswordListener) throws InterruptedException {
+        ErrorCode errorCode = null;
+        boolean isSuccess = false;
+
+        if(password.equals("")){
+            errorCode = ErrorCode.PasswordIsEmpty;
+        }else if (confirmPassword.equals("")){
+            errorCode = ErrorCode.ConfirmPasswordIsEmpty;
+        }
+
+        if (password.equals(confirmPassword)){
+            ChangePasswordUtil changePasswordUtil = new ChangePasswordUtil(mContext, mActivity);
+            changePasswordUtil.changePassword(phoneNumber, password);
+            Thread.sleep(1500);
+            isSuccess = changePasswordUtil.isSuccess;
+            errorCode = changePasswordUtil.errorCode;
         }else{
-            if (!password.equals(confirmPassword)){
-                ToastUtil toastUtil = new ToastUtil(mContext, mActivity);
-                toastUtil.showToast("两次密码输入不一致，请重新输入");
-            }else{
-                SMSSDK.submitVerificationCode(country, phoneNumber, codeNum);//提交验证码  在eventHandler里面查看验证结果
-            }
+            errorCode = ErrorCode.PasswordIsNotEqualsConfirmPassword;
+        }
+
+        if (isSuccess){
+            changePasswordListener.changePasswordSuccess();
+        }
+        if (errorCode != null){
+            changePasswordListener.changePasswordFail(errorCode);
+        }
+    }
+
+    @Override
+    public void judgeCanJumpToChangePasswordActivity(String phoneNumber, Context mContext, Activity mActivity, OnPhoneCheckListener onPhoneCheckListener) throws InterruptedException {
+        PhoneCheckUtil phoneCheckUtil = new PhoneCheckUtil(mContext, mActivity);
+        phoneCheckUtil.phoneCheck(phoneNumber);
+        Thread.sleep(1000);
+        boolean isSuccess = phoneCheckUtil.isSuccess;
+        if(!isSuccess){
+            onPhoneCheckListener.phoneIsExisted();
+        }else{
+            onPhoneCheckListener.phoneIsNotExisted();
         }
     }
 }

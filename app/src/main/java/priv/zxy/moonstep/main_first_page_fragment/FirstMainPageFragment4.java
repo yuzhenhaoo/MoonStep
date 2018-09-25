@@ -34,7 +34,7 @@ import java.util.List;
 
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.Utils.MyDialog;
-import priv.zxy.moonstep.login_activity.LoginActivity;
+import priv.zxy.moonstep.login.view.UserLoginActivity;
 
 public class FirstMainPageFragment4 extends Fragment implements OnMenuItemClickListener, OnMenuItemLongClickListener{
 
@@ -155,7 +155,7 @@ public class FirstMainPageFragment4 extends Fragment implements OnMenuItemClickL
             @Override
             public void onPositiveClick() {
                 menuObjects.clear();
-                        Intent intent = new Intent(mActivity, LoginActivity.class);
+                        Intent intent = new Intent(mActivity, UserLoginActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);

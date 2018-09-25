@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -21,7 +22,10 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import priv.zxy.moonstep.R;
+import priv.zxy.moonstep.Utils.ShowErrorReason;
+import priv.zxy.moonstep.Utils.ToastUtil;
 import priv.zxy.moonstep.Utils.UserNameCheckUtil;
+import priv.zxy.moonstep.login.module.bean.ErrorCode;
 import priv.zxy.moonstep.login.presenter.UserRegisterPresenter;
 import priv.zxy.moonstep.login.presenter.UserVerifyPhoneNumberPresenter;
 import priv.zxy.moonstep.main_page.MainActivity;
@@ -91,6 +95,8 @@ public class UserRegisterActivity extends AppCompatActivity implements IUserRegi
         progressBar = (ContentLoadingProgressBar) findViewById(R.id.progressBar);
         mContext = this.getApplicationContext();
         mActivity = this;
+
+        shake = AnimationUtils.loadAnimation(this, R.anim.shake);
 
         phoneNumber = getPhoneNumber();
 
@@ -233,11 +239,6 @@ public class UserRegisterActivity extends AppCompatActivity implements IUserRegi
     }
 
     @Override
-    public void showFailedError(int code) {
-
-    }
-
-    @Override
     public String getPhoneNumber() {
         Intent intent = getIntent();
         return intent.getStringExtra("phoneNumber");
@@ -267,5 +268,29 @@ public class UserRegisterActivity extends AppCompatActivity implements IUserRegi
     @Override
     public void finishActivitySelf() {
         this.finish();
+    }
+
+    @Override
+    public void showUserNameSuccessTip() {
+        ToastUtil toastUtil = new ToastUtil(mContext, mActivity);
+        toastUtil.showToast("恭喜！您的账号可以使用");
+    }
+
+    @Override
+    public void showUserNameFailTip(ErrorCode errorCode) {
+        ShowErrorReason showErrorReason = new ShowErrorReason(mContext, mActivity);
+        showErrorReason.show(errorCode);
+    }
+
+    @Override
+    public void showRegisterSuccessTip() {
+        ToastUtil toastUtil = new ToastUtil(mContext, mActivity);
+        toastUtil.showToast("恭喜您，可以进入圆月世界了！");
+    }
+
+    @Override
+    public void showRegisterFailTip(ErrorCode errorCode) {
+        ShowErrorReason showErrorReason = new ShowErrorReason(mContext, mActivity);
+        showErrorReason.show(errorCode);
     }
 }

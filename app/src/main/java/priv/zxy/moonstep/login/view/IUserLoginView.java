@@ -1,6 +1,7 @@
 package priv.zxy.moonstep.login.view;
 
 import priv.zxy.moonstep.Utils.SharedPreferencesUtil;
+import priv.zxy.moonstep.login.module.bean.ErrorCode;
 
 /**
  *  Created by Zxy on 2018/9/21
@@ -12,10 +13,6 @@ public interface IUserLoginView {
 
     String getUserPassword();
 
-    void clearUserName();
-
-    void clearUserPassword();
-
     void showLoading();
 
     void hideLoading();
@@ -26,9 +23,11 @@ public interface IUserLoginView {
 
     void toForgetPasswordActivity();
 
-    void showFailedError(int code);
-
     void initAccount(SharedPreferencesUtil preference);
 
     void initPassword(SharedPreferencesUtil preference);
+
+    void showSuccessTip();
+
+    void showErrorTip(ErrorCode errorCode);
 }

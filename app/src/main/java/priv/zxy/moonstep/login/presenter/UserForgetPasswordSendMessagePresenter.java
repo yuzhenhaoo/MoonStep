@@ -1,0 +1,59 @@
+package priv.zxy.moonstep.login.presenter;
+
+import android.app.Activity;
+import android.content.Context;
+import android.os.Looper;
+
+import priv.zxy.moonstep.Utils.ShowErrorReason;
+import priv.zxy.moonstep.login.module.bean.ErrorCode;
+import priv.zxy.moonstep.login.module.biz.IUser;
+import priv.zxy.moonstep.login.module.biz.OnPhoneCheckListener;
+import priv.zxy.moonstep.login.module.biz.UserBiz;
+import priv.zxy.moonstep.login.view.IForgetPasswordSendMessageView;
+import priv.zxy.moonstep.login.view.IUserLoginView;
+
+public class UserForgetPasswordSendMessagePresenter {
+
+    private IUser userBiz;
+    private IForgetPasswordSendMessageView forgetPasswordSendMessageView;//创建与LoginView交互的View对象
+    private Activity mActivity;
+    private Context mContext;
+
+    public UserForgetPasswordSendMessagePresenter(IForgetPasswordSendMessageView forgetPasswordSendMessageView, Activity mActivity, Context mContext){
+        this.forgetPasswordSendMessageView = forgetPasswordSendMessageView;
+        this.userBiz = new UserBiz();
+        this.mActivity = mActivity;
+        this.mContext = mContext;
+    }
+
+    public void toChangePasswordActivity(String phoneNumber, Context mContext, Activity mActivity) throws InterruptedException {
+        userBiz.judgeCanJumpToChangePasswordActivity(phoneNumber, this.mContext, this.mActivity, new OnPhoneCheckListener() {
+            @Override
+            public void phoneIsExisted() {
+                forgetPasswordSendMessageView.toChangePasswordActivity();
+            }
+
+            @Override
+            public void phoneIsNotExisted() {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Looper.prepare();
+                        forgetPasswordSendMessageView.showErrorTip();
+                        Looper.loop();
+                    }
+                }).start();
+
+            }
+        });
+    }
+
+    /**
+     * 提交验证码并获得反馈结果
+     * @param country 国家电话号头（如中国86)
+     * @param phoneNumber 电话号码
+     */
+    public void submitInfo(String country, String phoneNumber, String code, Context mContext, Activity mActivity) throws InterruptedException {
+        userBiz.submitInfo(country,phoneNumber, code, mContext, mActivity);
+    }
+}

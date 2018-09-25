@@ -55,7 +55,7 @@ public class LoginUtil {
                             JSONObject jsonObject = (JSONObject) new JSONObject(response).get("params");
                             String result = jsonObject.getString("Result");
                             if (result.equals("success")) {
-                                isSuccess = false;
+                                isSuccess = true;
                                 //做自己的登录成功操作，如页面跳转
                                 SharedPreferencesUtil sp = new SharedPreferencesUtil(mContext);
                                 //将数据存入

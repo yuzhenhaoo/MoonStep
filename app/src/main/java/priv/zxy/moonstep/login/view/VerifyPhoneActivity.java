@@ -10,10 +10,10 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -21,8 +21,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import priv.zxy.moonstep.R;
+import priv.zxy.moonstep.Utils.ShowErrorReason;
+import priv.zxy.moonstep.Utils.ToastUtil;
+import priv.zxy.moonstep.login.module.bean.ErrorCode;
 import priv.zxy.moonstep.login.presenter.UserVerifyPhoneNumberPresenter;
-import priv.zxy.moonstep.login_activity.RegisterPhone2;
 
 /**
  *  Created by Zxy on 2018/9/23
@@ -64,7 +66,7 @@ public class VerifyPhoneActivity extends AppCompatActivity implements IVerifyPho
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.register_phone1);
+        setContentView(R.layout.verify_phonenumber_activity);
         initView();
     }
 
@@ -87,6 +89,8 @@ public class VerifyPhoneActivity extends AppCompatActivity implements IVerifyPho
         mActivity = this;
 
         hideLoading();
+
+        shake = AnimationUtils.loadAnimation(this, R.anim.shake);
 
         userVerifyPhoneNumberPresenter = new UserVerifyPhoneNumberPresenter(this, mActivity, mContext);
 
@@ -177,6 +181,18 @@ public class VerifyPhoneActivity extends AppCompatActivity implements IVerifyPho
     @Override
     public void finishActivitySelf() {
         this.finish();
+    }
+
+    @Override
+    public void showSuccessTip() {
+        ToastUtil toastUtil = new ToastUtil(mContext, mActivity);
+        toastUtil.showToast("已经向您的手机发送验证信息，注意查收！");
+    }
+
+    @Override
+    public void showFailTip(ErrorCode errorCode) {
+        ShowErrorReason showErrorReason = new ShowErrorReason(mContext, mActivity);
+        showErrorReason.show(errorCode);
     }
 
     @Override

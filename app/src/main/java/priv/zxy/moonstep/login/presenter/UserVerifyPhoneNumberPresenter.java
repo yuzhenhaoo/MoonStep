@@ -54,19 +54,23 @@ public class UserVerifyPhoneNumberPresenter {
         userBiz.doVerifyPhoneNumber(verifyPhoneView.getPhoneNumber(), mContext, mActivity, new OnVerifyPhoneNumber() {
             @Override
             public void verifySuccess() {
-                Looper.prepare();
-                ToastUtil toastUtil = new ToastUtil(mContext, mActivity);
-                toastUtil.showToast("已经向您的手机发送验证信息，注意查收！");
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        verifyPhoneView.showSuccessTip();
+                    }
+                }).start();
                 verifyPhoneView.toSendMessageActivity();
-                Looper.loop();
             }
 
             @Override
-            public void verifyFail(ErrorCode errorCode) {
-                Looper.prepare();
-                ShowErrorReason showErrorReason = new ShowErrorReason(mContext, mActivity);
-                showErrorReason.show(errorCode);
-                Looper.loop();
+            public void verifyFail(final ErrorCode errorCode) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        verifyPhoneView.showFailTip(errorCode);
+                    }
+                }).start();
             }
         });
     }

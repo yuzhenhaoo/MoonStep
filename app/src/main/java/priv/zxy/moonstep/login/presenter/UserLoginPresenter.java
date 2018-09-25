@@ -3,6 +3,7 @@ package priv.zxy.moonstep.login.presenter;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
+import android.os.Looper;
 
 import priv.zxy.moonstep.Utils.SharedPreferencesUtil;
 import priv.zxy.moonstep.Utils.ShowErrorReason;
@@ -49,9 +50,15 @@ public class UserLoginPresenter {
             }
 
             @Override
-            public void loginFail(ErrorCode errorCode) {
-                ShowErrorReason showErrorReason = new ShowErrorReason(mContext, mActivity);
-                showErrorReason.show(errorCode);
+            public void loginFail(final ErrorCode errorCode) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Looper.prepare();
+                        userLoginView.showErrorTip(errorCode);
+                        Looper.loop();
+                    }
+                }).start();
             }
         });
     }

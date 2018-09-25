@@ -39,13 +39,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".login_activity.LoginActivity"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
-            android:configChanges="keyboardHidden|orientation|screenSize"/>
-        <activity android:name=".login_activity.RegisterPage"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
-        <activity android:name=".login_activity.ForgetPwdActivity"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
         <activity android:name=".main_page.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="keyboardHidden|orientation|screenSize"/>
@@ -60,12 +53,6 @@
         <activity android:name=".user_info_activity.UserInfoActivity"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
             android:configChanges="keyboardHidden|orientation|screenSize"/>
-        <activity android:name=".login_activity.RegisterPhone1"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
-            android:configChanges="keyboardHidden|orientation|screenSize"/>
-        <activity android:name=".login_activity.RegisterPhone2"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
-            android:configChanges="keyboardHidden|orientation|screenSize"/>
         <activity android:name=".login.view.UserLoginActivity"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
             android:configChanges="keyboardHidden|orientation|screenSize"/>
@@ -78,7 +65,10 @@
         <activity android:name=".login.view.VerifyPhoneActivity"
         android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
         android:configChanges="keyboardHidden|orientation|screenSize"/>
-        <activity android:name=".login.view.ForgetPasswordActivity"
+        <activity android:name=".login.view.ForgetPasswordSendMessageActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity android:name=".login.view.UserChangePasswordActivity"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
             android:configChanges="keyboardHidden|orientation|screenSize"/>
     </application>

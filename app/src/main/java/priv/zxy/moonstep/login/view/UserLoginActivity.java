@@ -22,6 +22,8 @@ import com.mob.MobSDK;
 
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.Utils.SharedPreferencesUtil;
+import priv.zxy.moonstep.Utils.ShowErrorReason;
+import priv.zxy.moonstep.login.module.bean.ErrorCode;
 import priv.zxy.moonstep.login.presenter.UserLoginPresenter;
 import priv.zxy.moonstep.main_page.MainActivity;
 
@@ -139,11 +141,18 @@ public class UserLoginActivity extends AppCompatActivity implements IUserLoginVi
             }
         });
 
-        forgetPassword.setOnClickListener(new View.OnClickListener() {
+        forgetPassword.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
-                forgetPassword.setAnimation(shake);
-                userLoginPresenter.toForgetPasswordActivity();
+            public boolean onTouch(View v, MotionEvent event) {
+                switch(event.getAction()){
+                    case MotionEvent.ACTION_DOWN:
+                        forgetPassword.startAnimation(shake);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        userLoginPresenter.toForgetPasswordActivity();
+                        break;
+                }
+                return true;
             }
         });
     }
@@ -156,16 +165,6 @@ public class UserLoginActivity extends AppCompatActivity implements IUserLoginVi
     @Override
     public String getUserPassword() {
         return password.getText().toString();
-    }
-
-    @Override
-    public void clearUserName() {
-        account.setText("");
-    }
-
-    @Override
-    public void clearUserPassword() {
-        password.setText("");
     }
 
     @Override
@@ -203,13 +202,8 @@ public class UserLoginActivity extends AppCompatActivity implements IUserLoginVi
 
     @Override
     public void toForgetPasswordActivity() {
-        Intent intent = new Intent(this, ForgetPasswordActivity.class);
+        Intent intent = new Intent(this, ForgetPasswordSendMessageActivity.class);
         startActivity(intent);
-    }
-
-    @Override
-    public void showFailedError(int code) {
-
     }
 
     @Override
@@ -220,5 +214,16 @@ public class UserLoginActivity extends AppCompatActivity implements IUserLoginVi
     @Override
     public void initPassword(SharedPreferencesUtil preference) {
         password.setText(sp.readLoginInfo().get("PassWd"));
+    }
+
+    @Override
+    public void showSuccessTip() {
+
+    }
+
+    @Override
+    public void showErrorTip(ErrorCode errorCode) {
+        ShowErrorReason showErrorReason = new ShowErrorReason(mContext, mActivity);
+        showErrorReason.show(errorCode);
     }
 }

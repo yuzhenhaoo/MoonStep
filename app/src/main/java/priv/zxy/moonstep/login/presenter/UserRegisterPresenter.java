@@ -2,6 +2,7 @@ package priv.zxy.moonstep.login.presenter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Looper;
 
 import priv.zxy.moonstep.Utils.ShowErrorReason;
 import priv.zxy.moonstep.Utils.ToastUtil;
@@ -33,14 +34,12 @@ public class UserRegisterPresenter {
         userBiz.checkUserName(userName, mContext, mActivity, new OnUserNameCheckListener() {
             @Override
             public void success() {
-                ToastUtil toastUtil = new ToastUtil(mContext, mActivity);
-                toastUtil.showToast("恭喜！您的账号可以使用");
+                userRegisterView.showUserNameSuccessTip();
             }
 
             @Override
             public void fail(ErrorCode errorCode) {
-                ShowErrorReason showErrorReason = new ShowErrorReason(mContext, mActivity);
-                showErrorReason.show(errorCode);
+                userRegisterView.showUserNameFailTip(errorCode);
             }
         });
     }
@@ -49,16 +48,26 @@ public class UserRegisterPresenter {
         userBiz.doRegister(mActivity, mContext, userName, userPassword, confirmUserPassword,gender, new OnRegisterListener() {
             @Override
             public void registerSuccess() {
-                ToastUtil toastUtil = new ToastUtil(mContext, mActivity);
-                toastUtil.showToast("恭喜您，可以进入圆月世界了！");
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        userRegisterView.showRegisterSuccessTip();
+                    }
+                }).start();
                 userRegisterView.toMainActivity();
                 userRegisterView.finishActivitySelf();
             }
 
             @Override
-            public void registerFail(ErrorCode errorCode) {
-                ShowErrorReason showErrorReason = new ShowErrorReason(mContext, mActivity);
-                showErrorReason.show(errorCode);
+            public void registerFail(final ErrorCode errorCode) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Looper.prepare();
+                        userRegisterView.showRegisterFailTip(errorCode);
+                        Looper.loop();
+                    }
+                }).start();
             }
         });
     }
