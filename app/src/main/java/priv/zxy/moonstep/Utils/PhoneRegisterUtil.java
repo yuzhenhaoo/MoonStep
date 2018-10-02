@@ -37,11 +37,12 @@ public class PhoneRegisterUtil {
     /**
      * 用来处理手机注册的请求
      *
-     * @param phone 手机账号
-     * @param userName 用户名
-     * @param password 密码
+     * @param PhoneNumber 手机账号
+     * @param NickName 用户名
+     * @param PassWord 密码
+     * @Param Gender 性别
      */
-    public void RegisterRequest(final String phone, final  String userName, final String gender, final String password){
+    public void RegisterRequest(final String PhoneNumber, final  String NickName, final String PassWord, final String Gender){
         //请求地址
         String url = "http://120.79.154.236:8080/MoonStep/NewServlet";
         String tag = "Login";
@@ -59,21 +60,10 @@ public class PhoneRegisterUtil {
                         try {
                             JSONObject jsonObject = (JSONObject) new JSONObject(response).get("params");
                             String result = jsonObject.getString("Result");
-                            switch (result) {
-                                case "success":
-                                    //做自己的登录成功操作，如页面跳转
-//                                    jump_to_mainPage(mActivity);
-                                    //提示用户已经注册成功了
-                                    registeResult = true;
-                                    break;
-                                case "erro0":
-                                    if(userName.equals("")) errorCode = ErrorCode.UserNameIsEmpty;
-                                    else errorCode = ErrorCode.UserNameIsExisted;
-
-                                    break;
-                                case "erro1":
-                                    errorCode = ErrorCode.PasswordFormatISNotRight;
-                                    break;
+                            if(result.equals("success")){
+                                registeResult = true;
+                            }else{
+                                errorCode = ErrorCode.PasswordFormatISNotRight;
                             }
                         } catch (JSONException e) {
                             //做自己的请求异常操作
@@ -92,10 +82,10 @@ public class PhoneRegisterUtil {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("PhoneNumber", phone);
-                params.put("UserName",userName);
-                params.put("PassWord", password);
-                params.put("Gender",gender);
+                params.put("PhoneNumber", PhoneNumber);
+                params.put("NickName",NickName);
+                params.put("PassWord", PassWord);
+                params.put("Gender",Gender);
                 return params;
             }
         };

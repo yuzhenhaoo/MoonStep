@@ -53,10 +53,10 @@ public class ChangePasswordUtil {
                             if (result.equals("success")) {
                                 //检验成功
                                 isSuccess = true;
-                            } else if(result.equals("erro0")){
+                            } else if(result.equals("error0")){
                                 //检验失败
                                 errorCode = ErrorCode.PhoneNumberIsNotRegistered;
-                            }else if(result.equals("erro1")){
+                            }else if(result.equals("error1")){
                                 errorCode = ErrorCode.ServerIsFault;
                             }
                         } catch (JSONException e) {

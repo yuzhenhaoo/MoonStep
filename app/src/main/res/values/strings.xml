@@ -66,7 +66,9 @@
     <string name="nowday_moon">此时月</string>
     <string name="tomorrom_moon">彼时月</string>
     <string name="input_account">输入用户名(8字以内)</string>
+    <string name="nickName">昵称</string>
     <string name="check_username">检测用户名</string>
     <string name="man">男</string>
     <string name="woman">女</string>
+    <string name="todo">TODO</string>
 </resources>

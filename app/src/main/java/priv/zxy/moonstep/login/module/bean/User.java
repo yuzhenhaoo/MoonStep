@@ -6,16 +6,13 @@ package priv.zxy.moonstep.login.module.bean;
 
 public class User {
     //用户姓名
-    private String userName;
+    private String nickName;
 
     //用户密码
     private String passWord;
 
     //用户手机号
     private String phoneNumber;
-
-    //用户邮箱
-    private String userEmail;
 
     //用户性别
     private String gender;
@@ -29,12 +26,12 @@ public class User {
     //用户宠物
     private String pet;
 
-    public String getUserName(){
-        return userName;
+    public String getNickName(){
+        return nickName;
     }
 
-    public void setUserName(String userName){
-        this.userName = userName;
+    public void setNickName(String userName){
+        this.nickName = nickName;
     }
 
     public String getUserPassword(){
@@ -51,14 +48,6 @@ public class User {
 
     public String getUserPhoneNumber(){
         return phoneNumber;
-    }
-
-    public void setUserEmail(String userEmail){
-        this.userEmail = userEmail;
-    }
-
-    public String getUserEmail(){
-        return userEmail;
     }
 
     public void setUserGender(String gender){

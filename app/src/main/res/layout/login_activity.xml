@@ -109,7 +109,7 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:drawableStart="@mipmap/account"
-            android:hint="@string/input_account"
+            android:hint="@string/phone_account"
             android:inputType="text"
             android:textColor="@color/white"
             android:textColorHint="@color/white"

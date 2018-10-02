@@ -25,6 +25,10 @@ import priv.zxy.moonstep.Utils.ToastUtil;
 import priv.zxy.moonstep.login.module.bean.ErrorCode;
 import priv.zxy.moonstep.login.presenter.UserChangePasswordPresenter;
 
+/**
+ *  Created by Zxy on 2018/9/23
+ */
+
 public class UserChangePasswordActivity extends AppCompatActivity implements IChangePasswordView {
     private TextView phone;
     private EditText password;
@@ -59,7 +63,7 @@ public class UserChangePasswordActivity extends AppCompatActivity implements ICh
     private void initView() {
         phone = (TextView) findViewById(R.id.phone);
         password = (EditText) findViewById(R.id.password);
-        confirmPassword = (EditText) findViewById(R.id.confirm_password);
+        confirmPassword = (EditText) findViewById(R.id.password_check);
         backButton = (ImageView) findViewById(R.id.back_button);
         deepBackground = (View) findViewById(R.id.deepBackground);
         plainBackground = (View) findViewById(R.id.plainBackground);

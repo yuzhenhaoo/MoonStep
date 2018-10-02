@@ -24,10 +24,8 @@ import android.widget.RadioGroup;
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.Utils.ShowErrorReason;
 import priv.zxy.moonstep.Utils.ToastUtil;
-import priv.zxy.moonstep.Utils.UserNameCheckUtil;
 import priv.zxy.moonstep.login.module.bean.ErrorCode;
 import priv.zxy.moonstep.login.presenter.UserRegisterPresenter;
-import priv.zxy.moonstep.login.presenter.UserVerifyPhoneNumberPresenter;
 import priv.zxy.moonstep.main_page.MainActivity;
 
 /**
@@ -36,7 +34,6 @@ import priv.zxy.moonstep.main_page.MainActivity;
 
 public class UserRegisterActivity extends AppCompatActivity implements IUserRegisterView {
 
-    private Button checkUsername;
     private EditText accountName;
     private RadioGroup radioGroup;
     private RadioButton man;
@@ -52,7 +49,7 @@ public class UserRegisterActivity extends AppCompatActivity implements IUserRegi
     private String phoneNumber;
     private Context mContext;
     private Activity mActivity;
-    private String userName;
+    private String nickName;
     private String userPassword = "";
     private String confirmPassword = "";
     private String userGender = "";
@@ -80,7 +77,6 @@ public class UserRegisterActivity extends AppCompatActivity implements IUserRegi
 
     @SuppressLint("ClickableViewAccessibility")
     private void initView() {
-        checkUsername = (Button) findViewById(R.id.check_username);
         accountName = (EditText) findViewById(R.id.accountName);
         radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
         man = (RadioButton) findViewById(R.id.man);
@@ -102,36 +98,6 @@ public class UserRegisterActivity extends AppCompatActivity implements IUserRegi
 
         userRegisterPresenter = new UserRegisterPresenter(this, mActivity, mContext);
         hideLoading();
-
-        checkUsername.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch(event.getAction()){
-                    case MotionEvent.ACTION_DOWN:
-                        checkUsername.setAnimation(shake);
-                        showLoading();
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        //检测用户名是否已经存在于数据库中，并跳出弹窗对用户进行提示
-                        userName = accountName.getText().toString();
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Looper.prepare();
-                                try {
-                                    userRegisterPresenter.UserNameCheck(userName);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                                mHandler.sendEmptyMessage(0x01);
-                                Looper.loop();
-                            }
-                        }).start();
-                        break;
-                }
-                return true;
-            }
-        });
 
         backButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -163,7 +129,7 @@ public class UserRegisterActivity extends AppCompatActivity implements IUserRegi
                             public void run() {
                                 Looper.prepare();
                                 try {
-                                    userRegisterPresenter.doRegister(userName, userPassword, confirmPassword, userGender);
+                                    userRegisterPresenter.doRegister(phoneNumber, nickName, userPassword,  confirmPassword, userGender);
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
                                 }
@@ -171,6 +137,21 @@ public class UserRegisterActivity extends AppCompatActivity implements IUserRegi
                                 Looper.loop();
                             }
                         }).start();
+                        break;
+                }
+                return true;
+            }
+        });
+
+        returnLoginPage.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()){
+                    case MotionEvent.ACTION_DOWN:
+                        returnLoginPage.setAnimation(shake);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        toLoginActivity();
                         break;
                 }
                 return true;
@@ -246,7 +227,7 @@ public class UserRegisterActivity extends AppCompatActivity implements IUserRegi
 
     @Override
     public void getData() {
-        userName = accountName.getText().toString();
+        nickName = accountName.getText().toString();
         userPassword = password.getText().toString();
         confirmPassword = passwordCheck.getText().toString();
 

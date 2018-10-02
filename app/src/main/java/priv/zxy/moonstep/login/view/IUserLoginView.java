@@ -9,7 +9,7 @@ import priv.zxy.moonstep.login.module.bean.ErrorCode;
 
 public interface IUserLoginView {
 
-    String getUserName();
+    String getUserPhoneNumber();
 
     String getUserPassword();
 

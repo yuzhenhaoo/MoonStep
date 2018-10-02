@@ -35,6 +35,10 @@ import priv.zxy.moonstep.login.presenter.UserForgetPasswordSendMessagePresenter;
 
 import static cn.smssdk.SMSSDK.getVoiceVerifyCode;
 
+/**
+ * Created by Zxy on 2018/9/20
+ */
+
 public class ForgetPasswordSendMessageActivity extends AppCompatActivity implements IForgetPasswordSendMessageView{
     private TextView header;
     private LinearLayout content1;

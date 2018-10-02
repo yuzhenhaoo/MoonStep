@@ -12,6 +12,10 @@ import priv.zxy.moonstep.login.module.biz.OnChangePasswordListener;
 import priv.zxy.moonstep.login.module.biz.UserBiz;
 import priv.zxy.moonstep.login.view.IChangePasswordView;
 
+/**
+ * Created by Zxy on 2018/9/20
+ */
+
 public class UserChangePasswordPresenter {
     private IUser userBiz;
     private IChangePasswordView changePasswordView;

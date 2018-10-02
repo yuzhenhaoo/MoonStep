@@ -36,7 +36,7 @@ public class LoginUtil {
         this.mActivity = activity;
     }
 
-    public void LoginRequest(final  String inputAccount, final String inputPassword){
+    public void LoginRequest(final  String phoneNumber, final String inputPassword){
         //请求地址
         String url = "http://120.79.154.236:8080/MoonStep/LoginServlet";
         String tag = "Login";
@@ -59,10 +59,10 @@ public class LoginUtil {
                                 //做自己的登录成功操作，如页面跳转
                                 SharedPreferencesUtil sp = new SharedPreferencesUtil(mContext);
                                 //将数据存入
-                                sp.saveSuccessedLoginAccountAndPassword(inputAccount, inputPassword);
+                                sp.saveSuccessedLoginAccountAndPassword(phoneNumber, inputPassword);
                             } else {
                                 //做自己的登录失败操作
-                                errorCode = ErrorCode.UserNameOrPasswordIsWrong;
+                                errorCode = ErrorCode.PhoneNumberOrPasswordIsWrong;
                             }
                         } catch (JSONException e) {
                             //做自己的请求异常操作
@@ -81,8 +81,8 @@ public class LoginUtil {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("AccountNumber", inputAccount);
-                params.put("Password", inputPassword);
+                params.put("PhoneNumber", phoneNumber);
+                params.put("PassWord", inputPassword);
                 return params;
             }
         };

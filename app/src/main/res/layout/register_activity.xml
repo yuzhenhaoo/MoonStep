@@ -1,116 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <LinearLayout
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/side_nav_bar">
+    <ImageView
+        android:id="@+id/moonstep_logo"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="50dp"
+        android:contentDescription="@string/todo"
+        android:src="@mipmap/moonstep_logo"/>
+
+    <EditText
+        android:id="@+id/accountName"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@mipmap/login_background"
-        android:gravity="center"
-        android:orientation="vertical">
-        <LinearLayout
-            android:layout_width="300dp"
-            android:layout_height="400dp"
-            android:orientation="vertical"
-            android:translationZ="20dp"
-            android:paddingStart="30dp"
-            android:paddingEnd="30dp"
-            android:background="@drawable/register_background">
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="50dp"
-                android:orientation="horizontal">
-                <Button
-                    android:id="@+id/check_username"
-                    android:layout_width="65dp"
-                    android:layout_height="25dp"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentEnd="true"
-                    android:text="@string/check_username"
-                    android:elevation="5dp"
-                    android:textColor="@color/white"
-                    android:textSize="12sp"
-                    android:background="@drawable/black_rectangle0"/>
-                <EditText
-                    android:id="@+id/accountName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColorHint="#ffffff"
-                    android:layout_toStartOf="@+id/check_username"
-                    android:theme="@style/MyEditText"
-                    android:hint="@string/input_account"
-                    android:inputType="text"/>
-            </RelativeLayout>
+        android:layout_height="wrap_content"
+        android:textColorHint="#ffffff"
+        android:theme="@style/MyEditText"
+        android:hint="@string/nickName"
+        app:layout_constraintTop_toBottomOf="@+id/moonstep_logo"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        android:inputType="text"/>
 
-            <RadioGroup
-                android:id="@+id/radioGroup"
-                android:layout_width="match_parent"
-                android:layout_marginTop="20dp"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <RadioButton
-                    android:id="@+id/man"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:checked="true"
-                    android:textColor="@color/white"
-                    android:text="@string/man"/>
-                <RadioButton
-                    android:id="@+id/woman"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textColor="@color/white"
-                    android:text="@string/woman"/>
-            </RadioGroup>
-            <EditText
-                android:id="@+id/password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:theme="@style/MyEditText"
-                android:textColorHint="#ffffff"
-                android:hint="@string/input_password"
-                android:inputType="textPassword"/>
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="match_parent"
+        android:layout_marginTop="20dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/accountName"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        android:orientation="horizontal">
+        <RadioButton
+            android:id="@+id/man"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="true"
+            android:textColor="@color/white"
+            android:text="@string/man"/>
+        <RadioButton
+            android:id="@+id/woman"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/white"
+            android:text="@string/woman"/>
+    </RadioGroup>
 
-            <EditText
-                android:id="@+id/password_check"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:textColorHint="#ffffff"
-                android:theme="@style/MyEditText"
-                android:hint="@string/input_password_again"
-                android:inputType="textPassword"/>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="20dp"
-                android:gravity="center"
-                android:orientation="vertical">
-                <Button
-                    android:id="@+id/click_register"
-                    android:layout_width="160dp"
-                    android:layout_height="35dp"
-                    android:textColor="#fff"
-                    android:text="@string/click_register"
-                    android:translationZ="10dp"
-                    android:background="@drawable/login_button"/>
-                <Button
-                    android:id="@+id/return_login_page"
-                    android:layout_width="160dp"
-                    android:layout_height="35dp"
-                    android:layout_marginTop="10dp"
-                    android:textColor="#fff"
-                    android:text="@string/return_login"
-                    android:translationZ="10dp"
-                    android:background="@drawable/login_button"/>
-            </LinearLayout>
-        </LinearLayout>
-    </LinearLayout>
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:theme="@style/MyEditText"
+        android:textColorHint="#ffffff"
+        android:hint="@string/input_password"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroup"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        android:inputType="textPassword"/>
+
+    <EditText
+        android:id="@+id/password_check"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:textColorHint="#ffffff"
+        android:theme="@style/MyEditText"
+        android:hint="@string/input_password_again"
+        app:layout_constraintTop_toBottomOf="@+id/password"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        android:inputType="textPassword"/>
+
+    <Button
+        android:id="@+id/click_register"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:textColor="#fff"
+        android:text="@string/click_register"
+        android:layout_marginTop="20dp"
+        android:translationZ="10dp"
+        app:layout_constraintTop_toBottomOf="@+id/password_check"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        android:background="@drawable/login_button"/>
+
+    <Button
+        android:id="@+id/return_login_page"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_marginTop="15dp"
+        android:textColor="#fff"
+        android:text="@string/return_login"
+        android:translationZ="10dp"
+        app:layout_constraintTop_toBottomOf="@+id/click_register"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        android:background="@drawable/login_button"/>
+
     <ImageView
         android:id="@+id/back_button"
         android:layout_width="wrap_content"
@@ -122,6 +117,7 @@
         android:id="@+id/deepBackground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:translationZ="10dp"
         android:background="#927c7a7a" />
 
     <View
@@ -129,6 +125,11 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_centerInParent="true"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:translationZ="10dp"
         android:background="@drawable/deep_gray_background" />
 
     <android.support.v4.widget.ContentLoadingProgressBar
@@ -136,5 +137,11 @@
         style="?android:attr/progressBarStyleLargeInverse"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:translationZ="10dp"
         android:layout_centerInParent="true" />
-</RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>

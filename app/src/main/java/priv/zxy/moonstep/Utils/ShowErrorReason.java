@@ -43,8 +43,8 @@ public class ShowErrorReason {
             case UserNameIsExisted:
                 toastUtil.showToast("用户名已经存在了");
                 break;
-            case UserNameOrPasswordIsWrong:
-                toastUtil.showToast("用户名/密码错误，请重新输入");
+            case PhoneNumberOrPasswordIsWrong:
+                toastUtil.showToast("手机号码未注册/密码错误，请重试");
                 break;
             case PasswordFormatISNotRight:
                 toastUtil.showToast("密码格式不正确，请重新输入");

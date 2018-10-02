@@ -43,7 +43,7 @@ public class UserLoginPresenter {
      * 这个函数里实现View层和Module层的交互
      */
     public void login() throws InterruptedException {
-        userBiz.doLogin(mActivity, mContext, userLoginView.getUserName(), userLoginView.getUserPassword(), new OnLoginListener() {
+        userBiz.doLogin(mActivity, mContext, userLoginView.getUserPhoneNumber(), userLoginView.getUserPassword(), new OnLoginListener() {
             @Override
             public void loginSuccess() {
                 userLoginView.toMainActivity();

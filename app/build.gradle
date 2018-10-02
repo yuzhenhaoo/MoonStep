@@ -8,6 +8,7 @@ MobSDK {
 
     SMSSDK {}
 }
+
 android {
     compileSdkVersion 28
     defaultConfig {
@@ -24,6 +25,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    //use legacy for android 6.0
+    useLibrary 'org.apache.http.legacy'
+
 }
 
 dependencies {
@@ -62,4 +67,8 @@ dependencies {
     implementation 'com.mcxiaoke.volley:library:1.0.19'
     //material-dialog
     implementation 'com.github.michael-rapp:android-material-dialog:4.3.4'
+
+    //Optional compile for GCM (Google Cloud Messaging).
+    implementation 'com.google.android.gms:play-services-gcm:10.2.1'
+    implementation 'com.hyphenate:hyphenate-sdk:3.3.0'
 }

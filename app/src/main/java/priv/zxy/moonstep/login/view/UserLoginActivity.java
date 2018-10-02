@@ -158,7 +158,7 @@ public class UserLoginActivity extends AppCompatActivity implements IUserLoginVi
     }
 
     @Override
-    public String getUserName() {
+    public String getUserPhoneNumber() {
         return account.getText().toString();
     }
 

@@ -24,7 +24,7 @@ public enum ErrorCode {
 
     UserNameIsExisted,
 
-    UserNameOrPasswordIsWrong,
+    PhoneNumberOrPasswordIsWrong,
 
     PasswordFormatISNotRight,
 
