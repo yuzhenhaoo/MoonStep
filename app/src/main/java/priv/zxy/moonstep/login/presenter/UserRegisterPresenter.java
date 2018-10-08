@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Looper;
 
-import priv.zxy.moonstep.login.module.bean.ErrorCode;
+import com.hyphenate.exceptions.HyphenateException;
+
+import priv.zxy.moonstep.kernel_data.bean.ErrorCode;
 import priv.zxy.moonstep.login.module.biz.IUser;
 import priv.zxy.moonstep.login.module.biz.OnRegisterListener;
 import priv.zxy.moonstep.login.module.biz.UserBiz;
@@ -27,7 +29,7 @@ public class UserRegisterPresenter {
         this.mContext = mContext;
     }
 
-    public void doRegister(String phoneNumber, String nickName, String userPassword, String confirmUserPassword, String gender) throws InterruptedException {
+    public void doRegister(String phoneNumber, String nickName, String userPassword, String confirmUserPassword, String gender) throws InterruptedException, HyphenateException {
         userBiz.doRegister(mActivity, mContext, phoneNumber, nickName, userPassword, confirmUserPassword, gender, new OnRegisterListener() {
             @Override
             public void registerSuccess() {

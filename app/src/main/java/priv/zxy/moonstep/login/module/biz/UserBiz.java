@@ -6,14 +6,20 @@ package priv.zxy.moonstep.login.module.biz;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
+
+import com.hyphenate.EMCallBack;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.exceptions.HyphenateException;
 
 import cn.smssdk.SMSSDK;
-import priv.zxy.moonstep.Utils.ChangePasswordUtil;
-import priv.zxy.moonstep.Utils.LoginUtil;
-import priv.zxy.moonstep.Utils.PhoneCheckUtil;
-import priv.zxy.moonstep.Utils.PhoneRegisterUtil;
+import priv.zxy.moonstep.Utils.ShowErrorReason;
+import priv.zxy.moonstep.Utils.dbUtils.ChangePasswordUtil;
+import priv.zxy.moonstep.Utils.dbUtils.LoginUtil;
+import priv.zxy.moonstep.Utils.dbUtils.PhoneCheckUtil;
+import priv.zxy.moonstep.Utils.dbUtils.PhoneRegisterUtil;
 import priv.zxy.moonstep.Utils.ToastUtil;
-import priv.zxy.moonstep.login.module.bean.ErrorCode;
+import priv.zxy.moonstep.kernel_data.bean.ErrorCode;
 
 public class UserBiz implements IUser {
 
@@ -28,22 +34,48 @@ public class UserBiz implements IUser {
      * @param loginListener   登陆监听
      */
     @Override
-    public void doLogin(Activity mActivity, Context mContext, String userPhoneNumber, String userPassword, OnLoginListener loginListener) throws InterruptedException {
+    public void doLogin(final Activity mActivity, final Context mContext, String userPhoneNumber, String userPassword, final OnLoginListener loginListener) throws InterruptedException {
         if (userPhoneNumber != null && userPassword != null) {
             LoginUtil loginUtil = new LoginUtil(mContext, mActivity);
             loginUtil.LoginRequest(userPhoneNumber, userPassword);
             boolean isSuccess = false;
             //这里开启一个延迟，用来获得正确的反馈结果,注意这个Thread的执行实际上是异步的
-            Thread.sleep(1300);
+            Thread.sleep(1000);
             isSuccess = loginUtil.isSuccess;//获得反馈的结果
             if (isSuccess) {
-                loginListener.loginSuccess();
+                EMClient.getInstance().login("moonstep" + userPhoneNumber,userPassword,new EMCallBack() {//回调
+                    @Override
+                    public void onSuccess() {
+                        //保证进入主页面后本地会话和群组都 load 完毕。
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                EMClient.getInstance().groupManager().loadAllGroups();
+                                EMClient.getInstance().chatManager().loadAllConversations();
+                            }
+                        }).start();
+                        loginListener.loginSuccess();
+                        Log.d("TAG", "登录聊天服务器成功！");
+                    }
+
+                    @Override
+                    public void onProgress(int progress, String status) {
+
+                    }
+
+                    @Override
+                    public void onError(int code, String message) {
+                        Log.d("TAG", "登录聊天服务器失败！" + code + message);
+                    }
+                });
             } else if (loginUtil.errorCode != null) {
                 loginListener.loginFail(loginUtil.errorCode);
             }
         } else {
-            ToastUtil toastUtil = new ToastUtil(mContext, mActivity);
-            toastUtil.showToast("您的账户/密码不能为空哦！");
+            if(userPhoneNumber == null)
+                loginListener.loginFail(ErrorCode.PhoneNumberISEmpty);
+            else
+                loginListener.loginFail(ErrorCode.PasswordIsEmpty);
         }
     }
 
@@ -59,14 +91,25 @@ public class UserBiz implements IUser {
      * @param registerListener 注册监听
      */
     @Override
-    public void doRegister(Activity mActivity, Context mContext, String phoneNumber, String nickName, String userPassword, String confirmUserPassword, String gender, OnRegisterListener registerListener) throws InterruptedException {
+    public void doRegister(Activity mActivity, Context mContext, final String phoneNumber, String nickName, final String userPassword, String confirmUserPassword, String gender, final OnRegisterListener registerListener) throws InterruptedException{
         if (userPassword.equals(confirmUserPassword)) {
             PhoneRegisterUtil prUtil = new PhoneRegisterUtil(mContext, mActivity);
             prUtil.RegisterRequest(phoneNumber, nickName, userPassword, gender);
             Thread.sleep(1000);
             boolean registerResult = prUtil.registeResult;
             if (registerResult) {
-                registerListener.registerSuccess();
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                EMClient.getInstance().createAccount(phoneNumber, userPassword);//同步方法
+                            } catch (HyphenateException e) {
+                                registerListener.registerFail(ErrorCode.ECRegisterFail);
+                            }
+                        }
+                    }).start();
+                    Thread.sleep(300);
+                    registerListener.registerSuccess();
             } else {
                 registerListener.registerFail(prUtil.errorCode);
             }

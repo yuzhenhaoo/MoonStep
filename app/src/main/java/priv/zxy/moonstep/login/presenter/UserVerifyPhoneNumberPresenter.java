@@ -2,12 +2,9 @@ package priv.zxy.moonstep.login.presenter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.os.Looper;
 import android.widget.Toast;
 
-import priv.zxy.moonstep.Utils.ShowErrorReason;
-import priv.zxy.moonstep.Utils.ToastUtil;
-import priv.zxy.moonstep.login.module.bean.ErrorCode;
+import priv.zxy.moonstep.kernel_data.bean.ErrorCode;
 import priv.zxy.moonstep.login.module.biz.IUser;
 import priv.zxy.moonstep.login.module.biz.OnVerifyPhoneNumber;
 import priv.zxy.moonstep.login.module.biz.UserBiz;

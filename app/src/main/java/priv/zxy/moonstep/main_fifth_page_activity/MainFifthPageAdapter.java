@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import priv.zxy.moonstep.R;
+import priv.zxy.moonstep.kernel_data.bean.ChatMessage;
 
 import java.util.ArrayList;
 import java.util.List;

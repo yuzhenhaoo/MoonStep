@@ -3,9 +3,7 @@ package priv.zxy.moonstep.Utils;
 import android.app.Activity;
 import android.content.Context;
 
-import priv.zxy.moonstep.login.module.bean.ErrorCode;
-
-import static priv.zxy.moonstep.login.module.bean.ErrorCode.PhoneNumberISEmpty;
+import priv.zxy.moonstep.kernel_data.bean.ErrorCode;
 
 public class ShowErrorReason {
     private Context mContext;
@@ -37,12 +35,6 @@ public class ShowErrorReason {
             case PhoneNumberIsNotRegistered:
                 toastUtil.showToast("电话号码还没有注册哦");
                 break;
-            case UserNameIsEmpty:
-                toastUtil.showToast("用户名不能为空哦");
-                break;
-            case UserNameIsExisted:
-                toastUtil.showToast("用户名已经存在了");
-                break;
             case PhoneNumberOrPasswordIsWrong:
                 toastUtil.showToast("手机号码未注册/密码错误，请重试");
                 break;
@@ -60,6 +52,24 @@ public class ShowErrorReason {
                 break;
             case ServerIsFault:
                 toastUtil.showToast("服务器出错了，请换个姿势重试，或者联系我们的客服吧");
+                break;
+            case ECRegisterFail:
+                toastUtil.showToast("EC注册出错了，请稍后重试");
+                break;
+            case ConnectChatServiceFail:
+                toastUtil.showToast("连接不上chat服务器，请稍后重试");
+                break;
+            case AccountISRemoverd:
+                toastUtil.showToast("您的账号已经被移除");
+                break;
+            case AccountIsLoginInOtherDevice:
+                toastUtil.showToast("账号已经在其它设备上登陆");
+                break;
+            case ECGetFriendsListFail:
+                toastUtil.showToast("EC服务器获取好友列表失败");
+                break;
+            case MoonFriendUserIsNotExisted:
+                toastUtil.showToast("月友账号不存在，可能是服务器端故障，请联系管理员");
                 break;
         }
     }

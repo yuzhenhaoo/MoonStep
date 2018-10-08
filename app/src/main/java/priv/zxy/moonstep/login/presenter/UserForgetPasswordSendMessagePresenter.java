@@ -4,13 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Looper;
 
-import priv.zxy.moonstep.Utils.ShowErrorReason;
-import priv.zxy.moonstep.login.module.bean.ErrorCode;
 import priv.zxy.moonstep.login.module.biz.IUser;
 import priv.zxy.moonstep.login.module.biz.OnPhoneCheckListener;
 import priv.zxy.moonstep.login.module.biz.UserBiz;
 import priv.zxy.moonstep.login.view.IForgetPasswordSendMessageView;
-import priv.zxy.moonstep.login.view.IUserLoginView;
 
 /**
  * Created by Zxy on 2018/9/20

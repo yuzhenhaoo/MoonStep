@@ -22,7 +22,7 @@ import android.widget.TextView;
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.Utils.ShowErrorReason;
 import priv.zxy.moonstep.Utils.ToastUtil;
-import priv.zxy.moonstep.login.module.bean.ErrorCode;
+import priv.zxy.moonstep.kernel_data.bean.ErrorCode;
 import priv.zxy.moonstep.login.presenter.UserChangePasswordPresenter;
 
 /**

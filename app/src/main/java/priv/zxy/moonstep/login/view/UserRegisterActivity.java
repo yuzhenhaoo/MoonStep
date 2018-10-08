@@ -21,12 +21,14 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import com.hyphenate.exceptions.HyphenateException;
+
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.Utils.ShowErrorReason;
 import priv.zxy.moonstep.Utils.ToastUtil;
-import priv.zxy.moonstep.login.module.bean.ErrorCode;
+import priv.zxy.moonstep.kernel_data.bean.ErrorCode;
 import priv.zxy.moonstep.login.presenter.UserRegisterPresenter;
-import priv.zxy.moonstep.main_page.MainActivity;
+import priv.zxy.moonstep.main.view.MainActivity;
 
 /**
  *  Created by Zxy on 2018/9/23
@@ -131,6 +133,8 @@ public class UserRegisterActivity extends AppCompatActivity implements IUserRegi
                                 try {
                                     userRegisterPresenter.doRegister(phoneNumber, nickName, userPassword,  confirmPassword, userGender);
                                 } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                } catch (HyphenateException e) {
                                     e.printStackTrace();
                                 }
                                 mHandler.sendEmptyMessage(0x01);

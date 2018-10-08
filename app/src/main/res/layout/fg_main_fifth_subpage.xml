@@ -1,110 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@mipmap/four_main_page_background"
-    android:paddingTop="10dp"
-    android:orientation="vertical">
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:baselineAligned="false"
-    android:padding="10dp">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1">
-        <Button
-            android:id="@+id/back"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:background="@drawable/black_back_key_round"
-            android:contentDescription="@string/click_back"/>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:layout_weight="1">
-        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/user_image"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:src="@color/LightGreen"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="Allision"
-            android:textSize="20sp"
-            android:gravity="center"
-            android:textColor="@color/white"/>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="end"
-        android:layout_weight="1">
-        <Button
-            android:id="@+id/person_info"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:background="@drawable/person_button"
-            android:contentDescription="@string/click_into_personal_info"/>
-    </LinearLayout>
-</LinearLayout>
+    android:paddingTop="10dp">
 
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="15dp"
-    android:gravity="center">
-    <TextView
+    <Button
+        android:id="@+id/back"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/black_back_key_round"
+        android:contentDescription="@string/click_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        app:layout_constraintLeft_toRightOf="@+id/back"
+        app:layout_constraintRight_toLeftOf="@+id/person_info"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/greenDot"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_gravity="center_vertical"
+            android:src="@color/LightGreen"
+            app:layout_constraintStart_toEndOf="@+id/back"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/userName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="8dp"
+            android:gravity="center"
+            android:text="Allision"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toStartOf="@+id/person_info"
+            app:layout_constraintLeft_toRightOf="@+id/greenDot"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/person_info"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/person_button"
+        android:contentDescription="@string/click_into_personal_info"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="10dp"
         android:text="MARCH, 5, 2015"
         android:textColor="@color/white"
-        android:textSize="16sp"/>
-</LinearLayout>
+        android:textSize="11sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteY="10dp" />
 
-<RelativeLayout
+    <ScrollView
+        android:id="@+id/scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/message_bar"
+        app:layout_constraintTop_toBottomOf="@+id/time">
 
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <LinearLayout
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycleview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </ScrollView>
+
+
+    <android.support.constraint.ConstraintLayout
         android:id="@+id/message_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="#7e4b2c81"
-        android:orientation="horizontal">
+        android:background="#614b2c81"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent">
+
         <Button
-            android:layout_margin="10dp"
+            android:id="@+id/moreFunctions"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_gravity="center"
-            android:background="@drawable/custom_icon0"/>
+            android:layout_margin="10dp"
+            android:background="@drawable/custom_icon0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/message_bar" />
+
         <EditText
+            android:id="@+id/inputMessage"
             android:layout_width="250dp"
             android:layout_height="50dp"
+            android:layout_marginStart="10dp"
             android:hint="your response..."
-            android:textColorHint="#70ffffff"
             android:inputType="text"
-            android:textSize="20sp"/>
+            android:textColor="@color/white"
+            android:textColorHint="#70ffffff"
+            android:textSize="20sp"
+            app:layout_constraintLeft_toRightOf="@+id/moreFunctions" />
+
         <Button
-            android:layout_width="match_parent"
+            android:id="@+id/sendMessage"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:background="#00ffffff"
             android:text="@string/send"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:background="#00ffffff"/>
-    </LinearLayout>
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycleview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/message_bar"/>
-</RelativeLayout>
-</LinearLayout>
+            app:layout_constraintRight_toRightOf="parent" />
+    </android.support.constraint.ConstraintLayout>
+</android.support.constraint.ConstraintLayout>

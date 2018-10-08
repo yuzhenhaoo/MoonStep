@@ -23,14 +23,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.Utils.ShowErrorReason;
 import priv.zxy.moonstep.Utils.ToastUtil;
-import priv.zxy.moonstep.login.module.bean.ErrorCode;
+import priv.zxy.moonstep.kernel_data.bean.ErrorCode;
 import priv.zxy.moonstep.login.presenter.UserForgetPasswordSendMessagePresenter;
 
 import static cn.smssdk.SMSSDK.getVoiceVerifyCode;

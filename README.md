@@ -8,23 +8,25 @@
 
 - 引导页
 
-![](/images/guide_page0.png)
+![](https://i.imgur.com/h68ufIw.jpg)
 
-![](/images/guide_page1.png)
+![](https://i.imgur.com/lF8GOis.jpg)
 
-![](/images/guide_page2.png)
+![](https://i.imgur.com/vqgwvFa.jpg)
 
-![](/images/guide_page3.png)
+![](https://i.imgur.com/SVLoGXD.jpg)
 
-![](/images/guide_page4.png)
+![](https://i.imgur.com/bCNB2eN.png)
+
+![](https://i.imgur.com/kLNv1u3.png)
 
 - 登录界面
 
-![](/images/login_page.png)
+![](https://i.imgur.com/HeacFrM.png)
 
 - 侧滑栏
 
-![](/images/drawable_page.png)
+![](https://i.imgur.com/rwCj7VO.png)
 
 ### 项目开发流程
 
@@ -152,9 +154,13 @@ UI设计工具：墨刀
 
 使用了移位动画，改进所有按钮点击的效果，不再通过来回的改变TextView的Size大小或者改变button本身的颜色来达到点击效果，而是通过button的晃动效果实现用户的优良体验。
 
-2018/9/25 22:18:28 
+2018/9/25
 
 Login-MVP架构模式完全完成，成功掌握了MVP架构模式地精髓，并具有了一定地架构能力和经验，并对MVP地三个层次分别有了自己地认识和了解，可以自由地掌控MVP地架构方法。
+
+2018/10/1
+
+开始接入环信的SDK服务，实现项目内容第一块的社交块。
 
 #### Bug流程一览
 
@@ -214,4 +220,20 @@ Bug类型：`网络请求完毕后，没有相应地用户提示，并且activit
 
 Bug原因：在Presenter的事件监听中，不能直接在子Thread中使用Toast的方法，必须新创建一个子线程，然后才能在子线程中调用Toast方法，注意要给子线程一个Handler地循环机制。
 
-Bug解决时间：8/25/2018
+Bug解决时间：9/25/2018
+
+- 2018/10/3
+
+Bug类型：`在使用环信的获取好友列表的功能的时候，返回错误:Unknown_server_error，无法正常获取当前用户的好友列表`
+
+Bug解决措施：只需要将对应的ECAPI放入一个子线程中就可以完成对于当前用户好友列表的获取了，具体原因不明。
+
+Bug解决时间：2018/10/4
+
+- 2018/10/4
+
+Bug类型：`在Application中查找并向MoonStep_Palace中添加User对象的时候，由于是网络请求的缘故，传给List的数据会很慢，这样的话，Recycler中地adapter会逐渐刷新界面，然而，由于List尚未完全完成对于数据地请求操作,所以此时看来RecyclerView中地数据只能显示一部分，处理地方式是什么呢？`
+
+Bug解决措施：尚未解决，暂且能够想到地解决措施就是在添加好友地时候，将好友地User地数据全部保存了本地地一个文件里，然后登陆app地时候要做一个检测，如果当前是第一次登陆app,那么需要进行网络地请求操作，做网络请求地时候，可以在进入进入MainActivity地时候，用一段动画将当前地MainActivity进行遮盖，遮盖时间5s钟左右，实质上也是一个数据加载地过程。
+
+Bug解决时间：尚未解决
