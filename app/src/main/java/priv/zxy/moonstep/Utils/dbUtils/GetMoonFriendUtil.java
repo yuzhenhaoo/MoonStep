@@ -2,6 +2,7 @@ package priv.zxy.moonstep.Utils.dbUtils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -17,6 +18,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.kernel_data.bean.ErrorCode;
 import priv.zxy.moonstep.kernel_data.bean.User;
 
@@ -58,6 +60,7 @@ public class GetMoonFriendUtil {
                                 user.setUserRace(jsonObject.getString("race"));
                                 user.setUserLevel(jsonObject.getString("level"));
                                 user.setNickName(jsonObject.getString("nickName"));
+//                                user.setHeadPortrait(jsonObject.getString("portrait"));
                                 user.setUserPet("pet");
                                 moonFriend = user;
                                 Log.e("GetMoonFriendUtil", "获取好友信息成功");

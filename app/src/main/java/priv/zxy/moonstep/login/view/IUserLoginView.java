@@ -30,4 +30,6 @@ public interface IUserLoginView {
     void showSuccessTip();
 
     void showErrorTip(ErrorCode errorCode);
+
+    void handleSendMessage();
 }

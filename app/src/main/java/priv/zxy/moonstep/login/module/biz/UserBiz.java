@@ -40,7 +40,7 @@ public class UserBiz implements IUser {
             loginUtil.LoginRequest(userPhoneNumber, userPassword);
             boolean isSuccess = false;
             //这里开启一个延迟，用来获得正确的反馈结果,注意这个Thread的执行实际上是异步的
-            Thread.sleep(1000);
+            Thread.sleep(400);
             isSuccess = loginUtil.isSuccess;//获得反馈的结果
             if (isSuccess) {
                 EMClient.getInstance().login("moonstep" + userPhoneNumber,userPassword,new EMCallBack() {//回调

@@ -22,5 +22,4 @@ public interface IMainView {
 
     void unBindService();
 
-    List<User> getMoonFriends();
 }

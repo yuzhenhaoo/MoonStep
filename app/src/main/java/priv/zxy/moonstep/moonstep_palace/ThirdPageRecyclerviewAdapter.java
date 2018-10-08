@@ -2,6 +2,7 @@ package priv.zxy.moonstep.moonstep_palace;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -69,7 +70,7 @@ public class ThirdPageRecyclerviewAdapter extends RecyclerView.Adapter<ThirdPage
     public void onBindViewHolder(@NonNull final ThirdPageRecyclerviewAdapter.MyHolder holder, int position) {
         User item = mItems.get(position);
 //        holder.userPhoto.setImageResource(item.getHeadPortrait());
-        holder.userPhoto.setImageBitmap(item.getHeadPortrait());//设置头像
+        holder.userPhoto.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(),R.mipmap.my_photo));//设置头像
         holder.userNickName.setText(item.getNickName());//设置昵称
         holder.race.setText(item.getUserRace());//设置种族
         holder.level.setText(item.getUserLevel());//设置等阶

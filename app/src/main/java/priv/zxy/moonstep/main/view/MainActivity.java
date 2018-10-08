@@ -33,6 +33,7 @@ import com.hyphenate.util.NetUtils;
 import java.lang.ref.WeakReference;
 import java.util.List;
 
+import priv.zxy.moonstep.EC.bean.OnMoonFriendListener;
 import priv.zxy.moonstep.EC.service.GetMessageService;
 import priv.zxy.moonstep.EC.service.MoonFriendService;
 import priv.zxy.moonstep.R;
@@ -57,22 +58,30 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,IMainView {
 
     private static final String TAG = "MainActivity";
+
     private TextView name;
+
     private TextView race;
 
     private Context mContext;
 
     private Activity mActivity;
 
-    private final MyHandler handle = new MyHandler(this);//创建handle对象，实现UI改写
-
-    MoonFriendService.MyBinder binder;//保持所启动地Service地IBinder对象，同时定义一个ServiceConnection对象
+    private OnMoonFriendListener moonFriendListener;
 
     private ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             Log.d(TAG, "MoonFriendService Connected");
-            binder = (MoonFriendService.MyBinder) service;
+            MoonFriendService MFservice = ((MoonFriendService.MyBinder) service).getService();
+
+            MFservice.setOnMoonFriendListener(new OnMoonFriendListener() {
+                @Override
+                public void getMoonFriends(List<User> moonfriends) {
+                    //通知MoonFriendFragment应该获取MoonFriend的列表了
+                    moonFriendListener.getMoonFriends(moonfriends);
+                }
+            });
         }
 
         @Override
@@ -80,28 +89,6 @@ public class MainActivity extends AppCompatActivity
             Log.d(TAG, "MoonFriendService DisConnected");
         }
     };
-
-    private static class MyHandler extends Handler {
-        private final WeakReference<MainActivity> mActivity;
-
-        private MyHandler(MainActivity activity) {
-            mActivity = new WeakReference<MainActivity>(activity);
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-            MainActivity activity = mActivity.get();
-            switch (msg.what) {
-                case 0x01:
-                    Log.i(TAG, activity.name.getText().toString());
-                    //这里设置用户的信息
-                    activity.name.setText("张默尘");
-                    Log.i(TAG, activity.name.getText().toString());
-                    activity.race.setText("月神族");
-                    break;
-            }
-        }
-    }
 
     //实现ConnectionListener接口
     private class MyConnectionListener implements EMConnectionListener {
@@ -163,7 +150,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private MyBroadcastReceiver myBroadcastReceiver = new MyBroadcastReceiver();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -185,13 +171,6 @@ public class MainActivity extends AppCompatActivity
         changeMyInformation();
 
         doEMConnectionListener();
-
-        //注册广播接收器
-        IntentFilter filter = new IntentFilter();
-
-        // 设置接收广播的类型，这里要和Service里设置的类型匹配，还可以在AndroidManifest.xml文件中注册
-         filter.addAction("priv.zxy.moonstep.EC.service");
-         this.registerReceiver(myBroadcastReceiver, filter);
 
     }
 
@@ -293,9 +272,9 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         unBindService();
-        unregisterReceiver(myBroadcastReceiver);
         super.onDestroy();
     }
+
 
     @Override
     public void doEMConnectionListener() {
@@ -316,22 +295,11 @@ public class MainActivity extends AppCompatActivity
         unbindService(connection);
     }
 
-    @Override
-    public List<User> getMoonFriends() {
-            return binder.getFriendsList();
-    }
-
     /**
-     * 定义一个广播接收器
-     * 用来接收GetMessageService中发送地EMMessage队列，并将其分配给两个方向：
-     * 一是消息页面消息地显示数量
-     * 二是点开ChattingActivity内容地显示
+     * 注册接口回调方法，供MoonFriendFragment来调用
+     * @param onMoonFriendListener 接口回调对象
      */
-    class MyBroadcastReceiver extends BroadcastReceiver{
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            //获得Service发送地广播信息，得到数据，传递给Fragment3和ChattingActivity
-            List<EMMessage> lists = binder.getMessages();
-        }
+    public void setOnCallBackListener(OnMoonFriendListener onMoonFriendListener){
+        this.moonFriendListener = onMoonFriendListener;
     }
 }

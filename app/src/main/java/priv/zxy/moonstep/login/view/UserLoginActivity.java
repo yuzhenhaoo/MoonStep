@@ -115,9 +115,10 @@ public class UserLoginActivity extends AppCompatActivity implements IUserLoginVi
                 switch(event.getAction()){
                     case MotionEvent.ACTION_DOWN:
                         clickLogin.startAnimation(shake);
-                        userLoginPresenter.showLoading();
+//                        clickLogin.setClickable(false);//设置不能再次点击，当失败了设置为恢复点击效果
                         break;
                     case MotionEvent.ACTION_UP:
+                        userLoginPresenter.showLoading();
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
@@ -126,7 +127,6 @@ public class UserLoginActivity extends AppCompatActivity implements IUserLoginVi
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
                                 }
-                                mHandler.sendEmptyMessage(0x01);
                             }
                         }).start();
                         break;
@@ -172,13 +172,16 @@ public class UserLoginActivity extends AppCompatActivity implements IUserLoginVi
     @Override
     public void showLoading() {
         progressBar.show();
-        try {
-            Thread.sleep(300);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         deepBackground.setVisibility(View.VISIBLE);
         plainBackground.setVisibility(View.VISIBLE);
+        loginQQ.setEnabled(false);
+        loginWeibo.setEnabled(false);
+        loginWeixin.setEnabled(false);
+        clickLogin.setEnabled(false);
+        forgetPassword.setEnabled(false);
+        registerPhone.setEnabled(false);
+        account.setEnabled(false);
+        password.setEnabled(false);
     }
 
     @Override
@@ -186,6 +189,14 @@ public class UserLoginActivity extends AppCompatActivity implements IUserLoginVi
         deepBackground.setVisibility(View.GONE);
         plainBackground.setVisibility(View.GONE);
         progressBar.hide();
+        loginQQ.setEnabled(true);
+        loginWeibo.setEnabled(true);
+        loginWeixin.setEnabled(true);
+        clickLogin.setEnabled(true);
+        forgetPassword.setEnabled(true);
+        registerPhone.setEnabled(true);
+        account.setEnabled(true);
+        password.setEnabled(true);
     }
 
     @Override
@@ -227,5 +238,10 @@ public class UserLoginActivity extends AppCompatActivity implements IUserLoginVi
     public void showErrorTip(ErrorCode errorCode) {
         ShowErrorReason showErrorReason = new ShowErrorReason(mContext, mActivity);
         showErrorReason.show(errorCode);
+    }
+
+    @Override
+    public void handleSendMessage(){
+        mHandler.sendEmptyMessage(0x01);
     }
 }

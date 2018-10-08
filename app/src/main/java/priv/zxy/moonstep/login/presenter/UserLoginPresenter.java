@@ -44,11 +44,13 @@ public class UserLoginPresenter {
         userBiz.doLogin(mActivity, mContext, userLoginView.getUserPhoneNumber(), userLoginView.getUserPassword(), new OnLoginListener() {
             @Override
             public void loginSuccess() {
+                userLoginView.handleSendMessage();
                 userLoginView.toMainActivity();
             }
 
             @Override
             public void loginFail(final ErrorCode errorCode) {
+                userLoginView.handleSendMessage();
                 new Thread(new Runnable() {
                     @Override
                     public void run() {

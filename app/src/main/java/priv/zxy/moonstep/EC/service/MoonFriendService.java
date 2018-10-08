@@ -23,36 +23,63 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 
+import priv.zxy.moonstep.EC.bean.OnMoonFriendListener;
 import priv.zxy.moonstep.Utils.dbUtils.GetMoonFriendUtil;
 import priv.zxy.moonstep.kernel_data.bean.User;
 
 public class MoonFriendService extends Service {
     private static final String TAG = "MoonFriendService";
+
     private static List<User> moonFriends = new ArrayList<User>();
+
     //通过EM获取好友的消息队列
     private EMMessageListener msgListener;
 
     //利用EMMessage对内部地数据进行去重后返回给Activity
     private List<EMMessage> emMessages;
+
     //定义onBinder方法所返回地对象
     private MyBinder binder = new MyBinder();
+
     public class MyBinder extends Binder{
 
-        public List<User> getFriendsList(){
-            return moonFriends;
+        /**
+         * @return 获取当前Service的实例
+         */
+        public MoonFriendService getService(){
+            return MoonFriendService.this;
         }
+    }
 
-        public List<EMMessage> getMessages(){
-            return emMessages;
-        }
+    /**
+     * 供Activity调用获得当前的MoonFriends列表
+     * @return moonFriends
+     */
+    public List<User> getFriendsList(){
+        return moonFriends;
+    }
+
+    /**
+     * 供Activity调用获得当前的消息队列
+     * @return emMessages
+     */
+    public List<EMMessage> getMessages(){
+        return emMessages;
     }
 
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        return binder;
+        return new MyBinder();
     }
 
+    /**
+     * 注册回调接口的方法，供外部使用
+     * @param onMoonFriendListener 回调接口对象
+     */
+    public void setOnMoonFriendListener(OnMoonFriendListener onMoonFriendListener){
+        this.onMoonFriendListener = onMoonFriendListener;
+    }
     @Override
     public void onCreate() {
         initMoonFriends();
@@ -60,10 +87,16 @@ public class MoonFriendService extends Service {
     }
 
     /**
+     * 获取好友列表的接口
+     */
+    private OnMoonFriendListener onMoonFriendListener;
+
+    /**
      * 这里应该是从登陆就可以开始监听到了
      */
     //必须要将获取好友的函数放在子线程里，不然会发生数据异常
     private static List<String> usernames = new ArrayList<>();
+
     public void initMoonFriends() {
         new Thread(new Runnable() {
             @Override
@@ -80,7 +113,8 @@ public class MoonFriendService extends Service {
                         }
                         moonFriends.add(util.getMoonFriend());
                     }
-
+                    //来通知MoonFriend这个时候应该获取MoonFriend列表了
+                    onMoonFriendListener.getMoonFriends(moonFriends);
                     Log.d(TAG, "run: EM获取好友列表成功");
                 } catch (HyphenateException e) {
                     e.printStackTrace();
