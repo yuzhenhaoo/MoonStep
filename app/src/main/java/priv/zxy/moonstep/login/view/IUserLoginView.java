@@ -32,4 +32,6 @@ public interface IUserLoginView {
     void showErrorTip(ErrorCode errorCode);
 
     void handleSendMessage();
+
+    void fixLoginPreferences(String username, String password);
 }

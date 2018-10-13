@@ -1,10 +1,6 @@
 package priv.zxy.moonstep.moonstep_palace.moon_friend.view;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -21,15 +17,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.hyphenate.chat.EMMessage;
 import com.yalantis.phoenix.PullToRefreshView;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import priv.zxy.moonstep.BuildConfig;
-import priv.zxy.moonstep.EC.application.ECApplication;
-import priv.zxy.moonstep.EC.bean.OnMoonFriendListener;
+import priv.zxy.moonstep.EM.bean.OnMoonFriendListener;
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.kernel_data.bean.User;
 import priv.zxy.moonstep.main.view.MainActivity;
@@ -57,11 +49,11 @@ public class MoonFriendFragment extends Fragment implements IMoonFriendView{
 
     private MoonFriendPresenter moonFriendPresenter;
 
-    private List<User> mList;//月友结果集
+    private List<User> mList = null;//月友结果集
 
     private ThirdPageRecyclerviewAdapter mAdapter;
 
-    private MainActivity mainActivity;//获取回调者的对象
+//    private MainActivity mainActivity;//获取回调者的对象
 
 
     public static MoonFriendFragment getInstance() {
@@ -72,17 +64,19 @@ public class MoonFriendFragment extends Fragment implements IMoonFriendView{
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        mainActivity = (MainActivity) this.getActivity();
+//        mainActivity = (MainActivity) this.getActivity();
         //注册回调接口来接收moonFriends的传递
-        mainActivity.setOnCallBackListener(new OnMoonFriendListener() {
-            @Override
-            public void getMoonFriends(List<User> moonfriends) {
-                mList = moonfriends;
-            }
-        });
-        Log.d("MoonFriendFragment", "onCreate");
+//        mainActivity.setOnCallBackListener(new OnMoonFriendListener() {
+//            @Override
+//            public void getMoonFriends(List<User> moonfriends) {
+//                mList = moonfriends;
+//                Log.d("MoonFriendFragment", String.valueOf(moonfriends.size()));
+//            }
+//        });
+//        Log.d("MoonFriendFragment", "onCreate");
+        //应该从这里取数据库中的内容
     }
 
     @Nullable
@@ -102,48 +96,6 @@ public class MoonFriendFragment extends Fragment implements IMoonFriendView{
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Log.d("MoonFriendFragment", "onActivityCreated");
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        Log.d("MoonFriendFragment", "onStart");
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d("MoonFriendFragment", "onResume");
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.d("MoonFriendFragment", "Pause");
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.d("MoonFriendFragment", "onStop");
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        Log.d("MoonFriendFragment", "onDestroyView");
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.d("MoonFriendFragment", "onDestroy");
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        Log.d("MoonFriendFragment", "onDetach");
     }
 
     public void initView() {
@@ -175,8 +127,9 @@ public class MoonFriendFragment extends Fragment implements IMoonFriendView{
         layoutManager = new LinearLayoutManager(this.getActivity());
         mAdapter = new ThirdPageRecyclerviewAdapter(this.getActivity());
         mAdapter.clear();//在每次进入好友页面的时候，都需要对当前页面的ViewHolder进行一次刷新
-        mAdapter.addAll(mList);
-
+        if(mList != null){
+            mAdapter.addAll(mList);
+        }
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(mAdapter);
     }

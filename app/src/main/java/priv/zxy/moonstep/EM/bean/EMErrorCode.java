@@ -1,6 +1,6 @@
-package priv.zxy.moonstep.EC.bean;
+package priv.zxy.moonstep.EM.bean;
 
-public class ECErrorCode {
+public class EMErrorCode {
     static final int 	EM_NO_ERROR = 0;
 
     static final int 	GENERAL_ERROR = 1;

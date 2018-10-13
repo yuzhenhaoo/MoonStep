@@ -6,20 +6,21 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.view.ViewGroup;
 
 import priv.zxy.moonstep.moonstep_palace.moon_friend.view.MoonFriendFragment;
+import priv.zxy.moonstep.moonstep_palace.personal_info.view.PersonalInfoFragment;
 
 public class FirstMainPageAdapter extends FragmentPagerAdapter {
     private final int PAGER_COUNT = 4;
     private FirstMainPageFragment1 myFragment1 = null;
     private FirstMainPageFragment2 myFragment2 = null;
     private MoonFriendFragment myFragment3 = null;
-    private FirstMainPageFragment4 myFragment4 = null;
+    private PersonalInfoFragment myFragment4 = null;
 
     public FirstMainPageAdapter(FragmentManager fm){
         super(fm);
         myFragment1 = new FirstMainPageFragment1();
         myFragment2 = new FirstMainPageFragment2();
         myFragment3 = new MoonFriendFragment();
-        myFragment4 = new FirstMainPageFragment4();
+        myFragment4 = new PersonalInfoFragment();
     }
 
     @Override

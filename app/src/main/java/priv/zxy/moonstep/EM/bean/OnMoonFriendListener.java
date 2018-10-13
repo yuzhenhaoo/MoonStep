@@ -1,4 +1,4 @@
-package priv.zxy.moonstep.EC.bean;
+package priv.zxy.moonstep.EM.bean;
 
 import java.util.List;
 

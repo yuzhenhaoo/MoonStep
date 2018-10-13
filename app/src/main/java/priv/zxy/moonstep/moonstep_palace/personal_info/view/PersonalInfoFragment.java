@@ -1,28 +1,30 @@
-package priv.zxy.moonstep.moonstep_palace;
+package priv.zxy.moonstep.moonstep_palace.personal_info.view;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hyphenate.chat.EMClient;
 import com.yalantis.contextmenu.lib.ContextMenuDialogFragment;
@@ -34,25 +36,42 @@ import com.yalantis.contextmenu.lib.interfaces.OnMenuItemLongClickListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import priv.zxy.moonstep.BuildConfig;
+import priv.zxy.moonstep.EM.application.EMApplication;
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.Utils.MyDialog;
+import priv.zxy.moonstep.Utils.SharedPreferencesUtil;
+import priv.zxy.moonstep.kernel_data.bean.User;
 import priv.zxy.moonstep.login.view.UserLoginActivity;
 
-public class FirstMainPageFragment4 extends Fragment implements OnMenuItemClickListener, OnMenuItemLongClickListener {
+/**
+ * 检查settings按钮设置是否可以生效，若是不能生效，则说明是toolbar设置的问题，针对toolbar进行改进。
+ */
+public class PersonalInfoFragment extends Fragment implements OnMenuItemClickListener, OnMenuItemLongClickListener {
 
-    private AppCompatImageButton magicWend;
-    private AppCompatImageButton addFriends;
-    private AppCompatImageButton sendMessages;
+    private String TAG = "PersonalInfoFragment";
+    private User myself = null;
     private View view;
     private ContextMenuDialogFragment mMenuDialogFragment;
     private ArrayList<MenuObject> menuObjects = new ArrayList<>();
     private Context mContext;
     private Activity mActivity;
+    private Button settings;
+    private CircleImageView userPhoto;
+    private TextView nickName;
+    private TextView userLevel;
+    private TextView userPet;
+    private TextView userRace;
+    private Button magicWend;
+    private Button addFriend;
+    private Button sendMessage;
+    private TextView signature;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        myself = EMApplication.getMyInfo();
         mContext = this.getContext();
         mActivity = this.getActivity();
         setHasOptionsMenu(true);//在Fragment要想让onCreateOptionsMenu生效必须先调用setHasOptionsMenu的方法
@@ -62,6 +81,8 @@ public class FirstMainPageFragment4 extends Fragment implements OnMenuItemClickL
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fg_main_first_subpage4, container, false);
+        initView();
+        updateData();
         return view;
     }
 
@@ -75,50 +96,20 @@ public class FirstMainPageFragment4 extends Fragment implements OnMenuItemClickL
     public void initView() {
         initToolbar();
         initMenuFragment();
-        magicWend = view.findViewById(R.id.magicWend);
-        addFriends = view.findViewById(R.id.addFriedns);
-        sendMessages = view.findViewById(R.id.sendMesssages);
-
-        magicWend.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                    magicWend.setPadding(10, 10, 0, 0);
-                } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                    magicWend.setPadding(-10, -10, 0, 0);
-                }
-                return false;
-            }
-        });
-
-        addFriends.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                    addFriends.setPadding(10, 10, 0, 0);
-                } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                    addFriends.setPadding(-10, -10, 0, 0);
-                }
-                return false;
-            }
-        });
-
-        sendMessages.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                    sendMessages.setPadding(10, 10, 0, 0);
-                } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                    sendMessages.setPadding(-10, -10, 0, 0);
-                }
-                return false;
-            }
-        });
+        userPhoto = (CircleImageView) view.findViewById(R.id.userPhoto);
+        nickName = (TextView) view.findViewById(R.id.nickName);
+        userLevel = (TextView) view.findViewById(R.id.userLevel);
+        userPet = (TextView) view.findViewById(R.id.userPet);
+        userRace = (TextView) view.findViewById(R.id.userRace);
+        magicWend = (Button) view.findViewById(R.id.magicWend);
+        addFriend = (Button) view.findViewById(R.id.addFriend);
+        sendMessage = (Button) view.findViewById(R.id.sendMessage);
+        signature = (TextView) view.findViewById(R.id.signature);
     }
 
+    //若要使用页面设置弹窗效果，必须要使用toolbar，然而约束布局toolbar不显示
     private void initToolbar() {
         Toolbar mToolbar = view.findViewById(R.id.toolbar);
-        TextView mToolBarTextView = view.findViewById(R.id.titleName);
         ((AppCompatActivity) mActivity).setSupportActionBar(mToolbar);
         if (((AppCompatActivity) mActivity).getSupportActionBar() != null) {
             ((AppCompatActivity) mActivity).getSupportActionBar().setHomeButtonEnabled(true);
@@ -132,7 +123,6 @@ public class FirstMainPageFragment4 extends Fragment implements OnMenuItemClickL
 //                onBackPressed();
 //            }
 //        });
-        mToolBarTextView.setText("称号");
     }
 
     private void initMenuFragment() {
@@ -168,7 +158,7 @@ public class FirstMainPageFragment4 extends Fragment implements OnMenuItemClickL
                         EMClient.getInstance().logout(true);//退出EMC的服务，让当前用户不在线
                     }
                 }).start();
-                if (BuildConfig.DEBUG) Log.d("FirstMainPageFragment4", "用户已经成功下线");
+                if (BuildConfig.DEBUG) Log.d("PersonalInfoFragment", "用户已经成功下线");
                 startActivity(intent);
             }
         });
@@ -255,5 +245,14 @@ public class FirstMainPageFragment4 extends Fragment implements OnMenuItemClickL
 
     @Override
     public void onMenuItemLongClick(View clickedView, int position) {
+    }
+
+    public void updateData() {
+            SharedPreferencesUtil sharedPreferencesUtil = new SharedPreferencesUtil(mContext);
+            nickName.setText(sharedPreferencesUtil.readMySelfInformation().get("nickName"));
+            userLevel.setText(sharedPreferencesUtil.readMySelfInformation().get("userLevel"));
+            userPet.setText(sharedPreferencesUtil.readMySelfInformation().get("userPet"));
+            userRace.setText(sharedPreferencesUtil.readMySelfInformation().get("userRace"));
+            signature.setText(sharedPreferencesUtil.readMySelfInformation().get("signature"));
     }
 }

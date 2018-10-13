@@ -100,7 +100,7 @@
         android:id="@+id/back_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@mipmap/back"
+        android:src="@mipmap/back0"
         android:layout_margin="5dp"
         android:contentDescription="@string/nothing"/>
 

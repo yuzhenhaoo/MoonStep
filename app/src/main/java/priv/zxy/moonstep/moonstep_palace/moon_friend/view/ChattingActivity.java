@@ -2,12 +2,9 @@ package priv.zxy.moonstep.moonstep_palace.moon_friend.view;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.bluetooth.BluetoothClass;
-import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -19,20 +16,24 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ScrollView;
-import android.widget.Toast;
+import android.widget.TextView;
 
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMMessage;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.Utils.ToastUtil;
 import priv.zxy.moonstep.kernel_data.bean.ChatMessage;
+import priv.zxy.moonstep.kernel_data.bean.MoonStepHelper;
 import priv.zxy.moonstep.moonstep_palace.moon_friend.presenter.ChattingAdapter;
-import priv.zxy.moonstep.user_info_activity.UserInfoActivity;
 
 public class ChattingActivity extends AppCompatActivity implements IChattingView, View.OnLayoutChangeListener{
 
@@ -43,24 +44,27 @@ public class ChattingActivity extends AppCompatActivity implements IChattingView
     private Button back;
     private Button person_info;
     private Button moreFuctions;
+    private TextView userName;
+    private TextView time;
     private EditText inputMessage;
     private Button sendMessage;
     private ScrollView scrollView;
     private ConstraintLayout root;
     private int rootHeight;//根布局原始高度
     private int keyHeight;//屏幕高度阀值
-    @SuppressLint("HandlerLeak")
-    Handler handler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what){
-                case 0:
-                    recyclerView.scrollToPosition(lists.size()-1);
-                    break;
-            }
-        }
-    };
+    private Intent intent;//用来接收Adapter中传过来的数据
+
+    /**
+     * 对方的数据
+     */
+    private Bitmap HeadPortrait = null;
+    private String PhoneNumber = null;
+    private String NickName = null;
+    private String Race = null;
+    private String Level = null;
+    private String UserGender = null;
+    private String Pet = null;
+    private String Signature = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,10 +73,10 @@ public class ChattingActivity extends AppCompatActivity implements IChattingView
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
 
         Transition explode = TransitionInflater.from(this).inflateTransition(R.transition.explode);
-        Transition slide_left = TransitionInflater.from(this).inflateTransition(R.transition.slide_left);
+//        Transition slide_left = TransitionInflater.from(this).inflateTransition(R.transition.slide_left);
         Transition slide_right = TransitionInflater.from(this).inflateTransition(R.transition.slide_right);
         //退出时使用
-        getWindow().setExitTransition(slide_left);
+//        getWindow().setExitTransition(slide_left);
         //第一次进入时使用
         getWindow().setEnterTransition(slide_right);
         //再次进入时使用
@@ -81,17 +85,21 @@ public class ChattingActivity extends AppCompatActivity implements IChattingView
 
         initView();
         initData();
+
+        updateData();
     }
 
     @SuppressLint("ClickableViewAccessibility")
     public void initView(){
         mActivity = this;
+        intent = getIntent();
         back = this.findViewById(R.id.back);
         person_info = this.findViewById(R.id.person_info);
         moreFuctions = this.findViewById(R.id.moreFunctions);
         inputMessage = this.findViewById(R.id.inputMessage);
         sendMessage = this.findViewById(R.id.sendMessage);
-
+        userName = this.findViewById(R.id.userName);
+        time = this.findViewById(R.id.time);
         recyclerView = this.findViewById(R.id.recycleview);
         scrollView = this.findViewById(R.id.scrollview);
 
@@ -102,16 +110,6 @@ public class ChattingActivity extends AppCompatActivity implements IChattingView
         keyHeight =  rootHeight / 3;
 
         mAdapter = new ChattingAdapter(getApplicationContext());
-
-//        OnClick方法执行的顺序相当于是异步的，也就是说，下面的三步实际上还是相当于先把1、3执行了，才执行的2，所以看起来没有任何效果
-//        sendMessage.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                scrollView.fullScroll(ScrollView.FOCUS_DOWN);//向下滑动
-//                sendMessageToMoonFriend();
-//                scrollView.fullScroll(ScrollView.FOCUS_DOWN);//向下滑动
-//            }
-//        });
 
         sendMessage.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -149,6 +147,15 @@ public class ChattingActivity extends AppCompatActivity implements IChattingView
     }
 
     public void initData(){
+//        HeadPortrait = ?
+        PhoneNumber = intent.getStringExtra("phoneNumber");
+        NickName = intent.getStringExtra("userNickName");
+        Race = intent.getStringExtra("race");
+        Level = intent.getStringExtra("level");
+        UserGender = intent.getStringExtra("userGender");
+        Pet = intent.getStringExtra("pet");
+        Signature = intent.getStringExtra("signature");
+
         mAdapter.clear();
         mAdapter.addAll(lists);
         //设置列表布局管理
@@ -156,6 +163,11 @@ public class ChattingActivity extends AppCompatActivity implements IChattingView
         recyclerView.setLayoutManager(linearLayoutManager);
         //设置适配器
         recyclerView.setAdapter(mAdapter);
+    }
+
+    public void updateData(){
+        userName.setText(NickName);
+        time.setText(getTime());
     }
 
     @Override
@@ -176,6 +188,14 @@ public class ChattingActivity extends AppCompatActivity implements IChattingView
     public void toPersonInfoPage() {
         Log.e("TAG", "personInfo2");
         Intent intent = new Intent(mActivity, UserInfoActivity.class);
+        //        intent.putExtra("headPortrait", item.getHeadPortrait());//暂时还不知道Bitmap怎么通过Activity进行传输
+        intent.putExtra("phoneNumber", PhoneNumber);
+        intent.putExtra("userNickName", NickName);
+        intent.putExtra("race", Race);
+        intent.putExtra("level", Level);
+        intent.putExtra("userGender", UserGender);
+        intent.putExtra("pet", Pet);
+        intent.putExtra("signature", Signature);
         mActivity.startActivity(intent);
     }
 
@@ -186,6 +206,9 @@ public class ChattingActivity extends AppCompatActivity implements IChattingView
             new ToastUtil(this.getApplicationContext(), this).showToast("发送地消息不能为空哦！");
         }else{
             scrollView.fullScroll(ScrollView.FOCUS_DOWN);//向下滑动
+
+            MoonStepHelper.getInstance().EMsendMessage(message, "moonstep" + PhoneNumber, EMMessage.ChatType.Chat);
+
             inputMessage.getText().clear();//发送后立刻清空输入框
             lists.add(new ChatMessage(message, true));
             mAdapter.notifyDataSetChanged();
@@ -214,5 +237,13 @@ public class ChattingActivity extends AppCompatActivity implements IChattingView
                 && (bottom - oldBottom > keyHeight)) {
             scrollView.fullScroll(ScrollView.FOCUS_DOWN);//向下滑动
         }
+    }
+
+    @Override
+    public String getTime() {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");// HH:mm:ss
+        //获取当前时间
+        Date date = new Date(System.currentTimeMillis());
+        return simpleDateFormat.format(date);
     }
 }

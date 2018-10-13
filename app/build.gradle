@@ -72,6 +72,11 @@ dependencies {
     //Optional compile for GCM (Google Cloud Messaging).
     implementation 'com.google.android.gms:play-services-gcm:11.6.2'
     implementation 'com.hyphenate:hyphenate-sdk:3.3.0'
+
+    implementation 'com.rengwuxian.materialedittext:library:2.1.4'
+
+    //添加LitePal的依赖
+    implementation 'org.litepal.android:java:3.0.0'
 }
 repositories {
     mavenCentral()

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -19,6 +20,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.mob.MobSDK;
+import com.rengwuxian.materialedittext.MaterialEditText;
 
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.Utils.SharedPreferencesUtil;
@@ -38,8 +40,8 @@ public class UserLoginActivity extends AppCompatActivity implements IUserLoginVi
     private Button loginQQ;
     private Button loginWeibo;
     private LinearLayout loginContent;
-    private EditText account;
-    private EditText password;
+    private MaterialEditText account;
+    private MaterialEditText password;
     private Button clickLogin;
     private Button forgetPassword;
     private View bottomLine;
@@ -85,8 +87,8 @@ public class UserLoginActivity extends AppCompatActivity implements IUserLoginVi
         loginQQ = (Button) findViewById(R.id.login_QQ);
         loginWeibo = (Button) findViewById(R.id.login_weibo);
         loginContent = (LinearLayout) findViewById(R.id.login_content);
-        account = (EditText) findViewById(R.id.account);
-        password = (EditText) findViewById(R.id.password);
+        account = (MaterialEditText) findViewById(R.id.account);
+        password = (MaterialEditText) findViewById(R.id.password);
         clickLogin = (Button) findViewById(R.id.click_login);
         forgetPassword = (Button) findViewById(R.id.forget_password);
         bottomLine = (View) findViewById(R.id.bottom_line);
@@ -204,6 +206,7 @@ public class UserLoginActivity extends AppCompatActivity implements IUserLoginVi
         Intent intent = new Intent(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("UserID", account.getText().toString());
         this.startActivity(intent);
     }
 
@@ -243,5 +246,10 @@ public class UserLoginActivity extends AppCompatActivity implements IUserLoginVi
     @Override
     public void handleSendMessage(){
         mHandler.sendEmptyMessage(0x01);
+    }
+
+    @Override
+    public void fixLoginPreferences(String username, String password) {
+        new SharedPreferencesUtil(mContext).fixSuccessedLoginAccountAndPassword(username, password);
     }
 }

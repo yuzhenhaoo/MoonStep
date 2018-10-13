@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@mipmap/login_background">
 
     <LinearLayout
@@ -101,30 +102,40 @@
         android:layout_below="@id/header"
         android:layout_marginEnd="40dp"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="30dp"
         android:orientation="vertical">
 
-        <EditText
+        <com.rengwuxian.materialedittext.MaterialEditText
             android:id="@+id/account"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:drawableStart="@mipmap/account"
+            android:layout_height="wrap_content"
             android:hint="@string/phone_account"
-            android:inputType="text"
-            android:textColor="@color/white"
-            android:textColorHint="@color/white"
-            android:theme="@style/MyEditText" />
+            android:inputType="number"
+            app:met_textColorHint="@color/Gray"
+            app:met_iconLeft="@mipmap/account"
+            app:met_clearButton="true"
+            app:met_accentTypeface="fonts/Satisfy-Regular.ttf"
+            app:met_baseColor="@color/white"
+            app:met_primaryColor="@color/DoderBlue"
+            app:met_floatingLabelText="phoneNumber"
+            app:met_floatingLabel="normal"/>
 
-        <EditText
+        <com.rengwuxian.materialedittext.MaterialEditText
             android:id="@+id/password"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:drawableStart="@mipmap/password"
-            android:hint="@string/input_password"
+            android:layout_height="wrap_content"
+            android:hint="@string/password"
             android:inputType="textPassword"
-            android:textColor="@color/white"
-            android:textColorHint="@color/white"
-            android:theme="@style/MyEditText" />
+            app:met_textColorHint="@color/Gray"
+            app:met_iconLeft="@mipmap/password"
+            app:met_clearButton="true"
+            app:met_minCharacters="6"
+            app:met_maxCharacters="16"
+            app:met_accentTypeface="fonts/Satisfy-Regular.ttf"
+            app:met_baseColor="@color/white"
+            app:met_primaryColor="@color/DoderBlue"
+            app:met_floatingLabelText="passWord"
+            app:met_floatingLabel="normal"/>
     </LinearLayout>
 
     <Button
@@ -148,6 +159,7 @@
         android:layout_marginBottom="20dp"
         android:layout_marginEnd="80dp"
         android:layout_marginStart="80dp"
+        android:layout_below="@+id/click_login"
         android:layout_marginTop="20dp"
         android:background="@color/transparent"
         android:text="@string/forget_password"

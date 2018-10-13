@@ -16,12 +16,12 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.hyphenate.exceptions.HyphenateException;
+import com.rengwuxian.materialedittext.MaterialEditText;
 
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.Utils.ShowErrorReason;
@@ -36,12 +36,12 @@ import priv.zxy.moonstep.main.view.MainActivity;
 
 public class UserRegisterActivity extends AppCompatActivity implements IUserRegisterView {
 
-    private EditText accountName;
+    private MaterialEditText accountName;
     private RadioGroup radioGroup;
     private RadioButton man;
     private RadioButton woman;
-    private EditText password;
-    private EditText passwordCheck;
+    private MaterialEditText password;
+    private MaterialEditText passwordCheck;
     private Button clickRegister;
     private Button returnLoginPage;
     private ImageView backButton;
@@ -79,12 +79,12 @@ public class UserRegisterActivity extends AppCompatActivity implements IUserRegi
 
     @SuppressLint("ClickableViewAccessibility")
     private void initView() {
-        accountName = (EditText) findViewById(R.id.accountName);
+        accountName = (MaterialEditText) findViewById(R.id.accountName);
         radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
         man = (RadioButton) findViewById(R.id.man);
         woman = (RadioButton) findViewById(R.id.woman);
-        password = (EditText) findViewById(R.id.password);
-        passwordCheck = (EditText) findViewById(R.id.password_check);
+        password = (MaterialEditText) findViewById(R.id.password);
+        passwordCheck = (MaterialEditText) findViewById(R.id.password_check);
         clickRegister = (Button) findViewById(R.id.click_register);
         returnLoginPage = (Button) findViewById(R.id.return_login_page);
         backButton = (ImageView) findViewById(R.id.back_button);

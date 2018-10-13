@@ -1,29 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_pressed="true">
-        <layer-list android:layout_height="match_parent">
-            <!-- 呈现内容-->
-            <item>
-                <shape xmlns:android="http://schemas.android.com/apk/res/android" android:innerRadius="0dp" android:shape="ring" android:thickness="20dp" android:useLevel="false">
-                    <gradient android:angle="-90" android:endColor="#f997ef" android:startColor="#0188f7" />
-                </shape>
-            </item>
-        </layer-list>
+    <item android:state_pressed="true" >
+        <bitmap android:src="@mipmap/add_friends" android:tileMode="disabled" android:gravity="center" />
+        <shape android:shape="rectangle">
+            <solid android:color="#c82e3743"/>
+        </shape>
     </item>
-    <item>
-        <layer-list android:layout_height="match_parent">
-            <!--阴影部分-->
-            <item>
-                <shape xmlns:android="http://schemas.android.com/apk/res/android" android:innerRadius="0dp" android:shape="ring" android:thickness="22dp" android:useLevel="false">
-                    <solid android:color="#598b8a8a" />
-                </shape>
-            </item>
-            <!-- 呈现内容-->
-            <item android:bottom="4dp" android:right="4dp">
-                <shape xmlns:android="http://schemas.android.com/apk/res/android" android:innerRadius="0dp" android:shape="ring" android:thickness="20dp" android:useLevel="false">
-                    <gradient android:angle="-90" android:endColor="#f997ef" android:startColor="#0084ff" />
-                </shape>
-            </item>
-        </layer-list>
+    <item >
+        <bitmap android:src="@mipmap/add_friends" android:tileMode="disabled" android:gravity="center" />
     </item>
 </selector>

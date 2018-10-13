@@ -19,6 +19,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.rengwuxian.materialedittext.MaterialEditText;
+
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.Utils.ShowErrorReason;
 import priv.zxy.moonstep.Utils.ToastUtil;
@@ -31,8 +33,8 @@ import priv.zxy.moonstep.login.presenter.UserChangePasswordPresenter;
 
 public class UserChangePasswordActivity extends AppCompatActivity implements IChangePasswordView {
     private TextView phone;
-    private EditText password;
-    private EditText confirmPassword;
+    private MaterialEditText password;
+    private MaterialEditText confirmPassword;
     private ImageView backButton;
     private View deepBackground;
     private View plainBackground;
@@ -62,8 +64,8 @@ public class UserChangePasswordActivity extends AppCompatActivity implements ICh
     @SuppressLint("ClickableViewAccessibility")
     private void initView() {
         phone = (TextView) findViewById(R.id.phone);
-        password = (EditText) findViewById(R.id.password);
-        confirmPassword = (EditText) findViewById(R.id.password_check);
+        password = (MaterialEditText) findViewById(R.id.password);
+        confirmPassword = (MaterialEditText) findViewById(R.id.password_check);
         backButton = (ImageView) findViewById(R.id.back_button);
         deepBackground = (View) findViewById(R.id.deepBackground);
         plainBackground = (View) findViewById(R.id.plainBackground);
@@ -145,6 +147,8 @@ public class UserChangePasswordActivity extends AppCompatActivity implements ICh
     @Override
     public void toLoginActivity() {
         Intent intent = new Intent(this, UserLoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 

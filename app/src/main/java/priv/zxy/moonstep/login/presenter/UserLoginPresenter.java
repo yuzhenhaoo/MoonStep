@@ -44,6 +44,7 @@ public class UserLoginPresenter {
         userBiz.doLogin(mActivity, mContext, userLoginView.getUserPhoneNumber(), userLoginView.getUserPassword(), new OnLoginListener() {
             @Override
             public void loginSuccess() {
+                userLoginView.fixLoginPreferences(userLoginView.getUserPhoneNumber(), userLoginView.getUserPassword());
                 userLoginView.handleSendMessage();
                 userLoginView.toMainActivity();
             }

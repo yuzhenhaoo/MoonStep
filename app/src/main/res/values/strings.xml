@@ -27,7 +27,8 @@
     <string name="send_message">发送验证码</string>
     <string name="input_email">请输入邮箱</string>
     <string name="email">邮箱</string>
-    <string name="input_password">输入密码(6-16位)</string>
+    <string name="input_password">输入密码</string>
+    <string name="password">密码</string>
     <string name="forget_password">忘记了密码？</string>
     <string name="verification_code">验证码</string>
     <string name="click_login">点击登录</string>

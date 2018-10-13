@@ -29,7 +29,7 @@ public class User {
     private String pet;
 
     //用户头像
-    private Bitmap headPortrait;
+    private byte[] headPortrait;
 
     //用户签名
     private String signature;
@@ -37,7 +37,7 @@ public class User {
     public User(){
     }
 
-    public User(Bitmap headProtrait, String nickName, String gender, String race){
+    public User(byte[] headProtrait, String nickName, String gender, String race){
         setHeadPortrait(headProtrait);
         setNickName(nickName);
         setUserGender(gender);
@@ -100,11 +100,11 @@ public class User {
         return pet;
     }
 
-    public void setHeadPortrait(Bitmap headPortrait){
+    public void setHeadPortrait(byte[] headPortrait){
         this.headPortrait = headPortrait;
     }
 
-    public Bitmap getHeadPortrait() {
+    public byte[] getHeadPortrait() {
         return headPortrait;
     }
 

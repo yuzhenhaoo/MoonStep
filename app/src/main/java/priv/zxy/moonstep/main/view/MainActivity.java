@@ -2,16 +2,13 @@ package priv.zxy.moonstep.main.view;
 
 import android.app.Activity;
 import android.app.Service;
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Message;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
@@ -26,16 +23,17 @@ import android.widget.TextView;
 
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMError;
+import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.util.NetUtils;
 
-import java.lang.ref.WeakReference;
+import org.litepal.tablemanager.Connector;
+
 import java.util.List;
 
-import priv.zxy.moonstep.EC.bean.OnMoonFriendListener;
-import priv.zxy.moonstep.EC.service.GetMessageService;
-import priv.zxy.moonstep.EC.service.MoonFriendService;
+import priv.zxy.moonstep.EM.bean.OnMoonFriendListener;
+import priv.zxy.moonstep.EM.service.MoonFriendService;
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.Utils.ShowErrorReason;
 import priv.zxy.moonstep.kernel_data.bean.ErrorCode;
@@ -49,8 +47,6 @@ import priv.zxy.moonstep.main_third_page_fragment.ThirdMainPageFragment1;
 
 /**
  * 我们可以在MainActivity中获得Moonfriends的获取和MessageQueue的获取
- * 我们要做的事情只有两件：
- * 一是在广播接收到Moonfriends之后，把Moonfriends实时的传递给MoonFriendFragment（问题一：Activity消息到Fragment消息传递的实时性）
  * 二就是在广播接收到MessageQueue后，传递给MoonFriendFragment改变当前好友列表的消息显示，再经过判断，通过ChattingActivity加载相应的数据。(问题二：我在得到消息队列后，给不同好友的消息在没有打开ChattingActivity的时候应该存储在哪里？是本地的数据库吗？直到打开ChattingActivity的时候再重新加载？)
  */
 
@@ -69,19 +65,18 @@ public class MainActivity extends AppCompatActivity
 
     private OnMoonFriendListener moonFriendListener;
 
+    private List<User> lists = null;
+
+    private List<EMMessage> emMessages = null;
+
+    private Intent service;
+
+    public static String userId = null;
+
     private ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             Log.d(TAG, "MoonFriendService Connected");
-            MoonFriendService MFservice = ((MoonFriendService.MyBinder) service).getService();
-
-            MFservice.setOnMoonFriendListener(new OnMoonFriendListener() {
-                @Override
-                public void getMoonFriends(List<User> moonfriends) {
-                    //通知MoonFriendFragment应该获取MoonFriend的列表了
-                    moonFriendListener.getMoonFriends(moonfriends);
-                }
-            });
         }
 
         @Override
@@ -150,9 +145,48 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    //通过EM获取好友的消息队列
+    private EMMessageListener msgListener = new EMMessageListener() {
+
+        @Override
+        public void onMessageReceived(List<EMMessage> messages) {
+            Log.d(TAG,"接收到了消息:");
+            emMessages = messages;
+            for(EMMessage message: emMessages){
+                Log.d(TAG, message.toString());
+            }
+        }
+
+        @Override
+        public void onCmdMessageReceived(List<EMMessage> messages) {
+            //收到透传消息
+            Log.d(TAG, "收到透传消息");
+        }
+
+        @Override
+        public void onMessageRead(List<EMMessage> messages) {
+            //收到已读回执
+            Log.d(TAG, "收到已读回执");
+        }
+
+        @Override
+        public void onMessageDelivered(List<EMMessage> message) {
+            //收到已送达回执
+            Log.d(TAG, "收到已送达回执");
+        }
+
+        @Override
+        public void onMessageChanged(EMMessage message, Object change) {
+            //消息状态变动
+            Log.d(TAG, "消息状态变动");
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SQLiteDatabase db = Connector.getDatabase();//实现数据库的创建
+        getUserID();
         //隐藏通知栏
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.mainpage);
@@ -172,8 +206,8 @@ public class MainActivity extends AppCompatActivity
 
         doEMConnectionListener();
 
+        EMClient.getInstance().chatManager().addMessageListener(msgListener);
     }
-
 
     @Override
     public void onBackPressed() {
@@ -236,12 +270,17 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    public void getUserID(){
+        Intent intent = getIntent();
+        userId = intent.getStringExtra("UserID");
+    }
+
+    @Override
     public void toLoginActivity() {
         Intent intent = new Intent(this, UserLoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
-
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -285,13 +324,15 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void bindService() {
 //        //绑定LoadingMoonFriendsService
-        Intent intent = new Intent(this, MoonFriendService.class);
-        bindService(intent, connection, Service.BIND_AUTO_CREATE);
+        service = new Intent(this, MoonFriendService.class);
+        bindService(service, connection, Service.BIND_AUTO_CREATE);
+        startService(service);
     }
 
     @Override
     public void unBindService() {
         //解除绑定LoadingMoonFriendsService
+        stopService(service);
         unbindService(connection);
     }
 
@@ -299,7 +340,8 @@ public class MainActivity extends AppCompatActivity
      * 注册接口回调方法，供MoonFriendFragment来调用
      * @param onMoonFriendListener 接口回调对象
      */
-    public void setOnCallBackListener(OnMoonFriendListener onMoonFriendListener){
-        this.moonFriendListener = onMoonFriendListener;
-    }
+//    public void setOnCallBackListener(OnMoonFriendListener onMoonFriendListener){
+//        this.moonFriendListener = onMoonFriendListener;
+//        this.moonFriendListener.getMoonFriends(lists);
+//    }
 }

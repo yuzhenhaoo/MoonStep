@@ -40,7 +40,7 @@
 
     <application
         android:allowBackup="true"
-        android:name=".EC.application.ECApplication"
+        android:name=".EM.application.EMApplication"
         android:icon="@mipmap/logo_compress"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/logo_compress"
@@ -67,7 +67,7 @@
         <activity android:name=".moonstep_palace.moon_friend.view.ChattingActivity"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
             android:configChanges="keyboardHidden|orientation|screenSize"/>
-        <activity android:name=".user_info_activity.UserInfoActivity"
+        <activity android:name=".moonstep_palace.moon_friend.view.UserInfoActivity"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
             android:configChanges="keyboardHidden|orientation|screenSize"/>
         <activity android:name=".login.view.UserLoginActivity"
@@ -109,7 +109,7 @@
             </intent-filter>
         </receiver>
         <!---exported决定应用是否能被其它应用隐式调用，默认为false,当设置为false地时候，即使设置了intent-filter，也不能被其它应用隐式调用-->
-        <service android:name=".EC.service.MoonFriendService"
+        <service android:name=".EM.service.MoonFriendService"
             android:exported="false">
         </service>
     </application>

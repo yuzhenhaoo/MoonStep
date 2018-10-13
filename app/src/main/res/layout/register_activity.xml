@@ -15,18 +15,23 @@
         android:contentDescription="@string/todo"
         android:src="@mipmap/moonstep_logo"/>
 
-    <EditText
+    <com.rengwuxian.materialedittext.MaterialEditText
         android:id="@+id/accountName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColorHint="#ffffff"
-        android:theme="@style/MyEditText"
         android:hint="@string/nickName"
-        app:layout_constraintTop_toBottomOf="@+id/moonstep_logo"
+        android:inputType="text"
         android:layout_marginTop="20dp"
         android:layout_marginStart="50dp"
         android:layout_marginEnd="50dp"
-        android:inputType="text"/>
+        app:met_textColorHint="@color/white"
+        app:met_clearButton="true"
+        app:met_accentTypeface="fonts/Satisfy-Regular.ttf"
+        app:met_baseColor="@color/white"
+        app:met_primaryColor="@color/DoderBlue"
+        app:met_floatingLabelText="nickName"
+        app:met_floatingLabel="normal"
+        app:layout_constraintTop_toBottomOf="@+id/moonstep_logo" />
 
     <RadioGroup
         android:id="@+id/radioGroup"
@@ -54,31 +59,41 @@
             android:text="@string/woman"/>
     </RadioGroup>
 
-    <EditText
+    <com.rengwuxian.materialedittext.MaterialEditText
         android:id="@+id/password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:hint="@string/input_password_again"
+        android:inputType="textPassword"
         android:layout_marginTop="15dp"
-        android:theme="@style/MyEditText"
-        android:textColorHint="#ffffff"
-        android:hint="@string/input_password"
-        app:layout_constraintTop_toBottomOf="@+id/radioGroup"
         android:layout_marginStart="50dp"
         android:layout_marginEnd="50dp"
-        android:inputType="textPassword"/>
+        app:met_textColorHint="@color/white"
+        app:met_clearButton="true"
+        app:met_accentTypeface="fonts/Satisfy-Regular.ttf"
+        app:met_baseColor="@color/white"
+        app:met_primaryColor="@color/DoderBlue"
+        app:met_floatingLabelText="password"
+        app:met_floatingLabel="normal"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
 
-    <EditText
+    <com.rengwuxian.materialedittext.MaterialEditText
         android:id="@+id/password_check"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:textColorHint="#ffffff"
-        android:theme="@style/MyEditText"
         android:hint="@string/input_password_again"
-        app:layout_constraintTop_toBottomOf="@+id/password"
+        android:inputType="textPassword"
+        android:layout_marginTop="15dp"
         android:layout_marginStart="50dp"
         android:layout_marginEnd="50dp"
-        android:inputType="textPassword"/>
+        app:met_textColorHint="@color/white"
+        app:met_clearButton="true"
+        app:met_accentTypeface="fonts/Satisfy-Regular.ttf"
+        app:met_baseColor="@color/white"
+        app:met_primaryColor="@color/DoderBlue"
+        app:met_floatingLabelText="password"
+        app:met_floatingLabel="normal"
+        app:layout_constraintTop_toBottomOf="@+id/password" />
 
     <Button
         android:id="@+id/click_register"
@@ -110,7 +125,7 @@
         android:id="@+id/back_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@mipmap/back"
+        android:src="@mipmap/back0"
         android:layout_margin="5dp"
         android:contentDescription="@string/nothing"/>
     <View

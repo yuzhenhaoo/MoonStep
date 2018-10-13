@@ -22,4 +22,6 @@ public interface IMainView {
 
     void unBindService();
 
+    void getUserID();
+
 }

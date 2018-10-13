@@ -12,4 +12,6 @@ public interface IChattingView {
     void toPersonInfoPage();
 
     void sendMessageToMoonFriend();
+
+    String getTime();
 }

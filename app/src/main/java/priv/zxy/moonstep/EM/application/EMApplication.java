@@ -1,4 +1,4 @@
-package priv.zxy.moonstep.EC.application;
+package priv.zxy.moonstep.EM.application;
 
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -7,24 +7,63 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMOptions;
 
+import org.litepal.LitePalApplication;
+import org.litepal.exceptions.GlobalException;
+
 import java.util.Iterator;
 import java.util.List;
 
-public class ECApplication extends Application {
-    private static final String TAG = "ECApplication";
-    private Context mContext;
-    private Intent getMessageService;
-    private Intent loadingMoonFriendService;
+import priv.zxy.moonstep.Utils.SharedPreferencesUtil;
+import priv.zxy.moonstep.Utils.dbUtils.GetMoonFriendUtil;
+import priv.zxy.moonstep.Utils.dbUtils.GetMyInformationUtil;
+import priv.zxy.moonstep.kernel_data.bean.User;
+import priv.zxy.moonstep.main.view.MainActivity;
+
+public class EMApplication extends LitePalApplication{
+    private static final String TAG = "";
+    public static Context mContext;
+    public static User mySelf = null;//用来在登入MainActivity的时候获得自己的信息
     // 记录是否已经初始化
     private boolean isInit = false;
+
     private ActivityLifecycleCallbacks activityLifecycleCallbacks = new ActivityLifecycleCallbacks() {
 
         @Override
         public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+            if (activity.getClass() == MainActivity.class){
+                if(MainActivity.userId != null){
+                        if ()//在这个地方检测userid的两种情况：第一次登陆和之后几次登陆，因为第一次登陆还没有将登陆信息存储到preferences当中，只能从MainActivity中获得信息，之后几次经过判断直接从preferences中取值就好了;第一次的记录可以写在onStart的监听当中
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                GetMyInformationUtil util = new GetMyInformationUtil(mContext);
+                                util.returnMyInfo("moonstep" + MainActivity.userId);
+                                try {
+                                    Thread.sleep(1000);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                if (util.isSuccess){
+                                    mySelf = util.getMoonFriend();
+                                    SharedPreferencesUtil sharedPreferencesUtil = new SharedPreferencesUtil(mContext);
+                                    sharedPreferencesUtil.saveMySelfInformation(mySelf.getNickName(), mySelf.getUserLevel(), mySelf.getUserPet(), mySelf.getUserRace(), mySelf.getSignature());
+                                    Log.d("EMApplication", "获取个人信息成功");
+                                }
+                                else
+                                    Log.d("EMApplication", "获取个人信息失败");
+                            }
+                        }).start();
+                        if(mySelf == null){
+                            Log.d("EMApplication", "获取个人信息失败");
+                        }
+                    }
+                }
+            }
         }
 
         @Override
@@ -156,4 +195,11 @@ public class ECApplication extends Application {
         return processName;
     }
 
+    public static User getMyInfo(){
+        return mySelf;
+    }
+
+    public static Context getEMApplicationContext(){
+        return mContext;
+    }
 }
