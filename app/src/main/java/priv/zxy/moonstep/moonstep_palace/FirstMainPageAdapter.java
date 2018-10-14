@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.view.ViewGroup;
 
 import priv.zxy.moonstep.moonstep_palace.moon_friend.view.MoonFriendFragment;
-import priv.zxy.moonstep.moonstep_palace.personal_info.view.PersonalInfoFragment;
+import priv.zxy.moonstep.moonstep_palace.moon_friend.view.PersonalInfoFragment;
 
 public class FirstMainPageAdapter extends FragmentPagerAdapter {
     private final int PAGER_COUNT = 4;

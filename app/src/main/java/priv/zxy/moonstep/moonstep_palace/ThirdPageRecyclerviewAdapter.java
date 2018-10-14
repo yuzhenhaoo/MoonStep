@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import priv.zxy.moonstep.R;
+import priv.zxy.moonstep.db.MoonFriend;
 import priv.zxy.moonstep.kernel_data.bean.User;
 import priv.zxy.moonstep.moonstep_palace.moon_friend.view.ChattingActivity;
 
@@ -21,7 +22,7 @@ import java.util.Collection;
 import java.util.List;
 
 public class ThirdPageRecyclerviewAdapter extends RecyclerView.Adapter<ThirdPageRecyclerviewAdapter.MyHolder> {
-    private final List<User> mItems = new ArrayList<>();
+    private final List<MoonFriend> mItems = new ArrayList<>();
     private Context mContext;
     private ThirdPageRecyclerviewAdapter.OnItemClickListener mOnItemClickListener;
 
@@ -29,7 +30,7 @@ public class ThirdPageRecyclerviewAdapter extends RecyclerView.Adapter<ThirdPage
         this.mContext = context;
     }
 
-    public boolean add(User item){
+    public boolean add(MoonFriend item){
         boolean isAdded = mItems.add(item);
         if (isAdded){
             notifyDataSetChanged();
@@ -37,7 +38,7 @@ public class ThirdPageRecyclerviewAdapter extends RecyclerView.Adapter<ThirdPage
         return isAdded;
     }
 
-    public boolean addAll(Collection<User> items){
+    public boolean addAll(Collection<MoonFriend> items){
         boolean isAdded = mItems.addAll(items);
         if (isAdded){
             notifyDataSetChanged();
@@ -68,16 +69,16 @@ public class ThirdPageRecyclerviewAdapter extends RecyclerView.Adapter<ThirdPage
      */
     @Override
     public void onBindViewHolder(@NonNull final ThirdPageRecyclerviewAdapter.MyHolder holder, int position) {
-        final User item = mItems.get(position);
+        final MoonFriend item = mItems.get(position);
 //        holder.userPhoto.setImageResource(item.getHeadPortrait());
         //当item 取了上述表达式的时候，会有两种情况，一种是当position为0时有值，第二种就是position为0时没有值，这个时候如果用户点击过快就会出现空指针异常
         if(item != null){
 //            holder.userPhoto.setImageBitmap(BitmapFactory.decodeByteArray(item.getHeadPortrait(), 0, item.getHeadPortrait().length));//这才是设置头像的正确方式
             holder.userPhoto.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(),R.mipmap.my_photo));//设置头像
             holder.userNickName.setText(item.getNickName());//设置昵称
-            holder.race.setText(item.getUserRace());//设置种族
-            holder.level.setText(item.getUserLevel());//设置等阶
-            if (item.getUserGender().equals("女")){ // 设置性别
+            holder.race.setText(item.getRace());//设置种族
+            holder.level.setText(item.getLevel());//设置等阶
+            if (item.getGender().equals("女")){ // 设置性别
                 holder.userGender.setImageResource(R.mipmap.female_gender);
             }else{
                 holder.userGender.setImageResource(R.mipmap.man_gender);
@@ -93,15 +94,15 @@ public class ThirdPageRecyclerviewAdapter extends RecyclerView.Adapter<ThirdPage
         }
     }
 
-    private void JumpToChattingActivity(View view, User item){
+    private void JumpToChattingActivity(View view, MoonFriend item){
         Intent intent = new Intent(view.getContext(), ChattingActivity.class);
 //        intent.putExtra("headPortrait", item.getHeadPortrait());//暂时还不知道Bitmap怎么通过Activity进行传输
-        intent.putExtra("phoneNumber", item.getUserPhoneNumber());
+        intent.putExtra("phoneNumber", item.getPhoneNumber());
         intent.putExtra("userNickName", item.getNickName());
-        intent.putExtra("race", item.getUserRace());
-        intent.putExtra("level", item.getUserLevel());
-        intent.putExtra("userGender", item.getUserGender());
-        intent.putExtra("pet", item.getUserPet());
+        intent.putExtra("race", item.getRace());
+        intent.putExtra("level", item.getLevel());
+        intent.putExtra("userGender", item.getGender());
+        intent.putExtra("pet", item.getPet());
         intent.putExtra("signature", item.getSignature());
         view.getContext().startActivity(intent);
     }
@@ -119,7 +120,7 @@ public class ThirdPageRecyclerviewAdapter extends RecyclerView.Adapter<ThirdPage
         mOnItemClickListener = onItemClickListener;
     }
 
-    User getModelByPos(int pos){
+    MoonFriend getModelByPos(int pos){
         return mItems.get(pos);
     }
 

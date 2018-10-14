@@ -55,19 +55,6 @@ public class MoonFriendService extends Service {
         return new MyBinder();
     }
 
-//    /**
-//     * 获取好友列表的接口
-//     */
-//    private OnMoonFriendListener onMoonFriendListener;
-//
-//    /**
-//     * 好友回调接口
-//     * @param onMoonFriendListener 回调接口对象
-//     */
-//    public void setOnMoonFriendListener(OnMoonFriendListener onMoonFriendListener){
-//        this.onMoonFriendListener = onMoonFriendListener;
-//    }
-
     @Override
     public void onCreate() {
         sharedPreferencesUtil = new SharedPreferencesUtil(EMApplication.getEMApplicationContext());

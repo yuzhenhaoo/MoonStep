@@ -24,7 +24,7 @@ import priv.zxy.moonstep.Utils.dbUtils.GetMyInformationUtil;
 import priv.zxy.moonstep.kernel_data.bean.User;
 import priv.zxy.moonstep.main.view.MainActivity;
 
-public class EMApplication extends LitePalApplication{
+public class EMApplication extends LitePalApplication {
     private static final String TAG = "";
     public static Context mContext;
     public static User mySelf = null;//用来在登入MainActivity的时候获得自己的信息
@@ -33,36 +33,38 @@ public class EMApplication extends LitePalApplication{
 
     private ActivityLifecycleCallbacks activityLifecycleCallbacks = new ActivityLifecycleCallbacks() {
 
+        /**
+         * 对MainActivity实施的监听：当登陆成功后，进入到MainActivity当中，就已经将登陆信息存入到了Preference当中，这个时候只要从Preference中直接取出phoneNumber就好
+         * @param activity
+         * @param savedInstanceState
+         */
         @Override
         public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-            if (activity.getClass() == MainActivity.class){
-                if(MainActivity.userId != null){
-                        if ()//在这个地方检测userid的两种情况：第一次登陆和之后几次登陆，因为第一次登陆还没有将登陆信息存储到preferences当中，只能从MainActivity中获得信息，之后几次经过判断直接从preferences中取值就好了;第一次的记录可以写在onStart的监听当中
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                GetMyInformationUtil util = new GetMyInformationUtil(mContext);
-                                util.returnMyInfo("moonstep" + MainActivity.userId);
-                                try {
-                                    Thread.sleep(1000);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                                if (util.isSuccess){
-                                    mySelf = util.getMoonFriend();
-                                    SharedPreferencesUtil sharedPreferencesUtil = new SharedPreferencesUtil(mContext);
-                                    sharedPreferencesUtil.saveMySelfInformation(mySelf.getNickName(), mySelf.getUserLevel(), mySelf.getUserPet(), mySelf.getUserRace(), mySelf.getSignature());
-                                    Log.d("EMApplication", "获取个人信息成功");
-                                }
-                                else
-                                    Log.d("EMApplication", "获取个人信息失败");
-                            }
-                        }).start();
-                        if(mySelf == null){
+
+            if (activity.getClass() == MainActivity.class) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        GetMyInformationUtil util = new GetMyInformationUtil(mContext);
+                        String phoneNumber = new SharedPreferencesUtil(mContext).readLoginInfo().get("UserName");
+                        util.returnMyInfo("moonstep" + phoneNumber);
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        if (util.isSuccess) {
+                            mySelf = util.getMoonFriend();
+                            SharedPreferencesUtil sharedPreferencesUtil = new SharedPreferencesUtil(mContext);
+                            sharedPreferencesUtil.saveMySelfInformation(mySelf.getNickName(), mySelf.getUserLevel(), mySelf.getUserPet(), mySelf.getUserRace(), mySelf.getSignature());
+                            Log.d("EMApplication", "获取个人信息成功");
+                        }
+
+                        if (mySelf == null) {
                             Log.d("EMApplication", "获取个人信息失败");
                         }
                     }
-                }
+                }).start();
             }
         }
 
@@ -195,11 +197,11 @@ public class EMApplication extends LitePalApplication{
         return processName;
     }
 
-    public static User getMyInfo(){
+    public static User getMyInfo() {
         return mySelf;
     }
 
-    public static Context getEMApplicationContext(){
+    public static Context getEMApplicationContext() {
         return mContext;
     }
 }

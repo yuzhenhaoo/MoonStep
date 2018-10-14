@@ -1,10 +1,13 @@
 package priv.zxy.moonstep.moonstep_palace.moon_friend.view;
 
+import android.animation.Animator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -12,17 +15,23 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
+import android.view.ViewPropertyAnimator;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
+
+import org.litepal.LitePal;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -31,15 +40,16 @@ import java.util.List;
 
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.Utils.ToastUtil;
-import priv.zxy.moonstep.kernel_data.bean.ChatMessage;
 import priv.zxy.moonstep.kernel_data.bean.MoonStepHelper;
 import priv.zxy.moonstep.moonstep_palace.moon_friend.presenter.ChattingAdapter;
+import priv.zxy.moonstep.db.Message;
 
 public class ChattingActivity extends AppCompatActivity implements IChattingView, View.OnLayoutChangeListener{
 
     private Activity mActivity;
+    private Context mContext;
     private RecyclerView recyclerView;
-    private List<ChatMessage> lists = new ArrayList<ChatMessage>();
+    private List<Message> messagesQueues = new ArrayList<Message>();
     private ChattingAdapter mAdapter;
     private Button back;
     private Button person_info;
@@ -53,6 +63,7 @@ public class ChattingActivity extends AppCompatActivity implements IChattingView
     private int rootHeight;//根布局原始高度
     private int keyHeight;//屏幕高度阀值
     private Intent intent;//用来接收Adapter中传过来的数据
+    private Animation animation;
 
     /**
      * 对方的数据
@@ -69,22 +80,14 @@ public class ChattingActivity extends AppCompatActivity implements IChattingView
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //告诉你的activity你要切换动画
-        getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
 
-        Transition explode = TransitionInflater.from(this).inflateTransition(R.transition.explode);
-//        Transition slide_left = TransitionInflater.from(this).inflateTransition(R.transition.slide_left);
-        Transition slide_right = TransitionInflater.from(this).inflateTransition(R.transition.slide_right);
-        //退出时使用
-//        getWindow().setExitTransition(slide_left);
-        //第一次进入时使用
-        getWindow().setEnterTransition(slide_right);
-        //再次进入时使用
-        getWindow().setReenterTransition(explode);
         setContentView(R.layout.fg_main_fifth_subpage);
 
         initView();
+
         initData();
+
+        initList();
 
         updateData();
     }
@@ -92,6 +95,7 @@ public class ChattingActivity extends AppCompatActivity implements IChattingView
     @SuppressLint("ClickableViewAccessibility")
     public void initView(){
         mActivity = this;
+        mContext = this.getApplicationContext();
         intent = getIntent();
         back = this.findViewById(R.id.back);
         person_info = this.findViewById(R.id.person_info);
@@ -111,6 +115,25 @@ public class ChattingActivity extends AppCompatActivity implements IChattingView
 
         mAdapter = new ChattingAdapter(getApplicationContext());
 
+        animation = AnimationUtils.loadAnimation(mContext, R.anim.animation1);
+
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                toPersonInfoPage();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
         sendMessage.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -127,21 +150,41 @@ public class ChattingActivity extends AppCompatActivity implements IChattingView
             }
         });
 
-        //对两个按钮设立监听事件
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //这里直接调用了返回按键，没有对数据进行保存，设立客服系统的时候，要增加一个函数，对当前activity的状态进行保存。
-                savedChattingMessage();
-                FinishesThisActivity(mActivity);
+                back.animate()
+                        .rotation(-90)//逆时针旋转90°
+                        .alpha(1)//旋转完成后改变透明度
+                        .setDuration(600)//设置动画时长为600ms
+                        .setListener(new Animator.AnimatorListener() {//设置动画的监听器，在动画完成的时候实现效果
+                            @Override
+                            public void onAnimationStart(Animator animation) {
+
+                            }
+
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                FinishesThisActivity(mActivity);
+                            }
+
+                            @Override
+                            public void onAnimationCancel(Animator animation) {
+
+                            }
+
+                            @Override
+                            public void onAnimationRepeat(Animator animation) {
+
+                            }
+                        });
             }
         });
 
         person_info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e("TAG", "personInfo1");
-                toPersonInfoPage();
+                person_info.startAnimation(animation);
             }
         });
     }
@@ -156,13 +199,25 @@ public class ChattingActivity extends AppCompatActivity implements IChattingView
         Pet = intent.getStringExtra("pet");
         Signature = intent.getStringExtra("signature");
 
-        mAdapter.clear();
-        mAdapter.addAll(lists);
         //设置列表布局管理
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
         //设置适配器
         recyclerView.setAdapter(mAdapter);
+    }
+
+    /**
+     * 初始化List列表
+     * 方法：从数据库中查找到当前聊天对象的所有聊天记录放在当前messagesQueues当中
+     *       并将取出的列表初始化到页面当中，默认初始化30条，更早的需要通过recyclerView的刷新来控制
+     */
+    public void initList(){
+        messagesQueues = LitePal.where("object = ?", PhoneNumber).find(Message.class);
+        //显示的想法：每个用户的历史聊天记录存储上限为1000条，如果上限超过1000，就把最早的一部分进行清除，保留最近的1000条消息记录
+        //一开始最多只显示30条消息记录，如果要显示更多，则需要下拉刷新来控制，需要设置监听器。
+        mAdapter.addAll(messagesQueues);
+        scrollView.fullScroll(ScrollView.FOCUS_DOWN);//向下滑动
+        mAdapter.notifyDataSetChanged();
     }
 
     public void updateData(){
@@ -176,12 +231,18 @@ public class ChattingActivity extends AppCompatActivity implements IChattingView
     }
 
     /**
-     * 要在这里保存ChattingMessage地历史信息，实际上是从EC服务器上请求历史地交流数据，是一个网络耗时操作
-     * 由于是一个网络耗时操作，所以要放在module中进行处理
+     * 发送的消息和接收的消息都应该存储到数据库中
      */
     @Override
-    public void savedChattingMessage() {
-
+    public Message savedChattingMessage(String content, int type) {
+        Message message = new Message();
+        message.setContent(content);
+        message.setDirection(1);//1、我发送的;2、对方发送的
+        message.setObject(PhoneNumber);
+        message.setType(type);//1、文字；2、图片；3、音频；4、视频；5、红包；6、文件；7、位置
+        message.save();
+        messagesQueues.add(message);
+        return message;
     }
 
     @Override
@@ -199,6 +260,9 @@ public class ChattingActivity extends AppCompatActivity implements IChattingView
         mActivity.startActivity(intent);
     }
 
+    /**
+     * 向好友发送消息的模块
+     */
     @Override
     public void sendMessageToMoonFriend() {
         String message = inputMessage.getText().toString();
@@ -208,11 +272,11 @@ public class ChattingActivity extends AppCompatActivity implements IChattingView
             scrollView.fullScroll(ScrollView.FOCUS_DOWN);//向下滑动
 
             MoonStepHelper.getInstance().EMsendMessage(message, "moonstep" + PhoneNumber, EMMessage.ChatType.Chat);
-
+//            savedChattingMessage(message, 1);
             inputMessage.getText().clear();//发送后立刻清空输入框
-            lists.add(new ChatMessage(message, true));
+
+            mAdapter.add(savedChattingMessage(message, 1));
             mAdapter.notifyDataSetChanged();
-            initData();
         }
     }
 
@@ -224,7 +288,14 @@ public class ChattingActivity extends AppCompatActivity implements IChattingView
     protected void onResume() {
         super.onResume();
         root.addOnLayoutChangeListener(this);
+        scrollView.post(new Runnable() {//使用Runnable的意义是将消息加入到消息队列中，在界面显示的时候开始调用
+            @Override
+            public void run() {
+                scrollView.fullScroll(ScrollView.FOCUS_DOWN);//滚动到底部
+            }
+        });
     }
+
 
     @Override
     public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {

@@ -35,17 +35,13 @@ import priv.zxy.moonstep.main.view.MainActivity;
 
 public class UserLoginActivity extends AppCompatActivity implements IUserLoginView {
 
-    private LinearLayout header;
     private Button loginWeixin;
     private Button loginQQ;
     private Button loginWeibo;
-    private LinearLayout loginContent;
     private MaterialEditText account;
     private MaterialEditText password;
     private Button clickLogin;
     private Button forgetPassword;
-    private View bottomLine;
-    private LinearLayout bottom;
     private Button registerPhone;
     private View deepBackground;
     private View plainBackground;
@@ -82,17 +78,13 @@ public class UserLoginActivity extends AppCompatActivity implements IUserLoginVi
     private void initView() {
         //MobSDK的初始化
         MobSDK.init(this);
-        header = (LinearLayout) findViewById(R.id.header);
         loginWeixin = (Button) findViewById(R.id.login_weixin);
         loginQQ = (Button) findViewById(R.id.login_QQ);
         loginWeibo = (Button) findViewById(R.id.login_weibo);
-        loginContent = (LinearLayout) findViewById(R.id.login_content);
         account = (MaterialEditText) findViewById(R.id.account);
         password = (MaterialEditText) findViewById(R.id.password);
         clickLogin = (Button) findViewById(R.id.click_login);
         forgetPassword = (Button) findViewById(R.id.forget_password);
-        bottomLine = (View) findViewById(R.id.bottom_line);
-        bottom = (LinearLayout) findViewById(R.id.bottom);
         registerPhone = (Button) findViewById(R.id.register_phone);
         deepBackground = (View) findViewById(R.id.deepBackground);
         plainBackground = (View) findViewById(R.id.plainBackground);
@@ -206,7 +198,6 @@ public class UserLoginActivity extends AppCompatActivity implements IUserLoginVi
         Intent intent = new Intent(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra("UserID", account.getText().toString());
         this.startActivity(intent);
     }
 

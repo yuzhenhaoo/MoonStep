@@ -1,6 +1,7 @@
 package priv.zxy.moonstep.moonstep_palace.moon_friend.view;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -19,10 +20,13 @@ import android.widget.TextView;
 
 import com.yalantis.phoenix.PullToRefreshView;
 
+import org.litepal.LitePal;
+
 import java.util.List;
 
 import priv.zxy.moonstep.EM.bean.OnMoonFriendListener;
 import priv.zxy.moonstep.R;
+import priv.zxy.moonstep.db.MoonFriend;
 import priv.zxy.moonstep.kernel_data.bean.User;
 import priv.zxy.moonstep.main.view.MainActivity;
 import priv.zxy.moonstep.moonstep_palace.ThirdPageRecyclerviewAdapter;
@@ -49,7 +53,7 @@ public class MoonFriendFragment extends Fragment implements IMoonFriendView{
 
     private MoonFriendPresenter moonFriendPresenter;
 
-    private List<User> mList = null;//月友结果集
+    private List<MoonFriend> mList = null;//月友结果集
 
     private ThirdPageRecyclerviewAdapter mAdapter;
 
@@ -64,19 +68,15 @@ public class MoonFriendFragment extends Fragment implements IMoonFriendView{
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        //这里开始初始化好友列表
+        mList = LitePal.findAll(MoonFriend.class);
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-//        mainActivity = (MainActivity) this.getActivity();
-        //注册回调接口来接收moonFriends的传递
-//        mainActivity.setOnCallBackListener(new OnMoonFriendListener() {
-//            @Override
-//            public void getMoonFriends(List<User> moonfriends) {
-//                mList = moonfriends;
-//                Log.d("MoonFriendFragment", String.valueOf(moonfriends.size()));
-//            }
-//        });
-//        Log.d("MoonFriendFragment", "onCreate");
-        //应该从这里取数据库中的内容
     }
 
     @Nullable
@@ -133,10 +133,4 @@ public class MoonFriendFragment extends Fragment implements IMoonFriendView{
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(mAdapter);
     }
-
-    public Bitmap getMoonFriendHeadPortrait(){
-        return BitmapFactory.decodeFile("/mipmap-xhdpi/guide_page3.png");
-    }
-
-
 }

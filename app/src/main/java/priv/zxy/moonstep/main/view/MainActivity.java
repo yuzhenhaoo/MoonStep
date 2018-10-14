@@ -35,6 +35,7 @@ import java.util.List;
 import priv.zxy.moonstep.EM.bean.OnMoonFriendListener;
 import priv.zxy.moonstep.EM.service.MoonFriendService;
 import priv.zxy.moonstep.R;
+import priv.zxy.moonstep.Utils.SharedPreferencesUtil;
 import priv.zxy.moonstep.Utils.ShowErrorReason;
 import priv.zxy.moonstep.kernel_data.bean.ErrorCode;
 import priv.zxy.moonstep.kernel_data.bean.User;
@@ -63,15 +64,9 @@ public class MainActivity extends AppCompatActivity
 
     private Activity mActivity;
 
-    private OnMoonFriendListener moonFriendListener;
-
-    private List<User> lists = null;
-
     private List<EMMessage> emMessages = null;
 
     private Intent service;
-
-    public static String userId = null;
 
     private ServiceConnection connection = new ServiceConnection() {
         @Override
@@ -186,7 +181,6 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SQLiteDatabase db = Connector.getDatabase();//实现数据库的创建
-        getUserID();
         //隐藏通知栏
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.mainpage);
@@ -255,24 +249,17 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void changeMyInformation() {
         NavigationView navigationView = findViewById(R.id.nav_view);
+        SharedPreferencesUtil sharedPreferencesUtil = new SharedPreferencesUtil(mContext);
         View nav_header_main = navigationView.getHeaderView(0);
         try {
             name = (TextView) nav_header_main.findViewById(R.id.name);
             race = (TextView) nav_header_main.findViewById(R.id.race);
 
-            name.setText("张默尘");
-            race.setText("月神族");
-            //修改User_Information
-//            thread.start();
+            name.setText(sharedPreferencesUtil.readMySelfInformation().get("nickName"));
+            race.setText(sharedPreferencesUtil.readMySelfInformation().get("userRace"));
         } catch (NullPointerException e) {
             Log.d(TAG, e.getMessage());
         }
-    }
-
-    @Override
-    public void getUserID(){
-        Intent intent = getIntent();
-        userId = intent.getStringExtra("UserID");
     }
 
     @Override
@@ -335,13 +322,4 @@ public class MainActivity extends AppCompatActivity
         stopService(service);
         unbindService(connection);
     }
-
-    /**
-     * 注册接口回调方法，供MoonFriendFragment来调用
-     * @param onMoonFriendListener 接口回调对象
-     */
-//    public void setOnCallBackListener(OnMoonFriendListener onMoonFriendListener){
-//        this.moonFriendListener = onMoonFriendListener;
-//        this.moonFriendListener.getMoonFriends(lists);
-//    }
 }

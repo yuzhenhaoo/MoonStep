@@ -1,4 +1,4 @@
-package priv.zxy.moonstep.moonstep_palace.personal_info.view;
+package priv.zxy.moonstep.moonstep_palace.moon_friend.view;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -248,11 +248,11 @@ public class PersonalInfoFragment extends Fragment implements OnMenuItemClickLis
     }
 
     public void updateData() {
-            SharedPreferencesUtil sharedPreferencesUtil = new SharedPreferencesUtil(mContext);
-            nickName.setText(sharedPreferencesUtil.readMySelfInformation().get("nickName"));
-            userLevel.setText(sharedPreferencesUtil.readMySelfInformation().get("userLevel"));
-            userPet.setText(sharedPreferencesUtil.readMySelfInformation().get("userPet"));
-            userRace.setText(sharedPreferencesUtil.readMySelfInformation().get("userRace"));
-            signature.setText(sharedPreferencesUtil.readMySelfInformation().get("signature"));
+        SharedPreferencesUtil sharedPreferencesUtil = new SharedPreferencesUtil(mContext);
+        nickName.setText(sharedPreferencesUtil.readMySelfInformation().get("nickName"));
+        userLevel.setText(sharedPreferencesUtil.readMySelfInformation().get("userLevel"));
+        userPet.setText(sharedPreferencesUtil.readMySelfInformation().get("userPet"));
+        userRace.setText(sharedPreferencesUtil.readMySelfInformation().get("userRace"));
+        signature.setText(sharedPreferencesUtil.readMySelfInformation().get("signature"));
     }
 }

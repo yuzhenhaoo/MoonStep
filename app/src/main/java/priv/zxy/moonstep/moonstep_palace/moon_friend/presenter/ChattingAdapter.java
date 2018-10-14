@@ -13,12 +13,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import priv.zxy.moonstep.R;
+import priv.zxy.moonstep.db.Message;
 import priv.zxy.moonstep.kernel_data.bean.ChatMessage;
 import priv.zxy.moonstep.main_fifth_page_activity.MainFifthPageAdapter;
 
 public class ChattingAdapter  extends RecyclerView.Adapter<ChattingAdapter.MyHolder> {
     private Context context;
-    private List<ChatMessage> lists = new ArrayList<ChatMessage>();
+    private List<Message> lists = new ArrayList<Message>();
 
     public interface IMsgViewType {
         int IMVT_COM_MSG = 0;// 收到对方的消息
@@ -29,7 +30,7 @@ public class ChattingAdapter  extends RecyclerView.Adapter<ChattingAdapter.MyHol
         this.context = context;
     }
 
-    public boolean add(ChatMessage entity){
+    public boolean add(Message entity){
         boolean success = lists.add(entity);
         if(success){
             notifyDataSetChanged();
@@ -37,7 +38,7 @@ public class ChattingAdapter  extends RecyclerView.Adapter<ChattingAdapter.MyHol
         return success;
     }
 
-    public boolean addAll(List<ChatMessage> list_items){
+    public boolean addAll(List<Message> list_items){
         boolean success = lists.addAll(list_items);
         if(success){
             notifyDataSetChanged();
@@ -52,9 +53,9 @@ public class ChattingAdapter  extends RecyclerView.Adapter<ChattingAdapter.MyHol
 
     @Override
     public int getItemViewType(int position) {
-        if(lists.get(position).isMeSend()){
+        if(lists.get(position).getDirection() == 1){//当前消息发送的方向为我所发送
             return IMsgViewType.IMVT_TO_MSG;
-        }else{
+        }else{//当前消息发送的方向是对方所发送
             return IMsgViewType.IMVT_COM_MSG;
         }
     }
@@ -69,10 +70,10 @@ public class ChattingAdapter  extends RecyclerView.Adapter<ChattingAdapter.MyHol
     public ChattingAdapter.MyHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         View view = null;
         if(viewType == IMsgViewType.IMVT_TO_MSG){
-            Log.i("TAG","发送消息");
+            Log.d("TAG","发送消息");
             view = LayoutInflater.from(context).inflate(R.layout.fg_main_fifth_item_right, viewGroup, false);
         }else if(viewType == IMsgViewType.IMVT_COM_MSG){
-            Log.i("TAG","接收消息");
+            Log.d("TAG","接收消息");
             view = LayoutInflater.from(context).inflate(R.layout.fg_main_fifth_item_left, viewGroup, false);
         }
         return new ChattingAdapter.MyHolder(view);
@@ -80,8 +81,8 @@ public class ChattingAdapter  extends RecyclerView.Adapter<ChattingAdapter.MyHol
 
     @Override
     public void onBindViewHolder(@NonNull ChattingAdapter.MyHolder viewHolder, int i) {
-        ChatMessage entity = lists.get(i);
-        viewHolder.show_words.setText(entity.getMsg());
+        Message entity = lists.get(i);
+        viewHolder.show_words.setText(entity.getContent());//利用当前ViewHolder设置内容
     }
 
     class MyHolder extends RecyclerView.ViewHolder{

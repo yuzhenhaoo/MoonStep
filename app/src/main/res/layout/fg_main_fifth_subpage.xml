@@ -14,7 +14,7 @@
         android:layout_height="28dp"
         android:layout_marginStart="12dp"
         android:layout_marginTop="12dp"
-        android:background="@drawable/black_back_key_round"
+        android:background="@mipmap/back3"
         android:contentDescription="@string/click_back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -60,7 +60,7 @@
         android:layout_height="28dp"
         android:layout_marginEnd="12dp"
         android:layout_marginTop="8dp"
-        android:background="@drawable/person_button"
+        android:background="@mipmap/person"
         android:contentDescription="@string/click_into_personal_info"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
