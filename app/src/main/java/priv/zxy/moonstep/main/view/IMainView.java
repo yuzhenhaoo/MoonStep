@@ -17,6 +17,6 @@ public interface IMainView {
 
     void unBindService();
 
-    void savedChattingMessage(String content, int direction, int type, String phoneNumber);
+    void exit();
 
 }

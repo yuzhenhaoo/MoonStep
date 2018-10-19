@@ -12,9 +12,10 @@ import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.customview.Titanic;
 import priv.zxy.moonstep.customview.TitanicTextView;
 import priv.zxy.moonstep.customview.FontCache;
+import priv.zxy.moonstep.kernel.BaseActivity;
 import priv.zxy.moonstep.login.view.UserLoginActivity;
 
-public class StartActivity extends AppCompatActivity {
+public class StartActivity extends BaseActivity {
 
     private TitanicTextView titanicTextView;
     private Button bt;

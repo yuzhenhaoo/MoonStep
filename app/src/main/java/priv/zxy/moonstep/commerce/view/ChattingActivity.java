@@ -36,12 +36,13 @@ import java.util.Date;
 import java.util.List;
 
 import priv.zxy.moonstep.R;
+import priv.zxy.moonstep.kernel.BaseActivity;
 import priv.zxy.moonstep.utils.ToastUtil;
 import priv.zxy.moonstep.helper.MoonStepHelper;
 import priv.zxy.moonstep.commerce.presenter.ChattingAdapter;
 import priv.zxy.moonstep.db.Message;
 
-public class ChattingActivity extends AppCompatActivity implements IChattingView, View.OnLayoutChangeListener{
+public class ChattingActivity extends BaseActivity implements IChattingView, View.OnLayoutChangeListener{
 
     private static final String TAG = "ChattingActivity";
     private Activity mActivity;

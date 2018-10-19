@@ -21,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import priv.zxy.moonstep.R;
+import priv.zxy.moonstep.kernel.BaseActivity;
 import priv.zxy.moonstep.utils.ShowErrorReason;
 import priv.zxy.moonstep.utils.ToastUtil;
 import priv.zxy.moonstep.kernel.bean.ErrorCode;
@@ -30,7 +31,7 @@ import priv.zxy.moonstep.login.presenter.UserVerifyPhoneNumberPresenter;
  *  Created by Zxy on 2018/9/23
  */
 
-public class VerifyPhoneActivity extends AppCompatActivity implements IVerifyPhoneView {
+public class VerifyPhoneActivity extends BaseActivity implements IVerifyPhoneView {
 
     private TextView inputText;
     private LinearLayout content1;

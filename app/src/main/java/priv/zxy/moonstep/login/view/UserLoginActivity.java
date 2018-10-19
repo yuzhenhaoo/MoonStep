@@ -20,6 +20,7 @@ import com.mob.MobSDK;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import priv.zxy.moonstep.R;
+import priv.zxy.moonstep.kernel.BaseActivity;
 import priv.zxy.moonstep.utils.SharedPreferencesUtil;
 import priv.zxy.moonstep.utils.ShowErrorReason;
 import priv.zxy.moonstep.kernel.bean.ErrorCode;
@@ -30,7 +31,7 @@ import priv.zxy.moonstep.main.view.MainActivity;
  *  Created by Zxy on 2018/9/23
  */
 
-public class UserLoginActivity extends AppCompatActivity implements IUserLoginView {
+public class UserLoginActivity extends BaseActivity implements IUserLoginView {
 
     private Button loginWeixin;
     private Button loginQQ;

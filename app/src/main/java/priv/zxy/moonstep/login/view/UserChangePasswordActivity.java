@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import priv.zxy.moonstep.R;
+import priv.zxy.moonstep.kernel.BaseActivity;
 import priv.zxy.moonstep.utils.ShowErrorReason;
 import priv.zxy.moonstep.utils.ToastUtil;
 import priv.zxy.moonstep.kernel.bean.ErrorCode;
@@ -30,7 +31,7 @@ import priv.zxy.moonstep.login.presenter.UserChangePasswordPresenter;
  *  Created by Zxy on 2018/9/23
  */
 
-public class UserChangePasswordActivity extends AppCompatActivity implements IChangePasswordView {
+public class UserChangePasswordActivity extends BaseActivity implements IChangePasswordView {
     private TextView phone;
     private MaterialEditText password;
     private MaterialEditText confirmPassword;

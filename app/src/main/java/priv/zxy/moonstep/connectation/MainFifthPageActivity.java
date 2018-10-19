@@ -9,12 +9,13 @@ import android.view.View;
 import android.widget.Button;
 
 import priv.zxy.moonstep.R;
+import priv.zxy.moonstep.kernel.BaseActivity;
 import priv.zxy.moonstep.kernel.bean.ChatMessage;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainFifthPageActivity extends AppCompatActivity {
+public class MainFifthPageActivity extends BaseActivity {
 
     private RecyclerView recyclerView;
     private List<ChatMessage> lists = new ArrayList<ChatMessage>();

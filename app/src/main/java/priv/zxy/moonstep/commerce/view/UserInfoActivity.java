@@ -13,8 +13,9 @@ import android.widget.TextView;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import priv.zxy.moonstep.R;
+import priv.zxy.moonstep.kernel.BaseActivity;
 
-public class UserInfoActivity extends AppCompatActivity implements IUserInfoView {
+public class UserInfoActivity extends BaseActivity implements IUserInfoView {
 
     private Intent intent;//创建intent对象用来接收ChattingActivity传递过来的User数据
     private Button backBt;

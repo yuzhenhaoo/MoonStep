@@ -24,6 +24,7 @@ import com.hyphenate.exceptions.HyphenateException;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import priv.zxy.moonstep.R;
+import priv.zxy.moonstep.kernel.BaseActivity;
 import priv.zxy.moonstep.utils.ShowErrorReason;
 import priv.zxy.moonstep.utils.ToastUtil;
 import priv.zxy.moonstep.kernel.bean.ErrorCode;
@@ -34,7 +35,7 @@ import priv.zxy.moonstep.main.view.MainActivity;
  *  Created by Zxy on 2018/9/23
  */
 
-public class UserRegisterActivity extends AppCompatActivity implements IUserRegisterView {
+public class UserRegisterActivity extends BaseActivity implements IUserRegisterView {
 
     private MaterialEditText accountName;
     private RadioGroup radioGroup;

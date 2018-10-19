@@ -27,6 +27,7 @@ import android.widget.TextView;
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
 import priv.zxy.moonstep.R;
+import priv.zxy.moonstep.kernel.BaseActivity;
 import priv.zxy.moonstep.utils.ShowErrorReason;
 import priv.zxy.moonstep.utils.ToastUtil;
 import priv.zxy.moonstep.kernel.bean.ErrorCode;
@@ -38,7 +39,7 @@ import static cn.smssdk.SMSSDK.getVoiceVerifyCode;
  * Created by Zxy on 2018/9/20
  */
 
-public class ForgetPasswordSendMessageActivity extends AppCompatActivity implements IForgetPasswordSendMessageView{
+public class ForgetPasswordSendMessageActivity extends BaseActivity implements IForgetPasswordSendMessageView{
     private TextView header;
     private LinearLayout content1;
     private EditText phoneNumber;
