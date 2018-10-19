@@ -24,9 +24,9 @@ import com.hyphenate.exceptions.HyphenateException;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import priv.zxy.moonstep.R;
-import priv.zxy.moonstep.Utils.ShowErrorReason;
-import priv.zxy.moonstep.Utils.ToastUtil;
-import priv.zxy.moonstep.kernel_data.bean.ErrorCode;
+import priv.zxy.moonstep.utils.ShowErrorReason;
+import priv.zxy.moonstep.utils.ToastUtil;
+import priv.zxy.moonstep.kernel.bean.ErrorCode;
 import priv.zxy.moonstep.login.presenter.UserRegisterPresenter;
 import priv.zxy.moonstep.main.view.MainActivity;
 

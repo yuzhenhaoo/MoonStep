@@ -10,7 +10,7 @@
         android:id="@+id/click_collpase"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@mipmap/collapse_logo"
+        android:background="@drawable/collapse_logo"
         android:layout_marginTop="160dp"
         android:layout_gravity="center"/>
     <android.support.v7.widget.RecyclerView

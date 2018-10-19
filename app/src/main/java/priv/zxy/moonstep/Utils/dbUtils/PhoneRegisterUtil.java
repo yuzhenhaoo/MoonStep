@@ -1,6 +1,5 @@
-package priv.zxy.moonstep.Utils.dbUtils;
+package priv.zxy.moonstep.utils.dbUtils;
 
-import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
@@ -18,15 +17,31 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import priv.zxy.moonstep.kernel_data.bean.ErrorCode;
+import priv.zxy.moonstep.helper.EMHelper;
+import priv.zxy.moonstep.EM.bean.VolleyCallback;
+import priv.zxy.moonstep.kernel.bean.ErrorCode;
 
 public class PhoneRegisterUtil {
 
+    private static final String TAG = "PhoneRegisterUtil";
+
     private Context mContext;
-    private Activity mActivity;
-    public PhoneRegisterUtil(Context context, Activity activity){
+
+    private static PhoneRegisterUtil instance;
+
+    private PhoneRegisterUtil(Context context){
         this.mContext = context;
-        this.mActivity = activity;
+    }
+
+    public static PhoneRegisterUtil getInstance(Context mContext) {
+        if (instance == null){
+            synchronized (PhoneRegisterUtil.class){
+                if (instance == null){
+                    instance = new PhoneRegisterUtil(mContext);
+                }
+            }
+        }
+        return instance;
     }
 
     public static boolean registeResult = false;
@@ -57,21 +72,38 @@ public class PhoneRegisterUtil {
                         try {
                             JSONObject jsonObject = (JSONObject) new JSONObject(response).get("params");
                             String result = jsonObject.getString("Result");
-                            if(result.equals("success")){
-                                registeResult = true;
-                            }else{
-                                errorCode = ErrorCode.PasswordFormatISNotRight;
-                            }
+                            EMHelper.getInstance(mContext).registerUser(new VolleyCallback() {
+                                @Override
+                                public String onSuccess(String result) {
+                                    registeResult = true;
+                                    return null;
+                                }
+
+                                @Override
+                                public boolean onSuccess() {
+                                    return false;
+                                }
+
+                                @Override
+                                public String onFail(String error) {
+                                    return null;
+                                }
+
+                                @Override
+                                public boolean onFail() {
+                                    errorCode = ErrorCode.PasswordFormatISNotRight;
+                                    return false;
+                                }
+                            }, "moonstep" + PhoneNumber, PassWord, NickName);
                         } catch (JSONException e) {
                             //做自己的请求异常操作
                             errorCode = ErrorCode.JSONException;
-                            Log.i("TAG", e.getMessage(), e);
+                            Log.e("TAG", e.getMessage(), e);
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                //做自己的响应错误操作，如Toast提示（“请稍后重试”等）
                 errorCode = ErrorCode.NetNotResponse;
                 Log.i("TAG", error.getMessage(), error);
             }

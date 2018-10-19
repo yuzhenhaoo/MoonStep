@@ -1,4 +1,4 @@
-package priv.zxy.moonstep.Utils;
+package priv.zxy.moonstep.utils;
 
 import android.support.annotation.NonNull;
 

@@ -1,11 +1,6 @@
 package priv.zxy.moonstep.main.view;
 
 import android.support.v4.app.Fragment;
-import android.view.View;
-
-import java.util.List;
-
-import priv.zxy.moonstep.kernel_data.bean.User;
 
 public interface IMainView {
     void addFragmentToStack(Fragment fragment);
@@ -21,4 +16,7 @@ public interface IMainView {
     void bindService();
 
     void unBindService();
+
+    void savedChattingMessage(String content, int direction, int type, String phoneNumber);
+
 }

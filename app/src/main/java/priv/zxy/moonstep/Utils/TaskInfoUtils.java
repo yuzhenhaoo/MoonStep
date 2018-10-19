@@ -1,10 +1,10 @@
-package priv.zxy.moonstep.Utils;
+package priv.zxy.moonstep.utils;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import priv.zxy.moonstep.main_fourth_page_fragment.TaskInfo;
+import priv.zxy.moonstep.task.TaskInfo;
 
 public class TaskInfoUtils {
     public static Collection<TaskInfo> generateTaskInfos() {

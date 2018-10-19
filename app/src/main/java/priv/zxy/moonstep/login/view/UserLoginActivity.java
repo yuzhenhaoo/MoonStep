@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -16,16 +15,14 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 
 import com.mob.MobSDK;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import priv.zxy.moonstep.R;
-import priv.zxy.moonstep.Utils.SharedPreferencesUtil;
-import priv.zxy.moonstep.Utils.ShowErrorReason;
-import priv.zxy.moonstep.kernel_data.bean.ErrorCode;
+import priv.zxy.moonstep.utils.SharedPreferencesUtil;
+import priv.zxy.moonstep.utils.ShowErrorReason;
+import priv.zxy.moonstep.kernel.bean.ErrorCode;
 import priv.zxy.moonstep.login.presenter.UserLoginPresenter;
 import priv.zxy.moonstep.main.view.MainActivity;
 

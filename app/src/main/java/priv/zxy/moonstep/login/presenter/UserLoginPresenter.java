@@ -4,8 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Looper;
 
-import priv.zxy.moonstep.Utils.SharedPreferencesUtil;
-import priv.zxy.moonstep.kernel_data.bean.ErrorCode;
+import priv.zxy.moonstep.utils.SharedPreferencesUtil;
+import priv.zxy.moonstep.kernel.bean.ErrorCode;
 import priv.zxy.moonstep.login.module.biz.IUser;
 import priv.zxy.moonstep.login.module.biz.OnLoginListener;
 import priv.zxy.moonstep.login.module.biz.UserBiz;

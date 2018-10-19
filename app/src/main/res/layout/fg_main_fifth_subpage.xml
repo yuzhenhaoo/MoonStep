@@ -5,7 +5,7 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/four_main_page_background"
+    android:background="@drawable/four_main_page_background"
     android:paddingTop="10dp">
 
     <Button
@@ -14,7 +14,7 @@
         android:layout_height="28dp"
         android:layout_marginStart="12dp"
         android:layout_marginTop="12dp"
-        android:background="@mipmap/back3"
+        android:background="@mipmap/back1"
         android:contentDescription="@string/click_back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -109,9 +109,9 @@
             android:layout_height="30dp"
             android:layout_gravity="center"
             android:layout_margin="10dp"
-            android:background="@drawable/custom_icon0"
+            android:background="@mipmap/cross"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/message_bar" />
+            app:layout_constraintTop_toTopOf="@+id/message_bar"/>
 
         <EditText
             android:id="@+id/inputMessage"

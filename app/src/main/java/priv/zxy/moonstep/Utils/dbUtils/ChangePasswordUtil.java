@@ -1,4 +1,4 @@
-package priv.zxy.moonstep.Utils.dbUtils;
+package priv.zxy.moonstep.utils.dbUtils;
 
 import android.app.Activity;
 import android.content.Context;
@@ -18,7 +18,9 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import priv.zxy.moonstep.kernel_data.bean.ErrorCode;
+import priv.zxy.moonstep.helper.EMHelper;
+import priv.zxy.moonstep.EM.bean.VolleyCallback;
+import priv.zxy.moonstep.kernel.bean.ErrorCode;
 
 public class ChangePasswordUtil {
     private Context mContext;
@@ -43,21 +45,46 @@ public class ChangePasswordUtil {
 
         //创建StringRequest，定义字符串请求的请求方式为POST(省略第一个参数会默认为GET方式)
         final StringRequest request = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
+                        new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
                             Log.i("TAG", "onResponse");
                             JSONObject jsonObject = (JSONObject) new JSONObject(response).get("params");
                             String result = jsonObject.getString("Result");
-                            if (result.equals("success")) {
-                                //检验成功
-                                isSuccess = true;
-                            } else if(result.equals("error0")){
-                                //检验失败
-                                errorCode = ErrorCode.PhoneNumberIsNotRegistered;
-                            }else if(result.equals("error1")){
-                                errorCode = ErrorCode.ServerIsFault;
+                            switch (result) {
+                                case "success":
+                                    EMHelper.getInstance(mContext).changePassword(new VolleyCallback() {
+                                        @Override
+                                        public String onSuccess(String result) {
+                                            return null;
+                                        }
+
+                                        @Override
+                                        public boolean onSuccess() {
+                                            //检验成功
+                                            isSuccess = true;
+                                            return false;
+                                        }
+
+                                        @Override
+                                        public String onFail(String error) {
+                                            return null;
+                                        }
+
+                                        @Override
+                                        public boolean onFail() {
+                                            return false;
+                                        }
+                                    }, "moonstep" + phoneNumber, password);
+                                    break;
+                                case "error0":
+                                    //检验失败
+                                    errorCode = ErrorCode.PhoneNumberIsNotRegistered;
+                                    break;
+                                case "error1":
+                                    errorCode = ErrorCode.ServerIsFault;
+                                    break;
                             }
                         } catch (JSONException e) {
                             //做自己的请求异常操作

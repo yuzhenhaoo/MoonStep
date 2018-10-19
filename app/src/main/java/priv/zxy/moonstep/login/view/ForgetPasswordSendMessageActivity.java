@@ -27,9 +27,9 @@ import android.widget.TextView;
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
 import priv.zxy.moonstep.R;
-import priv.zxy.moonstep.Utils.ShowErrorReason;
-import priv.zxy.moonstep.Utils.ToastUtil;
-import priv.zxy.moonstep.kernel_data.bean.ErrorCode;
+import priv.zxy.moonstep.utils.ShowErrorReason;
+import priv.zxy.moonstep.utils.ToastUtil;
+import priv.zxy.moonstep.kernel.bean.ErrorCode;
 import priv.zxy.moonstep.login.presenter.UserForgetPasswordSendMessagePresenter;
 
 import static cn.smssdk.SMSSDK.getVoiceVerifyCode;

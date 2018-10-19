@@ -17,7 +17,7 @@
         android:layout_width="96dp"
         android:layout_height="96dp"
         android:layout_gravity="center"
-        android:src="@mipmap/my_photo"
+        android:src="@drawable/my_photo"
         app:civ_border_color="#c0c0c0"
         app:civ_border_width="3dp" />
 

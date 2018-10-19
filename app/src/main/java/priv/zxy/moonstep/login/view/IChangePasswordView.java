@@ -1,6 +1,6 @@
 package priv.zxy.moonstep.login.view;
 
-import priv.zxy.moonstep.kernel_data.bean.ErrorCode;
+import priv.zxy.moonstep.kernel.bean.ErrorCode;
 
 /**
  * Created by Zxy on 2018/9/20

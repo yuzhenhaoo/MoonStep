@@ -6,7 +6,7 @@ import android.os.Looper;
 
 import com.hyphenate.exceptions.HyphenateException;
 
-import priv.zxy.moonstep.kernel_data.bean.ErrorCode;
+import priv.zxy.moonstep.kernel.bean.ErrorCode;
 import priv.zxy.moonstep.login.module.biz.IUser;
 import priv.zxy.moonstep.login.module.biz.OnRegisterListener;
 import priv.zxy.moonstep.login.module.biz.UserBiz;

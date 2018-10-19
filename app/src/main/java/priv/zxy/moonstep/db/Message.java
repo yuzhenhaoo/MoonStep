@@ -15,7 +15,7 @@ public class Message extends LitePalSupport{
     int type;
 
     /**
-     * 消息发送方向：1、我发送的；2、对方发送的
+     * 消息发送方向：0、对方发送的 1、我发送的；
      */
     int direction;
 

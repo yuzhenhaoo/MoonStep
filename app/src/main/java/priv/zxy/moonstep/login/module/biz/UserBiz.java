@@ -13,13 +13,12 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.exceptions.HyphenateException;
 
 import cn.smssdk.SMSSDK;
-import priv.zxy.moonstep.Utils.ShowErrorReason;
-import priv.zxy.moonstep.Utils.dbUtils.ChangePasswordUtil;
-import priv.zxy.moonstep.Utils.dbUtils.LoginUtil;
-import priv.zxy.moonstep.Utils.dbUtils.PhoneCheckUtil;
-import priv.zxy.moonstep.Utils.dbUtils.PhoneRegisterUtil;
-import priv.zxy.moonstep.Utils.ToastUtil;
-import priv.zxy.moonstep.kernel_data.bean.ErrorCode;
+import priv.zxy.moonstep.utils.dbUtils.ChangePasswordUtil;
+import priv.zxy.moonstep.utils.dbUtils.LoginUtil;
+import priv.zxy.moonstep.utils.dbUtils.PhoneCheckUtil;
+import priv.zxy.moonstep.utils.dbUtils.PhoneRegisterUtil;
+import priv.zxy.moonstep.utils.ToastUtil;
+import priv.zxy.moonstep.kernel.bean.ErrorCode;
 
 public class UserBiz implements IUser {
 
@@ -93,10 +92,9 @@ public class UserBiz implements IUser {
     @Override
     public void doRegister(Activity mActivity, Context mContext, final String phoneNumber, String nickName, final String userPassword, String confirmUserPassword, String gender, final OnRegisterListener registerListener) throws InterruptedException{
         if (userPassword.equals(confirmUserPassword)) {
-            PhoneRegisterUtil prUtil = new PhoneRegisterUtil(mContext, mActivity);
-            prUtil.RegisterRequest(phoneNumber, nickName, userPassword, gender);
+            PhoneRegisterUtil.getInstance(mContext).RegisterRequest(phoneNumber, nickName, userPassword, gender);
             Thread.sleep(1000);
-            boolean registerResult = prUtil.registeResult;
+            boolean registerResult = PhoneRegisterUtil.getInstance(mContext).registeResult;
             if (registerResult) {
                     new Thread(new Runnable() {
                         @Override
@@ -111,7 +109,7 @@ public class UserBiz implements IUser {
                     Thread.sleep(300);
                     registerListener.registerSuccess();
             } else {
-                registerListener.registerFail(prUtil.errorCode);
+                registerListener.registerFail(PhoneRegisterUtil.getInstance(mContext).errorCode);
             }
         } else {
             registerListener.registerFail(ErrorCode.PasswordIsNotEqualsConfirmPassword);

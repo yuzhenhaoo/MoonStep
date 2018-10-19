@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:scaleType="fitXY"
-    android:background="@mipmap/guide_page4">
+    android:background="@drawable/guide_page4">
     <LinearLayout
         android:gravity="bottom"
         android:layout_marginBottom="40dp"

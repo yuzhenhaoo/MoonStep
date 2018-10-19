@@ -1,4 +1,4 @@
-package priv.zxy.moonstep.Utils.dbUtils;
+package priv.zxy.moonstep.utils.dbUtils;
 
 import android.app.Activity;
 import android.content.Context;
@@ -18,7 +18,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import priv.zxy.moonstep.kernel_data.bean.ErrorCode;
+import priv.zxy.moonstep.kernel.bean.ErrorCode;
 
 /**
  * 工具类的逻辑尚有问题：

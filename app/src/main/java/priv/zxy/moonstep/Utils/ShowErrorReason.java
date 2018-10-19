@@ -1,9 +1,9 @@
-package priv.zxy.moonstep.Utils;
+package priv.zxy.moonstep.utils;
 
 import android.app.Activity;
 import android.content.Context;
 
-import priv.zxy.moonstep.kernel_data.bean.ErrorCode;
+import priv.zxy.moonstep.kernel.bean.ErrorCode;
 
 public class ShowErrorReason {
     private Context mContext;

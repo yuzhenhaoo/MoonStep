@@ -1,9 +1,8 @@
-package priv.zxy.moonstep.Utils.dbUtils;
+package priv.zxy.moonstep.utils.dbUtils;
 
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -19,9 +18,8 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import priv.zxy.moonstep.R;
-import priv.zxy.moonstep.kernel_data.bean.ErrorCode;
-import priv.zxy.moonstep.kernel_data.bean.User;
+import priv.zxy.moonstep.kernel.bean.ErrorCode;
+import priv.zxy.moonstep.kernel.bean.User;
 
 public class GetMyInformationUtil {
     private Context mContext;

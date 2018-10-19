@@ -1,8 +1,7 @@
-package priv.zxy.moonstep.Utils;
+package priv.zxy.moonstep.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Shader;
 
 import java.util.HashMap;
 import java.util.Map;

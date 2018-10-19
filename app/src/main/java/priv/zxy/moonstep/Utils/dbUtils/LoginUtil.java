@@ -1,4 +1,4 @@
-package priv.zxy.moonstep.Utils.dbUtils;
+package priv.zxy.moonstep.utils.dbUtils;
 
 import android.app.Activity;
 import android.content.Context;
@@ -18,8 +18,8 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import priv.zxy.moonstep.Utils.SharedPreferencesUtil;
-import priv.zxy.moonstep.kernel_data.bean.ErrorCode;
+import priv.zxy.moonstep.utils.SharedPreferencesUtil;
+import priv.zxy.moonstep.kernel.bean.ErrorCode;
 
 public class LoginUtil {
 

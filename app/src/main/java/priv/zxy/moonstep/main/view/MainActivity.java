@@ -23,28 +23,23 @@ import android.widget.TextView;
 
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMError;
-import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMMessage;
 import com.hyphenate.util.NetUtils;
 
 import org.litepal.tablemanager.Connector;
 
-import java.util.List;
-
-import priv.zxy.moonstep.EM.bean.OnMoonFriendListener;
 import priv.zxy.moonstep.EM.service.MoonFriendService;
 import priv.zxy.moonstep.R;
-import priv.zxy.moonstep.Utils.SharedPreferencesUtil;
-import priv.zxy.moonstep.Utils.ShowErrorReason;
-import priv.zxy.moonstep.kernel_data.bean.ErrorCode;
-import priv.zxy.moonstep.kernel_data.bean.User;
+import priv.zxy.moonstep.utils.SharedPreferencesUtil;
+import priv.zxy.moonstep.utils.ShowErrorReason;
+import priv.zxy.moonstep.db.Message;
+import priv.zxy.moonstep.kernel.bean.ErrorCode;
 import priv.zxy.moonstep.login.view.UserLoginActivity;
-import priv.zxy.moonstep.main_fifth_page_activity.MainFifthPageActivity;
-import priv.zxy.moonstep.moonstep_palace.FirstMainPageFragmentParent;
-import priv.zxy.moonstep.main_fourth_page_fragment.FourthMainPageFragment;
-import priv.zxy.moonstep.main_second_page_fragment.SecondMainPageFragmentParent;
-import priv.zxy.moonstep.main_third_page_fragment.ThirdMainPageFragment1;
+import priv.zxy.moonstep.connectation.MainFifthPageActivity;
+import priv.zxy.moonstep.commerce.view.FirstMainPageFragmentParent;
+import priv.zxy.moonstep.task.FourthMainPageFragment;
+import priv.zxy.moonstep.gps.SecondMainPageFragmentParent;
+import priv.zxy.moonstep.title.ThirdMainPageFragment1;
 
 /**
  * 我们可以在MainActivity中获得Moonfriends的获取和MessageQueue的获取
@@ -63,8 +58,6 @@ public class MainActivity extends AppCompatActivity
     private Context mContext;
 
     private Activity mActivity;
-
-    private List<EMMessage> emMessages = null;
 
     private Intent service;
 
@@ -140,43 +133,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    //通过EM获取好友的消息队列
-    private EMMessageListener msgListener = new EMMessageListener() {
-
-        @Override
-        public void onMessageReceived(List<EMMessage> messages) {
-            Log.d(TAG,"接收到了消息:");
-            emMessages = messages;
-            for(EMMessage message: emMessages){
-                Log.d(TAG, message.toString());
-            }
-        }
-
-        @Override
-        public void onCmdMessageReceived(List<EMMessage> messages) {
-            //收到透传消息
-            Log.d(TAG, "收到透传消息");
-        }
-
-        @Override
-        public void onMessageRead(List<EMMessage> messages) {
-            //收到已读回执
-            Log.d(TAG, "收到已读回执");
-        }
-
-        @Override
-        public void onMessageDelivered(List<EMMessage> message) {
-            //收到已送达回执
-            Log.d(TAG, "收到已送达回执");
-        }
-
-        @Override
-        public void onMessageChanged(EMMessage message, Object change) {
-            //消息状态变动
-            Log.d(TAG, "消息状态变动");
-        }
-    };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -200,7 +156,6 @@ public class MainActivity extends AppCompatActivity
 
         doEMConnectionListener();
 
-        EMClient.getInstance().chatManager().addMessageListener(msgListener);
     }
 
     @Override
@@ -295,6 +250,10 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    /**
+     * 在ChattingActivity中对为了监听EMClient而设立的SharedPreferences文件而进行销毁，保证每次进入ChattingActivity只让EMClient的SharedPreferences初始化一次
+     * 但是需要检测只通过Edit清除缓存的话是不是会改变到文件本身的内容，如果可以改变，那么我们不需要删除文件，如果不能改变，那么我们不但必须清除缓存，也必须删除文件
+     */
     @Override
     protected void onDestroy() {
         unBindService();
@@ -310,7 +269,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void bindService() {
-//        //绑定LoadingMoonFriendsService
+        //绑定LoadingMoonFriendsService
         service = new Intent(this, MoonFriendService.class);
         bindService(service, connection, Service.BIND_AUTO_CREATE);
         startService(service);
@@ -321,5 +280,16 @@ public class MainActivity extends AppCompatActivity
         //解除绑定LoadingMoonFriendsService
         stopService(service);
         unbindService(connection);
+    }
+
+    @Override
+    public void savedChattingMessage(String content, int direction, int type, String phoneNumber) {
+        Message message = new Message();
+        message.setContent(content);
+        message.setDirection(direction);//0、对方发送的;1、我发送的;
+        message.setObject(phoneNumber);
+        message.setType(type);//1、文字；2、图片；3、音频；4、视频；5、红包；6、文件；7、位置
+        message.save();
+        Log.d(TAG, "savedChattingMessage:" + message);
     }
 }

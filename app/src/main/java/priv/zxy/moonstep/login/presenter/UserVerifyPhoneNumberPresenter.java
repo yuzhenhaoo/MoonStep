@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.widget.Toast;
 
-import priv.zxy.moonstep.kernel_data.bean.ErrorCode;
+import priv.zxy.moonstep.kernel.bean.ErrorCode;
 import priv.zxy.moonstep.login.module.biz.IUser;
 import priv.zxy.moonstep.login.module.biz.OnVerifyPhoneNumber;
 import priv.zxy.moonstep.login.module.biz.UserBiz;

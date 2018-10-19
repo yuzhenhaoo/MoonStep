@@ -55,7 +55,7 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:padding="10dp"
-        android:background="@mipmap/full_into_fragment_tv_background">
+        android:background="@drawable/full_into_fragment_tv_background">
         <TextView
             android:id="@+id/title_description"
             android:layout_width="215dp"
