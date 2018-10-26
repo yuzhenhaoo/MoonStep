@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import priv.zxy.moonstep.R;
 
 public class FirstMainPageFragment2 extends Fragment {
     @Nullable

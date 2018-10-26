@@ -27,25 +27,25 @@
         <RadioButton
             android:id="@+id/rb_moon"
             style="@style/tab_menu_item"
-            android:drawableTop="@drawable/tab_menu_moon"
+            android:drawableTop="@mipmap/moon_normal"
             android:text="@string/tab_menu_moon" />
 
         <RadioButton
             android:id="@+id/rb_pet"
             style="@style/tab_menu_item"
-            android:drawableTop="@drawable/tab_menu_pet"
+            android:drawableTop="@mipmap/pet_normal"
             android:text="@string/tab_menu_pet" />
 
         <RadioButton
             android:id="@+id/rb_heart"
             style="@style/tab_menu_item"
-            android:drawableTop="@drawable/tab_menu_heart"
+            android:drawableTop="@mipmap/heart_normal"
             android:text="@string/tab_menu_heart" />
 
         <RadioButton
             android:id="@+id/rb_me"
             style="@style/tab_menu_item"
-            android:drawableTop="@drawable/tab_menu_me"
+            android:drawableTop="@mipmap/me_normal"
             android:text="@string/tab_menu_me" />
     </RadioGroup>
 

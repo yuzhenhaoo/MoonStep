@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/four_main_page_background"
+    android:fitsSystemWindows="true"
     android:paddingTop="10dp">
 
     <Button
@@ -115,7 +116,8 @@
 
         <EditText
             android:id="@+id/inputMessage"
-            android:layout_width="250dp"
+            android:layout_width="0dp"
+            app:layout_constraintRight_toLeftOf="@+id/sendMessage"
             android:layout_height="50dp"
             android:layout_marginStart="10dp"
             android:hint="your response..."

@@ -154,7 +154,8 @@ public class UserChangePasswordActivity extends BaseActivity implements IChangeP
 
     @Override
     public void showSuccessTip() {
-        new ToastUtil(mContext, mActivity).showToast("恭喜您，您的密码已经修改成功了");
+        ToastUtil.getInstance(mContext, mActivity).showToast("恭喜您，您的密码已经修改成功了");
+
     }
 
     @Override

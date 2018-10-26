@@ -22,8 +22,8 @@ import priv.zxy.moonstep.kernel.bean.ErrorCode;
 import priv.zxy.moonstep.kernel.bean.User;
 
 public class GetMyInformationUtil {
+    private static final String TAG = "GetMyInformationUtil";
     private Context mContext;
-    private Activity mActivity;
     public static boolean isSuccess = false;
     public static ErrorCode errorCode = null;
     public static User moonFriend = null;
@@ -61,9 +61,9 @@ public class GetMyInformationUtil {
                                 user.setNickName(jsonObject.getString("nickName"));
                                 user.setSignature(jsonObject.getString("signature"));
 //                                user.setHeadPortrait(jsonObject.getString("portrait").getBytes());
-                                user.setUserPet("pet");
+                                user.setUserPet(jsonObject.getString("pet"));
                                 moonFriend = user;
-                                Log.e(tag, "获取个人信息成功");
+                                Log.d(tag, "获取个人信息成功");
                             } else if(result.equals("error")){
                                 //检验失败
                                 errorCode = ErrorCode.MoonFriendUserIsNotExisted;

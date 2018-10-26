@@ -28,4 +28,8 @@ public class ActivityCollector {
         }
     }
 
+    public static boolean isEmpty(){
+        return activities == null;
+    }
+
 }

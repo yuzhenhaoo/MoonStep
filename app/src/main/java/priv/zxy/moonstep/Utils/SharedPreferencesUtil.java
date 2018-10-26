@@ -2,27 +2,36 @@ package priv.zxy.moonstep.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class SharedPreferencesUtil {
+    private static final String TAG = "SharedPreferencesUtil";
+
     private Context context;
 
     public SharedPreferencesUtil(Context context){
         this.context = context;
     }
 
-    //存储第一次的信息
-    public void save_first_login(){
+
+    /**
+     * 存储第一次登陆的信息
+     */
+    public void saveFirstLogin(){
         SharedPreferences sp = context.getSharedPreferences("mysp",Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.putString("Logging_ability","Is_first_logging");
         editor.apply();
     }
 
-    //第一次登陆就返回true,否则返回false;
-    public Boolean is_first_log(){
+    /**
+     * 检测当前是否为第一次登陆
+     * @return
+     */
+    public Boolean isFirstLogin(){
         SharedPreferences sp = context.getSharedPreferences("mysp", Context.MODE_PRIVATE);
         return !sp.contains("Logging_ability");
     }
@@ -99,5 +108,50 @@ public class SharedPreferencesUtil {
         SharedPreferences sp = context.getSharedPreferences("personalInfo", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         return !sp.contains("isSaved");
+    }
+
+    /**
+     * 当有消息来临时，如果页面没有关闭，就先将消息存储到缓存中
+     * 为了让FirstMainPageFragmentParent对缓存进行检测并对用户进行提示
+     */
+    public void saveIsMessageTip(String phoneNumber){
+        SharedPreferences sp = context.getSharedPreferences("tip", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString("message", "");
+        editor.putInt(phoneNumber, sp.getInt(phoneNumber, 0) + 1);
+        editor.commit();
+    }
+
+    /**
+     * 将每个人发来的消息数目和消息人存入缓存中
+     * 当传递进来phoneNumber地时候，获得当前未读的消息数目。
+     * @param phoneNumber
+     * @return
+     */
+    public int readMessageNumber(String phoneNumber){
+        SharedPreferences sp = context.getSharedPreferences("tip", Context.MODE_PRIVATE);
+        return sp.getInt(phoneNumber, 0);
+    }
+
+    /**
+     * 当点击进入一个人的聊天页面，说明他的消息已经被看过来，此时应该将他的消息记录从缓存中清除。
+     */
+    public void handleMessageTip(String phoneNumber){
+        SharedPreferences sp = context.getSharedPreferences("tip", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.remove(phoneNumber);
+        if (sp.contains("message") && sp.getAll().size() == 1){
+            editor.remove("message");
+        }
+        editor.commit();
+    }
+
+    /**
+     * 检测当前是否有临时消息
+     * @return 当sp中包含的消息只有message地时候，说明这个时候没有任何新来的消息，那么就返回false，若非这种情况，就返回true
+     */
+    public boolean isMessageTip(){
+        SharedPreferences sp = context.getSharedPreferences("tip", Context.MODE_PRIVATE);
+        return sp.getAll().size() > 1;
     }
 }

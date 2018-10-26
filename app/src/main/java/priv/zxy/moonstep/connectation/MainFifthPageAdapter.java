@@ -10,14 +10,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import priv.zxy.moonstep.R;
-import priv.zxy.moonstep.kernel.bean.ChatMessage;
+import priv.zxy.moonstep.kernel.bean.Message;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainFifthPageAdapter extends RecyclerView.Adapter<MainFifthPageAdapter.MyHolder> {
     private Context context;
-    private List<ChatMessage> lists = new ArrayList<ChatMessage>();
+    private List<Message> lists = new ArrayList<Message>();
 
     public interface IMsgViewType {
         int IMVT_COM_MSG = 0;// 收到对方的消息
@@ -28,7 +28,7 @@ public class MainFifthPageAdapter extends RecyclerView.Adapter<MainFifthPageAdap
         this.context = context;
     }
 
-    public boolean add(ChatMessage entity){
+    public boolean add(Message entity){
         boolean success = lists.add(entity);
         if(success){
             notifyDataSetChanged();
@@ -36,7 +36,7 @@ public class MainFifthPageAdapter extends RecyclerView.Adapter<MainFifthPageAdap
         return success;
     }
 
-    public boolean addAll(List<ChatMessage> list_items){
+    public boolean addAll(List<Message> list_items){
         boolean success = lists.addAll(list_items);
         if(success){
             notifyDataSetChanged();
@@ -79,7 +79,7 @@ public class MainFifthPageAdapter extends RecyclerView.Adapter<MainFifthPageAdap
 
     @Override
     public void onBindViewHolder(@NonNull MyHolder viewHolder, int i) {
-        ChatMessage entity = lists.get(i);
+        Message entity = lists.get(i);
         viewHolder.show_words.setText(entity.getMsg());
     }
 

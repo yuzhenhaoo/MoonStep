@@ -8,17 +8,21 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
 import priv.zxy.moonstep.EM.bean.VolleyCallback;
 import priv.zxy.moonstep.kernel.bean.EMBase;
+import priv.zxy.moonstep.utils.ToastUtil;
 
 public class EMHelper {
 
@@ -60,7 +64,6 @@ public class EMHelper {
      * @param nickName 用户昵称
      */
     public void registerUser(final VolleyCallback volleyCallback, final String userId, final String passWord, final String nickName){
-        initToken();
         //请求地址
         String url = EMBase.getInstance().getBaseRequest() + EMBase.getInstance().getOrgName() + "/" + EMBase.getInstance().getAppName() + "/" + "users";
         StringRequest request = new StringRequest(
@@ -115,7 +118,6 @@ public class EMHelper {
      * @param password 密码
      */
     public void changePassword(final VolleyCallback volleyCallback, String userId, final String password){
-        initToken();
         //请求地址
         String url = EMBase.getInstance().getBaseRequest() + EMBase.getInstance().getOrgName() + "/" + EMBase.getInstance().getAppName() + "/" + "users" + "/" + userId + "/" + "password";
 
@@ -171,7 +173,6 @@ public class EMHelper {
      * @param nickName 昵称
      */
     public void changeNickName(final VolleyCallback volleyCallback, String userId, final String nickName){
-        initToken();
         //请求地址
         String url = EMBase.getInstance().getBaseRequest() + EMBase.getInstance().getOrgName() + "/" + EMBase.getInstance().getAppName() + "/" + "users" + "/" + userId;
 
@@ -223,7 +224,7 @@ public class EMHelper {
     /**
      * 获得token值
      */
-    private void initToken() {
+    public void initToken(){
         //请求地址
         String url = EMBase.getInstance().getBaseRequest() + EMBase.getInstance().getOrgName() + "/" + EMBase.getInstance().getAppName() + "/token";
         String tag = "token";
@@ -233,19 +234,26 @@ public class EMHelper {
         //防止重复请求，所以先取消tag标识的请求队列
         requestQueue.cancelAll(tag);
 
-        Log.d(TAG, "请求的http地址为:" + url);
-        StringRequest request = new StringRequest(Request.Method.POST, url,
+
+//        final String requestBody = "{\"grant_type\": \"client_credentials\", \"client_id\": " + EMBase.getInstance().getClient_ID() + ", \"client_secret\": \"" + EMBase.getInstance().getClient_Secret() + "}";
+        final String requestBody = "{" + "\"" + "grant_type" + "\"" + ":" + "\"" + "client_credentials" + "\"" + "," + "\"" + "client_id" + "\"" + ":" + "\"" + EMBase.getInstance().getClient_ID() + "\"" + "," + "\"" + "client_secret" + "\"" + ":" + "\"" + EMBase.getInstance().getClient_Secret() + "\"" + "}";
+                Log.d(TAG, "requsetBody = " + requestBody);
+
+        StringRequest request = new StringRequest(Request.Method.POST,
+                url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        JSONObject jsonObject = null;
                         try {
-                            jsonObject = (JSONObject) new JSONObject(response);
+                            JSONObject jsonObject = new JSONObject(response);
                             token = jsonObject.getString("access_token");
-                            initAuthorization();
+                            int timeStamp = jsonObject.getInt("expires_in");
+                            Log.d(TAG, "token获取成功:" + token);
+                            Log.d(TAG, "token有效期为:" + timeStamp);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -253,14 +261,20 @@ public class EMHelper {
                 error.printStackTrace();
                 Log.e(TAG, "onErrorResponse: token获取失败", new RuntimeException());
             }
-        }) {
+        }){
             @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-                params.put("grant_type", "client_credentials");
-                params.put("client_id", EMBase.getInstance().getClient_ID());
-                params.put("client_secret", EMBase.getInstance().getClient_Secret());
-                return params;
+            public String getBodyContentType() {
+                return "application/x-www-form-urlencoded";
+            }
+
+            @Override
+            public byte[] getBody() throws AuthFailureError {
+                try {
+                    return requestBody.getBytes("utf-8");
+                } catch (UnsupportedEncodingException e) {
+                    VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s");
+                    return null;
+                }
             }
         };
 
@@ -271,12 +285,8 @@ public class EMHelper {
         requestQueue.add(request);
     }
 
-    private void initAuthorization() {
-        Authorization = "Bearer " + token;
-    }
-
     private String getAuthorization() {
-        return Authorization;
+        return "Bearer " + token;
     }
 
     /**
@@ -289,7 +299,7 @@ public class EMHelper {
      */
     public void getUserState(final VolleyCallback volleyCallback, final String userID) {
         //请求地址
-        String url = EMBase.getInstance().getBaseRequest() + EMBase.getInstance().getOrgName() + "/" + EMBase.getInstance().getOrgName() + "/" + EMBase.getInstance().getAppName() + "/" + "users" + userID + "/" + "status";
+        String url = EMBase.getInstance().getBaseRequest() + EMBase.getInstance().getOrgName() + "/" + EMBase.getInstance().getAppName() + "/" + "users" + "/" + userID + "/" + "status";
         String tag = "userState";
         //取得请求队列
         RequestQueue requestQueue = Volley.newRequestQueue(mContext);
@@ -298,8 +308,6 @@ public class EMHelper {
         requestQueue.cancelAll(tag);
 
         Log.d(TAG, "请求的http地址为:" + url);
-
-        initToken();//进行请求前，必须先获取到Token的值
 
         StringRequest request = new StringRequest(
                 url,
@@ -310,6 +318,7 @@ public class EMHelper {
                         try {
                             jsonObject = (JSONObject) new JSONObject(response);
                             String user_state = jsonObject.getJSONObject("data").getString(userID);
+                            Log.d(TAG,user_state);
                             if (volleyCallback != null) {
                                 volleyCallback.onSuccess(user_state);
                             }
@@ -329,6 +338,7 @@ public class EMHelper {
             public Map<String, String> getHeaders() throws AuthFailureError {//设置头信息
                 Map<String, String> map = new HashMap<String, String>();
                 map.put("Authorization", getAuthorization());
+                Log.d(TAG, "getHeaders: " + getAuthorization());
                 return map;
             }
         };

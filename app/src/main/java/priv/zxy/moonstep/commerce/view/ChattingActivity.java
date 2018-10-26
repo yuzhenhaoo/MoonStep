@@ -16,13 +16,18 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
@@ -36,13 +41,21 @@ import java.util.Date;
 import java.util.List;
 
 import priv.zxy.moonstep.R;
+import priv.zxy.moonstep.kernel.ActivityCollector;
 import priv.zxy.moonstep.kernel.BaseActivity;
 import priv.zxy.moonstep.utils.ToastUtil;
 import priv.zxy.moonstep.helper.MoonStepHelper;
 import priv.zxy.moonstep.commerce.presenter.ChattingAdapter;
 import priv.zxy.moonstep.db.Message;
 
-public class ChattingActivity extends BaseActivity implements IChattingView, View.OnLayoutChangeListener{
+/**
+ * 创建人: Administrator
+ * 创建时间: 2018/09/11
+ * 描述: 创建聊天Activity，但是这里没有继承BaseActivity,因为沉浸式体验（全屏模式）会与软键盘弹起时的windowSoftInputMode
+ *       属性发生冲突，为了避免这种冲突，只能避免使用全屏模式，被迫显示通知栏，使用多种方式解决均没有产生效果。
+ **/
+
+public class ChattingActivity extends AppCompatActivity implements IChattingView, View.OnLayoutChangeListener{
 
     private static final String TAG = "ChattingActivity";
     private Activity mActivity;
@@ -163,6 +176,8 @@ public class ChattingActivity extends BaseActivity implements IChattingView, Vie
         initList();
 
         updateData();
+
+        ActivityCollector.addActivity(this);
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -356,7 +371,7 @@ public class ChattingActivity extends BaseActivity implements IChattingView, Vie
     public void sendMessageToMoonFriend() {
         final String message = inputMessage.getText().toString();
         if(message.trim().isEmpty()){
-            new ToastUtil(this.getApplicationContext(), this).showToast("发送地消息不能为空哦！");
+            ToastUtil.getInstance(mContext, this).showToast("发送地消息不能为空哦！");
         }else{
             new Thread(new Runnable() {
                 @Override
@@ -367,7 +382,6 @@ public class ChattingActivity extends BaseActivity implements IChattingView, Vie
             }).start();
             inputMessage.getText().clear();//发送后立刻清空输入框
             savedChattingMessage(message, 1,1, PhoneNumber);
-            Log.d("ChattingActivity", "sendMessageToMoonFriend:" + String.valueOf(recyclerView.getHeight()));
             scrollView.fullScroll(ScrollView.FOCUS_DOWN);//向下滑动
         }
     }
@@ -390,12 +404,21 @@ public class ChattingActivity extends BaseActivity implements IChattingView, Vie
     public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
         // old是改变前的左上右下坐标点值，没有old的是改变后的左上右下坐标点值
         // 现在认为只要控件将Activity向上推的高度超过了1/3屏幕高，就认为软键盘弹起
+        Log.d(TAG, "onLayoutChange: top :" + String.valueOf(top));
+        Log.d(TAG, "onLayoutChange: bottom:" + String.valueOf(bottom));
+        Log.d(TAG, "onLayoutChange: oldTop:" + String.valueOf(oldTop));
+        Log.d(TAG, "onLayoutChange: oldBottom:" + String.valueOf(oldBottom));
+
         if (oldBottom != 0 && bottom != 0
                 && (oldBottom - bottom > keyHeight)) {
+            ViewGroup.LayoutParams layoutParams = root.getLayoutParams();
+            Toast.makeText(mActivity, "软键盘弹起了", Toast.LENGTH_SHORT).show();
             scrollView.fullScroll(ScrollView.FOCUS_DOWN);//向下滑动
         } else if (oldBottom != 0 && bottom != 0
                 && (bottom - oldBottom > keyHeight)) {
+            Toast.makeText(mActivity, "软键盘下去了", Toast.LENGTH_SHORT).show();
             scrollView.fullScroll(ScrollView.FOCUS_DOWN);//向下滑动
+
         }
     }
 
@@ -403,6 +426,7 @@ public class ChattingActivity extends BaseActivity implements IChattingView, Vie
     protected void onDestroy() {
         super.onDestroy();
         EMClient.getInstance().chatManager().removeMessageListener(msgListener);//移除Listener
+        ActivityCollector.removeActivity(this);
         Log.d("ChattingActivity","onDestroy");
     }
 

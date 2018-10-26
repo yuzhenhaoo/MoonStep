@@ -28,8 +28,10 @@ import priv.zxy.moonstep.kernel.bean.ErrorCode;
 import priv.zxy.moonstep.login.presenter.UserVerifyPhoneNumberPresenter;
 
 /**
- *  Created by Zxy on 2018/9/23
- */
+ * 创建人: Administrator
+ * 创建时间: 2018/09/23
+ * 描述: 手机验证页面
+ **/
 
 public class VerifyPhoneActivity extends BaseActivity implements IVerifyPhoneView {
 
@@ -186,8 +188,7 @@ public class VerifyPhoneActivity extends BaseActivity implements IVerifyPhoneVie
 
     @Override
     public void showSuccessTip() {
-        ToastUtil toastUtil = new ToastUtil(mContext, mActivity);
-        toastUtil.showToast("已经向您的手机发送验证信息，注意查收！");
+        ToastUtil.getInstance(mContext, mActivity).showToast("已经向您的手机发送验证信息，注意查收！");
     }
 
     @Override

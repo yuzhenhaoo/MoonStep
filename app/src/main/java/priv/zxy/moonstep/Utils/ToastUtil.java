@@ -1,6 +1,7 @@
 package priv.zxy.moonstep.utils;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -14,12 +15,27 @@ import priv.zxy.moonstep.R;
 public class ToastUtil {
 
     private Context mContext;
+
+    private static ToastUtil instance;
+
     private Activity mActivity;
 
-    public ToastUtil(Context context, Activity activity){
-        mContext = context;
-        mActivity = activity;
+    private ToastUtil(Context context, Activity activity){
+        this.mContext = context;
+        this.mActivity = activity;
     }
+
+    public static ToastUtil getInstance(Context context, Activity activity) {
+        if (instance == null) {
+            synchronized (ToastUtil.class) {
+                if (instance == null) {
+                    instance = new ToastUtil(context, activity);
+                }
+            }
+        }
+        return instance;
+    }
+
     public void showToast(String content){
         LayoutInflater inflater = mActivity.getLayoutInflater();
         View layout = inflater.inflate(R.layout.my_toast, null);

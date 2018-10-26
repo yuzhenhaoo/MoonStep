@@ -33,14 +33,14 @@ import priv.zxy.moonstep.main.view.MainActivity;
 
 public class UserLoginActivity extends BaseActivity implements IUserLoginView {
 
-    private Button loginWeixin;
-    private Button loginQQ;
-    private Button loginWeibo;
-    private MaterialEditText account;
-    private MaterialEditText password;
-    private Button clickLogin;
-    private Button forgetPassword;
-    private Button registerPhone;
+    private Button weiXinBt;
+    private Button qqBt;
+    private Button weiBoBt;
+    private MaterialEditText accountEt;
+    private MaterialEditText passwordEt;
+    private Button clickBt;
+    private Button fgPwdBt;
+    private Button rgiPhoneBt;
     private View deepBackground;
     private View plainBackground;
     private ContentLoadingProgressBar progressBar;
@@ -76,14 +76,14 @@ public class UserLoginActivity extends BaseActivity implements IUserLoginView {
     private void initView() {
         //MobSDK的初始化
         MobSDK.init(this);
-        loginWeixin = (Button) findViewById(R.id.login_weixin);
-        loginQQ = (Button) findViewById(R.id.login_QQ);
-        loginWeibo = (Button) findViewById(R.id.login_weibo);
-        account = (MaterialEditText) findViewById(R.id.account);
-        password = (MaterialEditText) findViewById(R.id.password);
-        clickLogin = (Button) findViewById(R.id.click_login);
-        forgetPassword = (Button) findViewById(R.id.forget_password);
-        registerPhone = (Button) findViewById(R.id.register_phone);
+        weiXinBt = (Button) findViewById(R.id.weiXinBt);
+        qqBt = (Button) findViewById(R.id.qqBt);
+        weiBoBt = (Button) findViewById(R.id.weiBoBt);
+        accountEt = (MaterialEditText) findViewById(R.id.accountEt);
+        passwordEt = (MaterialEditText) findViewById(R.id.passwordEt);
+        clickBt = (Button) findViewById(R.id.clickLoginBt);
+        fgPwdBt = (Button) findViewById(R.id.forgetPasswordBt);
+        rgiPhoneBt = (Button) findViewById(R.id.registerPhoneBt);
         deepBackground = (View) findViewById(R.id.deepBackground);
         plainBackground = (View) findViewById(R.id.plainBackground);
         progressBar = (ContentLoadingProgressBar) findViewById(R.id.progressBar);
@@ -97,17 +97,17 @@ public class UserLoginActivity extends BaseActivity implements IUserLoginView {
 
         userLoginPresenter.initAccountAndPassword(sp);
 
-        account.requestFocus();
+        accountEt.requestFocus();
 
         userLoginPresenter.hideLoading();
 
-        clickLogin.setOnTouchListener(new View.OnTouchListener() {
+        clickBt.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 switch(event.getAction()){
                     case MotionEvent.ACTION_DOWN:
-                        clickLogin.startAnimation(shake);
-//                        clickLogin.setClickable(false);//设置不能再次点击，当失败了设置为恢复点击效果
+                        clickBt.startAnimation(shake);
+//                        clickBt.setClickable(false);//设置不能再次点击，当失败了设置为恢复点击效果
                         break;
                     case MotionEvent.ACTION_UP:
                         userLoginPresenter.showLoading();
@@ -127,20 +127,20 @@ public class UserLoginActivity extends BaseActivity implements IUserLoginView {
             }
         });
 
-        registerPhone.setOnClickListener(new View.OnClickListener() {
+        rgiPhoneBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                registerPhone.startAnimation(shake);
+                rgiPhoneBt.startAnimation(shake);
                 userLoginPresenter.toConfirmPhoneActivity();
             }
         });
 
-        forgetPassword.setOnTouchListener(new View.OnTouchListener() {
+        fgPwdBt.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 switch(event.getAction()){
                     case MotionEvent.ACTION_DOWN:
-                        forgetPassword.startAnimation(shake);
+                        fgPwdBt.startAnimation(shake);
                         break;
                     case MotionEvent.ACTION_UP:
                         userLoginPresenter.toForgetPasswordActivity();
@@ -153,12 +153,12 @@ public class UserLoginActivity extends BaseActivity implements IUserLoginView {
 
     @Override
     public String getUserPhoneNumber() {
-        return account.getText().toString();
+        return accountEt.getText().toString();
     }
 
     @Override
     public String getUserPassword() {
-        return password.getText().toString();
+        return passwordEt.getText().toString();
     }
 
     @Override
@@ -166,14 +166,14 @@ public class UserLoginActivity extends BaseActivity implements IUserLoginView {
         progressBar.show();
         deepBackground.setVisibility(View.VISIBLE);
         plainBackground.setVisibility(View.VISIBLE);
-        loginQQ.setEnabled(false);
-        loginWeibo.setEnabled(false);
-        loginWeixin.setEnabled(false);
-        clickLogin.setEnabled(false);
-        forgetPassword.setEnabled(false);
-        registerPhone.setEnabled(false);
-        account.setEnabled(false);
-        password.setEnabled(false);
+        qqBt.setEnabled(false);
+        weiBoBt.setEnabled(false);
+        weiXinBt.setEnabled(false);
+        clickBt.setEnabled(false);
+        fgPwdBt.setEnabled(false);
+        rgiPhoneBt.setEnabled(false);
+        accountEt.setEnabled(false);
+        passwordEt.setEnabled(false);
     }
 
     @Override
@@ -181,14 +181,14 @@ public class UserLoginActivity extends BaseActivity implements IUserLoginView {
         deepBackground.setVisibility(View.GONE);
         plainBackground.setVisibility(View.GONE);
         progressBar.hide();
-        loginQQ.setEnabled(true);
-        loginWeibo.setEnabled(true);
-        loginWeixin.setEnabled(true);
-        clickLogin.setEnabled(true);
-        forgetPassword.setEnabled(true);
-        registerPhone.setEnabled(true);
-        account.setEnabled(true);
-        password.setEnabled(true);
+        qqBt.setEnabled(true);
+        weiBoBt.setEnabled(true);
+        weiXinBt.setEnabled(true);
+        clickBt.setEnabled(true);
+        fgPwdBt.setEnabled(true);
+        rgiPhoneBt.setEnabled(true);
+        accountEt.setEnabled(true);
+        passwordEt.setEnabled(true);
     }
 
     @Override
@@ -213,12 +213,12 @@ public class UserLoginActivity extends BaseActivity implements IUserLoginView {
 
     @Override
     public void initAccount(SharedPreferencesUtil preference) {
-        account.setText(sp.readLoginInfo().get("UserName"));
+        accountEt.setText(sp.readLoginInfo().get("UserName"));
     }
 
     @Override
     public void initPassword(SharedPreferencesUtil preference) {
-        password.setText(sp.readLoginInfo().get("PassWd"));
+        passwordEt.setText(sp.readLoginInfo().get("PassWd"));
     }
 
     @Override
@@ -238,7 +238,7 @@ public class UserLoginActivity extends BaseActivity implements IUserLoginView {
     }
 
     @Override
-    public void fixLoginPreferences(String username, String password) {
-        new SharedPreferencesUtil(mContext).fixSuccessedLoginAccountAndPassword(username, password);
+    public void fixLoginPreferences(String username, String passwordEt) {
+        new SharedPreferencesUtil(mContext).fixSuccessedLoginAccountAndPassword(username, passwordEt);
     }
 }

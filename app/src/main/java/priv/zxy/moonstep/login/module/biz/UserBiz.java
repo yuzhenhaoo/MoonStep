@@ -151,12 +151,12 @@ public class UserBiz implements IUser {
 
     @Override
     public void submitInfo(String country, String phone, String code, Context mContext, Activity mActivity) throws InterruptedException {
-        ToastUtil toastUtil = new ToastUtil(mContext, mActivity);
+        ToastUtil.getInstance(mContext, mActivity);
         if (phone.equals("")) {
-            toastUtil.showToast("手机号不能为空哦，请重新尝试");
+            ToastUtil.getInstance(mContext, mActivity).showToast("手机号不能为空哦，请重新尝试");
         } else {
             if (code.equals("")) {
-                toastUtil.showToast("验证码不能为空，请重新尝试!");
+                ToastUtil.getInstance(mContext, mActivity).showToast("验证码不能为空，请重新尝试!");
             } else {
                 SMSSDK.submitVerificationCode(country, phone, code);//提交验证码  在eventHandler里面查看验证结果
             }

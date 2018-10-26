@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
@@ -144,7 +145,7 @@ public class SendMessageActivity extends BaseActivity implements ISendMessageVie
         deepBackground = (View) findViewById(R.id.deepBackground);
         plainBackground = (View) findViewById(R.id.plainBackground);
         progressBar = (ContentLoadingProgressBar) findViewById(R.id.progressBar);
-        toastUtil = new ToastUtil(mContext, mActivity);
+        toastUtil = ToastUtil.getInstance(mContext,mActivity);
         mContext = this.getApplicationContext();
         mActivity = this;
         userSendMessagePresenter = new UserSendMessagePresenter(this, mContext, mActivity);
@@ -256,7 +257,6 @@ public class SendMessageActivity extends BaseActivity implements ISendMessageVie
     @Override
     public void sendVoiceCode() {
         getVoiceVerifyCode(country, phoneNum);
-        ToastUtil toastUtil = new ToastUtil(mContext, mActivity);
         toastUtil.showToast("正在向您的手机发送语音信息，请注意接收");
     }
 

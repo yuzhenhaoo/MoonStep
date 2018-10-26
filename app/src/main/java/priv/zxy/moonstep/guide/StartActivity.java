@@ -3,21 +3,17 @@ package priv.zxy.moonstep.guide;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import priv.zxy.moonstep.R;
-import priv.zxy.moonstep.customview.Titanic;
-import priv.zxy.moonstep.customview.TitanicTextView;
-import priv.zxy.moonstep.customview.FontCache;
 import priv.zxy.moonstep.kernel.BaseActivity;
 import priv.zxy.moonstep.login.view.UserLoginActivity;
 
 public class StartActivity extends BaseActivity {
 
-    private TitanicTextView titanicTextView;
     private Button bt;
     private boolean isStarted = false;
     @Override
@@ -32,10 +28,6 @@ public class StartActivity extends BaseActivity {
         final MyThread mThread = new MyThread();
         String MoonStep = "圆月行";
         bt = this.findViewById(R.id.clickJump);
-        titanicTextView = this.findViewById(R.id.titanicTextView);
-//        titanicTextView.setTypeface(Typefaces.get(this, "/fonts/font_style0.ttf"));
-        titanicTextView.setTypeface(FontCache.getTypeface("/fonts/font_style1.ttf", this.getApplicationContext()));
-        titanicTextView.setText(MoonStep);
 
         bt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -44,7 +36,6 @@ public class StartActivity extends BaseActivity {
                 isStarted = true;
             }
         });
-        new Titanic().start(titanicTextView);
         mThread.start();
     }
 

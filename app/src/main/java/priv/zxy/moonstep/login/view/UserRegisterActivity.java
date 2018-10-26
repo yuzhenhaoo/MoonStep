@@ -258,8 +258,8 @@ public class UserRegisterActivity extends BaseActivity implements IUserRegisterV
 
     @Override
     public void showUserNameSuccessTip() {
-        ToastUtil toastUtil = new ToastUtil(mContext, mActivity);
-        toastUtil.showToast("恭喜！您的账号可以使用");
+        ToastUtil.getInstance(mContext, mActivity).showToast("恭喜！您的账号可以使用");
+
     }
 
     @Override
@@ -270,8 +270,8 @@ public class UserRegisterActivity extends BaseActivity implements IUserRegisterV
 
     @Override
     public void showRegisterSuccessTip() {
-        ToastUtil toastUtil = new ToastUtil(mContext, mActivity);
-        toastUtil.showToast("恭喜您，可以进入圆月世界了！");
+        ToastUtil.getInstance(mContext, mActivity).showToast("恭喜您，可以进入圆月世界了！");
+
     }
 
     @Override

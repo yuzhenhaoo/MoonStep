@@ -113,13 +113,6 @@ public class PersonalInfoFragment extends Fragment implements OnMenuItemClickLis
             ((AppCompatActivity) mActivity).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             ((AppCompatActivity) mActivity).getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
-//        mToolbar.setNavigationIcon(R.drawable.black_back_key_round);
-//        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                onBackPressed();
-//            }
-//        });
     }
 
     private void initMenuFragment() {
@@ -164,7 +157,7 @@ public class PersonalInfoFragment extends Fragment implements OnMenuItemClickLis
 
     private List<MenuObject> getMenuObjects() {
         menuObjects.clear();
-        MenuObject close = new MenuObject();
+        MenuObject close = new MenuObject("关闭");
         close.setResource(R.mipmap.close);
 
         MenuObject send = new MenuObject("修改背景图片");
@@ -182,15 +175,15 @@ public class PersonalInfoFragment extends Fragment implements OnMenuItemClickLis
         MenuObject addFav = new MenuObject("意见反馈");
         addFav.setResource(R.mipmap.feedback);
 
-        MenuObject block = new MenuObject("退出登录");
-        block.setResource(R.mipmap.log_out);
+        MenuObject logOut = new MenuObject("退出登录");
+        logOut.setResource(R.mipmap.log_out);
 
         menuObjects.add(close);
         menuObjects.add(send);
         menuObjects.add(like);
         menuObjects.add(addFr);
         menuObjects.add(addFav);
-        menuObjects.add(block);
+        menuObjects.add(logOut);
         return menuObjects;
     }
 

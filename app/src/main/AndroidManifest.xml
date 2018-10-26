@@ -2,8 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="priv.zxy.moonstep">
-    <!--添加访问网络的权限-->
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <!-- 添加访问网络的权限 -->
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -28,7 +29,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -37,18 +38,21 @@
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
-        android:allowBackup="true"
         android:name=".kernel.Application"
+        android:allowBackup="true"
         android:icon="@mipmap/icon"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:roundIcon="@mipmap/icon_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:largeHeap="true"
         tools:replace="android:icon,android:theme">
-        <activity android:name=".guide.GuidePage"
+        <activity
+            android:name=".guide.GuidePage"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -56,62 +60,92 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".main.view.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:configChanges="keyboardHidden|orientation|screenSize"/>
-        <activity android:name=".connectation.MainFifthPageActivity"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
-        <activity android:name=".guide.StartActivity"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
-            android:configChanges="keyboardHidden|orientation|screenSize"/>
-        <activity android:name=".commerce.view.ChattingActivity"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
-            android:configChanges="keyboardHidden|orientation|screenSize"/>
-        <activity android:name=".commerce.view.UserInfoActivity"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
-            android:configChanges="keyboardHidden|orientation|screenSize"/>
-        <activity android:name=".login.view.UserLoginActivity"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
-            android:configChanges="keyboardHidden|orientation|screenSize"/>
-        <activity android:name=".login.view.SendMessageActivity"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
-            android:configChanges="keyboardHidden|orientation|screenSize"/>
-        <activity android:name=".login.view.UserRegisterActivity"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
-            android:configChanges="keyboardHidden|orientation|screenSize"/>
-        <activity android:name=".login.view.VerifyPhoneActivity"
-        android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
-        android:configChanges="keyboardHidden|orientation|screenSize"/>
-        <activity android:name=".login.view.ForgetPasswordSendMessageActivity"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
-            android:configChanges="keyboardHidden|orientation|screenSize"/>
-        <activity android:name=".login.view.UserChangePasswordActivity"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
-            android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity
+            android:name=".main.view.MainActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".connectation.MainFifthPageActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+        <activity
+            android:name=".guide.StartActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+        <activity
+            android:name=".commerce.view.ChattingActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+        <activity
+            android:name=".commerce.view.UserInfoActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+        <activity
+            android:name=".login.view.UserLoginActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+        <activity
+            android:name=".login.view.SendMessageActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+        <activity
+            android:name=".login.view.UserRegisterActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+        <activity
+            android:name=".login.view.VerifyPhoneActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+        <activity
+            android:name=".login.view.ForgetPasswordSendMessageActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+        <activity
+            android:name=".login.view.UserChangePasswordActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <!-- 设置环信应用的AppKey -->
-        <meta-data android:name="EASEMOB_APPKEY"  android:value="1106181001228289#moonstep" />
-        <!-- 声明SDK所需的service SDK核心功能-->
-        <service android:name="com.hyphenate.chat.EMChatService" android:exported="true"/>
-        <service android:name="com.hyphenate.chat.EMJobService"
-            android:permission="android.permission.BIND_JOB_SERVICE"
+        <meta-data
+            android:name="EASEMOB_APPKEY"
+            android:value="1106181001228289#moonstep" />
+        <!-- 声明SDK所需的service SDK核心功能 -->
+        <service
+            android:name="com.hyphenate.chat.EMChatService"
+            android:exported="true" />
+        <service
+            android:name="com.hyphenate.chat.EMJobService"
             android:exported="true"
-            />
+            android:permission="android.permission.BIND_JOB_SERVICE" />
         <!-- 声明SDK所需的receiver -->
         <receiver android:name="com.hyphenate.chat.EMMonitorReceiver">
             <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_REMOVED"/>
-                <data android:scheme="package"/>
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+
+                <data android:scheme="package" />
             </intent-filter>
             <!-- 可选filter -->
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-                <action android:name="android.intent.action.USER_PRESENT"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.USER_PRESENT" />
             </intent-filter>
         </receiver>
-        <!---exported决定应用是否能被其它应用隐式调用，默认为false,当设置为false地时候，即使设置了intent-filter，也不能被其它应用隐式调用-->
-        <service android:name=".EM.service.MoonFriendService"
-            android:exported="false">
-        </service>
+        <!-- -exported决定应用是否能被其它应用隐式调用，默认为false,当设置为false地时候，即使设置了intent-filter，也不能被其它应用隐式调用 -->
+        <service
+            android:name=".EM.service.MoonFriendService"
+            android:exported="false" />
+
+        <receiver
+            android:name=".kernel.BootReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".kernel.MessageReceiverService"
+            android:exported="false"
+            android:enabled="true"/>
     </application>
 
 </manifest>

@@ -2,11 +2,15 @@ package priv.zxy.moonstep.commerce.view;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.hyphenate.exceptions.HyphenateException;
 import com.yalantis.phoenix.PullToRefreshView;
@@ -50,8 +55,11 @@ public class MoonFriendFragment extends Fragment implements IMoonFriendView{
 
     private MoonFriendAdapter mAdapter;
 
-//    private MainActivity mainActivity;//获取回调者的对象
+    private IntentFilter intentFilter;
 
+    private LocalReceiver localReceiver;
+
+    private LocalBroadcastManager localBroadcastManager;
 
     public static MoonFriendFragment getInstance() {
         if (instance == null) {
@@ -89,6 +97,12 @@ public class MoonFriendFragment extends Fragment implements IMoonFriendView{
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Log.d(TAG, "onActivityCreated");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mAdapter.notifyDataSetChanged();
     }
 
     public void initView() {
@@ -130,6 +144,12 @@ public class MoonFriendFragment extends Fragment implements IMoonFriendView{
                 }, REFRESH_DELAY);
             }
         });
+
+        intentFilter = new IntentFilter();
+        intentFilter.addAction("priv.zxy.moonstep.commerce.view.LOCAL_BROADCAST");
+        localBroadcastManager = LocalBroadcastManager.getInstance(this.getActivity());
+        localReceiver = new LocalReceiver();
+        localBroadcastManager.registerReceiver(localReceiver, intentFilter);
     }
 
     public void initRecyclerView(){
@@ -146,5 +166,18 @@ public class MoonFriendFragment extends Fragment implements IMoonFriendView{
     @Override
     public void checkClientAndDatabase(List<MoonFriend> lists) throws HyphenateException, InterruptedException {
         moonFriendPresenter.checkClientAndDatabase(lists);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        localBroadcastManager.unregisterReceiver(localReceiver);
+    }
+
+    class LocalReceiver extends BroadcastReceiver{
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            mAdapter.notifyDataSetChanged();//一旦监听到消息就让界面刷新
+        }
     }
 }

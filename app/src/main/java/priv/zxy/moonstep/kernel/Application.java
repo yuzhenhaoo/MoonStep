@@ -2,9 +2,16 @@ package priv.zxy.moonstep.kernel;
 
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.hyphenate.EMMessageListener;
@@ -12,11 +19,15 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMOptions;
 
+import org.json.JSONException;
 import org.litepal.LitePalApplication;
 
 import java.util.Iterator;
 import java.util.List;
 
+import priv.zxy.moonstep.guide.StartActivity;
+import priv.zxy.moonstep.helper.EMHelper;
+import priv.zxy.moonstep.kernel.bean.EMBase;
 import priv.zxy.moonstep.kernel.bean.User;
 import priv.zxy.moonstep.utils.SharedPreferencesUtil;
 import priv.zxy.moonstep.utils.dbUtils.GetMyInformationUtil;
@@ -34,6 +45,14 @@ public class Application extends LitePalApplication {
     public static User mySelf = null;//用来在登入MainActivity的时候获得自己的信息
     // 记录是否已经初始化
     private boolean isInit = false;
+
+    private LocalBroadcastManager localBroadcastManager;
+
+    private LocalReceiver localReceiver;
+
+    private Intent intent;
+
+    private IntentFilter intentFilter;
 
     private ActivityLifecycleCallbacks activityLifecycleCallbacks = new ActivityLifecycleCallbacks() {
 
@@ -64,7 +83,6 @@ public class Application extends LitePalApplication {
                             sharedPreferencesUtil.saveMySelfInformation(mySelf.getNickName(), mySelf.getUserLevel(), mySelf.getUserPet(), mySelf.getUserRace(), mySelf.getSignature());
                             Log.d("Application", "获取个人信息成功");
                         }
-
                         if (mySelf == null) {
                             Log.d("Application", "获取个人信息失败");
                         }
@@ -72,6 +90,9 @@ public class Application extends LitePalApplication {
                 }).start();
             }else if (activity.getClass() == ChattingActivity.class){
                 EMClient.getInstance().chatManager().removeMessageListener(msgListener);//移除Listener
+            }else if (activity.getClass() == StartActivity.class){
+                localBroadcastManager.registerReceiver(localReceiver, intentFilter);
+                EMBase.getInstance().initDataFromDatabase();
             }
         }
 
@@ -106,6 +127,8 @@ public class Application extends LitePalApplication {
                 EMClient.getInstance().chatManager().addMessageListener(msgListener);//实施消息的监听
             } else if (activity.getClass() == MainActivity.class){
                 EMClient.getInstance().chatManager().removeMessageListener(msgListener);//移除Listener
+            } else if (activity.getClass() == StartActivity.class){
+                localBroadcastManager.unregisterReceiver(localReceiver);
             }
         }
     };
@@ -136,6 +159,9 @@ public class Application extends LitePalApplication {
                     case VOICE://处理声音消息
                         break;
                 }
+                SharedPreferencesUtil sharedPreferencesUtil = new SharedPreferencesUtil(mContext);
+                sharedPreferencesUtil.saveIsMessageTip(message.getFrom().substring(8, message.getFrom().length()));//当来消息的时候，将消息提示的标记存储到缓存中。
+                localBroadcastManager.sendBroadcast(intent);//发送本地广播
             }
         }
 
@@ -143,24 +169,28 @@ public class Application extends LitePalApplication {
         public void onCmdMessageReceived(List<EMMessage> messages) {
             //收到透传消息
             Log.d(TAG, "收到透传消息");
+            localBroadcastManager.sendBroadcast(intent);//发送本地广播
         }
 
         @Override
         public void onMessageRead(List<EMMessage> messages) {
             //收到已读回执
             Log.d(TAG, "收到已读回执");
+            localBroadcastManager.sendBroadcast(intent);//发送本地广播
         }
 
         @Override
         public void onMessageDelivered(List<EMMessage> message) {
             //收到已送达回执
             Log.d(TAG, "收到已送达回执");
+            localBroadcastManager.sendBroadcast(intent);//发送本地广播
         }
 
         @Override
         public void onMessageChanged(EMMessage message, Object change) {
             //消息状态变动
             Log.d(TAG, "消息状态变动");
+            localBroadcastManager.sendBroadcast(intent);//发送本地广播
         }
     };
 
@@ -178,7 +208,18 @@ public class Application extends LitePalApplication {
     public void onCreate() {
         super.onCreate();
         //注册Activity的生命周期回调接口。
-        mContext = this.getApplicationContext();
+        mContext = getApplicationContext();
+
+        localBroadcastManager = LocalBroadcastManager.getInstance(Application.mContext);//获取实例
+
+        localReceiver = new LocalReceiver();
+
+        intentFilter = new IntentFilter();
+
+        intentFilter.addAction("priv.zxy.moonstep.kernel.bean.LOCAL_BROADCAST");
+
+        intent = new Intent("priv.zxy.moonstep.commerce.view.LOCAL_BROADCAST");
+
         registerActivityLifecycleCallbacks(activityLifecycleCallbacks);
         initEaseMob();
     }
@@ -278,5 +319,12 @@ public class Application extends LitePalApplication {
 
     public static Context getEMApplicationContext() {
         return mContext;
+    }
+
+    private class LocalReceiver extends BroadcastReceiver{
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            EMHelper.getInstance(mContext).initToken();
+        }
     }
 }

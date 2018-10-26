@@ -1,5 +1,6 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/user_info_background">
@@ -95,46 +96,85 @@
     <View
         android:id="@+id/whiteline3"
         android:layout_width="match_parent"
-        android:layout_height="0.8dp"
+        android:layout_height="2dp"
         android:layout_margin="20dp"
-        android:background="@color/Gray"
+        android:background="#72eade"
         app:layout_constraintTop_toBottomOf="@+id/userRace" />
 
-    <android.support.constraint.ConstraintLayout
+    <!--<android.support.constraint.ConstraintLayout-->
+        <!--android:id="@+id/function"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="100dp"-->
+        <!--android:layout_margin="25dp"-->
+        <!--android:background="@color/DeepBlue"-->
+        <!--android:padding="20dp"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/whiteline3">-->
+
+        <!--<Button-->
+            <!--android:id="@+id/magicWend"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:background="@drawable/magic_wend_button"-->
+            <!--app:layout_constraintHorizontal_weight="1"-->
+            <!--app:layout_constraintLeft_toLeftOf="parent"-->
+            <!--app:layout_constraintRight_toLeftOf="@+id/addFriend" />-->
+
+        <!--<Button-->
+            <!--android:id="@+id/addFriend"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:background="@drawable/add_friends_button"-->
+            <!--app:layout_constraintHorizontal_weight="1"-->
+            <!--app:layout_constraintLeft_toRightOf="@+id/magicWend"-->
+            <!--app:layout_constraintRight_toLeftOf="@+id/sendMessage" />-->
+
+        <!--<Button-->
+            <!--android:id="@+id/sendMessage"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:background="@drawable/send_messages_button"-->
+            <!--app:layout_constraintHorizontal_weight="1"-->
+            <!--app:layout_constraintLeft_toRightOf="@id/addFriend"-->
+            <!--app:layout_constraintRight_toRightOf="parent" />-->
+    <!--</android.support.constraint.ConstraintLayout>-->
+
+    <LinearLayout
         android:id="@+id/function"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_margin="25dp"
-        android:background="@color/DeepBlue"
-        app:layout_constraintTop_toBottomOf="@+id/whiteline3">
+        app:layout_constraintTop_toBottomOf="@+id/whiteline3"
+        android:paddingStart="40dp"
+        android:paddingEnd="40dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:gravity="center"
+        android:foreground="@drawable/text_border"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/magicWend"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:background="@drawable/magic_wend_button"
-            app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@+id/addFriend" />
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            tools:ignore="ButtonStyle"
+            android:background="@mipmap/magic_wend"/>
 
         <Button
             android:id="@+id/addFriend"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:background="@drawable/add_friends_button"
-            app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintLeft_toRightOf="@+id/magicWend"
-            app:layout_constraintRight_toLeftOf="@+id/sendMessage" />
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            tools:ignore="ButtonStyle"
+            android:background="@mipmap/add_friend"/>
 
         <Button
             android:id="@+id/sendMessage"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:background="@drawable/send_messages_button"
-            app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintLeft_toRightOf="@id/addFriend"
-            app:layout_constraintRight_toRightOf="parent" />
-    </android.support.constraint.ConstraintLayout>
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            tools:ignore="ButtonStyle"
+            android:background="@mipmap/message"/>
+    </LinearLayout>
 
     <TextView
         android:id="@+id/signature"
@@ -153,6 +193,6 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_margin="20dp"
-        android:background="@color/Gray"
+        android:background="#72eade"
         app:layout_constraintTop_toBottomOf="@id/signature" />
 </android.support.constraint.ConstraintLayout>

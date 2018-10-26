@@ -23,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
@@ -152,7 +153,7 @@ public class ForgetPasswordSendMessageActivity extends BaseActivity implements I
 
         mContext = this.getApplicationContext();
         mActivity = this;
-        toastUtil = new ToastUtil(mContext,mActivity);
+        toastUtil = ToastUtil.getInstance(mContext, mActivity);
 
         userForgetPasswordSendMessagePresenter = new UserForgetPasswordSendMessagePresenter(this, mActivity, mContext);
         shake = AnimationUtils.loadAnimation(this, R.anim.shake);
@@ -260,7 +261,6 @@ public class ForgetPasswordSendMessageActivity extends BaseActivity implements I
     @Override
     public void sendVoiceCode() {
         getVoiceVerifyCode(country, phoneNum);
-        ToastUtil toastUtil = new ToastUtil(mContext, mActivity);
         toastUtil.showToast("正在向您的手机发送语音信息，请注意接收");
     }
 

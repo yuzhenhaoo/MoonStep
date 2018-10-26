@@ -6,13 +6,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import priv.zxy.moonstep.R;
-import priv.zxy.moonstep.customview.CustomTextView;
 
 public class FourthMainPageAdapter extends RecyclerView.Adapter<FourthMainPageAdapter.MyHolder> {
     private final List<TaskInfo> mItems = new ArrayList<>();
@@ -103,8 +103,8 @@ public class FourthMainPageAdapter extends RecyclerView.Adapter<FourthMainPageAd
      * ViewHolder这个类只有属性，没有方法，它要做的事情就是存我们的item的find出的id
      */
     class MyHolder extends RecyclerView.ViewHolder{
-        final CustomTextView taskName;
-        final CustomTextView taskLevel;
+        final TextView taskName;
+        final TextView taskLevel;
         MyHolder(View itemView){
             super(itemView);
             taskName = itemView.findViewById(R.id.task_name);

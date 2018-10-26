@@ -14,9 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import priv.zxy.moonstep.R;
+import priv.zxy.moonstep.kernel.BaseActivity;
 import priv.zxy.moonstep.utils.SharedPreferencesUtil;
 
-public class GuidePage extends AppCompatActivity {
+public class GuidePage extends BaseActivity {
     //引导页对象
     private ViewPager vp;
     //Button的OnClick属性在页面第一次展现的时候就会出现一次点击，所以必须进行避免。
@@ -36,14 +37,7 @@ public class GuidePage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         //调用以后开启应用是否为第一次登陆的检测功能
-        jump_activity();
-
-        Window window = getWindow();
-        //隐藏状态栏
-        //定义全屏参数
-        int flag= WindowManager.LayoutParams.FLAG_FULLSCREEN;
-        //设置当前窗体为全屏显示
-        window.setFlags(flag, flag);
+        jumpActivity();
 
         setContentView(R.layout.main_guide_parent_page);
 
@@ -56,12 +50,12 @@ public class GuidePage extends AppCompatActivity {
      * 第一次登陆圆月行的时候，需要进入圆月行引导页
      * 第二次登陆圆月行，直接进入登录页面
      */
-    public void jump_activity(){
+    public void jumpActivity(){
         SharedPreferencesUtil sp = new SharedPreferencesUtil(this);
-        if(!sp.is_first_log()){
+        if(!sp.isFirstLogin()){
             jumpLoginActivity();
         }
-        sp.save_first_login();
+        sp.saveFirstLogin();
     }
 
     private void initView(){
