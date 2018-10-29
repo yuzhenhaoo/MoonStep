@@ -1,7 +1,6 @@
 package priv.zxy.moonstep.utils.dbUtils;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -17,9 +16,11 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import priv.zxy.moonstep.db.MoonFriend;
 import priv.zxy.moonstep.helper.EMHelper;
 import priv.zxy.moonstep.EM.bean.VolleyCallback;
 import priv.zxy.moonstep.kernel.bean.ErrorCode;
+import priv.zxy.moonstep.utils.LogUtil;
 
 public class PhoneRegisterUtil {
 
@@ -29,23 +30,17 @@ public class PhoneRegisterUtil {
 
     private static PhoneRegisterUtil instance;
 
-    private PhoneRegisterUtil(Context context){
-        this.mContext = context;
-    }
-
-    public static PhoneRegisterUtil getInstance(Context mContext) {
+    public static PhoneRegisterUtil getInstance() {
         if (instance == null){
             synchronized (PhoneRegisterUtil.class){
                 if (instance == null){
-                    instance = new PhoneRegisterUtil(mContext);
+                    instance = new PhoneRegisterUtil();
                 }
             }
         }
         return instance;
     }
 
-    public static boolean registeResult = false;
-    public static ErrorCode errorCode;
     /**
      * 用来处理手机注册的请求
      *
@@ -54,10 +49,10 @@ public class PhoneRegisterUtil {
      * @param PassWord 密码
      * @Param Gender 性别
      */
-    public void RegisterRequest(final String PhoneNumber, final  String NickName, final String PassWord, final String Gender){
+    public void RegisterRequest(final VolleyCallback volleyCallback, final String PhoneNumber, final  String NickName, final String PassWord, final String Gender){
         //请求地址
         String url = "http://120.79.154.236:8080/MoonStep/NewServlet";
-        String tag = "Login";
+        String tag = "LogUtilin";
         //取得请求队列
         RequestQueue requestQueue = Volley.newRequestQueue(mContext);
 
@@ -72,40 +67,52 @@ public class PhoneRegisterUtil {
                         try {
                             JSONObject jsonObject = (JSONObject) new JSONObject(response).get("params");
                             String result = jsonObject.getString("Result");
-                            EMHelper.getInstance(mContext).registerUser(new VolleyCallback() {
-                                @Override
-                                public String onSuccess(String result) {
-                                    registeResult = true;
-                                    return null;
-                                }
+                            if (result.equals("success")){
+                                EMHelper.getInstance(mContext).registerUser(new VolleyCallback() {
+                                    @Override
+                                    public String onSuccess(String result) throws InterruptedException {
+                                        volleyCallback.onSuccess();
+                                        return null;
+                                    }
 
-                                @Override
-                                public boolean onSuccess() {
-                                    return false;
-                                }
+                                    @Override
+                                    public boolean onSuccess() {
+                                        return false;
+                                    }
 
-                                @Override
-                                public String onFail(String error) {
-                                    return null;
-                                }
+                                    @Override
+                                    public String onFail(String error) {
+                                        return null;
+                                    }
 
-                                @Override
-                                public boolean onFail() {
-                                    errorCode = ErrorCode.PasswordFormatISNotRight;
-                                    return false;
-                                }
-                            }, "moonstep" + PhoneNumber, PassWord, NickName);
+                                    @Override
+                                    public boolean onFail() {
+                                        volleyCallback.getErrorCode(ErrorCode.PasswordFormatISNotRight);
+                                        return false;
+                                    }
+
+                                    @Override
+                                    public void getMoonFriend(MoonFriend moonFriend) {
+
+                                    }
+
+                                    @Override
+                                    public void getErrorCode(ErrorCode errorCode) {
+
+                                    }
+                                }, "moonstep" + PhoneNumber, PassWord, NickName);
+                            }
                         } catch (JSONException e) {
                             //做自己的请求异常操作
-                            errorCode = ErrorCode.JSONException;
-                            Log.e("TAG", e.getMessage(), e);
+                            volleyCallback.getErrorCode(ErrorCode.JSONException);
+                            LogUtil.e(TAG, e.getMessage());
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                errorCode = ErrorCode.NetNotResponse;
-                Log.i("TAG", error.getMessage(), error);
+                volleyCallback.getErrorCode(ErrorCode.NetNotResponse);
+                LogUtil.i(TAG, error.getMessage());
             }
         }) {
             @Override

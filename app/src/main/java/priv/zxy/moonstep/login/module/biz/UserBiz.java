@@ -6,13 +6,12 @@ package priv.zxy.moonstep.login.module.biz;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
-
-import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.exceptions.HyphenateException;
 
-import cn.smssdk.SMSSDK;
+//import cn.smssdk.SMSSDK;
+import priv.zxy.moonstep.EM.bean.VolleyCallback;
+import priv.zxy.moonstep.db.MoonFriend;
 import priv.zxy.moonstep.utils.dbUtils.ChangePasswordUtil;
 import priv.zxy.moonstep.utils.dbUtils.LoginUtil;
 import priv.zxy.moonstep.utils.dbUtils.PhoneCheckUtil;
@@ -23,58 +22,22 @@ import priv.zxy.moonstep.kernel.bean.ErrorCode;
 public class UserBiz implements IUser {
 
     /**
-     * 在做doLogin()之前，你必须先开启刷新页面，否则将会影响用户的体验
-     * 当doLogin()方法的调用结束以后，你必须关闭刷新页面，否则将会无法使界面对用户进行响应
+     * 在做doLogUtilin()之前，你必须先开启刷新页面，否则将会影响用户的体验
+     * 当doLogUtilin()方法的调用结束以后，你必须关闭刷新页面，否则将会无法使界面对用户进行响应
      *
-     * @param mActivity       调用者当前Activity
-     * @param mContext        调用者当前的上下文
      * @param userPhoneNumber 用户名
      * @param userPassword    用户密码
-     * @param loginListener   登陆监听
+     * @param onLoginListener   登陆监听
      */
     @Override
-    public void doLogin(final Activity mActivity, final Context mContext, String userPhoneNumber, String userPassword, final OnLoginListener loginListener) throws InterruptedException {
+    public void doLogUtilin(String userPhoneNumber, String userPassword, final OnLoginListener onLoginListener) throws InterruptedException {
         if (userPhoneNumber != null && userPassword != null) {
-            LoginUtil loginUtil = new LoginUtil(mContext, mActivity);
-            loginUtil.LoginRequest(userPhoneNumber, userPassword);
-            boolean isSuccess = false;
-            //这里开启一个延迟，用来获得正确的反馈结果,注意这个Thread的执行实际上是异步的
-            Thread.sleep(400);
-            isSuccess = loginUtil.isSuccess;//获得反馈的结果
-            if (isSuccess) {
-                EMClient.getInstance().login("moonstep" + userPhoneNumber,userPassword,new EMCallBack() {//回调
-                    @Override
-                    public void onSuccess() {
-                        //保证进入主页面后本地会话和群组都 load 完毕。
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                EMClient.getInstance().groupManager().loadAllGroups();
-                                EMClient.getInstance().chatManager().loadAllConversations();
-                            }
-                        }).start();
-                        loginListener.loginSuccess();
-                        Log.d("TAG", "登录聊天服务器成功！");
-                    }
-
-                    @Override
-                    public void onProgress(int progress, String status) {
-
-                    }
-
-                    @Override
-                    public void onError(int code, String message) {
-                        Log.d("TAG", "登录聊天服务器失败！" + code + message);
-                    }
-                });
-            } else if (loginUtil.errorCode != null) {
-                loginListener.loginFail(loginUtil.errorCode);
-            }
+            LoginUtil.getInstance().LogUtilinRequest(onLoginListener, userPhoneNumber, userPassword);
         } else {
             if(userPhoneNumber == null)
-                loginListener.loginFail(ErrorCode.PhoneNumberISEmpty);
+                onLoginListener.LogUtilinFail(ErrorCode.PhoneNumberISEmpty);
             else
-                loginListener.loginFail(ErrorCode.PasswordIsEmpty);
+                onLoginListener.LogUtilinFail(ErrorCode.PasswordIsEmpty);
         }
     }
 
@@ -82,35 +45,56 @@ public class UserBiz implements IUser {
      * 在做doRegister之前，你必须先开启页面的刷新，否则将会影响到用户体验
      * 在doRegister调用完成后，你必须关闭页面的刷新机制，否则程序将会无法对用户进行响应
      *
-     * @param mActivity        得到调用的当前Activity
-     * @param mContext         得到当前的上下文环境
      * @param nickName         用户名
      * @param userPassword     用户密码
      * @param gender           性别
      * @param registerListener 注册监听
      */
     @Override
-    public void doRegister(Activity mActivity, Context mContext, final String phoneNumber, String nickName, final String userPassword, String confirmUserPassword, String gender, final OnRegisterListener registerListener) throws InterruptedException{
+    public void doRegister(final String phoneNumber, String nickName, final String userPassword, String confirmUserPassword, String gender, final OnRegisterListener registerListener) throws InterruptedException{
         if (userPassword.equals(confirmUserPassword)) {
-            PhoneRegisterUtil.getInstance(mContext).RegisterRequest(phoneNumber, nickName, userPassword, gender);
-            Thread.sleep(1000);
-            boolean registerResult = PhoneRegisterUtil.getInstance(mContext).registeResult;
-            if (registerResult) {
+            PhoneRegisterUtil.getInstance().RegisterRequest(new VolleyCallback() {
+                @Override
+                public String onSuccess(String result) throws InterruptedException {
+                    return null;
+                }
+
+                @Override
+                public boolean onSuccess() throws InterruptedException {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
                             try {
                                 EMClient.getInstance().createAccount(phoneNumber, userPassword);//同步方法
+                                registerListener.registerSuccess();
                             } catch (HyphenateException e) {
                                 registerListener.registerFail(ErrorCode.ECRegisterFail);
                             }
                         }
                     }).start();
-                    Thread.sleep(300);
-                    registerListener.registerSuccess();
-            } else {
-                registerListener.registerFail(PhoneRegisterUtil.getInstance(mContext).errorCode);
-            }
+                    return true;
+                }
+
+                @Override
+                public String onFail(String error) {
+                    return null;
+                }
+
+                @Override
+                public boolean onFail() {
+                    return false;
+                }
+
+                @Override
+                public void getMoonFriend(MoonFriend moonFriend) {
+
+                }
+
+                @Override
+                public void getErrorCode(ErrorCode errorCode) {
+                    registerListener.registerFail(errorCode);
+                }
+            }, phoneNumber, nickName, userPassword, gender);
         } else {
             registerListener.registerFail(ErrorCode.PasswordIsNotEqualsConfirmPassword);
         }
@@ -126,26 +110,46 @@ public class UserBiz implements IUser {
      * 但是因为页面刷新机制本身中并不带有线程休眠时间的控制，所以在doVerifyPhoneNumber中应该加入线程休眠的时间
      *
      * @param phoneNumber       用户输入的手机号码
-     * @param mContext          上下文环境
-     * @param mActivity         持掌上下文的Activity本身
      * @param verifyPhoneNumber 对于phoneNumber的事件监听，这里应该根据实际的状况向verifyPhoneNumber的两个函数传递具体的事件监听的状态码，并根据实际的状态码来处理实际的事件，状态吗可以由bean层中的枚举类来承接
      */
     @Override
-    public void doVerifyPhoneNumber(String phoneNumber, Context mContext, Activity mActivity, OnVerifyPhoneNumber verifyPhoneNumber) throws InterruptedException {
+    public void doVerifyPhoneNumber(String phoneNumber, final OnVerifyPhoneNumber verifyPhoneNumber) throws InterruptedException {
         if (phoneNumber.equals("")) {
             // 这里应该设置一个具体的状态码：手机号为空
             verifyPhoneNumber.verifyFail(ErrorCode.PhoneNumberISEmpty);
         } else {
-            PhoneCheckUtil peUtil = new PhoneCheckUtil(mContext, mActivity);
-            peUtil.phoneCheck(phoneNumber);
-            Thread.sleep(1500);
-            boolean isSuccess = false;
-            isSuccess = peUtil.isSuccess;
-            if (isSuccess) {
-                verifyPhoneNumber.verifySuccess();
-            } else {
-                verifyPhoneNumber.verifyFail(peUtil.errorCode);
-            }
+            PhoneCheckUtil.getInstance().phoneCheck(new VolleyCallback() {
+                @Override
+                public String onSuccess(String result) {
+                    return null;
+                }
+
+                @Override
+                public boolean onSuccess() throws InterruptedException {
+                    verifyPhoneNumber.verifySuccess();
+                    return true;
+                }
+
+                @Override
+                public String onFail(String error) {
+                    return null;
+                }
+
+                @Override
+                public boolean onFail() {
+                    return false;
+                }
+
+                @Override
+                public void getMoonFriend(MoonFriend moonFriend) {
+
+                }
+
+                @Override
+                public void getErrorCode(ErrorCode errorCode) {
+                    verifyPhoneNumber.verifyFail(errorCode);
+                }
+            }, phoneNumber);
         }
     }
 
@@ -158,16 +162,15 @@ public class UserBiz implements IUser {
             if (code.equals("")) {
                 ToastUtil.getInstance(mContext, mActivity).showToast("验证码不能为空，请重新尝试!");
             } else {
-                SMSSDK.submitVerificationCode(country, phone, code);//提交验证码  在eventHandler里面查看验证结果
+//                SMSSDK.submitVerificationCode(country, phone, code);//提交验证码  在eventHandler里面查看验证结果
             }
             Thread.sleep(1000);
         }
     }
 
     @Override
-    public void setChangePassword(Context mContext, Activity mActivity, String phoneNumber, String password, String confirmPassword, OnChangePasswordListener changePasswordListener) throws InterruptedException {
+    public void setChangePassword(String phoneNumber, String password, String confirmPassword, final OnChangePasswordListener changePasswordListener) throws InterruptedException {
         ErrorCode errorCode = null;
-        boolean isSuccess = false;
 
         if (password.equals("")) {
             errorCode = ErrorCode.PasswordIsEmpty;
@@ -176,33 +179,79 @@ public class UserBiz implements IUser {
         }
 
         if (password.equals(confirmPassword)) {
-            ChangePasswordUtil changePasswordUtil = new ChangePasswordUtil(mContext, mActivity);
-            changePasswordUtil.changePassword(phoneNumber, password);
-            Thread.sleep(1500);
-            isSuccess = changePasswordUtil.isSuccess;
-            errorCode = changePasswordUtil.errorCode;
+
+            ChangePasswordUtil.getInstance().changePassword(new VolleyCallback() {
+                @Override
+                public String onSuccess(String result) {
+                    return null;
+                }
+
+                @Override
+                public boolean onSuccess() throws InterruptedException {
+                    changePasswordListener.changePasswordSuccess();
+                    return true;
+                }
+
+                @Override
+                public String onFail(String error) {
+                    return null;
+                }
+
+                @Override
+                public boolean onFail() {
+                    return false;
+                }
+
+                @Override
+                public void getMoonFriend(MoonFriend moonFriend) {
+
+                }
+
+                @Override
+                public void getErrorCode(ErrorCode errorCode) {
+                    changePasswordListener.changePasswordFail(errorCode);
+                }
+            }, phoneNumber, password);
         } else {
             errorCode = ErrorCode.PasswordIsNotEqualsConfirmPassword;
         }
-
-        if (isSuccess) {
-            changePasswordListener.changePasswordSuccess();
-        }
-        if (errorCode != null) {
-            changePasswordListener.changePasswordFail(errorCode);
-        }
+        if (errorCode != null) changePasswordListener.changePasswordFail(errorCode);
     }
 
     @Override
-    public void judgeCanJumpToChangePasswordActivity(String phoneNumber, Context mContext, Activity mActivity, OnPhoneCheckListener onPhoneCheckListener) throws InterruptedException {
-        PhoneCheckUtil phoneCheckUtil = new PhoneCheckUtil(mContext, mActivity);
-        phoneCheckUtil.phoneCheck(phoneNumber);
-        Thread.sleep(1000);
-        boolean isSuccess = phoneCheckUtil.isSuccess;
-        if (!isSuccess) {
-            onPhoneCheckListener.phoneIsExisted();
-        } else {
-            onPhoneCheckListener.phoneIsNotExisted();
-        }
+    public void judgeCanJumpToChangePasswordActivity(String phoneNumber, final OnPhoneCheckListener onPhoneCheckListener) throws InterruptedException {
+        PhoneCheckUtil.getInstance().phoneCheck(new VolleyCallback() {
+            @Override
+            public String onSuccess(String result) {
+                return null;
+            }
+
+            @Override
+            public boolean onSuccess() throws InterruptedException {
+                onPhoneCheckListener.phoneIsNotExisted();
+                return true;
+            }
+
+            @Override
+            public String onFail(String error) {
+                return null;
+            }
+
+            @Override
+            public boolean onFail() {
+                onPhoneCheckListener.phoneIsExisted();
+                return true;
+            }
+
+            @Override
+            public void getMoonFriend(MoonFriend moonFriend) {
+
+            }
+
+            @Override
+            public void getErrorCode(ErrorCode errorCode) {
+                onPhoneCheckListener.getErrcodeTips(errorCode);
+            }
+        }, phoneNumber);
     }
 }

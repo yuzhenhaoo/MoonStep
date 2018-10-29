@@ -3,8 +3,9 @@ package priv.zxy.moonstep.kernel;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.WindowManager;
+
+import priv.zxy.moonstep.utils.LogUtil;
 
 /**
  * 创建人: Administrator
@@ -20,7 +21,7 @@ public class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         //隐藏通知栏
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        Log.d("BaseActivity", getClass().getSimpleName());
+        LogUtil.d("BaseActivity", getClass().getSimpleName());
         ActivityCollector.addActivity(this);
     }
 

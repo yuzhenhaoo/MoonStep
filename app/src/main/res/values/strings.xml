@@ -16,9 +16,9 @@
     <string name="guide_page5_text1">无尽奥秘</string>
     <string name="guide_page5_text2">待你来开启</string>
     <string name="hello">你好，请登录</string>
-    <string name="login_weixin">微信登录</string>
-    <string name="login_qq">QQ登录</string>
-    <string name="login_weibo">微博登录</string>
+    <string name="LogUtilin_weixin">微信登录</string>
+    <string name="LogUtilin_qq">QQ登录</string>
+    <string name="LogUtilin_weibo">微博登录</string>
     <string name="reg_phone">手机注册</string>
     <string name="register_email">邮箱注册</string>
     <string name="phone_account">手机号</string>
@@ -31,11 +31,11 @@
     <string name="password">密码</string>
     <string name="forget_password">忘记了密码？</string>
     <string name="verification_code">验证码</string>
-    <string name="click_login">点击登录</string>
+    <string name="click_LogUtilin">点击登录</string>
     <string name="input_message">请输入验证码</string>
     <string name="input_password_again">再次输入密码</string>
     <string name="click_register">点击注册</string>
-    <string name="return_login">返回登录</string>
+    <string name="return_LogUtilin">返回登录</string>
     <string name="confirm">确认</string>
     <string name="appbar_scrolling_view_behavior" translatable="false">android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string>
     <string name="moon_place">圆月宫</string>

@@ -14,7 +14,7 @@ public interface IVerifyPhoneView {
 
     String getPhoneNumber();
 
-    void toLoginActivity();
+    void toLogUtilinActivity();
 
     void toSendMessageActivity();
 

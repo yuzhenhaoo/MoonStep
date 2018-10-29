@@ -43,11 +43,11 @@
                 android:layout_marginTop="50dp"
                 android:orientation="vertical">
                 <Button
-                    android:id="@+id/click_login"
+                    android:id="@+id/click_LogUtilin"
                     android:layout_width="160dp"
                     android:layout_height="35dp"
                     android:textColor="#fff"
-                    android:text="@string/click_login"
+                    android:text="@string/click_LogUtilin"
                     android:elevation="10dp"
                     android:background="@drawable/purple_rectangle0"/>
             </LinearLayout>

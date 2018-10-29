@@ -1,7 +1,6 @@
 package priv.zxy.moonstep.helper;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -9,7 +8,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -22,6 +20,7 @@ import java.util.Map;
 
 import priv.zxy.moonstep.EM.bean.VolleyCallback;
 import priv.zxy.moonstep.kernel.bean.EMBase;
+import priv.zxy.moonstep.utils.LogUtil;
 import priv.zxy.moonstep.utils.ToastUtil;
 
 public class EMHelper {
@@ -82,14 +81,16 @@ public class EMHelper {
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Log.e(TAG, "onResponse: ", new RuntimeException());
+                            LogUtil.e(TAG, "onResponse: ");
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
-                Log.e(TAG, "onErrorResponse: 注册失败", new RuntimeException());
+                LogUtil.e(TAG, "onErrorResponse: 注册失败");
             }
         }
         ){
@@ -128,20 +129,24 @@ public class EMHelper {
         //防止重复请求，所以先取消tag标识的请求队列
         requestQueue.cancelAll(tag);
 
-        Log.d(TAG, "请求的http地址为:" + url);
+        LogUtil.d(TAG, "请求的http地址为:" + url);
 
         StringRequest putRequest = new StringRequest(Request.Method.PUT,
                 url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        volleyCallback.onSuccess();
+                        try {
+                            volleyCallback.onSuccess();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
-                Log.e(TAG, "onErrorResponse: 密码修改失败", new RuntimeException());
+                LogUtil.e(TAG, "onErrorResponse: 密码修改失败");
             }
         }){
             @Override
@@ -183,20 +188,24 @@ public class EMHelper {
         //防止重复请求，所以先取消tag标识的请求队列
         requestQueue.cancelAll(tag);
 
-        Log.d(TAG, "请求的http地址为:" + url);
+        LogUtil.d(TAG, "请求的http地址为:" + url);
 
         StringRequest putRequest = new StringRequest(Request.Method.PUT,
                 url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        volleyCallback.onSuccess();
+                        try {
+                            volleyCallback.onSuccess();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
-                Log.e(TAG, "onErrorResponse: 昵称修改失败", new RuntimeException());
+                LogUtil.e(TAG, "onErrorResponse: 昵称修改失败");
             }
         }){
             @Override
@@ -237,7 +246,7 @@ public class EMHelper {
 
 //        final String requestBody = "{\"grant_type\": \"client_credentials\", \"client_id\": " + EMBase.getInstance().getClient_ID() + ", \"client_secret\": \"" + EMBase.getInstance().getClient_Secret() + "}";
         final String requestBody = "{" + "\"" + "grant_type" + "\"" + ":" + "\"" + "client_credentials" + "\"" + "," + "\"" + "client_id" + "\"" + ":" + "\"" + EMBase.getInstance().getClient_ID() + "\"" + "," + "\"" + "client_secret" + "\"" + ":" + "\"" + EMBase.getInstance().getClient_Secret() + "\"" + "}";
-                Log.d(TAG, "requsetBody = " + requestBody);
+                LogUtil.d(TAG, "requsetBody = " + requestBody);
 
         StringRequest request = new StringRequest(Request.Method.POST,
                 url,
@@ -248,8 +257,8 @@ public class EMHelper {
                             JSONObject jsonObject = new JSONObject(response);
                             token = jsonObject.getString("access_token");
                             int timeStamp = jsonObject.getInt("expires_in");
-                            Log.d(TAG, "token获取成功:" + token);
-                            Log.d(TAG, "token有效期为:" + timeStamp);
+                            LogUtil.d(TAG, "token获取成功:" + token);
+                            LogUtil.d(TAG, "token有效期为:" + timeStamp);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -259,7 +268,7 @@ public class EMHelper {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
-                Log.e(TAG, "onErrorResponse: token获取失败", new RuntimeException());
+                LogUtil.e(TAG, "onErrorResponse: token获取失败");
             }
         }){
             @Override
@@ -307,7 +316,7 @@ public class EMHelper {
         //防止重复请求，所以先取消tag标识的请求队列
         requestQueue.cancelAll(tag);
 
-        Log.d(TAG, "请求的http地址为:" + url);
+        LogUtil.d(TAG, "请求的http地址为:" + url);
 
         StringRequest request = new StringRequest(
                 url,
@@ -318,11 +327,11 @@ public class EMHelper {
                         try {
                             jsonObject = (JSONObject) new JSONObject(response);
                             String user_state = jsonObject.getJSONObject("data").getString(userID);
-                            Log.d(TAG,user_state);
+                            LogUtil.d(TAG,user_state);
                             if (volleyCallback != null) {
                                 volleyCallback.onSuccess(user_state);
                             }
-                        } catch (JSONException e) {
+                        } catch (JSONException | InterruptedException e) {
                             e.printStackTrace();
                         }
                     }
@@ -330,7 +339,7 @@ public class EMHelper {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.e(TAG, "onErrorResponse: 请求用户状态失败", new RuntimeException());
+                        LogUtil.e(TAG, "onErrorResponse: 请求用户状态失败");
                     }
                 }
         ) {
@@ -338,7 +347,7 @@ public class EMHelper {
             public Map<String, String> getHeaders() throws AuthFailureError {//设置头信息
                 Map<String, String> map = new HashMap<String, String>();
                 map.put("Authorization", getAuthorization());
-                Log.d(TAG, "getHeaders: " + getAuthorization());
+                LogUtil.d(TAG, "getHeaders: " + getAuthorization());
                 return map;
             }
         };

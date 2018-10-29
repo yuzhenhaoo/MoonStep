@@ -1,9 +1,5 @@
 package priv.zxy.moonstep.utils.dbUtils;
 
-import android.app.Activity;
-import android.content.Context;
-import android.util.Log;
-
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -18,7 +14,10 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import priv.zxy.moonstep.EM.bean.VolleyCallback;
+import priv.zxy.moonstep.kernel.Application;
 import priv.zxy.moonstep.kernel.bean.ErrorCode;
+import priv.zxy.moonstep.utils.LogUtil;
 
 /**
  * 工具类的逻辑尚有问题：
@@ -27,21 +26,27 @@ import priv.zxy.moonstep.kernel.bean.ErrorCode;
  * 并在presenter的相应的调用过程中对当前错误码进行判断，并真醉错误码进行输出
  */
 public class PhoneCheckUtil {
-    private Context mContext;
-    private Activity mActivity;
-    public static boolean isSuccess = false;
-    public static ErrorCode errorCode;
-    public PhoneCheckUtil(Context context, Activity activity){
-        this.mContext = context;
-        this.mActivity = activity;
+    private static final String TAG = "PhoneCheckUtil";
+
+    private static PhoneCheckUtil instance;
+
+    public static PhoneCheckUtil getInstance(){
+        if (instance == null){
+            synchronized(PhoneCheckUtil.class){
+                if (instance == null){
+                    instance = new PhoneCheckUtil();
+                }
+            }
+        }
+        return instance;
     }
 
-    public void phoneCheck(final String phoneNumber){
+    public void phoneCheck(final VolleyCallback volleyCallback, final String phoneNumber){
         //请求地址
         String url = "http://120.79.154.236:8080/MoonStep/CheckPhoneServlet";
-        String tag = "Login";
+        String tag = "LogUtilin";
         //取得请求队列
-        RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+        RequestQueue requestQueue = Volley.newRequestQueue(Application.getContext());
 
         //防止重复请求，所以先取消tag标识的请求队列
         requestQueue.cancelAll(tag);
@@ -52,28 +57,31 @@ public class PhoneCheckUtil {
                     @Override
                     public void onResponse(String response) {
                         try {
-                            Log.i("TAG","onResponse");
+                            LogUtil.i(TAG,"onResponse");
                             JSONObject jsonObject = (JSONObject) new JSONObject(response).get("params");
                             String result = jsonObject.getString("Result");
                             if (result.equals("success")) {
                                 //检验成功
-                                isSuccess = true;
+                                volleyCallback.onSuccess();
                             } else {
                                 //检验失败
-                                errorCode = ErrorCode.PhoneNumberIsRegistered;
+                                volleyCallback.getErrorCode(ErrorCode.PhoneNumberIsRegistered);
+                                volleyCallback.onFail();
                             }
                         } catch (JSONException e) {
                             //做自己的请求异常操作
-                            errorCode = ErrorCode.JSONException;
-                            Log.e("TAG", e.getMessage(), e);
+                            volleyCallback.getErrorCode(ErrorCode.JSONException);
+                            LogUtil.e(TAG, e.getMessage());
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 //做自己的响应错误操作，如Toast提示（“请稍后重试”等）
-                errorCode = ErrorCode.NetNotResponse;
-                Log.e("TAG", error.getMessage(), error);
+                volleyCallback.getErrorCode(ErrorCode.NetNotResponse);
+                LogUtil.e(TAG, error.getMessage());
             }
         }) {
             @Override

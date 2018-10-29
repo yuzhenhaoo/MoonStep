@@ -2,7 +2,6 @@ package priv.zxy.moonstep.kernel.bean;
 
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -15,6 +14,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import priv.zxy.moonstep.kernel.Application;
+import priv.zxy.moonstep.utils.LogUtil;
 
 public class EMBase {
 
@@ -54,7 +54,7 @@ public class EMBase {
         if (OrgName != null){
             return OrgName;
         }
-        Log.d(TAG, "orgName初始化失败", new RuntimeException());
+        LogUtil.d(TAG, "orgName初始化失败");
         return null;
     }
 
@@ -62,7 +62,7 @@ public class EMBase {
         if (AppName != null){
             return AppName;
         }
-        Log.d(TAG, "appName初始化失败", new RuntimeException());
+        LogUtil.d(TAG, "appName初始化失败");
         return null;
     }
 
@@ -70,7 +70,7 @@ public class EMBase {
         if (Client_ID != null){
             return Client_ID;
         }
-        Log.d(TAG, "client_id初始化失败", new RuntimeException());
+        LogUtil.d(TAG, "client_id初始化失败");
         return null;
     }
 
@@ -78,7 +78,7 @@ public class EMBase {
         if (Client_Secret != null){
             return Client_Secret;
         }
-        Log.d(TAG, "client_secret初始化失败", new RuntimeException());
+        LogUtil.d(TAG, "client_secret初始化失败");
         return null;
     }
 
@@ -91,12 +91,12 @@ public class EMBase {
         String url = "http://120.79.154.236:8080/MoonStep/EMServlet";
         String tag = "orgName";
 
-        localBroadcastManager = LocalBroadcastManager.getInstance(Application.mContext);
+        localBroadcastManager = LocalBroadcastManager.getInstance(Application.getContext());
         final Intent intent = new Intent("priv.zxy.moonstep.kernel.bean.LOCAL_BROADCAST");
 
 
         //取得请求队列
-        RequestQueue requestQueue = Volley.newRequestQueue(Application.mContext);
+        RequestQueue requestQueue = Volley.newRequestQueue(Application.getContext());
 
         //防止重复请求，所以先取消tag标识的请求队列
         requestQueue.cancelAll(tag);

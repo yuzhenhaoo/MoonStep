@@ -94,7 +94,7 @@ public class UserChangePasswordActivity extends BaseActivity implements IChangeP
                             @Override
                             public void run() {
                                 try {
-                                    userChangePasswordPresenter.setChangePassword(mContext, mActivity, phoneNum, pwd, conPwd);
+                                    userChangePasswordPresenter.setChangePassword(phoneNum, pwd, conPwd);
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
                                 }
@@ -145,7 +145,7 @@ public class UserChangePasswordActivity extends BaseActivity implements IChangeP
     }
 
     @Override
-    public void toLoginActivity() {
+    public void toLogUtilinActivity() {
         Intent intent = new Intent(this, UserLoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -160,6 +160,6 @@ public class UserChangePasswordActivity extends BaseActivity implements IChangeP
 
     @Override
     public void showErrorTip(ErrorCode errorCode) {
-        new ShowErrorReason(mContext, mActivity).show(errorCode);
+        ShowErrorReason.getInstance(mActivity).show(errorCode);
     }
 }

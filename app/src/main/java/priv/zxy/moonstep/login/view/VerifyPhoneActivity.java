@@ -97,7 +97,7 @@ public class VerifyPhoneActivity extends BaseActivity implements IVerifyPhoneVie
 
         userVerifyPhoneNumberPresenter = new UserVerifyPhoneNumberPresenter(this, mActivity, mContext);
 
-        // 回退到LoginActivity
+        // 回退到LogUtilinActivity
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -165,7 +165,7 @@ public class VerifyPhoneActivity extends BaseActivity implements IVerifyPhoneVie
     }
 
     @Override
-    public void toLoginActivity() {
+    public void toLogUtilinActivity() {
         Intent intent = new Intent(this, UserLoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -193,8 +193,7 @@ public class VerifyPhoneActivity extends BaseActivity implements IVerifyPhoneVie
 
     @Override
     public void showFailTip(ErrorCode errorCode) {
-        ShowErrorReason showErrorReason = new ShowErrorReason(mContext, mActivity);
-        showErrorReason.show(errorCode);
+        ShowErrorReason.getInstance(mActivity).show(errorCode);
     }
 
     @Override

@@ -8,27 +8,27 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
+import com.baidu.mapapi.CoordType;
+import com.baidu.mapapi.SDKInitializer;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMOptions;
 
-import org.json.JSONException;
 import org.litepal.LitePalApplication;
 
 import java.util.Iterator;
 import java.util.List;
 
+import priv.zxy.moonstep.EM.bean.VolleyCallback;
+import priv.zxy.moonstep.db.MoonFriend;
 import priv.zxy.moonstep.guide.StartActivity;
 import priv.zxy.moonstep.helper.EMHelper;
 import priv.zxy.moonstep.kernel.bean.EMBase;
-import priv.zxy.moonstep.kernel.bean.User;
+import priv.zxy.moonstep.kernel.bean.ErrorCode;
+import priv.zxy.moonstep.utils.LogUtil;
 import priv.zxy.moonstep.utils.SharedPreferencesUtil;
 import priv.zxy.moonstep.utils.dbUtils.GetMyInformationUtil;
 import priv.zxy.moonstep.db.Message;
@@ -38,11 +38,10 @@ import priv.zxy.moonstep.commerce.view.ChattingActivity;
 
 public class Application extends LitePalApplication {
 
-    public static Context mContext;
+    private static Context mContext;
 
     private static final String TAG = "Application";
 
-    public static User mySelf = null;//用来在登入MainActivity的时候获得自己的信息
     // 记录是否已经初始化
     private boolean isInit = false;
 
@@ -53,6 +52,10 @@ public class Application extends LitePalApplication {
     private Intent intent;
 
     private IntentFilter intentFilter;
+
+    public static Context getContext(){
+        return mContext;
+    }
 
     private ActivityLifecycleCallbacks activityLifecycleCallbacks = new ActivityLifecycleCallbacks() {
 
@@ -69,23 +72,38 @@ public class Application extends LitePalApplication {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        GetMyInformationUtil util = new GetMyInformationUtil(mContext);
-                        String phoneNumber = new SharedPreferencesUtil(mContext).readLoginInfo().get("UserName");
-                        util.returnMyInfo("moonstep" + phoneNumber);
-                        try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        if (util.isSuccess) {
-                            mySelf = util.getMoonFriend();
-                            SharedPreferencesUtil sharedPreferencesUtil = new SharedPreferencesUtil(mContext);
-                            sharedPreferencesUtil.saveMySelfInformation(mySelf.getNickName(), mySelf.getUserLevel(), mySelf.getUserPet(), mySelf.getUserRace(), mySelf.getSignature());
-                            Log.d("Application", "获取个人信息成功");
-                        }
-                        if (mySelf == null) {
-                            Log.d("Application", "获取个人信息失败");
-                        }
+                        String phoneNumber = SharedPreferencesUtil.getInstance(mContext).readLogUtilinInfo().get("UserName");
+                        GetMyInformationUtil.getInstance().returnMyInfo(new VolleyCallback() {
+                            @Override
+                            public String onSuccess(String result) {
+                                return null;
+                            }
+
+                            @Override
+                            public boolean onSuccess() throws InterruptedException {
+                                return false;
+                            }
+
+                            @Override
+                            public String onFail(String error) {
+                                return null;
+                            }
+
+                            @Override
+                            public boolean onFail() {
+                                return false;
+                            }
+
+                            @Override
+                            public void getMoonFriend(MoonFriend moonFriend) {
+                                SharedPreferencesUtil.getInstance(mContext).saveMySelfInformation(moonFriend.getNickName(), moonFriend.getLevel(), moonFriend.getPet(), moonFriend.getRace(), moonFriend.getSignature());
+                            }
+
+                            @Override
+                            public void getErrorCode(ErrorCode errorCode) {
+                                LogUtil.d(TAG, "获取个人信息失败");
+                            }
+                        }, "moonstep" + phoneNumber);
                     }
                 }).start();
             }else if (activity.getClass() == ChattingActivity.class){
@@ -140,14 +158,14 @@ public class Application extends LitePalApplication {
 
         @Override
         public void onMessageReceived(List<EMMessage> messages) {
-            Log.d(TAG,"接收到了消息:");
+            LogUtil.d(TAG,"接收到了消息:");
             emMessages = messages;
             for(EMMessage message: emMessages){
-//                Log.d(TAG,"message来源:    " + message.getFrom().substring(8, message.getFrom().length()));
+//                LogUtil.d(TAG,"message来源:    " + message.getFrom().substring(8, message.getFrom().length()));
                 String[] msg = MoonStepHelper.getInstance().getMessageTypeWithBody(message.getBody().toString().trim());
                 switch (MoonStepHelper.getInstance().transformMessageType(msg[0])){
                     case TEXT://处理文本消息
-                        Log.e("Message","来自于Application" + msg[1]);
+                        LogUtil.e("Message","来自于Application" + msg[1]);
                         savedChattingMessage(msg[1], 0, 1, message.getFrom().substring(8));
                         break;
                     case IMAGE://处理图片消息
@@ -159,8 +177,7 @@ public class Application extends LitePalApplication {
                     case VOICE://处理声音消息
                         break;
                 }
-                SharedPreferencesUtil sharedPreferencesUtil = new SharedPreferencesUtil(mContext);
-                sharedPreferencesUtil.saveIsMessageTip(message.getFrom().substring(8, message.getFrom().length()));//当来消息的时候，将消息提示的标记存储到缓存中。
+                SharedPreferencesUtil.getInstance(mContext).saveIsMessageTip(message.getFrom().substring(8, message.getFrom().length()));//当来消息的时候，将消息提示的标记存储到缓存中。
                 localBroadcastManager.sendBroadcast(intent);//发送本地广播
             }
         }
@@ -168,28 +185,28 @@ public class Application extends LitePalApplication {
         @Override
         public void onCmdMessageReceived(List<EMMessage> messages) {
             //收到透传消息
-            Log.d(TAG, "收到透传消息");
+            LogUtil.d(TAG, "收到透传消息");
             localBroadcastManager.sendBroadcast(intent);//发送本地广播
         }
 
         @Override
         public void onMessageRead(List<EMMessage> messages) {
             //收到已读回执
-            Log.d(TAG, "收到已读回执");
+            LogUtil.d(TAG, "收到已读回执");
             localBroadcastManager.sendBroadcast(intent);//发送本地广播
         }
 
         @Override
         public void onMessageDelivered(List<EMMessage> message) {
             //收到已送达回执
-            Log.d(TAG, "收到已送达回执");
+            LogUtil.d(TAG, "收到已送达回执");
             localBroadcastManager.sendBroadcast(intent);//发送本地广播
         }
 
         @Override
         public void onMessageChanged(EMMessage message, Object change) {
             //消息状态变动
-            Log.d(TAG, "消息状态变动");
+            LogUtil.d(TAG, "消息状态变动");
             localBroadcastManager.sendBroadcast(intent);//发送本地广播
         }
     };
@@ -201,16 +218,23 @@ public class Application extends LitePalApplication {
         message.setObject(phoneNumber);
         message.setType(type);//1、文字；2、图片；3、音频；4、视频；5、红包；6、文件；7、位置
         message.save();
-        Log.d(TAG, "savedChattingMessage:" + message);
+        LogUtil.d(TAG, "savedChattingMessage:" + message);
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
+
+        SDKInitializer.initialize(getApplicationContext());
+
+        //自4.3.0起，百度地图SDK所有接口均支持百度坐标和国测局坐标，用此方法设置您使用的坐标类型.
+        //包括BD09LL和GCJ02两种坐标，默认是BD09LL坐标。
+        SDKInitializer.setCoordType(CoordType.BD09LL);
+
         //注册Activity的生命周期回调接口。
         mContext = getApplicationContext();
 
-        localBroadcastManager = LocalBroadcastManager.getInstance(Application.mContext);//获取实例
+        localBroadcastManager = LocalBroadcastManager.getInstance(mContext);//获取实例
 
         localReceiver = new LocalReceiver();
 
@@ -270,7 +294,7 @@ public class Application extends LitePalApplication {
          用户的账号被从服务器端删除；
          用户从另一个设备登录，把当前设备上登录的用户踢出。
          */
-        options.setAutoLogin(true);
+//        options.setAutoLogUtilin(true);
         // 设置是否需要发送已读回执
         options.setRequireAck(true);
         // 设置是否需要发送回执，
@@ -307,18 +331,10 @@ public class Application extends LitePalApplication {
                     return processName;
                 }
             } catch (Exception e) {
-                // Log.d("Process", "Error>> :"+ e.toString());
+                // LogUtil.d("Process", "Error>> :"+ e.toString());
             }
         }
         return processName;
-    }
-
-    public static User getMyInfo() {
-        return mySelf;
-    }
-
-    public static Context getEMApplicationContext() {
-        return mContext;
     }
 
     private class LocalReceiver extends BroadcastReceiver{

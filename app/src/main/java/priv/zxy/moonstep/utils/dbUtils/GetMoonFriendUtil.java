@@ -1,9 +1,5 @@
 package priv.zxy.moonstep.utils.dbUtils;
 
-import android.app.Activity;
-import android.content.Context;
-import android.util.Log;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -17,26 +13,35 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import priv.zxy.moonstep.EM.bean.VolleyCallback;
+import priv.zxy.moonstep.db.MoonFriend;
+import priv.zxy.moonstep.kernel.Application;
 import priv.zxy.moonstep.kernel.bean.ErrorCode;
-import priv.zxy.moonstep.kernel.bean.User;
+import priv.zxy.moonstep.utils.LogUtil;
 
 public class GetMoonFriendUtil {
-    private Context mContext;
-    private Activity mActivity;
-    public static boolean isSuccess = false;
-    public static ErrorCode errorCode = null;
-    public static User moonFriend = null;
 
-    public GetMoonFriendUtil(Context mContext) {
-        this.mContext = mContext;
+    private static final String TAG = "GetMoonFriendUtil";
+
+    private static GetMoonFriendUtil instance;
+
+    public static GetMoonFriendUtil getInstance() {
+        if (instance == null){
+            synchronized (GetMoonFriendUtil.class){
+                if (instance == null){
+                    instance = new GetMoonFriendUtil();
+                }
+            }
+        }
+        return instance;
     }
 
-    public void returnMoonFriendInfo(final String userId) {
+    public void returnMoonFriendInfo(final VolleyCallback volleyCallback, final String userId) {
         //请求地址
         String url = "http://120.79.154.236:8080/MoonStep/CheckUserID";
         String tag = "moonfriend";
         //取得请求队列
-        RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+        RequestQueue requestQueue = Volley.newRequestQueue(Application.getContext());
 
         //防止重复请求，所以先取消tag标识的请求队列
         requestQueue.cancelAll(tag);
@@ -50,35 +55,32 @@ public class GetMoonFriendUtil {
                             JSONObject jsonObject = (JSONObject) new JSONObject(response).get("params");
                             String result = jsonObject.getString("Result");
                             if (result.equals("success")) {
-                                //检验成功
-                                isSuccess = true;
-                                User user = new User();
-                                user.setUserPhoneNumber(jsonObject.getString("phoneNumber"));
-                                user.setUserGender(jsonObject.getString("gender"));
-                                user.setUserRace(jsonObject.getString("race"));
-                                user.setUserLevel(jsonObject.getString("level"));
-                                user.setUserPet(jsonObject.getString("pet"));
-                                user.setNickName(jsonObject.getString("nickName"));
-                                user.setSignature(jsonObject.getString("signature"));
-//                                user.setHeadPortrait(jsonObject.getString("portrait").getBytes());
-                                moonFriend = user;
-                                Log.e("GetMoonFriendUtil", "获取好友信息成功");
+                                MoonFriend moonFriend = new MoonFriend();
+                                moonFriend.setPhoneNumber(jsonObject.getString("phoneNumber"));
+                                moonFriend.setGender(jsonObject.getString("gender"));
+                                moonFriend.setRace(jsonObject.getString("race"));
+                                moonFriend.setLevel(jsonObject.getString("level"));
+                                moonFriend.setPet(jsonObject.getString("pet"));
+                                moonFriend.setNickName(jsonObject.getString("nickName"));
+                                moonFriend.setSignature(jsonObject.getString("signature"));
+//                                moonFriend.setHeadPortrait(jsonObject.getString("portrait").getBytes());
+                                volleyCallback.getMoonFriend(moonFriend);
+                                LogUtil.e(TAG, "获取好友信息成功");
                             } else if(result.equals("error")){
-                                //检验失败
-                                errorCode = ErrorCode.MoonFriendUserIsNotExisted;
+                                volleyCallback.getErrorCode(ErrorCode.MoonFriendUserIsNotExisted);
                             }
                         } catch (JSONException e) {
                             //做自己的请求异常操作
-                            errorCode = ErrorCode.JSONException;
-                            Log.e("GetMoonFriendUtil", e.getMessage(), e);
+                            volleyCallback.getErrorCode(ErrorCode.JSONException);
+                            LogUtil.e(TAG, e.getMessage());
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 //做自己的响应错误操作，如Toast提示（“请稍后重试”等）
-                errorCode = ErrorCode.NetNotResponse;
-                Log.e("GetMoonFriendUtil", error.getMessage(), error);
+                volleyCallback.getErrorCode(ErrorCode.NetNotResponse);
+                LogUtil.e(TAG, error.getMessage());
             }
         }) {
             @Override
@@ -93,9 +95,5 @@ public class GetMoonFriendUtil {
 
         //将请求添加到队列中
         requestQueue.add(request);
-    }
-
-    public User getMoonFriend(){
-        return moonFriend;
     }
 }

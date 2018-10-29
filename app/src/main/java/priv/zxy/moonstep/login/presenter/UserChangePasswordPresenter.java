@@ -27,12 +27,12 @@ public class UserChangePasswordPresenter {
         this.userBiz = new UserBiz();
     }
 
-    public void toLoginActivity(){
-        changePasswordView.toLoginActivity();
+    public void toLogUtilinActivity(){
+        changePasswordView.toLogUtilinActivity();
     }
 
-    public void setChangePassword(final Context mContext, final Activity mActivity, String phoneNumber, String password, String confirmPassword) throws InterruptedException {
-        userBiz.setChangePassword(mContext, mActivity, phoneNumber, password, confirmPassword, new OnChangePasswordListener() {
+    public void setChangePassword(String phoneNumber, String password, String confirmPassword) throws InterruptedException {
+        userBiz.setChangePassword(phoneNumber, password, confirmPassword, new OnChangePasswordListener() {
             @Override
             public void changePasswordSuccess() throws InterruptedException {
                 new Thread(new Runnable() {
@@ -43,7 +43,7 @@ public class UserChangePasswordPresenter {
                         Looper.loop();
                     }
                 }).start();
-                changePasswordView.toLoginActivity();
+                changePasswordView.toLogUtilinActivity();
                 changePasswordView.hideLoading();
             }
 

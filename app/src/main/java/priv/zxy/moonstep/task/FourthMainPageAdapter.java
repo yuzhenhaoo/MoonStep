@@ -67,7 +67,7 @@ public class FourthMainPageAdapter extends RecyclerView.Adapter<FourthMainPageAd
 //        holder.itemView.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
-//                Log.i("TAG","调用了Adapter中的itemView.setOnClickListener");
+//                LogUtil.i("TAG","调用了Adapter中的itemView.setOnClickListener");
 //                if (mOnItemClickListener != null) {
 //                    mOnItemClickListener.onItemClicked(holder.getAdapterPosition(), holder.iv);
 //                }

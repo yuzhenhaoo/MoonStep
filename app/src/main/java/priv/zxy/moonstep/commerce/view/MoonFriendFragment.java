@@ -14,7 +14,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +30,7 @@ import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.db.MoonFriend;
 import priv.zxy.moonstep.commerce.presenter.MoonFriendAdapter;
 import priv.zxy.moonstep.commerce.presenter.MoonFriendPresenter;
+import priv.zxy.moonstep.utils.LogUtil;
 
 public class MoonFriendFragment extends Fragment implements IMoonFriendView{
 
@@ -96,7 +96,7 @@ public class MoonFriendFragment extends Fragment implements IMoonFriendView{
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Log.d(TAG, "onActivityCreated");
+        LogUtil.d(TAG, "onActivityCreated");
     }
 
     @Override

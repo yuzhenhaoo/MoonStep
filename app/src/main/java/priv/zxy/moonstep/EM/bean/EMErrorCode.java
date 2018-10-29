@@ -19,9 +19,9 @@ public class EMErrorCode {
 
     static final int 	INVALID_TOKEN = 104;
 
-    static final int 	USER_ALREADY_LOGIN = 200;
+    static final int 	USER_ALREADY_LogUtilIN = 200;
 
-    static final int 	USER_NOT_LOGIN = 201;
+    static final int 	USER_NOT_LogUtilIN = 201;
 
     static final int 	USER_AUTHENTICATION_FAILED = 202;
 
@@ -31,7 +31,7 @@ public class EMErrorCode {
 
     static final int 	USER_ILLEGAL_ARGUMENT = 205;
 
-    static final int 	USER_LOGIN_ANOTHER_DEVICE = 206;
+    static final int 	USER_LogUtilIN_ANOTHER_DEVICE = 206;
 
     static final int 	USER_REMOVED = 207;
 
@@ -47,7 +47,7 @@ public class EMErrorCode {
 
     static final int 	USER_BIND_ANOTHER_DEVICE = 213;
 
-    static final int 	USER_LOGIN_TOO_MANY_DEVICES = 214;
+    static final int 	USER_LogUtilIN_TOO_MANY_DEVICES = 214;
 
     static final int 	USER_MUTED = 215;
 

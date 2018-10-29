@@ -1,13 +1,15 @@
 package priv.zxy.moonstep.db;
 
-
-import android.graphics.Bitmap;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import org.litepal.crud.LitePalSupport;
 
-import java.sql.Blob;
-
-public class MoonFriend extends LitePalSupport{
+/**
+ * 利用Parcelable进行序列化，方便在Activity之间利用Intent传递数据
+ * 尽量使用Serializable而不要使用Serializable，因为Serializable会将整个对象序列化，效率比Parcelable要低一些。
+ */
+public class MoonFriend extends LitePalSupport implements Parcelable{
     //用户姓名
     private String nickName;
 
@@ -34,6 +36,22 @@ public class MoonFriend extends LitePalSupport{
 
     //当前用户是否已经登陆,0没有登陆，1登陆,获取方式详见REST API
     private int isOnline;
+
+    public MoonFriend(){
+
+    }
+
+    protected MoonFriend(Parcel in) {
+        nickName = in.readString();
+        phoneNumber = in.readString();
+        gender = in.readString();
+        race = in.readString();
+        level = in.readString();
+        pet = in.readString();
+        headPortrait = in.createByteArray();
+        signature = in.readString();
+        isOnline = in.readInt();
+    }
 
     public int getIsOnline() {
         return isOnline;
@@ -107,4 +125,33 @@ public class MoonFriend extends LitePalSupport{
         this.signature = signature;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(nickName);
+        dest.writeString(phoneNumber);
+        dest.writeString(gender);
+        dest.writeString(race);
+        dest.writeString(level);
+        dest.writeString(pet);
+        dest.writeByteArray(headPortrait);
+        dest.writeString(signature);
+        dest.writeInt(isOnline);
+    }
+
+    public static final Creator<MoonFriend> CREATOR = new Creator<MoonFriend>() {
+        @Override
+        public MoonFriend createFromParcel(Parcel in) {
+            return new MoonFriend(in);
+        }
+
+        @Override
+        public MoonFriend[] newArray(int size) {
+            return new MoonFriend[size];
+        }
+    };
 }

@@ -8,8 +8,8 @@ import android.view.View;
 import android.widget.Button;
 
 import priv.zxy.moonstep.R;
+import priv.zxy.moonstep.db.Message;
 import priv.zxy.moonstep.kernel.BaseActivity;
-import priv.zxy.moonstep.kernel.bean.Message;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,10 +36,6 @@ public class MainFifthPageActivity extends BaseActivity {
 
         recyclerView = this.findViewById(R.id.recycleview);
         mAdapter = new MainFifthPageAdapter(getApplicationContext());
-        lists.add(new Message("您好，我是您的客服，有什么可以帮助您的吗？" ,false));
-        lists.add(new Message("是的，也没有什么别的事情！",true));
-        lists.add(new Message("我想知道你们官方对于圆月行的态度如何!",true));
-        lists.add(new Message("这是一款非常好的app，希望您可以坚持玩下去就可以看到它的风采",false));
     }
 
     public void initData(){

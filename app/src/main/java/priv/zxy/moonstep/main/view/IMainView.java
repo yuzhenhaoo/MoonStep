@@ -9,7 +9,7 @@ public interface IMainView {
 
     void changeMyInformation();
 
-    void toLoginActivity();
+    void toLogUtilinActivity();
 
     void doEMConnectionListener();
 

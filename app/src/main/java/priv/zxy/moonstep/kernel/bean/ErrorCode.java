@@ -86,7 +86,7 @@ public enum ErrorCode {
     /**
      * 账户在其它设备上登陆
      */
-    AccountIsLoginInOtherDevice,
+    AccountIsLogUtilinInOtherDevice,
 
     /**
      * EC获取好友列表失败

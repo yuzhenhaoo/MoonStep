@@ -9,7 +9,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.transition.Fade;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +21,7 @@ import com.cleveroad.fanlayoutmanager.callbacks.FanChildDrawingOrderCallback;
 import java.util.ArrayList;
 
 import priv.zxy.moonstep.R;
+import priv.zxy.moonstep.utils.LogUtil;
 import priv.zxy.moonstep.utils.TitleNamesUtils;
 
 public class ThirdMainPageFragment1 extends Fragment {
@@ -134,7 +134,7 @@ public class ThirdMainPageFragment1 extends Fragment {
 
     @android.support.annotation.RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void onClick(View view, int pos) {
-        Log.i("TAG","onClick被点击了");
+        LogUtil.i("TAG","onClick被点击了");
         FullInfoTabFragment fragment = FullInfoTabFragment.newInstance(mAdapter.getModelByPos(pos));
         Toast.makeText(this.getContext(), "pos:" + pos, Toast.LENGTH_SHORT).show();
 
@@ -143,7 +143,7 @@ public class ThirdMainPageFragment1 extends Fragment {
         setExitTransition(new Fade());
         fragment.setSharedElementReturnTransition(new SharedTransitionSet());
 
-        Log.i("TAG","fragment配置完成了，开始进行跳转");
+        LogUtil.i("TAG","fragment配置完成了，开始进行跳转");
         //进行fragment的跳转
         getActivity().getSupportFragmentManager()
                 .beginTransaction()
@@ -151,7 +151,7 @@ public class ThirdMainPageFragment1 extends Fragment {
                 .replace(R.id.main_content, fragment)
                 .addToBackStack(null)
                 .commit();
-        Log.i("TAG","跳转完成");
+        LogUtil.i("TAG","跳转完成");
     }
 
     public void onClick(int pos) {

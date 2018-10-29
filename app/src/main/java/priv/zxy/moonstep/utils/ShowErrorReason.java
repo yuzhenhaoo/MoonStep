@@ -3,15 +3,30 @@ package priv.zxy.moonstep.utils;
 import android.app.Activity;
 import android.content.Context;
 
+import priv.zxy.moonstep.kernel.Application;
 import priv.zxy.moonstep.kernel.bean.ErrorCode;
 
 public class ShowErrorReason {
-    private Context mContext;
+
+    private static ShowErrorReason instance;
+
     private Activity mActivity;
 
-    public ShowErrorReason(Context mContext, Activity mActivity){
-        this.mContext = mContext;
+    private Context mContext;
+
+    public ShowErrorReason(Activity mActivity){
+        mContext = Application.getContext();
         this.mActivity = mActivity;
+    }
+    public static ShowErrorReason getInstance(Activity mActivity){
+        if (instance == null){
+            synchronized(ShowErrorReason.class){
+                if (instance == null){
+                    instance = new ShowErrorReason(mActivity);
+                }
+            }
+        }
+        return instance;
     }
 
     public void show(ErrorCode errorCode){
@@ -61,7 +76,7 @@ public class ShowErrorReason {
             case AccountISRemoverd:
                 ToastUtil.getInstance(mContext, mActivity).showToast("您的账号已经被移除");
                 break;
-            case AccountIsLoginInOtherDevice:
+            case AccountIsLogUtilinInOtherDevice:
                 ToastUtil.getInstance(mContext, mActivity).showToast("账号已经在其它设备上登陆");
                 break;
             case ECGetFriendsListFail:

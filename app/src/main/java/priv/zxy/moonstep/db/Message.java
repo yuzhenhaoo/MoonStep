@@ -6,29 +6,30 @@ import org.litepal.crud.LitePalSupport;
  * 想要让表进行CRUD的操作，必须要让类继承与LitePalSupport这个类
  */
 public class Message extends LitePalSupport{
-    int id;
+
+    private int id;
 
     /**
      * 发送消息的类型，因为这里直接关乎到数据库的存储，所以不用枚举类型
      * 1、文字；2、图片；3、音频；4、视频；5、红包；6、文件；7、位置
      */
-    int type;
+    private int type;
 
     /**
      * 消息发送方向：0、对方发送的 1、我发送的；
      */
-    int direction;
+    private int direction;
 
     /**
      * 发送对象
      * 实际上是UserID("moonstep" + 手机号)
      */
-    String object;
+    private String object;
 
     /**
      * 消息发送内容
      */
-    String content;
+    private String content;
 
     public int getId() {
         return id;

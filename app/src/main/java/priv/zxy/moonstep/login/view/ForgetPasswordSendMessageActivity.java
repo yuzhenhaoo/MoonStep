@@ -12,7 +12,6 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -25,8 +24,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import cn.smssdk.EventHandler;
-import cn.smssdk.SMSSDK;
+//import cn.smssdk.EventHandler;
+//import cn.smssdk.SMSSDK;
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.kernel.BaseActivity;
 import priv.zxy.moonstep.utils.ShowErrorReason;
@@ -34,7 +33,7 @@ import priv.zxy.moonstep.utils.ToastUtil;
 import priv.zxy.moonstep.kernel.bean.ErrorCode;
 import priv.zxy.moonstep.login.presenter.UserForgetPasswordSendMessagePresenter;
 
-import static cn.smssdk.SMSSDK.getVoiceVerifyCode;
+//import static cn.smssdk.SMSSDK.getVoiceVerifyCode;
 
 /**
  * Created by Zxy on 2018/9/20
@@ -67,16 +66,16 @@ public class ForgetPasswordSendMessageActivity extends BaseActivity implements I
     Animation shake;
 
     //Mob短信端的事件触发机制
-    EventHandler eventHandler = new EventHandler() {
-        @Override
-        public void afterEvent(int event, int result, Object data) {
-            Message msg = new Message();
-            msg.arg1 = event;
-            msg.arg2 = result;
-            msg.obj = data;
-            mHandler.sendMessage(msg);
-        }
-    };
+//    EventHandler eventHandler = new EventHandler() {
+//        @Override
+//        public void afterEvent(int event, int result, Object data) {
+//            Message msg = new Message();
+//            msg.arg1 = event;
+//            msg.arg2 = result;
+//            msg.obj = data;
+//            mHandler.sendMessage(msg);
+//        }
+//    };
 
     @SuppressLint("HandlerLeak")
     private Handler handler = new Handler(){
@@ -87,41 +86,41 @@ public class ForgetPasswordSendMessageActivity extends BaseActivity implements I
         }
     };
 
-    @SuppressLint("HandlerLeak")
-    Handler mHandler = new Handler() {
-        public void handleMessage(Message msg) {
-            // TODO Auto-generated method stub
-            super.handleMessage(msg);
-            int event = msg.arg1;
-            int result = msg.arg2;
-            Object data = msg.obj;
-            Log.e("event", "event=" + event);
-            if (result == SMSSDK.RESULT_COMPLETE) {
-                //短信注册成功后，返回MainActivity,然后提示新好友
-                if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {//提交验证码成功
-                    //页面跳转
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                userForgetPasswordSendMessagePresenter.toChangePasswordActivity(phoneNumber.getText().toString(), mContext, mActivity);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                            handler.sendEmptyMessage(0x01);
-                        }
-                    }).start();
-                } else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
-                    //已经验证
-                    toastUtil.showToast("验证码已经发送");
-                } else {
-                    toastUtil.showToast("验证码错误(猜测您点了语音验证码，以最后得到的验证码为准)");
-                }
-            } else {
-                ((Throwable) data).printStackTrace();
-            }
-        }
-    };
+//    @SuppressLint("HandlerLeak")
+//    Handler mHandler = new Handler() {
+//        public void handleMessage(Message msg) {
+//            // TODO Auto-generated method stub
+//            super.handleMessage(msg);
+//            int event = msg.arg1;
+//            int result = msg.arg2;
+//            Object data = msg.obj;
+//            LogUtil.e("event", "event=" + event);
+//            if (result == SMSSDK.RESULT_COMPLETE) {
+//                //短信注册成功后，返回MainActivity,然后提示新好友
+//                if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {//提交验证码成功
+//                    //页面跳转
+//                    new Thread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            try {
+//                                userForgetPasswordSendMessagePresenter.toChangePasswordActivity(phoneNumber.getText().toString(), mContext, mActivity);
+//                            } catch (InterruptedException e) {
+//                                e.printStackTrace();
+//                            }
+//                            handler.sendEmptyMessage(0x01);
+//                        }
+//                    }).start();
+//                } else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
+//                    //已经验证
+//                    toastUtil.showToast("验证码已经发送");
+//                } else {
+//                    toastUtil.showToast("验证码错误(猜测您点了语音验证码，以最后得到的验证码为准)");
+//                }
+//            } else {
+//                ((Throwable) data).printStackTrace();
+//            }
+//        }
+//    };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -133,7 +132,7 @@ public class ForgetPasswordSendMessageActivity extends BaseActivity implements I
     @SuppressLint("ClickableViewAccessibility")
     private void initView() {
         //对SMSSDK进行注册，与unregisterEventHandler配套使用
-        SMSSDK.registerEventHandler(eventHandler);
+//        SMSSDK.registerEventHandler(eventHandler);
         header = (TextView) findViewById(R.id.header);
         content1 = (LinearLayout) findViewById(R.id.content1);
         phoneNumber = (EditText) findViewById(R.id.phone_number);
@@ -165,7 +164,7 @@ public class ForgetPasswordSendMessageActivity extends BaseActivity implements I
             public void onClick(View view) {
                 if(getPhoneNumber().equals("")) toastUtil.showToast("您的手机号不能为空");
                 else{
-                    SMSSDK.getVerificationCode(country, getPhoneNumber());//发送短信验证码到手机号
+//                    SMSSDK.getVerificationCode(country, getPhoneNumber());//发送短信验证码到手机号
                     sendCode.setEnabled(false);
                     timer.start();//使用计时器 设置验证码的时间限制
                 }
@@ -260,7 +259,7 @@ public class ForgetPasswordSendMessageActivity extends BaseActivity implements I
 
     @Override
     public void sendVoiceCode() {
-        getVoiceVerifyCode(country, phoneNum);
+//        getVoiceVerifyCode(country, phoneNum);
         toastUtil.showToast("正在向您的手机发送语音信息，请注意接收");
     }
 
@@ -295,13 +294,13 @@ public class ForgetPasswordSendMessageActivity extends BaseActivity implements I
 
     @Override
     public void showErrorTip() {
-        new ShowErrorReason(mContext, mActivity).show(ErrorCode.PhoneNumberIsNotRegistered);
+        ShowErrorReason.getInstance(mActivity).show(ErrorCode.PhoneNumberIsNotRegistered);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         //防止使用短信验证 产生内存溢出问题
-        SMSSDK.unregisterEventHandler(eventHandler);
+//        SMSSDK.unregisterEventHandler(eventHandler);
     }
 }

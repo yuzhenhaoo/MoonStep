@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'com.mob.sdk'
+//apply plugin: 'com.mob.sdk'
 
 // 在MobSDK的扩展中注册SMSSDK的相关信息
 //MobSDK {
@@ -77,6 +77,11 @@ dependencies {
 
     //添加LitePal的依赖
     implementation 'org.litepal.android:java:3.0.0'
+
+    //动态加载库-ENViews
+    implementation 'com.github.codeestX:ENViews:v1.0.3'
+
+    implementation 'hanks.xyz:htextview-library:0.1.2'
 }
 repositories {
     mavenCentral()

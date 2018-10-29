@@ -51,11 +51,10 @@ public class GuidePage extends BaseActivity {
      * 第二次登陆圆月行，直接进入登录页面
      */
     public void jumpActivity(){
-        SharedPreferencesUtil sp = new SharedPreferencesUtil(this);
-        if(!sp.isFirstLogin()){
-            jumpLoginActivity();
+        if(!SharedPreferencesUtil.getInstance(this).isFirstLogUtilin()){
+            jumpLogUtilinActivity();
         }
-        sp.saveFirstLogin();
+        SharedPreferencesUtil.getInstance(this).saveFirstLogUtilin();
     }
 
     private void initView(){
@@ -125,7 +124,7 @@ public class GuidePage extends BaseActivity {
 
     public void buttonListener(View v){
         if(button_is_clicked){
-            jumpLoginActivity();
+            jumpLogUtilinActivity();
         }
         button_is_clicked = true;
     }
@@ -133,7 +132,7 @@ public class GuidePage extends BaseActivity {
     /**
      * 通过intent的两个标记为来实现从Viewpager跳转到StartActivity的时候确保Viewpager_Activity的销毁
      */
-    public void jumpLoginActivity(){
+    public void jumpLogUtilinActivity(){
         Intent intent = new Intent(this, StartActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

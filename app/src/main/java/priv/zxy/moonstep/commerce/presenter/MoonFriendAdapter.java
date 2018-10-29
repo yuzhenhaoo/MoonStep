@@ -2,12 +2,10 @@ package priv.zxy.moonstep.commerce.presenter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +19,7 @@ import priv.zxy.moonstep.db.MoonFriend;
 import priv.zxy.moonstep.commerce.view.ChattingActivity;
 import priv.zxy.moonstep.helper.EMHelper;
 import priv.zxy.moonstep.kernel.Application;
+import priv.zxy.moonstep.kernel.bean.ErrorCode;
 import priv.zxy.moonstep.utils.SharedPreferencesUtil;
 
 import java.util.ArrayList;
@@ -91,7 +90,6 @@ public class MoonFriendAdapter extends RecyclerView.Adapter<MoonFriendAdapter.My
 //        holder.userPhoto.setImageResource(item.getHeadPortrait());
         //当item 取了上述表达式的时候，会有两种情况，一种是当position为0时有值，第二种就是position为0时没有值，这个时候如果用户点击过快就会出现空指针异常
         if (item != null) {
-            final SharedPreferencesUtil util = new SharedPreferencesUtil(Application.mContext);
 //            holder.userPhoto.setImageBitmap(BitmapFactory.decodeByteArray(item.getHeadPortrait(), 0, item.getHeadPortrait().length));//这才是设置头像的正确方式
             holder.userPhoto.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.my_photo));//设置头像
             holder.userNickName.setText(item.getNickName());//设置昵称
@@ -107,11 +105,11 @@ public class MoonFriendAdapter extends RecyclerView.Adapter<MoonFriendAdapter.My
                 @Override
                 public void onClick(View view) {
                     JumpToChattingActivity(view, item);
-                    util.handleMessageTip(item.getPhoneNumber());
+                    SharedPreferencesUtil.getInstance(mContext).handleMessageTip(item.getPhoneNumber());
 //                    MoonFriendAdapter.this.notifyDataSetChanged();
                 }
             });
-            EMHelper.getInstance(Application.mContext).getUserState(new VolleyCallback() {
+            EMHelper.getInstance(Application.getContext()).getUserState(new VolleyCallback() {
                 @Override
                 public String onSuccess(String result) {
                     if (result.equals("offline")){
@@ -136,11 +134,21 @@ public class MoonFriendAdapter extends RecyclerView.Adapter<MoonFriendAdapter.My
                 public boolean onFail() {
                     return false;
                 }
+
+                @Override
+                public void getMoonFriend(MoonFriend moonFriend) {
+
+                }
+
+                @Override
+                public void getErrorCode(ErrorCode errorCode) {
+
+                }
             }, "moonstep" + item.getPhoneNumber());
             holder.isOnline.setText("");
             Random rd = new Random();
             holder.bubbleView.setBubbleColor(bubbleColor[rd.nextInt(bubbleColor.length - 1)]);//通过随机数设定气泡的颜色
-            int messageNumber = util.readMessageNumber(item.getPhoneNumber());
+            int messageNumber = SharedPreferencesUtil.getInstance(mContext).readMessageNumber(item.getPhoneNumber());
 //            holder.bubbleView.setTextColor();//这里可以用来设置文字的颜色
             if (messageNumber != 0) {
                 holder.bubbleView.setVisibility(View.VISIBLE);
@@ -154,13 +162,7 @@ public class MoonFriendAdapter extends RecyclerView.Adapter<MoonFriendAdapter.My
     private void JumpToChattingActivity(View view, MoonFriend item) {
         Intent intent = new Intent(view.getContext(), ChattingActivity.class);
 //        intent.putExtra("headPortrait", item.getHeadPortrait());//暂时还不知道Bitmap怎么通过Activity进行传输
-        intent.putExtra("phoneNumber", item.getPhoneNumber());
-        intent.putExtra("userNickName", item.getNickName());
-        intent.putExtra("race", item.getRace());
-        intent.putExtra("level", item.getLevel());
-        intent.putExtra("userGender", item.getGender());
-        intent.putExtra("pet", item.getPet());
-        intent.putExtra("signature", item.getSignature());
+        intent.putExtra("moonfriend", item);
         view.getContext().startActivity(intent);
     }
 

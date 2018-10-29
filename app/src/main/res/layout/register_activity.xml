@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/side_nav_bar">
     <ImageView
-        android:id="@+id/moonstep_logo"
+        android:id="@+id/moonstep_LogUtilo"
         android:layout_width="120dp"
         android:layout_height="120dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -31,7 +31,7 @@
         app:met_primaryColor="@color/DoderBlue"
         app:met_floatingLabelText="nickName"
         app:met_floatingLabel="normal"
-        app:layout_constraintTop_toBottomOf="@+id/moonstep_logo" />
+        app:layout_constraintTop_toBottomOf="@+id/moonstep_LogUtilo" />
 
     <RadioGroup
         android:id="@+id/radioGroup"
@@ -109,12 +109,12 @@
         android:background="@drawable/login_button"/>
 
     <Button
-        android:id="@+id/return_login_page"
+        android:id="@+id/return_LogUtilin_page"
         android:layout_width="match_parent"
         android:layout_height="35dp"
         android:layout_marginTop="15dp"
         android:textColor="#fff"
-        android:text="@string/return_login"
+        android:text="@string/return_LogUtilin"
         android:translationZ="8dp"
         app:layout_constraintTop_toBottomOf="@+id/click_register"
         android:layout_marginStart="50dp"

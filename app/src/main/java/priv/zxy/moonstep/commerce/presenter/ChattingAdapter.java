@@ -3,7 +3,6 @@ package priv.zxy.moonstep.commerce.presenter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +13,7 @@ import java.util.List;
 
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.db.Message;
+import priv.zxy.moonstep.utils.LogUtil;
 
 public class ChattingAdapter  extends RecyclerView.Adapter<ChattingAdapter.MyHolder> {
     private Context context;
@@ -68,10 +68,10 @@ public class ChattingAdapter  extends RecyclerView.Adapter<ChattingAdapter.MyHol
     public ChattingAdapter.MyHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         View view = null;
         if(viewType == IMsgViewType.IMVT_TO_MSG){
-            Log.d("TAG","发送消息");
+            LogUtil.d("TAG","发送消息");
             view = LayoutInflater.from(context).inflate(R.layout.fg_main_fifth_item_right, viewGroup, false);
         }else if(viewType == IMsgViewType.IMVT_COM_MSG){
-            Log.d("TAG","接收消息");
+            LogUtil.d("TAG","接收消息");
             view = LayoutInflater.from(context).inflate(R.layout.fg_main_fifth_item_left, viewGroup, false);
         }
         return new ChattingAdapter.MyHolder(view);

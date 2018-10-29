@@ -5,7 +5,6 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import priv.zxy.moonstep.R;
+import priv.zxy.moonstep.utils.LogUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -78,7 +78,7 @@ public class ThirdMainPageRecyclerViewAdapter extends RecyclerView.Adapter<Third
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i("TAG","调用了Adapter中的itemView.setOnClickListener");
+                LogUtil.i("TAG","调用了Adapter中的itemView.setOnClickListener");
                 if (mOnItemClickListener != null) {
                     mOnItemClickListener.onItemClicked(holder.getAdapterPosition(), holder.iv);
                 }

@@ -1,6 +1,6 @@
 package priv.zxy.moonstep.kernel.bean;
 
-public enum User_State {
+public enum UserState {
 
     //用户在线
     onLine,

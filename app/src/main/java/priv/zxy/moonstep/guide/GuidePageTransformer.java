@@ -29,7 +29,7 @@ public class GuidePageTransformer implements ViewPager.PageTransformer {
             }
             // Fade the page relative to its size.
             float alphaFactor = Math.max(MIN_ALPHA, 1 - Math.abs(position));
-            //透明度改变Log
+            //透明度改变LogUtil
             view.setAlpha(alphaFactor);
         } else { // (1,+Infinity]
             // This page is way off-screen to the right.    出了右边屏幕

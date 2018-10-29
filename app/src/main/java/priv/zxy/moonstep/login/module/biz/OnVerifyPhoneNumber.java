@@ -7,7 +7,7 @@ package priv.zxy.moonstep.login.module.biz;
 import priv.zxy.moonstep.kernel.bean.ErrorCode;
 
 public interface OnVerifyPhoneNumber {
-    public void verifySuccess();
+    void verifySuccess();
 
-    public void verifyFail(ErrorCode errorCode);
+    void verifyFail(ErrorCode errorCode);
 }

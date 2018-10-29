@@ -1,6 +1,7 @@
 package priv.zxy.moonstep.commerce.view;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -21,29 +22,37 @@ import priv.zxy.moonstep.kernel.Application;
 import priv.zxy.moonstep.utils.SharedPreferencesUtil;
 
 public class FirstMainPageFragmentParent extends Fragment {
+
     private static final String TAG = "FirstMainPageFragmentPa";
+
     private View view;
+
     private ViewPager viewPager;
+
     private RadioGroup rg_tab_bar;
+
     private RadioButton rb_moon;
+
     private RadioButton rb_pet;
+
     private RadioButton rb_heart;
+
     private RadioButton rb_me;
 
-    private SharedPreferencesUtil util;
+    private Context mContext;
 
     @SuppressLint("HandlerLeak")
-    private Handler mHandler = new Handler(){
+    private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            if (viewPager.getCurrentItem() != 2){
-                switch (msg.what){
+            if (viewPager.getCurrentItem() != 2) {
+                switch (msg.what) {
                     case 0x00:
-                        rb_heart.setCompoundDrawables(null,changeBtnTop(R.drawable.tab_menu_heart_tip), null, null);
+                        rb_heart.setCompoundDrawables(null, changeBtnTop(R.drawable.tab_menu_heart_tip), null, null);
                         break;
                     case 0x01:
-                        rb_heart.setCompoundDrawables(null,changeBtnTop(R.drawable.tab_menu_heart), null, null);
+                        rb_heart.setCompoundDrawables(null, changeBtnTop(R.drawable.tab_menu_heart), null, null);
                         break;
                 }
             }
@@ -64,29 +73,28 @@ public class FirstMainPageFragmentParent extends Fragment {
         initDate();
     }
 
-    public void initView(){
+    public void initView() {
         viewPager = view.findViewById(R.id.vp);
         rg_tab_bar = view.findViewById(R.id.rg_tab_bar);
         rb_moon = view.findViewById(R.id.rb_moon);
         rb_pet = view.findViewById(R.id.rb_pet);
         rb_heart = view.findViewById(R.id.rb_heart);
         rb_me = view.findViewById(R.id.rb_me);
-        util = new SharedPreferencesUtil(this.getContext());
         viewPager.setCurrentItem(0);
-
+        mContext = this.getContext();
 
         new Thread(new Runnable() {
             @Override
             public void run() {
-                while(true){
+                while (true) {
                     try {
                         Thread.sleep(100);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    if (util.isMessageTip()){
+                    if (SharedPreferencesUtil.getInstance(mContext).isMessageTip()) {
                         mHandler.sendEmptyMessage(0x00);
-                    }else{
+                    } else {
                         mHandler.sendEmptyMessage(0x01);
                     }
                 }
@@ -94,7 +102,7 @@ public class FirstMainPageFragmentParent extends Fragment {
         }).start();
     }
 
-    public void initDate(){
+    public void initDate() {
         //通过getChildFragment得到子容器的管理器，实现Fragment的嵌套
         MainAdapter mAdapter = new MainAdapter(getChildFragmentManager());
         viewPager.setAdapter(mAdapter);
@@ -105,7 +113,7 @@ public class FirstMainPageFragmentParent extends Fragment {
         rg_tab_bar.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int id) {
-                switch(id){
+                switch (id) {
                     case R.id.rb_moon:
                         viewPager.setCurrentItem(0);
                         break;
@@ -132,7 +140,7 @@ public class FirstMainPageFragmentParent extends Fragment {
             @Override
             public void onPageSelected(int i) {
                 resetTopDrawable();
-                switch (i){
+                switch (i) {
                     case 0:
                         rb_moon.setChecked(true);
                         setChecked(rb_moon, R.mipmap.moon_pressed);
@@ -158,19 +166,19 @@ public class FirstMainPageFragmentParent extends Fragment {
         });
     }
 
-    private void resetTopDrawable(){
-        rb_moon.setCompoundDrawables(null,changeBtnTop(R.mipmap.moon_normal),null,null);
-        rb_pet.setCompoundDrawables(null,changeBtnTop(R.mipmap.pet_normal),null,null);
-        rb_me.setCompoundDrawables(null,changeBtnTop(R.mipmap.me_normal),null,null);
+    private void resetTopDrawable() {
+        rb_moon.setCompoundDrawables(null, changeBtnTop(R.mipmap.moon_normal), null, null);
+        rb_pet.setCompoundDrawables(null, changeBtnTop(R.mipmap.pet_normal), null, null);
+        rb_me.setCompoundDrawables(null, changeBtnTop(R.mipmap.me_normal), null, null);
     }
 
-    private void setChecked(RadioButton rb, int id){
-        rb.setCompoundDrawables(null,changeBtnTop(id),null,null);
+    private void setChecked(RadioButton rb, int id) {
+        rb.setCompoundDrawables(null, changeBtnTop(id), null, null);
     }
 
-    private Drawable changeBtnTop(int id){
-        Drawable drawableTop  = Application.mContext.getResources().getDrawable(id);
-        drawableTop .setBounds(0, 0, drawableTop .getMinimumWidth(), drawableTop .getMinimumHeight());
-        return drawableTop ;
+    private Drawable changeBtnTop(int id) {
+        Drawable drawableTop = Application.getContext().getResources().getDrawable(id);
+        drawableTop.setBounds(0, 0, drawableTop.getMinimumWidth(), drawableTop.getMinimumHeight());
+        return drawableTop;
     }
 }

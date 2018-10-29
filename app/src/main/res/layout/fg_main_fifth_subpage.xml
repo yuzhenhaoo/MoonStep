@@ -82,21 +82,14 @@
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteY="10dp" />
 
-    <ScrollView
-        android:id="@+id/scrollview"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/message_bar"
-        app:layout_constraintTop_toBottomOf="@+id/time">
-
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycleview"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </ScrollView>
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/time"
+            app:layout_constraintBottom_toTopOf="@+id/message_bar"/>
 
-
-    <android.support.constraint.ConstraintLayout
+    <LinearLayout
         android:id="@+id/message_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -106,36 +99,36 @@
 
         <Button
             android:id="@+id/moreFunctions"
-            android:layout_width="30dp"
+            android:layout_width="0dp"
             android:layout_height="30dp"
+            android:layout_weight="1"
             android:layout_gravity="center"
             android:layout_margin="10dp"
-            android:background="@mipmap/cross"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/message_bar"/>
+            android:background="@mipmap/cross"/>
 
         <EditText
             android:id="@+id/inputMessage"
             android:layout_width="0dp"
             app:layout_constraintRight_toLeftOf="@+id/sendMessage"
             android:layout_height="50dp"
+            android:layout_weight="8"
             android:layout_marginStart="10dp"
             android:hint="your response..."
             android:inputType="text"
             android:textColor="@color/white"
             android:textColorHint="#70ffffff"
-            android:textSize="20sp"
-            app:layout_constraintLeft_toRightOf="@+id/moreFunctions" />
+            android:background="@color/transparent"
+            android:textSize="20sp" />
 
         <Button
             android:id="@+id/sendMessage"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:background="#00ffffff"
+            android:layout_weight="2"
             android:text="@string/send"
             android:textColor="@color/white"
+            android:background="@color/transparent"
             android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintRight_toRightOf="parent" />
-    </android.support.constraint.ConstraintLayout>
+            android:textStyle="bold"/>
+    </LinearLayout>
 </android.support.constraint.ConstraintLayout>

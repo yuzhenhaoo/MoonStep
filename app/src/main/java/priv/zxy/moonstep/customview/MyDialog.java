@@ -1,17 +1,17 @@
-package priv.zxy.moonstep.utils;
+package priv.zxy.moonstep.customview;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import priv.zxy.moonstep.R;
+import priv.zxy.moonstep.utils.LogUtil;
 
 public class MyDialog extends Dialog {
 
@@ -70,7 +70,7 @@ public class MyDialog extends Dialog {
     }
 
     private void initView() {
-        Log.i("TAG","initView");
+        LogUtil.i("TAG","initView");
         title = (TextView) findViewById(R.id.title);
         content = (TextView) findViewById(R.id.content);
         negativeButton = (Button) findViewById(R.id.negativeButton);
@@ -81,9 +81,9 @@ public class MyDialog extends Dialog {
      * 初始化控件的显示数据
      */
     private void initData(){
-        Log.i("TAG","initData");
-        Log.i("TAG",titletxt);
-        Log.i("TAG",contenttxt);
+        LogUtil.i("TAG","initData");
+        LogUtil.i("TAG",titletxt);
+        LogUtil.i("TAG",contenttxt);
         //如果用户自定义了title和message
         if(titletxt != null){
             title.setText(titletxt);
@@ -106,7 +106,7 @@ public class MyDialog extends Dialog {
      */
     @SuppressLint("ClickableViewAccessibility")
     private void initEvent(){
-        Log.i("TAG","initEvent");
+        LogUtil.i("TAG","initEvent");
         positiveButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {

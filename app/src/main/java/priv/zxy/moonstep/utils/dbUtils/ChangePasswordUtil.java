@@ -1,9 +1,5 @@
 package priv.zxy.moonstep.utils.dbUtils;
 
-import android.app.Activity;
-import android.content.Context;
-import android.util.Log;
-
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -18,27 +14,36 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import priv.zxy.moonstep.db.MoonFriend;
 import priv.zxy.moonstep.helper.EMHelper;
 import priv.zxy.moonstep.EM.bean.VolleyCallback;
+import priv.zxy.moonstep.kernel.Application;
 import priv.zxy.moonstep.kernel.bean.ErrorCode;
+import priv.zxy.moonstep.utils.LogUtil;
 
 public class ChangePasswordUtil {
-    private Context mContext;
-    private Activity mActivity;
-    public static boolean isSuccess = false;
-    public static ErrorCode errorCode = null;
 
-    public ChangePasswordUtil(Context context, Activity activity) {
-        this.mContext = context;
-        this.mActivity = activity;
+    private static final String TAG = "ChangePasswordUtil";
+
+    private static ChangePasswordUtil instance;
+
+    public static ChangePasswordUtil getInstance(){
+        if (instance == null){
+            synchronized (ChangePasswordUtil.class){
+                if (instance == null){
+                    instance = new ChangePasswordUtil();
+                }
+            }
+        }
+        return instance;
     }
 
-    public void changePassword(final String phoneNumber, final String password) {
+    public void changePassword(final VolleyCallback volleyCallback, final String phoneNumber, final String password) {
         //请求地址
         String url = "http://120.79.154.236:8080/MoonStep/ChangePasswordServlet";
-        String tag = "Login";
+        String tag = "LogUtilin";
         //取得请求队列
-        RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+        RequestQueue requestQueue = Volley.newRequestQueue(Application.getContext());
 
         //防止重复请求，所以先取消tag标识的请求队列
         requestQueue.cancelAll(tag);
@@ -49,21 +54,21 @@ public class ChangePasswordUtil {
                     @Override
                     public void onResponse(String response) {
                         try {
-                            Log.i("TAG", "onResponse");
+                            LogUtil.i("TAG", "onResponse");
                             JSONObject jsonObject = (JSONObject) new JSONObject(response).get("params");
                             String result = jsonObject.getString("Result");
                             switch (result) {
                                 case "success":
-                                    EMHelper.getInstance(mContext).changePassword(new VolleyCallback() {
+                                    EMHelper.getInstance(Application.getContext()).changePassword(new VolleyCallback() {
                                         @Override
                                         public String onSuccess(String result) {
                                             return null;
                                         }
 
                                         @Override
-                                        public boolean onSuccess() {
+                                        public boolean onSuccess() throws InterruptedException {
                                             //检验成功
-                                            isSuccess = true;
+                                            volleyCallback.onSuccess();
                                             return false;
                                         }
 
@@ -76,28 +81,38 @@ public class ChangePasswordUtil {
                                         public boolean onFail() {
                                             return false;
                                         }
+
+                                        @Override
+                                        public void getMoonFriend(MoonFriend moonFriend) {
+
+                                        }
+
+                                        @Override
+                                        public void getErrorCode(ErrorCode errorCode) {
+
+                                        }
                                     }, "moonstep" + phoneNumber, password);
                                     break;
                                 case "error0":
                                     //检验失败
-                                    errorCode = ErrorCode.PhoneNumberIsNotRegistered;
+                                    volleyCallback.getErrorCode(ErrorCode.PhoneNumberIsNotRegistered);
                                     break;
                                 case "error1":
-                                    errorCode = ErrorCode.ServerIsFault;
+                                    volleyCallback.getErrorCode(ErrorCode.ServerIsFault);
                                     break;
                             }
                         } catch (JSONException e) {
                             //做自己的请求异常操作
-                            errorCode = ErrorCode.JSONException;
-                            Log.e("TAG", e.getMessage(), e);
+                            volleyCallback.getErrorCode(ErrorCode.JSONException);
+                            LogUtil.e("TAG", e.getMessage());
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 //做自己的响应错误操作，如Toast提示（“请稍后重试”等）
-                errorCode = ErrorCode.NetNotResponse;
-                Log.e("TAG", error.getMessage(), error);
+                volleyCallback.getErrorCode(ErrorCode.JSONException);
+                LogUtil.e("TAG", error.getMessage());
             }
         }) {
             @Override

@@ -1,13 +1,12 @@
 package priv.zxy.moonstep.helper;
 
-import android.util.Log;
-
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
 
 import java.io.File;
 
 import priv.zxy.moonstep.kernel.bean.MessageType;
+import priv.zxy.moonstep.utils.LogUtil;
 
 public class MoonStepHelper {
 
@@ -111,10 +110,10 @@ public class MoonStepHelper {
         File file = new File(filePath);
         if (!fileIsExists(filePath)){
             file.mkdir();
-            Log.d(TAG, "文件创建成功");
+            LogUtil.d(TAG, "文件创建成功");
         }
         else
-            Log.d(TAG, "文件创建失败");
+            LogUtil.d(TAG, "文件创建失败");
     }
 
     /**
@@ -125,9 +124,9 @@ public class MoonStepHelper {
             File file = new File(filePath);
             file.delete();
             if (!fileIsExists())
-                Log.d(TAG, "文件删除成功");
+                LogUtil.d(TAG, "文件删除成功");
             else
-                Log.d(TAG, "文件删除失败");
+                LogUtil.d(TAG, "文件删除失败");
         }
     }
 

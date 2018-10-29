@@ -16,15 +16,15 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 
-import com.mob.MobSDK;
+//import com.mob.MobSDK;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.kernel.BaseActivity;
+import priv.zxy.moonstep.login.presenter.UserLoginPresenter;
 import priv.zxy.moonstep.utils.SharedPreferencesUtil;
 import priv.zxy.moonstep.utils.ShowErrorReason;
 import priv.zxy.moonstep.kernel.bean.ErrorCode;
-import priv.zxy.moonstep.login.presenter.UserLoginPresenter;
 import priv.zxy.moonstep.main.view.MainActivity;
 
 /**
@@ -34,21 +34,33 @@ import priv.zxy.moonstep.main.view.MainActivity;
 public class UserLoginActivity extends BaseActivity implements IUserLoginView {
 
     private Button weiXinBt;
+
     private Button qqBt;
+
     private Button weiBoBt;
+
     private MaterialEditText accountEt;
+
     private MaterialEditText passwordEt;
+
     private Button clickBt;
+
     private Button fgPwdBt;
+
     private Button rgiPhoneBt;
+
     private View deepBackground;
+
     private View plainBackground;
+
     private ContentLoadingProgressBar progressBar;
+
     private Activity mActivity;
+
     private Context mContext;
-    private UserLoginPresenter userLoginPresenter;
-    //实现之前成功存下的账户和密码的读取
-    SharedPreferencesUtil sp;
+
+    private UserLoginPresenter userLogUtilinPresenter;
+
     //加载动画资源文件
     Animation shake;
 
@@ -69,19 +81,19 @@ public class UserLoginActivity extends BaseActivity implements IUserLoginView {
     }
 
     /**
-     * 关于clickLogin中的逻辑处理，本来showLoading和hideLoading都是要放在presenter中减少activity的冗余度的，但是这里要做网络请求的话，必须要用到
+     * 关于clickLogUtilin中的逻辑处理，本来showLoading和hideLoading都是要放在presenter中减少activity的冗余度的，但是这里要做网络请求的话，必须要用到
      * handler来处理UI界面的变化，不然可能会引起ANR，然而handler又必须使用在View中，所以showLoading和hideLoading不得不写在activity中。
      */
     @SuppressLint("ClickableViewAccessibility")
     private void initView() {
         //MobSDK的初始化
-        MobSDK.init(this);
+//        MobSDK.init(this);
         weiXinBt = (Button) findViewById(R.id.weiXinBt);
         qqBt = (Button) findViewById(R.id.qqBt);
         weiBoBt = (Button) findViewById(R.id.weiBoBt);
         accountEt = (MaterialEditText) findViewById(R.id.accountEt);
         passwordEt = (MaterialEditText) findViewById(R.id.passwordEt);
-        clickBt = (Button) findViewById(R.id.clickLoginBt);
+        clickBt = (Button) findViewById(R.id.clickLogUtilinBt);
         fgPwdBt = (Button) findViewById(R.id.forgetPasswordBt);
         rgiPhoneBt = (Button) findViewById(R.id.registerPhoneBt);
         deepBackground = (View) findViewById(R.id.deepBackground);
@@ -89,17 +101,16 @@ public class UserLoginActivity extends BaseActivity implements IUserLoginView {
         progressBar = (ContentLoadingProgressBar) findViewById(R.id.progressBar);
         mActivity = this;
         mContext = this.getApplicationContext();
-        sp = new SharedPreferencesUtil(mContext);
 
         shake = AnimationUtils.loadAnimation(this, R.anim.shake);
 
-        userLoginPresenter = new UserLoginPresenter(this, mActivity, mContext);
+        userLogUtilinPresenter = new UserLoginPresenter(this, mActivity, mContext);
 
-        userLoginPresenter.initAccountAndPassword(sp);
+        userLogUtilinPresenter.initAccountAndPassword(SharedPreferencesUtil.getInstance(mContext));
 
         accountEt.requestFocus();
 
-        userLoginPresenter.hideLoading();
+        userLogUtilinPresenter.hideLoading();
 
         clickBt.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -110,12 +121,12 @@ public class UserLoginActivity extends BaseActivity implements IUserLoginView {
 //                        clickBt.setClickable(false);//设置不能再次点击，当失败了设置为恢复点击效果
                         break;
                     case MotionEvent.ACTION_UP:
-                        userLoginPresenter.showLoading();
+                        userLogUtilinPresenter.showLoading();
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
                                 try {
-                                    userLoginPresenter.login();
+                                    userLogUtilinPresenter.LogUtilin();
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
                                 }
@@ -131,7 +142,7 @@ public class UserLoginActivity extends BaseActivity implements IUserLoginView {
             @Override
             public void onClick(View v) {
                 rgiPhoneBt.startAnimation(shake);
-                userLoginPresenter.toConfirmPhoneActivity();
+                userLogUtilinPresenter.toConfirmPhoneActivity();
             }
         });
 
@@ -143,7 +154,7 @@ public class UserLoginActivity extends BaseActivity implements IUserLoginView {
                         fgPwdBt.startAnimation(shake);
                         break;
                     case MotionEvent.ACTION_UP:
-                        userLoginPresenter.toForgetPasswordActivity();
+                        userLogUtilinPresenter.toForgetPasswordActivity();
                         break;
                 }
                 return true;
@@ -213,12 +224,12 @@ public class UserLoginActivity extends BaseActivity implements IUserLoginView {
 
     @Override
     public void initAccount(SharedPreferencesUtil preference) {
-        accountEt.setText(sp.readLoginInfo().get("UserName"));
+        accountEt.setText(SharedPreferencesUtil.getInstance(mContext).readLogUtilinInfo().get("UserName"));
     }
 
     @Override
     public void initPassword(SharedPreferencesUtil preference) {
-        passwordEt.setText(sp.readLoginInfo().get("PassWd"));
+        passwordEt.setText(SharedPreferencesUtil.getInstance(mContext).readLogUtilinInfo().get("PassWd"));
     }
 
     @Override
@@ -228,8 +239,7 @@ public class UserLoginActivity extends BaseActivity implements IUserLoginView {
 
     @Override
     public void showErrorTip(ErrorCode errorCode) {
-        ShowErrorReason showErrorReason = new ShowErrorReason(mContext, mActivity);
-        showErrorReason.show(errorCode);
+        ShowErrorReason.getInstance(mActivity).show(errorCode);
     }
 
     @Override
@@ -238,7 +248,7 @@ public class UserLoginActivity extends BaseActivity implements IUserLoginView {
     }
 
     @Override
-    public void fixLoginPreferences(String username, String passwordEt) {
-        new SharedPreferencesUtil(mContext).fixSuccessedLoginAccountAndPassword(username, passwordEt);
+    public void fixLogUtilinPreferences(String username, String passwordEt) {
+        SharedPreferencesUtil.getInstance(mContext).fixSuccessedLogUtilinAccountAndPassword(username, passwordEt);
     }
 }

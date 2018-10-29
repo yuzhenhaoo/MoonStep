@@ -44,7 +44,7 @@ public class UserRegisterActivity extends BaseActivity implements IUserRegisterV
     private MaterialEditText password;
     private MaterialEditText passwordCheck;
     private Button clickRegister;
-    private Button returnLoginPage;
+    private Button returnLogUtilinPage;
     private ImageView backButton;
     private View deepBackground;
     private View plainBackground;
@@ -87,7 +87,7 @@ public class UserRegisterActivity extends BaseActivity implements IUserRegisterV
         password = (MaterialEditText) findViewById(R.id.password);
         passwordCheck = (MaterialEditText) findViewById(R.id.password_check);
         clickRegister = (Button) findViewById(R.id.click_register);
-        returnLoginPage = (Button) findViewById(R.id.return_login_page);
+        returnLogUtilinPage = (Button) findViewById(R.id.return_LogUtilin_page);
         backButton = (ImageView) findViewById(R.id.back_button);
         deepBackground = (View) findViewById(R.id.deepBackground);
         plainBackground = (View) findViewById(R.id.plainBackground);
@@ -148,15 +148,15 @@ public class UserRegisterActivity extends BaseActivity implements IUserRegisterV
             }
         });
 
-        returnLoginPage.setOnTouchListener(new View.OnTouchListener() {
+        returnLogUtilinPage.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()){
                     case MotionEvent.ACTION_DOWN:
-                        returnLoginPage.setAnimation(shake);
+                        returnLogUtilinPage.setAnimation(shake);
                         break;
                     case MotionEvent.ACTION_UP:
-                        toLoginActivity();
+                        toLogUtilinActivity();
                         break;
                 }
                 return true;
@@ -209,7 +209,7 @@ public class UserRegisterActivity extends BaseActivity implements IUserRegisterV
     }
 
     @Override
-    public void toLoginActivity() {
+    public void toLogUtilinActivity() {
         Intent intent = new Intent(this, UserLoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -264,8 +264,7 @@ public class UserRegisterActivity extends BaseActivity implements IUserRegisterV
 
     @Override
     public void showUserNameFailTip(ErrorCode errorCode) {
-        ShowErrorReason showErrorReason = new ShowErrorReason(mContext, mActivity);
-        showErrorReason.show(errorCode);
+        ShowErrorReason.getInstance(mActivity).show(errorCode);
     }
 
     @Override
@@ -276,7 +275,6 @@ public class UserRegisterActivity extends BaseActivity implements IUserRegisterV
 
     @Override
     public void showRegisterFailTip(ErrorCode errorCode) {
-        ShowErrorReason showErrorReason = new ShowErrorReason(mContext, mActivity);
-        showErrorReason.show(errorCode);
+        ShowErrorReason.getInstance(mActivity).show(errorCode);
     }
 }

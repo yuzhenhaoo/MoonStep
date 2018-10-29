@@ -18,7 +18,7 @@ public interface IChangePasswordView {
 
     String getConfirmPassword();
 
-    void toLoginActivity();
+    void toLogUtilinActivity();
 
     void showSuccessTip();
 

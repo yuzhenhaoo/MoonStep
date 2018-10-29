@@ -22,7 +22,7 @@ public interface IUserRegisterView {
 
     void hideLoading();
 
-    void toLoginActivity();
+    void toLogUtilinActivity();
 
     void toMainActivity();
 

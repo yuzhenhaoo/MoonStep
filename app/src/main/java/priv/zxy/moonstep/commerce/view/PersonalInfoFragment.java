@@ -13,7 +13,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -35,11 +34,10 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import priv.zxy.moonstep.BuildConfig;
-import priv.zxy.moonstep.kernel.Application;
 import priv.zxy.moonstep.R;
-import priv.zxy.moonstep.utils.MyDialog;
+import priv.zxy.moonstep.customview.MyDialog;
+import priv.zxy.moonstep.utils.LogUtil;
 import priv.zxy.moonstep.utils.SharedPreferencesUtil;
-import priv.zxy.moonstep.kernel.bean.User;
 import priv.zxy.moonstep.login.view.UserLoginActivity;
 
 /**
@@ -47,10 +45,9 @@ import priv.zxy.moonstep.login.view.UserLoginActivity;
  */
 public class PersonalInfoFragment extends Fragment implements OnMenuItemClickListener, OnMenuItemLongClickListener {
 
-    private String TAG = "PersonalInfoFragment";
-    private User myself = null;
+    private static final String TAG = "PersonalInfoFragment";
     private View view;
-    private ContextMenuDialogFragment mMenuDialogFragment;
+    private ContextMenuDialogFragment mMenuDiaLogFragment;
     private ArrayList<MenuObject> menuObjects = new ArrayList<>();
     private Context mContext;
     private Activity mActivity;
@@ -68,7 +65,6 @@ public class PersonalInfoFragment extends Fragment implements OnMenuItemClickLis
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        myself = Application.getMyInfo();
         mContext = this.getContext();
         mActivity = this.getActivity();
         setHasOptionsMenu(true);//在Fragment要想让onCreateOptionsMenu生效必须先调用setHasOptionsMenu的方法
@@ -120,12 +116,12 @@ public class PersonalInfoFragment extends Fragment implements OnMenuItemClickLis
         menuParams.setActionBarSize((int) getResources().getDimension(R.dimen.tool_bar_height));
         menuParams.setMenuObjects(getMenuObjects());
         menuParams.setClosableOutside(false);
-        mMenuDialogFragment = ContextMenuDialogFragment.newInstance(menuParams);
-        mMenuDialogFragment.setItemClickListener(this);
-        mMenuDialogFragment.setItemLongClickListener(this);
+        mMenuDiaLogFragment = ContextMenuDialogFragment.newInstance(menuParams);
+        mMenuDiaLogFragment.setItemClickListener(this);
+        mMenuDiaLogFragment.setItemLongClickListener(this);
     }
 
-    private void popupDialog() {
+    private void popupDiaLogUtil() {
         final MyDialog myDialog = new MyDialog(mActivity);
         myDialog.setTitle("退出提示!");
         myDialog.setContent("退出登陆后我们会继续保留您的账户数据，记得常回来看看哦！");
@@ -148,7 +144,7 @@ public class PersonalInfoFragment extends Fragment implements OnMenuItemClickLis
                         EMClient.getInstance().logout(true);//退出EMC的服务，让当前用户不在线
                     }
                 }).start();
-                if (BuildConfig.DEBUG) Log.d("PersonalInfoFragment", "用户已经成功下线");
+                if (BuildConfig.DEBUG) LogUtil.d("PersonalInfoFragment", "用户已经成功下线");
                 startActivity(intent);
             }
         });
@@ -175,15 +171,15 @@ public class PersonalInfoFragment extends Fragment implements OnMenuItemClickLis
         MenuObject addFav = new MenuObject("意见反馈");
         addFav.setResource(R.mipmap.feedback);
 
-        MenuObject logOut = new MenuObject("退出登录");
-        logOut.setResource(R.mipmap.log_out);
+        MenuObject LogUtilOut = new MenuObject("退出登录");
+        LogUtilOut.setResource(R.mipmap.log_out);
 
         menuObjects.add(close);
         menuObjects.add(send);
         menuObjects.add(like);
         menuObjects.add(addFr);
         menuObjects.add(addFav);
-        menuObjects.add(logOut);
+        menuObjects.add(LogUtilOut);
         return menuObjects;
     }
 
@@ -201,7 +197,7 @@ public class PersonalInfoFragment extends Fragment implements OnMenuItemClickLis
         switch (item.getItemId()) {
             case R.id.context_menu:
                 if (getFragmentManager().findFragmentByTag(ContextMenuDialogFragment.TAG) == null) {
-                    mMenuDialogFragment.show(getFragmentManager(), ContextMenuDialogFragment.TAG);
+                    mMenuDiaLogFragment.show(getFragmentManager(), ContextMenuDialogFragment.TAG);
                 }
                 break;
         }
@@ -228,7 +224,7 @@ public class PersonalInfoFragment extends Fragment implements OnMenuItemClickLis
                 break;
             case 5:
                 //这里设置一个弹窗，确认是否登出当前账号
-                popupDialog();
+                popupDiaLogUtil();
                 break;
         }
     }
@@ -238,11 +234,10 @@ public class PersonalInfoFragment extends Fragment implements OnMenuItemClickLis
     }
 
     public void updateData() {
-        SharedPreferencesUtil sharedPreferencesUtil = new SharedPreferencesUtil(mContext);
-        nickName.setText(sharedPreferencesUtil.readMySelfInformation().get("nickName"));
-        userLevel.setText(sharedPreferencesUtil.readMySelfInformation().get("userLevel"));
-        userPet.setText(sharedPreferencesUtil.readMySelfInformation().get("userPet"));
-        userRace.setText(sharedPreferencesUtil.readMySelfInformation().get("userRace"));
-        signature.setText(sharedPreferencesUtil.readMySelfInformation().get("signature"));
+        nickName.setText(SharedPreferencesUtil.getInstance(mContext).readMySelfInformation().get("nickName"));
+        userLevel.setText(SharedPreferencesUtil.getInstance(mContext).readMySelfInformation().get("userLevel"));
+        userPet.setText(SharedPreferencesUtil.getInstance(mContext).readMySelfInformation().get("userPet"));
+        userRace.setText(SharedPreferencesUtil.getInstance(mContext).readMySelfInformation().get("userRace"));
+        signature.setText(SharedPreferencesUtil.getInstance(mContext).readMySelfInformation().get("signature"));
     }
 }

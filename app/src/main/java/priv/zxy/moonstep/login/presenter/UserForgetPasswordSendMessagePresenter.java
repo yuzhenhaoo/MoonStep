@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Looper;
 
+import priv.zxy.moonstep.kernel.bean.ErrorCode;
 import priv.zxy.moonstep.login.module.biz.IUser;
 import priv.zxy.moonstep.login.module.biz.OnPhoneCheckListener;
 import priv.zxy.moonstep.login.module.biz.UserBiz;
@@ -16,7 +17,7 @@ import priv.zxy.moonstep.login.view.IForgetPasswordSendMessageView;
 public class UserForgetPasswordSendMessagePresenter {
 
     private IUser userBiz;
-    private IForgetPasswordSendMessageView forgetPasswordSendMessageView;//创建与LoginView交互的View对象
+    private IForgetPasswordSendMessageView forgetPasswordSendMessageView;//创建与LogUtilinView交互的View对象
     private Activity mActivity;
     private Context mContext;
 
@@ -28,7 +29,7 @@ public class UserForgetPasswordSendMessagePresenter {
     }
 
     public void toChangePasswordActivity(String phoneNumber, Context mContext, Activity mActivity) throws InterruptedException {
-        userBiz.judgeCanJumpToChangePasswordActivity(phoneNumber, this.mContext, this.mActivity, new OnPhoneCheckListener() {
+        userBiz.judgeCanJumpToChangePasswordActivity(phoneNumber,  new OnPhoneCheckListener() {
             @Override
             public void phoneIsExisted() {
                 forgetPasswordSendMessageView.toChangePasswordActivity();
@@ -44,7 +45,18 @@ public class UserForgetPasswordSendMessagePresenter {
                         Looper.loop();
                     }
                 }).start();
+            }
 
+            @Override
+            public void getErrcodeTips(ErrorCode errorCode) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Looper.prepare();
+                        forgetPasswordSendMessageView.showErrorTip();
+                        Looper.loop();
+                    }
+                }).start();
             }
         });
     }

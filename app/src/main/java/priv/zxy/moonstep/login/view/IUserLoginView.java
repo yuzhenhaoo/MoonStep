@@ -33,5 +33,5 @@ public interface IUserLoginView {
 
     void handleSendMessage();
 
-    void fixLoginPreferences(String username, String password);
+    void fixLogUtilinPreferences(String username, String password);
 }

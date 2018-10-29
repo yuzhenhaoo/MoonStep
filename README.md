@@ -71,21 +71,25 @@
 
 - 框架搭建
 
-	fanLayoutManager
+	fanLayoutManager 多样式LayoutManager扩展框架
 
-	ViewPager
+	ViewPager 
 
-	CircleImageView
+	CircleImageView 圆形头像框架
 
-	recycleView
+	recycleView 
 
-	JellyToggleButton
+	JellyToggleButton 流动按钮
 
 	CarouselLayoutManager
 
-	PullToRefreshView
+	PullToRefreshView 下拉刷新框架
 
- 	Butterknife
+ 	Butterknife 黄油刀
+
+	ENViews 动态加载框架
+
+	HTextView 自定义动态效果的TextView
 
 	LitePal(数据库框架)
 
@@ -99,13 +103,23 @@
    
 	Android Stdio
    
+	Tomcat
+
+	NetBeans 
+	
+	MySQL
+
+	PostMan
+
+	PhotoShop CC 2018
 
 UI设计工具：墨刀
+
 #### 测试
 
-- 视觉验收
-- 交互验收
-- 产品验收
+- 视觉测试
+- 交互测试
+- 产品测试
 
 #### 发布
 
@@ -240,6 +254,6 @@ Bug解决时间：2018/10/4
 
 Bug类型：`在Application中查找并向MoonStep_Palace中添加User对象的时候，由于是网络请求的缘故，传给List的数据会很慢，这样的话，Recycler中地adapter会逐渐刷新界面，然而，由于List尚未完全完成对于数据地请求操作,所以此时看来RecyclerView中地数据只能显示一部分，处理地方式是什么呢？`
 
-Bug解决措施：尚未解决，暂且能够想到地解决措施就是在添加好友地时候，将好友地User地数据全部保存了本地地一个文件里，然后登陆app地时候要做一个检测，如果当前是第一次登陆app,那么需要进行网络地请求操作，做网络请求地时候，可以在进入进入MainActivity地时候，用一段动画将当前地MainActivity进行遮盖，遮盖时间5s钟左右，实质上也是一个数据加载地过程。
+Bug解决措施：已经解决，解决方式：在第一次加载的时候，将好友的信息存储到SQLite中，一方面减少对网络请求的依赖，递增速度，第二个是在好友页面直接从本地数据库中加载的话，比从网络上重新加载要快了许多。
 
-Bug解决时间：尚未解决
+Bug解决时间：2018/10/12

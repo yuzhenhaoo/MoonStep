@@ -2,28 +2,47 @@ package priv.zxy.moonstep.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import priv.zxy.moonstep.helper.EMHelper;
 
 public class SharedPreferencesUtil {
     private static final String TAG = "SharedPreferencesUtil";
 
     private Context context;
 
-    public SharedPreferencesUtil(Context context){
+    private static SharedPreferencesUtil instance;
+
+    private SharedPreferencesUtil(Context context){
         this.context = context;
     }
 
+    /**
+     * 双重锁定模式
+     *
+     * @param mContext 上下文
+     * @return SharedPreferencesUtil的实例
+     */
+    public static SharedPreferencesUtil getInstance(Context mContext) {
+        if (instance == null) {
+            synchronized (EMHelper.class) {
+                if (instance == null) {
+                    instance = new SharedPreferencesUtil(mContext);
+                }
+            }
+        }
+        return instance;
+    }
 
     /**
      * 存储第一次登陆的信息
      */
-    public void saveFirstLogin(){
+    public void saveFirstLogUtilin(){
         SharedPreferences sp = context.getSharedPreferences("mysp",Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
-        editor.putString("Logging_ability","Is_first_logging");
+        editor.putString("LogUtilging_ability","Is_first_LogUtilging");
         editor.apply();
     }
 
@@ -31,9 +50,9 @@ public class SharedPreferencesUtil {
      * 检测当前是否为第一次登陆
      * @return
      */
-    public Boolean isFirstLogin(){
+    public Boolean isFirstLogUtilin(){
         SharedPreferences sp = context.getSharedPreferences("mysp", Context.MODE_PRIVATE);
-        return !sp.contains("Logging_ability");
+        return !sp.contains("LogUtilging_ability");
     }
 
     /**
@@ -55,30 +74,42 @@ public class SharedPreferencesUtil {
         return !sp.contains("IsInitedDataBase");
     }
 
-    public void saveSuccessedLoginAccountAndPassword(String username, String passwd){
+    public void saveSuccessedLogUtilinAccountAndPassword(String username, String passwd){
         SharedPreferences sp = context.getSharedPreferences("mysp",Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.putString("UserName", username);
         editor.putString("PassWd", passwd);
+        editor.putBoolean("IsSuccessed", true);
         editor.commit();
     }
 
-    public void fixSuccessedLoginAccountAndPassword(String username, String passwd){
+    public void fixSuccessedLogUtilinAccountAndPassword(String username, String passwd){
         SharedPreferences sp = context.getSharedPreferences("mysp", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
-        editor.remove("UserName");
-        editor.remove("PassWd");
         editor.putString("UserName", username);
         editor.putString("PassWd", passwd);
+        editor.putBoolean("IsSuccessed", true);
         editor.commit();
     }
 
-    public Map<String, String> readLoginInfo(){
+    public void fixFailLogUtilinInfo(){
+        SharedPreferences sp = context.getSharedPreferences("mysp", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putBoolean("IsSuccessed", false);
+        editor.commit();
+    }
+
+    public Map<String, String> readLogUtilinInfo(){
         Map<String, String> data = new HashMap<String, String>();
         SharedPreferences sp = context.getSharedPreferences("mysp", Context.MODE_PRIVATE);
         data.put("UserName", sp.getString("UserName", ""));
         data.put("PassWd", sp.getString("PassWd",""));
         return data;
+    }
+
+    public boolean isSuccessedLogUtilined(){
+        SharedPreferences sp = context.getSharedPreferences("mysp", Context.MODE_PRIVATE);
+        return sp.getBoolean("IsSuccessed", false);
     }
 
     public void saveMySelfInformation(String nickName, String userLevel, String userPet, String userRace, String signature){

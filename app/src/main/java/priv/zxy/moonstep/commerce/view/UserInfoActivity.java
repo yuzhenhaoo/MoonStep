@@ -13,11 +13,11 @@ import android.widget.TextView;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import priv.zxy.moonstep.R;
+import priv.zxy.moonstep.db.MoonFriend;
 import priv.zxy.moonstep.kernel.BaseActivity;
 
 public class UserInfoActivity extends BaseActivity implements IUserInfoView {
 
-    private Intent intent;//创建intent对象用来接收ChattingActivity传递过来的User数据
     private Button backBt;
     private CircleImageView userPhoto;
     private TextView nickName;
@@ -28,17 +28,13 @@ public class UserInfoActivity extends BaseActivity implements IUserInfoView {
     private Button addFriend;
     private Button sendMessage;
     private TextView signature;
+
     /**
      * 对方的列表数据(为了防止安全问题，所以这个地方不加电话号码，只从ChattingActivity中获得应该显示在界面上的信息)
      */
+    private MoonFriend personInfo;
 
     private Bitmap HeadPortrait = null;
-    private String NickName = null;
-    private String Race = null;
-    private String Level = null;
-    private String UserGender = null;
-    private String Pet = null;
-    private String Signature = null;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,14 +63,8 @@ public class UserInfoActivity extends BaseActivity implements IUserInfoView {
     }
 
     public void initData() {
-        intent = getIntent();
+        personInfo = (MoonFriend) getIntent().getParcelableExtra("moonfriend");
         // headPortrait = ?
-        NickName = intent.getStringExtra("userNickName");
-        Race = intent.getStringExtra("race");
-        Level = intent.getStringExtra("level");
-        UserGender = intent.getStringExtra("userGender");
-        Pet = intent.getStringExtra("pet");
-        Signature = intent.getStringExtra("signature");
     }
 
     /**
@@ -82,11 +72,11 @@ public class UserInfoActivity extends BaseActivity implements IUserInfoView {
      */
     @Override
     public void updateData() {
-        nickName.setText(NickName);
-        userLevel.setText(Level);
-        userPet.setText(Pet);
-        userRace.setText(Race);
-        signature.setText(Signature);
+        nickName.setText(personInfo.getNickName());
+        userLevel.setText(personInfo.getLevel());
+        userPet.setText(personInfo.getPet());
+        userRace.setText(personInfo.getRace());
+        signature.setText(personInfo.getSignature());
     }
 
     public void setListener(){

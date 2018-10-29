@@ -16,7 +16,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,14 +31,17 @@ import com.hyphenate.util.NetUtils;
 
 import org.litepal.tablemanager.Connector;
 
+import java.util.Map;
+
 import priv.zxy.moonstep.EM.service.MoonFriendService;
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.kernel.BaseActivity;
+import priv.zxy.moonstep.login.view.UserLoginActivity;
+import priv.zxy.moonstep.utils.LogUtil;
 import priv.zxy.moonstep.utils.SharedPreferencesUtil;
 import priv.zxy.moonstep.utils.ShowErrorReason;
 import priv.zxy.moonstep.db.Message;
 import priv.zxy.moonstep.kernel.bean.ErrorCode;
-import priv.zxy.moonstep.login.view.UserLoginActivity;
 import priv.zxy.moonstep.connectation.MainFifthPageActivity;
 import priv.zxy.moonstep.commerce.view.FirstMainPageFragmentParent;
 import priv.zxy.moonstep.task.FourthMainPageFragment;
@@ -81,12 +83,12 @@ public class MainActivity extends BaseActivity
     private ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            Log.d(TAG, "MoonFriendService Connected");
+            LogUtil.d(TAG, "MoonFriendService Connected");
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            Log.d(TAG, "MoonFriendService DisConnected");
+            LogUtil.d(TAG, "MoonFriendService DisConnected");
         }
     };
 
@@ -102,47 +104,46 @@ public class MainActivity extends BaseActivity
 
                 @Override
                 public void run() {
-                    ShowErrorReason showErrorReason = new ShowErrorReason(mContext, mActivity);
                     if (error == EMError.USER_REMOVED) {
                         // 显示帐号已经被移除
-                        showErrorReason.show(ErrorCode.AccountISRemoverd);
-                        Log.e("error", String.valueOf(error));
+                        ShowErrorReason.getInstance(mActivity).show(ErrorCode.AccountISRemoverd);
+                        LogUtil.e("error", String.valueOf(error));
                         try {
                             Thread.sleep(1000);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        toLoginActivity();//强制退出到登陆页面
+                        toLogUtilinActivity();//强制退出到登陆页面
                     } else if (error == EMError.USER_LOGIN_ANOTHER_DEVICE) {
                         // 显示帐号在其他设备登录
-                        showErrorReason.show(ErrorCode.AccountIsLoginInOtherDevice);
-                        Log.e("error", String.valueOf(error));
+                        ShowErrorReason.getInstance(mActivity).show(ErrorCode.AccountIsLogUtilinInOtherDevice);
+                        LogUtil.e("error", String.valueOf(error));
                         try {
                             Thread.sleep(1000);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        toLoginActivity();//强制退出到登陆页面
+                        toLogUtilinActivity();//强制退出到登陆页面
                     } else {
                         if (NetUtils.hasNetwork(MainActivity.this)){
                             //连接不到聊天服务器
-                            showErrorReason.show(ErrorCode.ConnectChatServiceFail);
+                            ShowErrorReason.getInstance(mActivity).show(ErrorCode.ConnectChatServiceFail);
                             try {
                                 Thread.sleep(1000);
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
-                            toLoginActivity();//强制退出到登陆页面
+                            toLogUtilinActivity();//强制退出到登陆页面
                         }
                         else{
                             //当前网络不可用，请检查网络设置
-                            showErrorReason.show(ErrorCode.NetNotResponse);
+                            ShowErrorReason.getInstance(mActivity).show(ErrorCode.NetNotResponse);
                             try {
                                 Thread.sleep(1000);
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
-                            toLoginActivity();//强制退出到登陆页面
+                            toLogUtilinActivity();//强制退出到登陆页面
                         }
                     }
                 }
@@ -220,21 +221,21 @@ public class MainActivity extends BaseActivity
     @Override
     public void changeMyInformation() {
         NavigationView navigationView = findViewById(R.id.nav_view);
-        SharedPreferencesUtil sharedPreferencesUtil = new SharedPreferencesUtil(mContext);
         View nav_header_main = navigationView.getHeaderView(0);
         try {
             name = (TextView) nav_header_main.findViewById(R.id.name);
             race = (TextView) nav_header_main.findViewById(R.id.race);
 
-            name.setText(sharedPreferencesUtil.readMySelfInformation().get("nickName"));
-            race.setText(sharedPreferencesUtil.readMySelfInformation().get("userRace"));
+            Map<String, String> data = SharedPreferencesUtil.getInstance(mContext).readMySelfInformation();
+            name.setText(data.get("nickName"));
+            race.setText(data.get("userRace"));
         } catch (NullPointerException e) {
-            Log.d(TAG, e.getMessage());
+            LogUtil.d(TAG, e.getMessage());
         }
     }
 
     @Override
-    public void toLoginActivity() {
+    public void toLogUtilinActivity() {
         Intent intent = new Intent(this, UserLoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

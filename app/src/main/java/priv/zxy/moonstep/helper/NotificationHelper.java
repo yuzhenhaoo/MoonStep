@@ -29,7 +29,7 @@ public class NotificationHelper {
             synchronized (NotificationHelper.class){
                 if (instance == null){
                     instance = new NotificationHelper();
-                    mContext = priv.zxy.moonstep.kernel.Application.mContext;
+                    mContext = priv.zxy.moonstep.kernel.Application.getContext();
                     manager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
                 }
             }

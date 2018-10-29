@@ -30,8 +30,8 @@ public class UserVerifyPhoneNumberPresenter {
     /**
      * 实质上是用来返回登陆页面的
      */
-    public void toLoginActivity(){
-        verifyPhoneView.toLoginActivity();
+    public void toLogUtilinActivity(){
+        verifyPhoneView.toLogUtilinActivity();
     }
 
     /**
@@ -48,7 +48,7 @@ public class UserVerifyPhoneNumberPresenter {
      * 它本质上要实现ConfrimPhoneActivity的一个主要逻辑功能：对于电话号码合法性的判断
      */
     public void doVerifyPhoneNumber() throws InterruptedException {
-        userBiz.doVerifyPhoneNumber(verifyPhoneView.getPhoneNumber(), mContext, mActivity, new OnVerifyPhoneNumber() {
+        userBiz.doVerifyPhoneNumber(verifyPhoneView.getPhoneNumber(), new OnVerifyPhoneNumber() {
             @Override
             public void verifySuccess() {
                 new Thread(new Runnable() {
