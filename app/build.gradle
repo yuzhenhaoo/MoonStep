@@ -68,20 +68,16 @@ dependencies {
     implementation 'com.mcxiaoke.volley:library:1.0.19'
     //material-dialog
     implementation 'com.github.michael-rapp:android-material-dialog:4.3.4'
-
     //Optional compile for GCM (Google Cloud Messaging).
     implementation 'com.google.android.gms:play-services-gcm:11.6.2'
     implementation 'com.hyphenate:hyphenate-sdk:3.3.0'
-
     implementation 'com.rengwuxian.materialedittext:library:2.1.4'
-
     //添加LitePal的依赖
     implementation 'org.litepal.android:java:3.0.0'
-
     //动态加载库-ENViews
     implementation 'com.github.codeestX:ENViews:v1.0.3'
-
     implementation 'hanks.xyz:htextview-library:0.1.2'
+    implementation files('libs/glide-3.6.0.jar')
 }
 repositories {
     mavenCentral()

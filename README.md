@@ -91,9 +91,13 @@
 
 	HTextView 自定义动态效果的TextView
 
+	Glide 图片加载框架
+
 	LitePal(数据库框架)
 
-	Mob的短信SDK
+	Mob的短信 sdk
+
+	百度map sdk
 
 - 帐号申请
 - 官网运营
