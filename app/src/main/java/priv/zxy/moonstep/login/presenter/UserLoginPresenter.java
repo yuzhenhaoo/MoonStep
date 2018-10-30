@@ -52,13 +52,10 @@ public class UserLoginPresenter {
             @Override
             public void LogUtilinFail(final ErrorCode errorCode) {
                 userLogUtilinView.handleSendMessage();
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Looper.prepare();
-                        userLogUtilinView.showErrorTip(errorCode);
-                        Looper.loop();
-                    }
+                new Thread(() -> {
+                    Looper.prepare();
+                    userLogUtilinView.showErrorTip(errorCode);
+                    Looper.loop();
                 }).start();
             }
         });

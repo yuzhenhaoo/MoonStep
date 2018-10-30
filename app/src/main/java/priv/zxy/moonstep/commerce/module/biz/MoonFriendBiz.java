@@ -26,62 +26,57 @@ public class MoonFriendBiz implements IMoonFriendBiz {
     }
 
     /**
-     * 这里存在问题，每次向util工具类输入15809679015的时候，返回的确是18616257996的信息
      * @param lists 列表
      * @throws InterruptedException
      */
     @Override
     public void checkClientAndDatabase(final List<MoonFriend> lists) throws InterruptedException {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    final List<String> usernames = EMClient.getInstance().contactManager().getAllContactsFromServer();
-                    if (lists.size() != usernames.size()) {
-                        for (String username : usernames) {
-                            GetMoonFriendUtil.getInstance().returnMoonFriendInfo(new VolleyCallback() {
-                                @Override
-                                public String onSuccess(String result) {
-                                    return null;
-                                }
+        new Thread(()->{
+            try {
+                final List<String> usernames = EMClient.getInstance().contactManager().getAllContactsFromServer();
+                if (lists.size() != usernames.size()) {
+                    for (String username : usernames) {
+                        GetMoonFriendUtil.getInstance().returnMoonFriendInfo(new VolleyCallback() {
+                            @Override
+                            public String onSuccess(String result) {
+                                return null;
+                            }
 
-                                @Override
-                                public boolean onSuccess() {
-                                    return false;
-                                }
+                            @Override
+                            public boolean onSuccess() {
+                                return false;
+                            }
 
-                                @Override
-                                public String onFail(String error) {
-                                    return null;
-                                }
+                            @Override
+                            public String onFail(String error) {
+                                return null;
+                            }
 
-                                @Override
-                                public boolean onFail() {
-                                    return false;
-                                }
+                            @Override
+                            public boolean onFail() {
+                                return false;
+                            }
 
-                                @Override
-                                public void getMoonFriend(MoonFriend moonFriend) {
-                                    List<MoonFriend> newLists = null;
-                                    newLists = LitePal.where("phonenumber = ?", moonFriend.getPhoneNumber()).find(MoonFriend.class);
-                                    if (newLists == null) {//说明该条数据不存在于数据库中
-                                        saveUserToMoonFriendDataBase(moonFriend);
-                                    }
+                            @Override
+                            public void getMoonFriend(MoonFriend moonFriend) {
+                                List<MoonFriend> newLists = null;
+                                newLists = LitePal.where("phonenumber = ?", moonFriend.getPhoneNumber()).find(MoonFriend.class);
+                                if (newLists == null) {//说明该条数据不存在于数据库中
+                                    saveUserToMoonFriendDataBase(moonFriend);
                                 }
+                            }
 
-                                @Override
-                                public void getErrorCode(ErrorCode errorCode) {
+                            @Override
+                            public void getErrorCode(ErrorCode errorCode) {
 
-                                }
-                            }, username);
-                        }
+                            }
+                        }, username);
                     }
-                } catch (HyphenateException e) {
-                    e.printStackTrace();
                 }
+            } catch (HyphenateException e) {
+                e.printStackTrace();
             }
         }).start();
-        Thread.sleep(1000);
     }
 
     /**

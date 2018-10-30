@@ -58,8 +58,8 @@ public class GuidePage extends BaseActivity {
     }
 
     private void initView(){
-        fragments = new ArrayList<Fragment>();
-        vp = (ViewPager) findViewById(R.id.crime_view_pager);
+        fragments = new ArrayList<>();
+        vp = findViewById(R.id.crime_view_pager);
         mAdapter = new FragmentPagerAdapter(getSupportFragmentManager()){
             @Override
             public int getCount(){

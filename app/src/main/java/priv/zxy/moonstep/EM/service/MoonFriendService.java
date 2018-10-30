@@ -65,53 +65,50 @@ public class MoonFriendService extends Service {
     private static List<String> usernames = new ArrayList<>();
 
     public void initMoonFriends() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    usernames = EMClient.getInstance().contactManager().getAllContactsFromServer();
-                    for (String username : usernames) {
-                        GetMoonFriendUtil.getInstance().returnMoonFriendInfo(new VolleyCallback() {
-                            @Override
-                            public String onSuccess(String result) throws InterruptedException {
-                                return null;
-                            }
+        new Thread(() -> {
+            try {
+                usernames = EMClient.getInstance().contactManager().getAllContactsFromServer();
+                for (String username : usernames) {
+                    GetMoonFriendUtil.getInstance().returnMoonFriendInfo(new VolleyCallback() {
+                        @Override
+                        public String onSuccess(String result) throws InterruptedException {
+                            return null;
+                        }
 
-                            @Override
-                            public boolean onSuccess() throws InterruptedException {
-                                return false;
-                            }
+                        @Override
+                        public boolean onSuccess() throws InterruptedException {
+                            return false;
+                        }
 
-                            @Override
-                            public String onFail(String error) {
-                                return null;
-                            }
+                        @Override
+                        public String onFail(String error) {
+                            return null;
+                        }
 
-                            @Override
-                            public boolean onFail() {
-                                return false;
-                            }
+                        @Override
+                        public boolean onFail() {
+                            return false;
+                        }
 
-                            @Override
-                            public void getMoonFriend(MoonFriend moonFriend) {
-                                List<MoonFriend> newLists = LitePal.where("phonenumber = ?", moonFriend.getPhoneNumber()).find(MoonFriend.class);
-                                if(newLists == null || newLists.size() == 0){//说明该条数据不存在于数据库中
-                                    saveUserToMoonFriendDataBase(moonFriend);
-                                }
+                        @Override
+                        public void getMoonFriend(MoonFriend moonFriend) {
+                            List<MoonFriend> newLists = LitePal.where("phonenumber = ?", moonFriend.getPhoneNumber()).find(MoonFriend.class);
+                            if(newLists == null || newLists.size() == 0){//说明该条数据不存在于数据库中
+                                saveUserToMoonFriendDataBase(moonFriend);
                             }
+                        }
 
-                            @Override
-                            public void getErrorCode(ErrorCode errorCode) {
+                        @Override
+                        public void getErrorCode(ErrorCode errorCode) {
 
-                            }
-                        }, username);
-                    }
-                    LogUtil.d(TAG, "run: EM获取好友列表成功");
-                    SharedPreferencesUtil.getInstance(Application.getContext()).saveIsInitedDataBase();
-                } catch (HyphenateException e) {
-                    e.printStackTrace();
-                    LogUtil.d(TAG, "run: EM获取好友列表失败：" + e.getMessage());
+                        }
+                    }, username);
                 }
+                LogUtil.d(TAG, "run: EM获取好友列表成功");
+                SharedPreferencesUtil.getInstance(Application.getContext()).saveIsInitedDataBase();
+            } catch (HyphenateException e) {
+                e.printStackTrace();
+                LogUtil.d(TAG, "run: EM获取好友列表失败：" + e.getMessage());
             }
         }).start();
     }

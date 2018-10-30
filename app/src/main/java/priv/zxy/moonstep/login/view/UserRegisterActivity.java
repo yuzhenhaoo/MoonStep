@@ -102,65 +102,53 @@ public class UserRegisterActivity extends BaseActivity implements IUserRegisterV
         userRegisterPresenter = new UserRegisterPresenter(this, mActivity, mContext);
         hideLoading();
 
-        backButton.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch(event.getAction()){
-                    case MotionEvent.ACTION_DOWN:
-                        backButton.setAnimation(shake);
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        finishActivitySelf();
-                        break;
-                }
-                return true;
+        backButton.setOnTouchListener((v, event) -> {
+            switch(event.getAction()){
+                case MotionEvent.ACTION_DOWN:
+                    backButton.setAnimation(shake);
+                    break;
+                case MotionEvent.ACTION_UP:
+                    finishActivitySelf();
+                    break;
             }
+            return true;
         });
 
-        clickRegister.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                switch (motionEvent.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        clickRegister.setAnimation(shake);
-                        showLoading();
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        getData();
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Looper.prepare();
-                                try {
-                                    userRegisterPresenter.doRegister(phoneNumber, nickName, userPassword,  confirmPassword, userGender);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                } catch (HyphenateException e) {
-                                    e.printStackTrace();
-                                }
-                                mHandler.sendEmptyMessage(0x01);
-                                Looper.loop();
-                            }
-                        }).start();
-                        break;
-                }
-                return true;
+        clickRegister.setOnTouchListener((view, motionEvent) -> {
+            switch (motionEvent.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    clickRegister.setAnimation(shake);
+                    showLoading();
+                    break;
+                case MotionEvent.ACTION_UP:
+                    getData();
+                    new Thread(() -> {
+                        Looper.prepare();
+                        try {
+                            userRegisterPresenter.doRegister(phoneNumber, nickName, userPassword,  confirmPassword, userGender);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        } catch (HyphenateException e) {
+                            e.printStackTrace();
+                        }
+                        mHandler.sendEmptyMessage(0x01);
+                        Looper.loop();
+                    }).start();
+                    break;
             }
+            return true;
         });
 
-        returnLogUtilinPage.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()){
-                    case MotionEvent.ACTION_DOWN:
-                        returnLogUtilinPage.setAnimation(shake);
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        toLogUtilinActivity();
-                        break;
-                }
-                return true;
+        returnLogUtilinPage.setOnTouchListener((v, event) -> {
+            switch (event.getAction()){
+                case MotionEvent.ACTION_DOWN:
+                    returnLogUtilinPage.setAnimation(shake);
+                    break;
+                case MotionEvent.ACTION_UP:
+                    toLogUtilinActivity();
+                    break;
             }
+            return true;
         });
     }
 
@@ -236,17 +224,14 @@ public class UserRegisterActivity extends BaseActivity implements IUserRegisterV
         userPassword = password.getText().toString();
         confirmPassword = passwordCheck.getText().toString();
 
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
-                switch (checkedId) {
-                    case R.id.man:
-                        userGender = "男";
-                        break;
-                    case R.id.woman:
-                        userGender = "女";
-                        break;
-                }
+        radioGroup.setOnCheckedChangeListener((radioGroup, checkedId) -> {
+            switch (checkedId) {
+                case R.id.man:
+                    userGender = "男";
+                    break;
+                case R.id.woman:
+                    userGender = "女";
+                    break;
             }
         });
     }

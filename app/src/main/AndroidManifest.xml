@@ -37,6 +37,7 @@
         android:roundIcon="@mipmap/icon_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        android:resizeableActivity="false"
         tools:replace="android:icon,android:theme">
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"

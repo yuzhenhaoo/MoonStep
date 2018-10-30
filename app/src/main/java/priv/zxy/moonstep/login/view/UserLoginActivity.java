@@ -112,53 +112,41 @@ public class UserLoginActivity extends BaseActivity implements IUserLoginView {
 
         userLogUtilinPresenter.hideLoading();
 
-        clickBt.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch(event.getAction()){
-                    case MotionEvent.ACTION_DOWN:
-                        clickBt.startAnimation(shake);
+        clickBt.setOnTouchListener((v, event) -> {
+            switch(event.getAction()){
+                case MotionEvent.ACTION_DOWN:
+                    clickBt.startAnimation(shake);
 //                        clickBt.setClickable(false);//设置不能再次点击，当失败了设置为恢复点击效果
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        userLogUtilinPresenter.showLoading();
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    userLogUtilinPresenter.LogUtilin();
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }).start();
-                        break;
-                }
-                return true;
+                    break;
+                case MotionEvent.ACTION_UP:
+                    userLogUtilinPresenter.showLoading();
+                    new Thread(() -> {
+                        try {
+                            userLogUtilinPresenter.LogUtilin();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }).start();
+                    break;
             }
+            return true;
         });
 
-        rgiPhoneBt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                rgiPhoneBt.startAnimation(shake);
-                userLogUtilinPresenter.toConfirmPhoneActivity();
-            }
+        rgiPhoneBt.setOnClickListener(v -> {
+            rgiPhoneBt.startAnimation(shake);
+            userLogUtilinPresenter.toConfirmPhoneActivity();
         });
 
-        fgPwdBt.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch(event.getAction()){
-                    case MotionEvent.ACTION_DOWN:
-                        fgPwdBt.startAnimation(shake);
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        userLogUtilinPresenter.toForgetPasswordActivity();
-                        break;
-                }
-                return true;
+        fgPwdBt.setOnTouchListener((v, event) -> {
+            switch(event.getAction()){
+                case MotionEvent.ACTION_DOWN:
+                    fgPwdBt.startAnimation(shake);
+                    break;
+                case MotionEvent.ACTION_UP:
+                    userLogUtilinPresenter.toForgetPasswordActivity();
+                    break;
             }
+            return true;
         });
     }
 

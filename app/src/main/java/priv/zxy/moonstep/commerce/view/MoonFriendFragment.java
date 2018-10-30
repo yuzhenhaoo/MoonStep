@@ -120,30 +120,22 @@ public class MoonFriendFragment extends Fragment implements IMoonFriendView{
         moonFriendPresenter = new MoonFriendPresenter(this, mContext, mActivity);
 
         //设置刷新事件的监听
-        mPullToRefreshView.setOnRefreshListener(new PullToRefreshView.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mPullToRefreshView.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mPullToRefreshView.setRefreshing(false);
-                        try {
-                            try {
-                                checkClientAndDatabase(mList);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                            mList = LitePal.findAll(MoonFriend.class);
-                            mAdapter.clear();
-                            mAdapter.addAll(mList);
-                            mAdapter.notifyDataSetChanged();//设置Adapter的刷新
-                        } catch (HyphenateException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, REFRESH_DELAY);
+        mPullToRefreshView.setOnRefreshListener(() -> mPullToRefreshView.postDelayed(() -> {
+            mPullToRefreshView.setRefreshing(false);
+            try {
+                try {
+                    checkClientAndDatabase(mList);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                mList = LitePal.findAll(MoonFriend.class);
+                mAdapter.clear();
+                mAdapter.addAll(mList);
+                mAdapter.notifyDataSetChanged();//设置Adapter的刷新
+            } catch (HyphenateException e) {
+                e.printStackTrace();
             }
-        });
+        }, REFRESH_DELAY));
 
         intentFilter = new IntentFilter();
         intentFilter.addAction("priv.zxy.moonstep.commerce.view.LOCAL_BROADCAST");

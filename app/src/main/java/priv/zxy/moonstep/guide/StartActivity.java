@@ -54,13 +54,12 @@ public class StartActivity extends BaseActivity {
         Glide.with(this).load(R.drawable.start_background).into(imageView);
 
         imageView.animate().scaleX(1.2f).scaleY(1.2f).setDuration(8000).start();
-        bt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                jump_to_LogUtilin_page();
-                isStarted = true;
-            }
+
+        bt.setOnClickListener(v->{
+            jump_to_LogUtilin_page();
+            isStarted = true;
         });
+
 
         final Handler mHandler = new Handler();
         Runnable runnable = new Runnable() {

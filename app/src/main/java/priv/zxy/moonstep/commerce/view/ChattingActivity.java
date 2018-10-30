@@ -102,14 +102,8 @@ public class ChattingActivity extends AppCompatActivity implements IChattingView
                 final String[] msg = MoonStepHelper.getInstance().getMessageTypeWithBody(message.getBody().toString().trim());
                 switch (MoonStepHelper.getInstance().transformMessageType(msg[0])){
                     case TEXT://处理文本消息
-                        LogUtil.e("Message","来自于ChattingActivity" + msg[1]);
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                savedChattingMessage(msg[1], 0, 1, message.getFrom().substring(8));
-//                                scrollView.fullScroll(ScrollView.FOCUS_DOWN);
-                            }
-                        });
+                        LogUtil.e("Message","ChattingActivity" + msg[1]);
+                        runOnUiThread(()->savedChattingMessage(msg[1], 0, 1, message.getFrom().substring(8)));
                         break;
                     case IMAGE://处理图片消息
                         break;
@@ -211,69 +205,55 @@ public class ChattingActivity extends AppCompatActivity implements IChattingView
             }
         });
 
-        sendMessage.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()){
-                    case MotionEvent.ACTION_DOWN:
-                        sendMessageToMoonFriend();
-                        recyclerView.scrollToPosition(mAdapter.getItemCount() - 1);//将RecyclerView定位到最后一行
-                        break;
-                    case MotionEvent.ACTION_UP://软键盘弹起的时候滑到最底部
-                        getFocusPopUpSoftKeyboard();
-                        break;
-                }
-                return true;
+        sendMessage.setOnTouchListener((v, event)->{
+            switch (event.getAction()){
+                case MotionEvent.ACTION_DOWN:
+                     sendMessageToMoonFriend();
+                     recyclerView.scrollToPosition(mAdapter.getItemCount() - 1);//将RecyclerView定位到最后一行
+                     break;
+                case MotionEvent.ACTION_UP://软键盘弹起的时候滑到最底部
+                     getFocusPopUpSoftKeyboard();
+                     break;
             }
+            return true;
         });
 
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                back.animate()
-                        .rotation(-90)//逆时针旋转90°
-                        .alpha(1)//旋转完成后改变透明度
-                        .setDuration(600)//设置动画时长为600ms
-                        .setListener(new Animator.AnimatorListener() {//设置动画的监听器，在动画完成的时候实现效果
-                            @Override
-                            public void onAnimationStart(Animator animation) {
+        back.setOnClickListener(v->{
+            back.animate()
+                    .rotation(-90)//逆时针旋转90°
+                    .alpha(1)//旋转完成后改变透明度
+                    .setDuration(600)//设置动画时长为600ms
+                    .setListener(new Animator.AnimatorListener() {//设置动画的监听器，在动画完成的时候实现效果
+                        @Override
+                        public void onAnimationStart(Animator animation) {
 
-                            }
+                        }
 
-                            @Override
-                            public void onAnimationEnd(Animator animation) {
-                                finisheThisActivity(mActivity);
-                            }
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            finisheThisActivity(mActivity);
+                        }
 
-                            @Override
-                            public void onAnimationCancel(Animator animation) {
+                        @Override
+                        public void onAnimationCancel(Animator animation) {
 
-                            }
+                        }
 
-                            @Override
-                            public void onAnimationRepeat(Animator animation) {
+                        @Override
+                        public void onAnimationRepeat(Animator animation) {
 
-                            }
-                        });
-            }
+                        }
+                    });
         });
 
-        person_info.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                person_info.startAnimation(animation);
-            }
-        });
+        person_info.setOnClickListener(v->person_info.startAnimation(animation));
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                inputMessage.setFocusable(true);
-                inputMessage.setFocusableInTouchMode(true);
-                inputMessage.requestFocus();
-                InputMethodManager inputMethodManager = (InputMethodManager)inputMessage.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputMethodManager.showSoftInput(inputMessage, 0);
-            }
+        new Handler().postDelayed(()->{
+            inputMessage.setFocusable(true);
+            inputMessage.setFocusableInTouchMode(true);
+            inputMessage.requestFocus();
+            InputMethodManager inputMethodManager = (InputMethodManager)inputMessage.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.showSoftInput(inputMessage, 0);
         }, 300);
 
         EMClient.getInstance().chatManager().addMessageListener(msgListener);
@@ -349,13 +329,7 @@ public class ChattingActivity extends AppCompatActivity implements IChattingView
         if(message.trim().isEmpty()){
             ToastUtil.getInstance(mContext, this).showToast("发送地消息不能为空哦！");
         }else{
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    //异步的去发送消息
-                    MoonStepHelper.getInstance().EMsendMessage(message, "moonstep" + moonFriend.getPhoneNumber(), EMMessage.ChatType.Chat);//向对方发送消息
-                }
-            }).start();
+            new Thread(()->MoonStepHelper.getInstance().EMsendMessage(message, "moonstep" + moonFriend.getPhoneNumber(), EMMessage.ChatType.Chat)).start();//向对方发送消息(异步)
             inputMessage.getText().clear();//发送后立刻清空输入框
             inputMessage.requestFocus();//对输入框请求焦点
             savedChattingMessage(message, 1,1, moonFriend.getPhoneNumber());
@@ -373,12 +347,7 @@ public class ChattingActivity extends AppCompatActivity implements IChattingView
     protected void onResume() {
         super.onResume();
         root.addOnLayoutChangeListener(this);
-        new Handler().post(new Runnable() {
-            @Override
-            public void run() {
-                recyclerView.scrollToPosition(mAdapter.getItemCount() - 1);
-            }
-        });
+        new Handler().post(()->recyclerView.scrollToPosition(mAdapter.getItemCount() - 1));
     }
 
 

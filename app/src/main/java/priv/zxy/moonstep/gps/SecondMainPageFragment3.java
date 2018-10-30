@@ -40,30 +40,24 @@ public class SecondMainPageFragment3 extends Fragment {
         bt_auction = view.findViewById(R.id.bt_auction);
         bt_mall = view.findViewById(R.id.bt_mall);
 
-        bt_auction.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_DOWN){
-                    bt_auction.setPadding(3,3,0,0);
-                    jump_to_auction_page();
-                }else if(event.getAction() == MotionEvent.ACTION_UP){
-                    bt_auction.setPadding(-3,-3,0,0);
-                }
-                return false;
+        bt_auction.setOnTouchListener((view, event) -> {
+            if(event.getAction() == MotionEvent.ACTION_DOWN){
+                bt_auction.setPadding(3,3,0,0);
+                jump_to_auction_page();
+            }else if(event.getAction() == MotionEvent.ACTION_UP){
+                bt_auction.setPadding(-3,-3,0,0);
             }
+            return false;
         });
-        bt_mall.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_DOWN){
-                    bt_mall.setPadding(10,10,0,0);
-                    jump_to_moon_mall_page();
-                }else if(event.getAction() == MotionEvent.ACTION_UP){
-                    bt_mall.setPadding(-10,-10,0,0);
-                }
-                return false;
-
+        bt_mall.setOnTouchListener((view, event) -> {
+            if(event.getAction() == MotionEvent.ACTION_DOWN){
+                bt_mall.setPadding(10,10,0,0);
+                jump_to_moon_mall_page();
+            }else if(event.getAction() == MotionEvent.ACTION_UP){
+                bt_mall.setPadding(-10,-10,0,0);
             }
+            return false;
+
         });
     }
 

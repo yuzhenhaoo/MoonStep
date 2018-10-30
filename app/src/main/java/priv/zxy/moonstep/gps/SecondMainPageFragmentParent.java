@@ -47,20 +47,17 @@ public class SecondMainPageFragmentParent extends Fragment {
         SecondMainPageAdapter mAdapter = new SecondMainPageAdapter(getChildFragmentManager());
         vp.setAdapter(mAdapter);
         rb_map.setChecked(true);
-        rg_tab_bar.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int id) {
-                switch (id){
-                    case R.id.rb_map:
-                        vp.setCurrentItem(0);
-                        break;
-                    case R.id.rb_radar:
-                        vp.setCurrentItem(1);
-                        break;
-                    case R.id.rb_package:
-                        vp.setCurrentItem(2);
-                        break;
-                }
+        rg_tab_bar.setOnCheckedChangeListener((radioGroup, id) -> {
+            switch (id){
+                case R.id.rb_map:
+                    vp.setCurrentItem(0);
+                    break;
+                case R.id.rb_radar:
+                    vp.setCurrentItem(1);
+                    break;
+                case R.id.rb_package:
+                    vp.setCurrentItem(2);
+                    break;
             }
         });
         vp.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {

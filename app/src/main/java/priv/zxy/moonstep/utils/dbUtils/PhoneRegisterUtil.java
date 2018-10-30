@@ -61,60 +61,54 @@ public class PhoneRegisterUtil {
 
         //创建StringRequest，定义字符串请求的请求方式为POST(省略第一个参数会默认为GET方式)
         final StringRequest request = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONObject jsonObject = (JSONObject) new JSONObject(response).get("params");
-                            String result = jsonObject.getString("Result");
-                            if (result.equals("success")){
-                                EMHelper.getInstance(mContext).registerUser(new VolleyCallback() {
-                                    @Override
-                                    public String onSuccess(String result) throws InterruptedException {
-                                        volleyCallback.onSuccess();
-                                        return null;
-                                    }
+                response -> {
+                    try {
+                        JSONObject jsonObject = (JSONObject) new JSONObject(response).get("params");
+                        String result = jsonObject.getString("Result");
+                        if (result.equals("success")){
+                            EMHelper.getInstance(mContext).registerUser(new VolleyCallback() {
+                                @Override
+                                public String onSuccess(String result) throws InterruptedException {
+                                    volleyCallback.onSuccess();
+                                    return null;
+                                }
 
-                                    @Override
-                                    public boolean onSuccess() {
-                                        return false;
-                                    }
+                                @Override
+                                public boolean onSuccess() {
+                                    return false;
+                                }
 
-                                    @Override
-                                    public String onFail(String error) {
-                                        return null;
-                                    }
+                                @Override
+                                public String onFail(String error) {
+                                    return null;
+                                }
 
-                                    @Override
-                                    public boolean onFail() {
-                                        volleyCallback.getErrorCode(ErrorCode.PasswordFormatISNotRight);
-                                        return false;
-                                    }
+                                @Override
+                                public boolean onFail() {
+                                    volleyCallback.getErrorCode(ErrorCode.PasswordFormatISNotRight);
+                                    return false;
+                                }
 
-                                    @Override
-                                    public void getMoonFriend(MoonFriend moonFriend) {
+                                @Override
+                                public void getMoonFriend(MoonFriend moonFriend) {
 
-                                    }
+                                }
 
-                                    @Override
-                                    public void getErrorCode(ErrorCode errorCode) {
+                                @Override
+                                public void getErrorCode(ErrorCode errorCode) {
 
-                                    }
-                                }, "moonstep" + PhoneNumber, PassWord, NickName);
-                            }
-                        } catch (JSONException e) {
-                            //做自己的请求异常操作
-                            volleyCallback.getErrorCode(ErrorCode.JSONException);
-                            LogUtil.e(TAG, e.getMessage());
+                                }
+                            }, "moonstep" + PhoneNumber, PassWord, NickName);
                         }
+                    } catch (JSONException e) {
+                        //做自己的请求异常操作
+                        volleyCallback.getErrorCode(ErrorCode.JSONException);
+                        LogUtil.e(TAG, e.getMessage());
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                volleyCallback.getErrorCode(ErrorCode.NetNotResponse);
-                LogUtil.i(TAG, error.getMessage());
-            }
-        }) {
+                }, error -> {
+                    volleyCallback.getErrorCode(ErrorCode.NetNotResponse);
+                    LogUtil.i(TAG, error.getMessage());
+                }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();

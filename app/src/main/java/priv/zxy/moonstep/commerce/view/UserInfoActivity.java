@@ -80,59 +80,45 @@ public class UserInfoActivity extends BaseActivity implements IUserInfoView {
     }
 
     public void setListener(){
-        backBt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                backBt.animate()
-                        .rotation(-90)//逆时针旋转90°
-                        .alpha(1)//旋转完成后改变透明度
-                        .setDuration(600)//设置动画时长为600ms
-                        .setListener(new Animator.AnimatorListener() {//设置动画的监听器，在动画完成的时候实现效果
-                            @Override
-                            public void onAnimationStart(Animator animation) {
+        backBt.setOnClickListener(v -> backBt.animate()
+                .rotation(-90)//逆时针旋转90°
+                .alpha(1)//旋转完成后改变透明度
+                .setDuration(600)//设置动画时长为600ms
+                .setListener(new Animator.AnimatorListener() {//设置动画的监听器，在动画完成的时候实现效果
+                    @Override
+                    public void onAnimationStart(Animator animation) {
 
-                            }
+                    }
 
-                            @Override
-                            public void onAnimationEnd(Animator animation) {
-                                finishThisOne();//结束当前页面
-                            }
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        finishThisOne();//结束当前页面
+                    }
 
-                            @Override
-                            public void onAnimationCancel(Animator animation) {
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
 
-                            }
+                    }
 
-                            @Override
-                            public void onAnimationRepeat(Animator animation) {
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
 
-                            }
-                        });
-            }
-        });
+                    }
+                }));
 
         //道具使用按钮
-        magicWend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        magicWend.setOnClickListener(v -> {
 
-            }
         });
 
         //添加好友按钮，点击的时候在本地数据库中检索是不是已经添加了该好友，如果本地数据库没有，则从网络上去检索是不是添加了该好友
-        addFriend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        addFriend.setOnClickListener(v -> {
 
-            }
         });
 
         //发送消息按钮,只有身为好友的时候才能向对方发送消息，不是好友的话弹出添加好友的提示框，如果是好友的话，就直接进入聊天页面
-        sendMessage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        sendMessage.setOnClickListener(v -> {
 
-            }
         });
     }
 

@@ -51,23 +51,13 @@ public class UserVerifyPhoneNumberPresenter {
         userBiz.doVerifyPhoneNumber(verifyPhoneView.getPhoneNumber(), new OnVerifyPhoneNumber() {
             @Override
             public void verifySuccess() {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        verifyPhoneView.showSuccessTip();
-                    }
-                }).start();
+                new Thread(() -> verifyPhoneView.showSuccessTip()).start();
                 verifyPhoneView.toSendMessageActivity();
             }
 
             @Override
             public void verifyFail(final ErrorCode errorCode) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        verifyPhoneView.showFailTip(errorCode);
-                    }
-                }).start();
+                new Thread(() -> verifyPhoneView.showFailTip(errorCode)).start();
             }
         });
     }

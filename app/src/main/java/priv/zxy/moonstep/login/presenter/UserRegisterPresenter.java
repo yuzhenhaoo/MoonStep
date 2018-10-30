@@ -33,25 +33,17 @@ public class UserRegisterPresenter {
         userBiz.doRegister(phoneNumber, nickName, userPassword, confirmUserPassword, gender, new OnRegisterListener() {
             @Override
             public void registerSuccess() {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        userRegisterView.showRegisterSuccessTip();
-                    }
-                }).start();
+                new Thread(() -> userRegisterView.showRegisterSuccessTip()).start();
                 userRegisterView.toMainActivity();
                 userRegisterView.finishActivitySelf();
             }
 
             @Override
             public void registerFail(final ErrorCode errorCode) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Looper.prepare();
-                        userRegisterView.showRegisterFailTip(errorCode);
-                        Looper.loop();
-                    }
+                new Thread(() -> {
+                    Looper.prepare();
+                    userRegisterView.showRegisterFailTip(errorCode);
+                    Looper.loop();
                 }).start();
             }
         });

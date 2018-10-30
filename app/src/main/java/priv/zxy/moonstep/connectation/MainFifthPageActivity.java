@@ -46,21 +46,13 @@ public class MainFifthPageActivity extends BaseActivity {
         recyclerView.setAdapter(mAdapter);
 
         //对两个按钮设立监听事件
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //这里直接调用了返回按键，没有对数据进行保存，设立客服系统的时候，要增加一个函数，对当前activity的状态进行保存。
-                savedThisState();
-                FinishesThisActivity();
-            }
+        back.setOnClickListener(view -> {
+            //这里直接调用了返回按键，没有对数据进行保存，设立客服系统的时候，要增加一个函数，对当前activity的状态进行保存。
+            savedThisState();
+            FinishesThisActivity();
         });
 
-        person_info.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                jumpToPersonInfoPage();
-            }
-        });
+        person_info.setOnClickListener(view -> jumpToPersonInfoPage());
     }
 
     public void FinishesThisActivity(){

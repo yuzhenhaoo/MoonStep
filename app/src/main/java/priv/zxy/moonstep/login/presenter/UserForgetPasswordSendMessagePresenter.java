@@ -37,25 +37,19 @@ public class UserForgetPasswordSendMessagePresenter {
 
             @Override
             public void phoneIsNotExisted() {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Looper.prepare();
-                        forgetPasswordSendMessageView.showErrorTip();
-                        Looper.loop();
-                    }
+                new Thread(() -> {
+                    Looper.prepare();
+                    forgetPasswordSendMessageView.showErrorTip();
+                    Looper.loop();
                 }).start();
             }
 
             @Override
             public void getErrcodeTips(ErrorCode errorCode) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Looper.prepare();
-                        forgetPasswordSendMessageView.showErrorTip();
-                        Looper.loop();
-                    }
+                new Thread(() -> {
+                    Looper.prepare();
+                    forgetPasswordSendMessageView.showErrorTip();
+                    Looper.loop();
                 }).start();
             }
         });

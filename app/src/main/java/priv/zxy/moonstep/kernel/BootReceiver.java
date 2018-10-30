@@ -31,31 +31,26 @@ public class BootReceiver extends BroadcastReceiver {
         if (intent.getAction().equals(ACTION) && SharedPreferencesUtil.getInstance(context).isSuccessedLogUtilined()){
             //同时应该在这里登录环信服务器
             final Map<String, String> LogUtilinInfo = SharedPreferencesUtil.getInstance(context).readLogUtilinInfo();
-            new Thread(new Runnable() {
+            new Thread(() -> EMClient.getInstance().login("moonstep" + LogUtilinInfo.get("UserName"), LogUtilinInfo.get("PassWd"), new EMCallBack() {//回调
                 @Override
-                public void run() {
-                    EMClient.getInstance().login("moonstep" + LogUtilinInfo.get("UserName"), LogUtilinInfo.get("PassWd"), new EMCallBack() {//回调
-                        @Override
-                        public void onSuccess() {
-                            EMClient.getInstance().groupManager().loadAllGroups();
-                            EMClient.getInstance().chatManager().loadAllConversations();
-                            LogUtil.d(TAG, "后台登录服务器成功");
-                            //只有服务器登录成功的时候，才可以启动服务
-                            context.startService(new Intent(context, MessageReceiverService.class));
-                        }
-
-                        @Override
-                        public void onProgress(int progress, String status) {
-                            LogUtil.d(TAG, "后台登录服务器的进度:" + progress);
-                        }
-
-                        @Override
-                        public void onError(int code, String message) {
-                            LogUtil.d(TAG, "后台登录服务器失败!" + code);
-                        }
-                    });
+                public void onSuccess() {
+                    EMClient.getInstance().groupManager().loadAllGroups();
+                    EMClient.getInstance().chatManager().loadAllConversations();
+                    LogUtil.d(TAG, "后台登录服务器成功");
+                    //只有服务器登录成功的时候，才可以启动服务
+                    context.startService(new Intent(context, MessageReceiverService.class));
                 }
-            }).start();
+
+                @Override
+                public void onProgress(int progress, String status) {
+                    LogUtil.d(TAG, "后台登录服务器的进度:" + progress);
+                }
+
+                @Override
+                public void onError(int code, String message) {
+                    LogUtil.d(TAG, "后台登录服务器失败!" + code);
+                }
+            })).start();
         }
     }
 }

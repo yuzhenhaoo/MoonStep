@@ -131,22 +131,16 @@ public class PersonalInfoFragment extends Fragment implements OnMenuItemClickLis
                 myDialog.dismiss();
             }
         });
-        myDialog.setPositiveClickLister("确认", new MyDialog.onPostiveClickListener() {
-            @Override
-            public void onPositiveClick() {
-                menuObjects.clear();
-                Intent intent = new Intent(mActivity, UserLoginActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        EMClient.getInstance().logout(true);//退出EMC的服务，让当前用户不在线
-                    }
-                }).start();
-                if (BuildConfig.DEBUG) LogUtil.d("PersonalInfoFragment", "用户已经成功下线");
-                startActivity(intent);
-            }
+        myDialog.setPositiveClickLister("确认", () -> {
+            menuObjects.clear();
+            Intent intent = new Intent(mActivity, UserLoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            new Thread(() -> {
+                EMClient.getInstance().logout(true);//退出EMC的服务，让当前用户不在线
+            }).start();
+            if (BuildConfig.DEBUG) LogUtil.d("PersonalInfoFragment", "用户已经成功下线");
+            startActivity(intent);
         });
         myDialog.show();
     }

@@ -54,66 +54,60 @@ public class LoginUtil {
 
         //创建StringRequest，定义字符串请求的请求方式为POST(省略第一个参数会默认为GET方式)
         final StringRequest request = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONObject jsonObject = (JSONObject) new JSONObject(response).get("params");
-                            String result = jsonObject.getString("Result");
-                            if (result.equals("success")) {
+                response -> {
+                    try {
+                        JSONObject jsonObject = (JSONObject) new JSONObject(response).get("params");
+                        String result = jsonObject.getString("Result");
+                        if (result.equals("success")) {
 //                                isSuccess = true;
 
-                                EMClient.getInstance().login("moonstep" + phoneNumber,inputPassword,new EMCallBack() {//回调
-                                    @Override
-                                    public void onSuccess() {
-                                        //保证进入主页面后本地会话和群组都 load 完毕。
-                                        new Thread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                EMClient.getInstance().groupManager().loadAllGroups();
-                                                EMClient.getInstance().chatManager().loadAllConversations();
-                                            }
-                                        }).start();
-                                        LogUtilinListener.LogUtilinSuccess();//只有当环信服务器也登陆成功的时候才触发回调方法
-                                        LogUtil.d(TAG, "登录聊天服务器成功！");
-                                    }
+                            EMClient.getInstance().login("moonstep" + phoneNumber,inputPassword,new EMCallBack() {//回调
+                                @Override
+                                public void onSuccess() {
+                                    //保证进入主页面后本地会话和群组都 load 完毕。
+                                    new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            EMClient.getInstance().groupManager().loadAllGroups();
+                                            EMClient.getInstance().chatManager().loadAllConversations();
+                                        }
+                                    }).start();
+                                    LogUtilinListener.LogUtilinSuccess();//只有当环信服务器也登陆成功的时候才触发回调方法
+                                    LogUtil.d(TAG, "登录聊天服务器成功！");
+                                }
 
-                                    @Override
-                                    public void onProgress(int progress, String status) {
+                                @Override
+                                public void onProgress(int progress, String status) {
 
-                                    }
+                                }
 
-                                    @Override
-                                    public void onError(int code, String message) {
-                                        LogUtil.d(TAG, "登录聊天服务器失败！" + code + message);
-                                    }
-                                });
+                                @Override
+                                public void onError(int code, String message) {
+                                    LogUtil.d(TAG, "登录聊天服务器失败！" + code + message);
+                                }
+                            });
 
-                                //将数据存入
-                                SharedPreferencesUtil.getInstance(Application.getContext()).saveSuccessedLogUtilinAccountAndPassword(phoneNumber, inputPassword);
+                            //将数据存入
+                            SharedPreferencesUtil.getInstance(Application.getContext()).saveSuccessedLogUtilinAccountAndPassword(phoneNumber, inputPassword);
 
-                                //我们需要在登录成功的时候再次启动一次MessageReceiverService
-                                Application.getContext().startService(new Intent(Application.getContext(), MessageReceiverService.class));
-                            } else {
-                                LogUtilinListener.LogUtilinFail(ErrorCode.PhoneNumberOrPasswordIsWrong);
+                            //我们需要在登录成功的时候再次启动一次MessageReceiverService
+                            Application.getContext().startService(new Intent(Application.getContext(), MessageReceiverService.class));
+                        } else {
+                            LogUtilinListener.LogUtilinFail(ErrorCode.PhoneNumberOrPasswordIsWrong);
 
-                                //将mysp文件中的登录成功标记位置为false
-                                SharedPreferencesUtil.getInstance(Application.getContext()).fixFailLogUtilinInfo();
-                            }
-                        } catch (JSONException e) {
-                            //做自己的请求异常操作
-                            LogUtilinListener.LogUtilinFail(ErrorCode.JSONException);
-                            LogUtil.e(TAG, e.getMessage());
+                            //将mysp文件中的登录成功标记位置为false
+                            SharedPreferencesUtil.getInstance(Application.getContext()).fixFailLogUtilinInfo();
                         }
+                    } catch (JSONException e) {
+                        //做自己的请求异常操作
+                        LogUtilinListener.LogUtilinFail(ErrorCode.JSONException);
+                        LogUtil.e(TAG, e.getMessage());
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                //做自己的响应错误操作，如Toast提示（“请稍后重试”等）
-                LogUtilinListener.LogUtilinFail(ErrorCode.NetNotResponse);
-                LogUtil.e(TAG, error.getMessage());
-            }
-        }) {
+                }, error -> {
+                    //做自己的响应错误操作，如Toast提示（“请稍后重试”等）
+                    LogUtilinListener.LogUtilinFail(ErrorCode.NetNotResponse);
+                    LogUtil.e(TAG, error.getMessage());
+                }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();

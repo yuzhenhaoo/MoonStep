@@ -53,37 +53,31 @@ public class PhoneCheckUtil {
 
         //创建StringRequest，定义字符串请求的请求方式为POST(省略第一个参数会默认为GET方式)
         final StringRequest request = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            LogUtil.i(TAG,"onResponse");
-                            JSONObject jsonObject = (JSONObject) new JSONObject(response).get("params");
-                            String result = jsonObject.getString("Result");
-                            if (result.equals("success")) {
-                                //检验成功
-                                volleyCallback.onSuccess();
-                            } else {
-                                //检验失败
-                                volleyCallback.getErrorCode(ErrorCode.PhoneNumberIsRegistered);
-                                volleyCallback.onFail();
-                            }
-                        } catch (JSONException e) {
-                            //做自己的请求异常操作
-                            volleyCallback.getErrorCode(ErrorCode.JSONException);
-                            LogUtil.e(TAG, e.getMessage());
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
+                response -> {
+                    try {
+                        LogUtil.i(TAG,"onResponse");
+                        JSONObject jsonObject = (JSONObject) new JSONObject(response).get("params");
+                        String result = jsonObject.getString("Result");
+                        if (result.equals("success")) {
+                            //检验成功
+                            volleyCallback.onSuccess();
+                        } else {
+                            //检验失败
+                            volleyCallback.getErrorCode(ErrorCode.PhoneNumberIsRegistered);
+                            volleyCallback.onFail();
                         }
+                    } catch (JSONException e) {
+                        //做自己的请求异常操作
+                        volleyCallback.getErrorCode(ErrorCode.JSONException);
+                        LogUtil.e(TAG, e.getMessage());
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                //做自己的响应错误操作，如Toast提示（“请稍后重试”等）
-                volleyCallback.getErrorCode(ErrorCode.NetNotResponse);
-                LogUtil.e(TAG, error.getMessage());
-            }
-        }) {
+                }, error -> {
+                    //做自己的响应错误操作，如Toast提示（“请稍后重试”等）
+                    volleyCallback.getErrorCode(ErrorCode.NetNotResponse);
+                    LogUtil.e(TAG, error.getMessage());
+                }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();

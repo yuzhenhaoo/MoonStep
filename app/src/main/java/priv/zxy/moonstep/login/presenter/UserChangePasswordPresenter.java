@@ -35,13 +35,10 @@ public class UserChangePasswordPresenter {
         userBiz.setChangePassword(phoneNumber, password, confirmPassword, new OnChangePasswordListener() {
             @Override
             public void changePasswordSuccess() throws InterruptedException {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Looper.prepare();
-                        changePasswordView.showSuccessTip();
-                        Looper.loop();
-                    }
+                new Thread(() -> {
+                    Looper.prepare();
+                    changePasswordView.showSuccessTip();
+                    Looper.loop();
                 }).start();
                 changePasswordView.toLogUtilinActivity();
                 changePasswordView.hideLoading();
@@ -49,12 +46,7 @@ public class UserChangePasswordPresenter {
 
             @Override
             public void changePasswordFail(final ErrorCode errorCode) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        changePasswordView.showErrorTip(errorCode);
-                    }
-                }).start();
+                new Thread(() -> changePasswordView.showErrorTip(errorCode)).start();
             }
         });
     }

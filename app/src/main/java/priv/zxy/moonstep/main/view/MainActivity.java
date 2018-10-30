@@ -100,51 +100,47 @@ public class MainActivity extends BaseActivity
 
         @Override
         public void onDisconnected(final int error){
-            runOnUiThread(new Runnable() {
-
-                @Override
-                public void run() {
-                    if (error == EMError.USER_REMOVED) {
-                        // 显示帐号已经被移除
-                        ShowErrorReason.getInstance(mActivity).show(ErrorCode.AccountISRemoverd);
-                        LogUtil.e("error", String.valueOf(error));
+            runOnUiThread(() -> {
+                if (error == EMError.USER_REMOVED) {
+                    // 显示帐号已经被移除
+                    ShowErrorReason.getInstance(mActivity).show(ErrorCode.AccountISRemoverd);
+                    LogUtil.e("error", String.valueOf(error));
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    toLogUtilinActivity();//强制退出到登陆页面
+                } else if (error == EMError.USER_LOGIN_ANOTHER_DEVICE) {
+                    // 显示帐号在其他设备登录
+                    ShowErrorReason.getInstance(mActivity).show(ErrorCode.AccountIsLogUtilinInOtherDevice);
+                    LogUtil.e("error", String.valueOf(error));
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    toLogUtilinActivity();//强制退出到登陆页面
+                } else {
+                    if (NetUtils.hasNetwork(MainActivity.this)){
+                        //连接不到聊天服务器
+                        ShowErrorReason.getInstance(mActivity).show(ErrorCode.ConnectChatServiceFail);
                         try {
                             Thread.sleep(1000);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
                         toLogUtilinActivity();//强制退出到登陆页面
-                    } else if (error == EMError.USER_LOGIN_ANOTHER_DEVICE) {
-                        // 显示帐号在其他设备登录
-                        ShowErrorReason.getInstance(mActivity).show(ErrorCode.AccountIsLogUtilinInOtherDevice);
-                        LogUtil.e("error", String.valueOf(error));
+                    }
+                    else{
+                        //当前网络不可用，请检查网络设置
+                        ShowErrorReason.getInstance(mActivity).show(ErrorCode.NetNotResponse);
                         try {
                             Thread.sleep(1000);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
                         toLogUtilinActivity();//强制退出到登陆页面
-                    } else {
-                        if (NetUtils.hasNetwork(MainActivity.this)){
-                            //连接不到聊天服务器
-                            ShowErrorReason.getInstance(mActivity).show(ErrorCode.ConnectChatServiceFail);
-                            try {
-                                Thread.sleep(1000);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                            toLogUtilinActivity();//强制退出到登陆页面
-                        }
-                        else{
-                            //当前网络不可用，请检查网络设置
-                            ShowErrorReason.getInstance(mActivity).show(ErrorCode.NetNotResponse);
-                            try {
-                                Thread.sleep(1000);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                            toLogUtilinActivity();//强制退出到登陆页面
-                        }
                     }
                 }
             });

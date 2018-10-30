@@ -83,20 +83,18 @@ public class FirstMainPageFragmentParent extends Fragment {
         viewPager.setCurrentItem(0);
         mContext = this.getContext();
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    if (SharedPreferencesUtil.getInstance(mContext).isMessageTip()) {
-                        mHandler.sendEmptyMessage(0x00);
-                    } else {
-                        mHandler.sendEmptyMessage(0x01);
-                    }
+
+        new Thread(() -> {
+            while (true) {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if (SharedPreferencesUtil.getInstance(mContext).isMessageTip()) {
+                    mHandler.sendEmptyMessage(0x00);
+                } else {
+                    mHandler.sendEmptyMessage(0x01);
                 }
             }
         }).start();
@@ -110,23 +108,20 @@ public class FirstMainPageFragmentParent extends Fragment {
 
         rb_moon.setChecked(true);
 
-        rg_tab_bar.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int id) {
-                switch (id) {
-                    case R.id.rb_moon:
-                        viewPager.setCurrentItem(0);
-                        break;
-                    case R.id.rb_pet:
-                        viewPager.setCurrentItem(1);
-                        break;
-                    case R.id.rb_heart:
-                        viewPager.setCurrentItem(2);
-                        break;
-                    case R.id.rb_me:
-                        viewPager.setCurrentItem(3);
-                        break;
-                }
+        rg_tab_bar.setOnCheckedChangeListener((radioGroup, id) -> {
+            switch (id) {
+                case R.id.rb_moon:
+                    viewPager.setCurrentItem(0);
+                    break;
+                case R.id.rb_pet:
+                    viewPager.setCurrentItem(1);
+                    break;
+                case R.id.rb_heart:
+                    viewPager.setCurrentItem(2);
+                    break;
+                case R.id.rb_me:
+                    viewPager.setCurrentItem(3);
+                    break;
             }
         });
 

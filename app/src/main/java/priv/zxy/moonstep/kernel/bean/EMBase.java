@@ -103,27 +103,21 @@ public class EMBase {
 
         StringRequest request = new StringRequest(Request.Method.POST,
                 url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONObject jsonObject = new JSONObject(response).getJSONObject("result");
-                            OrgName = jsonObject.get("orgname").toString();
-                            AppName = jsonObject.get("appname").toString();
-                            Client_ID = jsonObject.get("client_id").toString();
-                            Client_Secret = jsonObject.get("client_secret").toString();
-                            localBroadcastManager.sendBroadcastSync(intent);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
+                response -> {
+                    try {
+                        JSONObject jsonObject = new JSONObject(response).getJSONObject("result");
+                        OrgName = jsonObject.get("orgname").toString();
+                        AppName = jsonObject.get("appname").toString();
+                        Client_ID = jsonObject.get("client_id").toString();
+                        Client_Secret = jsonObject.get("client_secret").toString();
+                        localBroadcastManager.sendBroadcastSync(intent);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
 
-            }
-        });
+                }, error -> {
+
+                });
 
         request.setTag(tag);
 

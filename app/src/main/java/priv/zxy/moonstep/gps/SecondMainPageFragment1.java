@@ -59,40 +59,15 @@ public class SecondMainPageFragment1 extends Fragment {
         //普通地图 ,mBaiduMap是地图控制器对象
         mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
 
-        bt1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
-            }
-        });
+        bt1.setOnClickListener(v -> mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL));
 
-        bt2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mBaiduMap.setMapType(BaiduMap.MAP_TYPE_SATELLITE);
-            }
-        });
+        bt2.setOnClickListener(v -> mBaiduMap.setMapType(BaiduMap.MAP_TYPE_SATELLITE));
 
-        bt3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NONE);
-            }
-        });
+        bt3.setOnClickListener(v -> mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NONE));
 
-        bt4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mBaiduMap.setTrafficEnabled(true);
-            }
-        });
+        bt4.setOnClickListener(v -> mBaiduMap.setTrafficEnabled(true));
 
-        bt5.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mBaiduMap.setBaiduHeatMapEnabled(true);
-            }
-        });
+        bt5.setOnClickListener(v -> mBaiduMap.setBaiduHeatMapEnabled(true));
 
     }
 

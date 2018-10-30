@@ -48,41 +48,35 @@ public class GetMoonFriendUtil {
 
         //创建StringRequest，定义字符串请求的请求方式为POST(省略第一个参数会默认为GET方式)
         final StringRequest request = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONObject jsonObject = (JSONObject) new JSONObject(response).get("params");
-                            String result = jsonObject.getString("Result");
-                            if (result.equals("success")) {
-                                MoonFriend moonFriend = new MoonFriend();
-                                moonFriend.setPhoneNumber(jsonObject.getString("phoneNumber"));
-                                moonFriend.setGender(jsonObject.getString("gender"));
-                                moonFriend.setRace(jsonObject.getString("race"));
-                                moonFriend.setLevel(jsonObject.getString("level"));
-                                moonFriend.setPet(jsonObject.getString("pet"));
-                                moonFriend.setNickName(jsonObject.getString("nickName"));
-                                moonFriend.setSignature(jsonObject.getString("signature"));
+                response -> {
+                    try {
+                        JSONObject jsonObject = (JSONObject) new JSONObject(response).get("params");
+                        String result = jsonObject.getString("Result");
+                        if (result.equals("success")) {
+                            MoonFriend moonFriend = new MoonFriend();
+                            moonFriend.setPhoneNumber(jsonObject.getString("phoneNumber"));
+                            moonFriend.setGender(jsonObject.getString("gender"));
+                            moonFriend.setRace(jsonObject.getString("race"));
+                            moonFriend.setLevel(jsonObject.getString("level"));
+                            moonFriend.setPet(jsonObject.getString("pet"));
+                            moonFriend.setNickName(jsonObject.getString("nickName"));
+                            moonFriend.setSignature(jsonObject.getString("signature"));
 //                                moonFriend.setHeadPortrait(jsonObject.getString("portrait").getBytes());
-                                volleyCallback.getMoonFriend(moonFriend);
-                                LogUtil.e(TAG, "获取好友信息成功");
-                            } else if(result.equals("error")){
-                                volleyCallback.getErrorCode(ErrorCode.MoonFriendUserIsNotExisted);
-                            }
-                        } catch (JSONException e) {
-                            //做自己的请求异常操作
-                            volleyCallback.getErrorCode(ErrorCode.JSONException);
-                            LogUtil.e(TAG, e.getMessage());
+                            volleyCallback.getMoonFriend(moonFriend);
+                            LogUtil.e(TAG, "获取好友信息成功");
+                        } else if(result.equals("error")){
+                            volleyCallback.getErrorCode(ErrorCode.MoonFriendUserIsNotExisted);
                         }
+                    } catch (JSONException e) {
+                        //做自己的请求异常操作
+                        volleyCallback.getErrorCode(ErrorCode.JSONException);
+                        LogUtil.e(TAG, e.getMessage());
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                //做自己的响应错误操作，如Toast提示（“请稍后重试”等）
-                volleyCallback.getErrorCode(ErrorCode.NetNotResponse);
-                LogUtil.e(TAG, error.getMessage());
-            }
-        }) {
+                }, error -> {
+                    //做自己的响应错误操作，如Toast提示（“请稍后重试”等）
+                    volleyCallback.getErrorCode(ErrorCode.NetNotResponse);
+                    LogUtil.e(TAG, error.getMessage());
+                }) {
             @Override
             protected Map<String, String> getParams(){
                 Map<String, String> params = new HashMap<>();

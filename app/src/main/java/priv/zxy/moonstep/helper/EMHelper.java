@@ -68,31 +68,25 @@ public class EMHelper {
         StringRequest request = new StringRequest(
                 Request.Method.POST,
                 url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONObject jsonObject = new JSONObject(response);
-                            Boolean activated = jsonObject.getJSONArray("entities").getJSONObject(0).getBoolean("activated");
-                            if (activated){
-                                volleyCallback.onSuccess();
-                            }else{
-                                volleyCallback.onFail();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            LogUtil.e(TAG, "onResponse: ");
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
+                response -> {
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+                        Boolean activated = jsonObject.getJSONArray("entities").getJSONObject(0).getBoolean("activated");
+                        if (activated){
+                            volleyCallback.onSuccess();
+                        }else{
+                            volleyCallback.onFail();
                         }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        LogUtil.e(TAG, "onResponse: ");
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-                LogUtil.e(TAG, "onErrorResponse: 注册失败");
-            }
-        }
+                }, error -> {
+                    error.printStackTrace();
+                    LogUtil.e(TAG, "onErrorResponse: 注册失败");
+                }
         ){
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
@@ -133,22 +127,16 @@ public class EMHelper {
 
         StringRequest putRequest = new StringRequest(Request.Method.PUT,
                 url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            volleyCallback.onSuccess();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+                response -> {
+                    try {
+                        volleyCallback.onSuccess();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-                LogUtil.e(TAG, "onErrorResponse: 密码修改失败");
-            }
-        }){
+                }, error -> {
+                    error.printStackTrace();
+                    LogUtil.e(TAG, "onErrorResponse: 密码修改失败");
+                }){
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
@@ -192,22 +180,16 @@ public class EMHelper {
 
         StringRequest putRequest = new StringRequest(Request.Method.PUT,
                 url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            volleyCallback.onSuccess();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+                response -> {
+                    try {
+                        volleyCallback.onSuccess();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-                LogUtil.e(TAG, "onErrorResponse: 昵称修改失败");
-            }
-        }){
+                }, error -> {
+                    error.printStackTrace();
+                    LogUtil.e(TAG, "onErrorResponse: 昵称修改失败");
+                }){
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
@@ -250,27 +232,21 @@ public class EMHelper {
 
         StringRequest request = new StringRequest(Request.Method.POST,
                 url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONObject jsonObject = new JSONObject(response);
-                            token = jsonObject.getString("access_token");
-                            int timeStamp = jsonObject.getInt("expires_in");
-                            LogUtil.d(TAG, "token获取成功:" + token);
-                            LogUtil.d(TAG, "token有效期为:" + timeStamp);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
+                response -> {
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+                        token = jsonObject.getString("access_token");
+                        int timeStamp = jsonObject.getInt("expires_in");
+                        LogUtil.d(TAG, "token获取成功:" + token);
+                        LogUtil.d(TAG, "token有效期为:" + timeStamp);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-                LogUtil.e(TAG, "onErrorResponse: token获取失败");
-            }
-        }){
+
+                }, error -> {
+                    error.printStackTrace();
+                    LogUtil.e(TAG, "onErrorResponse: token获取失败");
+                }){
             @Override
             public String getBodyContentType() {
                 return "application/x-www-form-urlencoded";
@@ -320,28 +296,20 @@ public class EMHelper {
 
         StringRequest request = new StringRequest(
                 url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        JSONObject jsonObject;
-                        try {
-                            jsonObject = (JSONObject) new JSONObject(response);
-                            String user_state = jsonObject.getJSONObject("data").getString(userID);
-                            LogUtil.d(TAG,user_state);
-                            if (volleyCallback != null) {
-                                volleyCallback.onSuccess(user_state);
-                            }
-                        } catch (JSONException | InterruptedException e) {
-                            e.printStackTrace();
+                response -> {
+                    JSONObject jsonObject;
+                    try {
+                        jsonObject = (JSONObject) new JSONObject(response);
+                        String user_state = jsonObject.getJSONObject("data").getString(userID);
+                        LogUtil.d(TAG,user_state);
+                        if (volleyCallback != null) {
+                            volleyCallback.onSuccess(user_state);
                         }
+                    } catch (JSONException | InterruptedException e) {
+                        e.printStackTrace();
                     }
                 },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        LogUtil.e(TAG, "onErrorResponse: 请求用户状态失败");
-                    }
-                }
+                error -> LogUtil.e(TAG, "onErrorResponse: 请求用户状态失败")
         ) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {//设置头信息

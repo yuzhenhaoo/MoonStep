@@ -107,58 +107,34 @@ public class MyDialog extends Dialog {
     @SuppressLint("ClickableViewAccessibility")
     private void initEvent(){
         LogUtil.i("TAG","initEvent");
-        positiveButton.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()){
-                    case MotionEvent.ACTION_DOWN:
-                        positiveButton.setTextSize(19);
-                        if(onpostiveClickListener != null){
-                            onpostiveClickListener.onPositiveClick();//调用接口中的方法
-                        }
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        positiveButton.setTextSize(18);
-                        break;
-                }
-                return true;
+        positiveButton.setOnTouchListener((v, event) -> {
+            switch (event.getAction()){
+                case MotionEvent.ACTION_DOWN:
+                    positiveButton.setTextSize(19);
+                    if(onpostiveClickListener != null){
+                        onpostiveClickListener.onPositiveClick();//调用接口中的方法
+                    }
+                    break;
+                case MotionEvent.ACTION_UP:
+                    positiveButton.setTextSize(18);
+                    break;
             }
+            return true;
         });
-        negativeButton.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()){
-                    case MotionEvent.ACTION_DOWN:
-                        negativeButton.setTextSize(19);
-                        if(onnegativeClickListener != null){
-                            onnegativeClickListener.onNegativeClick();//调用接口中的方法
-                        }
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        negativeButton.setTextSize(18);
-                        break;
-                }
-                return true;
+        negativeButton.setOnTouchListener((v, event) -> {
+            switch (event.getAction()){
+                case MotionEvent.ACTION_DOWN:
+                    negativeButton.setTextSize(19);
+                    if(onnegativeClickListener != null){
+                        onnegativeClickListener.onNegativeClick();//调用接口中的方法
+                    }
+                    break;
+                case MotionEvent.ACTION_UP:
+                    negativeButton.setTextSize(18);
+                    break;
             }
+            return true;
         });
-//        positiveButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                positiveButton.setTextSize(19);
-//                if(onpostiveClickListener != null){
-//                    onpostiveClickListener.onPositiveClick();//调用接口中的方法
-//                }
-//            }
-//        });
-
-//        negativeButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if(onnegativeClickListener != null){
-//                    onnegativeClickListener.onNegativeClick();
-//                }
-//            }
-//        });
     }
 
     /*--------------------setter方法传值---------------------------------*/

@@ -50,71 +50,65 @@ public class ChangePasswordUtil {
 
         //创建StringRequest，定义字符串请求的请求方式为POST(省略第一个参数会默认为GET方式)
         final StringRequest request = new StringRequest(Request.Method.POST, url,
-                        new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            LogUtil.i("TAG", "onResponse");
-                            JSONObject jsonObject = (JSONObject) new JSONObject(response).get("params");
-                            String result = jsonObject.getString("Result");
-                            switch (result) {
-                                case "success":
-                                    EMHelper.getInstance(Application.getContext()).changePassword(new VolleyCallback() {
-                                        @Override
-                                        public String onSuccess(String result) {
-                                            return null;
-                                        }
+                response -> {
+                    try {
+                        LogUtil.i("TAG", "onResponse");
+                        JSONObject jsonObject = (JSONObject) new JSONObject(response).get("params");
+                        String result = jsonObject.getString("Result");
+                        switch (result) {
+                            case "success":
+                                EMHelper.getInstance(Application.getContext()).changePassword(new VolleyCallback() {
+                                    @Override
+                                    public String onSuccess(String result) {
+                                        return null;
+                                    }
 
-                                        @Override
-                                        public boolean onSuccess() throws InterruptedException {
-                                            //检验成功
-                                            volleyCallback.onSuccess();
-                                            return false;
-                                        }
+                                    @Override
+                                    public boolean onSuccess() throws InterruptedException {
+                                        //检验成功
+                                        volleyCallback.onSuccess();
+                                        return false;
+                                    }
 
-                                        @Override
-                                        public String onFail(String error) {
-                                            return null;
-                                        }
+                                    @Override
+                                    public String onFail(String error) {
+                                        return null;
+                                    }
 
-                                        @Override
-                                        public boolean onFail() {
-                                            return false;
-                                        }
+                                    @Override
+                                    public boolean onFail() {
+                                        return false;
+                                    }
 
-                                        @Override
-                                        public void getMoonFriend(MoonFriend moonFriend) {
+                                    @Override
+                                    public void getMoonFriend(MoonFriend moonFriend) {
 
-                                        }
+                                    }
 
-                                        @Override
-                                        public void getErrorCode(ErrorCode errorCode) {
+                                    @Override
+                                    public void getErrorCode(ErrorCode errorCode) {
 
-                                        }
-                                    }, "moonstep" + phoneNumber, password);
-                                    break;
-                                case "error0":
-                                    //检验失败
-                                    volleyCallback.getErrorCode(ErrorCode.PhoneNumberIsNotRegistered);
-                                    break;
-                                case "error1":
-                                    volleyCallback.getErrorCode(ErrorCode.ServerIsFault);
-                                    break;
-                            }
-                        } catch (JSONException e) {
-                            //做自己的请求异常操作
-                            volleyCallback.getErrorCode(ErrorCode.JSONException);
-                            LogUtil.e("TAG", e.getMessage());
+                                    }
+                                }, "moonstep" + phoneNumber, password);
+                                break;
+                            case "error0":
+                                //检验失败
+                                volleyCallback.getErrorCode(ErrorCode.PhoneNumberIsNotRegistered);
+                                break;
+                            case "error1":
+                                volleyCallback.getErrorCode(ErrorCode.ServerIsFault);
+                                break;
                         }
+                    } catch (JSONException e) {
+                        //做自己的请求异常操作
+                        volleyCallback.getErrorCode(ErrorCode.JSONException);
+                        LogUtil.e("TAG", e.getMessage());
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                //做自己的响应错误操作，如Toast提示（“请稍后重试”等）
-                volleyCallback.getErrorCode(ErrorCode.JSONException);
-                LogUtil.e("TAG", error.getMessage());
-            }
-        }) {
+                }, error -> {
+                    //做自己的响应错误操作，如Toast提示（“请稍后重试”等）
+                    volleyCallback.getErrorCode(ErrorCode.JSONException);
+                    LogUtil.e("TAG", error.getMessage());
+                }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();

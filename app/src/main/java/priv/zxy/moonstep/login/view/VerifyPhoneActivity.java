@@ -98,45 +98,31 @@ public class VerifyPhoneActivity extends BaseActivity implements IVerifyPhoneVie
         userVerifyPhoneNumberPresenter = new UserVerifyPhoneNumberPresenter(this, mActivity, mContext);
 
         // 回退到LogUtilinActivity
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finishActivitySelf();
-            }
+        backButton.setOnClickListener(v -> finishActivitySelf());
+
+        countryChoice.setOnClickListener(v -> {
+            //这里使用左滑动画效果的一个包含国家列表的Activity
+            userVerifyPhoneNumberPresenter.toCountrySelectedActivity();
         });
 
-        countryChoice.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //这里使用左滑动画效果的一个包含国家列表的Activity
-                userVerifyPhoneNumberPresenter.toCountrySelectedActivity();
+        submit.setOnTouchListener((v, event) -> {
+            switch (event.getAction()){
+                case MotionEvent.ACTION_DOWN:
+                    submit.setAnimation(shake);
+                    showLoading();
+                    break;
+                case MotionEvent.ACTION_UP:
+                    new Thread(() -> {
+                        try {
+                            userVerifyPhoneNumberPresenter.doVerifyPhoneNumber();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        mHandler.sendEmptyMessage(0x01);
+                    }).start();
+                    break;
             }
-        });
-
-        submit.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()){
-                    case MotionEvent.ACTION_DOWN:
-                        submit.setAnimation(shake);
-                        showLoading();
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    userVerifyPhoneNumberPresenter.doVerifyPhoneNumber();
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                                mHandler.sendEmptyMessage(0x01);
-                            }
-                        }).start();
-                        break;
-                }
-                return true;
-            }
+            return true;
         });
     }
 

@@ -159,71 +159,56 @@ public class ForgetPasswordSendMessageActivity extends BaseActivity implements I
 
         hideLoading();
 
-        sendCode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(getPhoneNumber().equals("")) toastUtil.showToast("您的手机号不能为空");
-                else{
+        sendCode.setOnClickListener(view -> {
+            if(getPhoneNumber().equals("")) toastUtil.showToast("您的手机号不能为空");
+            else{
 //                    SMSSDK.getVerificationCode(country, getPhoneNumber());//发送短信验证码到手机号
-                    sendCode.setEnabled(false);
-                    timer.start();//使用计时器 设置验证码的时间限制
-                }
+                sendCode.setEnabled(false);
+                timer.start();//使用计时器 设置验证码的时间限制
             }
         });
 
         //必须要在满足条件的情况下才能做跳转(验证码发送正确)
-        submit.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch(event.getAction()){
-                    case MotionEvent.ACTION_DOWN:
-                        submit.setAnimation(shake);
-                        showLoading();
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Looper.prepare();
-                                try {
-                                    String codeNum = codeNumber.getText().toString();
-                                    phoneNum = getPhoneNumber();
-                                    userForgetPasswordSendMessagePresenter.submitInfo(country,phoneNum, codeNum, mContext, mActivity);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                                handler.sendEmptyMessage(0x01);
-                                Looper.loop();
-                            }
-                        }).start();
-                        break;
-                }
-                return true;
+        submit.setOnTouchListener((v, event) -> {
+            switch(event.getAction()){
+                case MotionEvent.ACTION_DOWN:
+                    submit.setAnimation(shake);
+                    showLoading();
+                    break;
+                case MotionEvent.ACTION_UP:
+                    new Thread(() -> {
+                        Looper.prepare();
+                        try {
+                            String codeNum = codeNumber.getText().toString();
+                            phoneNum = getPhoneNumber();
+                            userForgetPasswordSendMessagePresenter.submitInfo(country,phoneNum, codeNum, mContext, mActivity);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        handler.sendEmptyMessage(0x01);
+                        Looper.loop();
+                    }).start();
+                    break;
             }
+            return true;
         });
 
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                sendCode.setAnimation(shake);
-                finishActivitySelf();
-            }
+        backButton.setOnClickListener(view -> {
+            sendCode.setAnimation(shake);
+            finishActivitySelf();
         });
 
         //对于语音验证的事件监听
-        voiceCode.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch(event.getAction()){
-                    case MotionEvent.ACTION_DOWN:
-                        submit.setAnimation(shake);
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        sendVoiceCode();
-                        break;
-                }
-                return true;
+        voiceCode.setOnTouchListener((v, event) -> {
+            switch(event.getAction()){
+                case MotionEvent.ACTION_DOWN:
+                    submit.setAnimation(shake);
+                    break;
+                case MotionEvent.ACTION_UP:
+                    sendVoiceCode();
+                    break;
             }
+            return true;
         });
     }
 

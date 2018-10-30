@@ -79,33 +79,27 @@ public class UserChangePasswordActivity extends BaseActivity implements IChangeP
 
         hideLoading();
         userChangePasswordPresenter = new UserChangePasswordPresenter(this, mContext, mActivity);
-        submit.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch(event.getAction()){
-                    case MotionEvent.ACTION_UP:
-                        submit.setAnimation(shake);
-                        showLoading();
-                        break;
-                    case MotionEvent.ACTION_DOWN:
-                        final String pwd = getPassword();
-                        final String conPwd = getConfirmPassword();
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    userChangePasswordPresenter.setChangePassword(phoneNum, pwd, conPwd);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                                mHandler.sendEmptyMessage(0x01);
-                            }
-                        }).start();
+        submit.setOnTouchListener((v, event) -> {
+            switch(event.getAction()){
+                case MotionEvent.ACTION_UP:
+                    submit.setAnimation(shake);
+                    showLoading();
+                    break;
+                case MotionEvent.ACTION_DOWN:
+                    final String pwd = getPassword();
+                    final String conPwd = getConfirmPassword();
+                    new Thread(() -> {
+                        try {
+                            userChangePasswordPresenter.setChangePassword(phoneNum, pwd, conPwd);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        mHandler.sendEmptyMessage(0x01);
+                    }).start();
 
-                        break;
-                }
-                return true;
+                    break;
             }
+            return true;
         });
     }
 
@@ -155,7 +149,6 @@ public class UserChangePasswordActivity extends BaseActivity implements IChangeP
     @Override
     public void showSuccessTip() {
         ToastUtil.getInstance(mContext, mActivity).showToast("恭喜您，您的密码已经修改成功了");
-
     }
 
     @Override

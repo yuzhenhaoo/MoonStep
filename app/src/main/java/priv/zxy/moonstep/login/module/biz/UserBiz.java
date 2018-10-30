@@ -61,15 +61,12 @@ public class UserBiz implements IUser {
 
                 @Override
                 public boolean onSuccess() throws InterruptedException {
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                EMClient.getInstance().createAccount(phoneNumber, userPassword);//同步方法
-                                registerListener.registerSuccess();
-                            } catch (HyphenateException e) {
-                                registerListener.registerFail(ErrorCode.ECRegisterFail);
-                            }
+                    new Thread(() -> {
+                        try {
+                            EMClient.getInstance().createAccount(phoneNumber, userPassword);//同步方法
+                            registerListener.registerSuccess();
+                        } catch (HyphenateException e) {
+                            registerListener.registerFail(ErrorCode.ECRegisterFail);
                         }
                     }).start();
                     return true;

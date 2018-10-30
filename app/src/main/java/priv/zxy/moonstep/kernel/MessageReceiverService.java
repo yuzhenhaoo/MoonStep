@@ -117,14 +117,11 @@ public class MessageReceiverService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         LogUtil.d(TAG, "Thread is running!");
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                LogUtil.d(TAG, ActivityCollector.activities.toString());
-                if ( ActivityCollector.isEmpty()){//如果当前没有activity在栈中，也就是说，程序没有显示在页面上，我们对消息实施监听。
-                    //设置监听器
-                    EMClient.getInstance().chatManager().addMessageListener(msgListener);//实施消息的监听
-                }
+        new Thread(() -> {
+            LogUtil.d(TAG, ActivityCollector.activities.toString());
+            if ( ActivityCollector.isEmpty()){//如果当前没有activity在栈中，也就是说，程序没有显示在页面上，我们对消息实施监听。
+                //设置监听器
+                EMClient.getInstance().chatManager().addMessageListener(msgListener);//实施消息的监听
             }
         }).start();
         return super.onStartCommand(intent, flags, startId);
