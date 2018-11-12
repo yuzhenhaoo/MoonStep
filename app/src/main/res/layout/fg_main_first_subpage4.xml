@@ -1,198 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/user_info_background">
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"/>
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/personal_background">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/userPhoto"
+    <ImageView
+        android:id="@+id/headBackground"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginTop="48dp"
-        android:background="@mipmap/portrait_background"
-        android:padding="10dp"
-        android:src="@drawable/my_photo"
-        app:civ_border_color="#72eade"
-        app:civ_border_width="2dp"
+        android:background="@drawable/head_background"
+        android:contentDescription="@string/nothing"
+        android:translationZ="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.3" />
+
+    <ImageView
+        android:id="@+id/headPortrait"
+        android:layout_width="93dp"
+        android:layout_height="93dp"
+        android:contentDescription="@string/nothing"
+        android:src="@drawable/default_man_head"
+        android:translationZ="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.303" />
 
     <TextView
-        android:id="@+id/nickName"
+        android:id="@+id/userNickName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
         android:text="张墨尘"
-        android:textColor="@color/white"
+        android:textColorHighlight="#9136f2"
+        android:fontFamily="@font/fontfamily1"
+        android:textColor="#d3f2ef"
+        android:textStyle="bold"
+        android:textSize="32sp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toBottomOf="@+id/headBackground"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <TextView
+        android:id="@+id/userLevelName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="月师"
+        android:textSize="24sp"
+        android:textColor="#d3f2ef"
+        android:fontFamily="@font/fontfamily1"
+        app:layout_constraintTop_toBottomOf="@id/userNickName"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <View
+        android:layout_width="300dp"
+        android:layout_height="400dp"
+        android:background="@drawable/round_square_background"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <priv.zxy.moonstep.customview.AnimationButton
+        android:id="@+id/clickButton"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="40dp"
+        android:translationZ="10dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userPhoto" />
-
-    <TextView
-        android:id="@+id/userLevel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="80dp"
-        android:layout_marginTop="10dp"
-        android:text="一阶圆月"
-        android:textColor="@color/white"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/whiteline1"
-        app:layout_constraintTop_toBottomOf="@+id/nickName" />
-
-    <View
-        android:id="@+id/whiteline1"
-        android:layout_width="1dp"
-        android:layout_height="15dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="12dp"
-        android:background="@color/white"
-        app:layout_constraintLeft_toRightOf="@+id/userLevel"
-        app:layout_constraintRight_toLeftOf="@+id/userPet"
-        app:layout_constraintTop_toBottomOf="@+id/nickName" />
-
-    <TextView
-        android:id="@+id/userPet"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="10dp"
-        android:text="月灵鹿"
-        android:textColor="@color/white"
-        app:layout_constraintLeft_toRightOf="@+id/whiteline1"
-        app:layout_constraintRight_toLeftOf="@+id/whiteline2"
-        app:layout_constraintTop_toBottomOf="@+id/nickName" />
-
-    <View
-        android:id="@+id/whiteline2"
-        android:layout_width="1dp"
-        android:layout_height="15dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="12dp"
-        android:background="@color/white"
-        app:layout_constraintLeft_toRightOf="@+id/userPet"
-        app:layout_constraintRight_toLeftOf="@+id/userRace"
-        app:layout_constraintTop_toBottomOf="@+id/nickName" />
-
-    <TextView
-        android:id="@+id/userRace"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="80dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="10dp"
-        android:text="月灵族"
-        android:textColor="@color/white"
-        app:layout_constraintLeft_toRightOf="@+id/whiteline2"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nickName" />
-
-    <View
-        android:id="@+id/whiteline3"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_margin="20dp"
-        android:background="#72eade"
-        app:layout_constraintTop_toBottomOf="@+id/userRace" />
-
-    <!--<android.support.constraint.ConstraintLayout-->
-        <!--android:id="@+id/function"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="100dp"-->
-        <!--android:layout_margin="25dp"-->
-        <!--android:background="@color/DeepBlue"-->
-        <!--android:padding="20dp"-->
-        <!--app:layout_constraintTop_toBottomOf="@+id/whiteline3">-->
-
-        <!--<Button-->
-            <!--android:id="@+id/magicWend"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:background="@drawable/magic_wend_button"-->
-            <!--app:layout_constraintHorizontal_weight="1"-->
-            <!--app:layout_constraintLeft_toLeftOf="parent"-->
-            <!--app:layout_constraintRight_toLeftOf="@+id/addFriend" />-->
-
-        <!--<Button-->
-            <!--android:id="@+id/addFriend"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:background="@drawable/add_friends_button"-->
-            <!--app:layout_constraintHorizontal_weight="1"-->
-            <!--app:layout_constraintLeft_toRightOf="@+id/magicWend"-->
-            <!--app:layout_constraintRight_toLeftOf="@+id/sendMessage" />-->
-
-        <!--<Button-->
-            <!--android:id="@+id/sendMessage"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:background="@drawable/send_messages_button"-->
-            <!--app:layout_constraintHorizontal_weight="1"-->
-            <!--app:layout_constraintLeft_toRightOf="@id/addFriend"-->
-            <!--app:layout_constraintRight_toRightOf="parent" />-->
-    <!--</android.support.constraint.ConstraintLayout>-->
-
-    <LinearLayout
-        android:id="@+id/function"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_margin="25dp"
-        app:layout_constraintTop_toBottomOf="@+id/whiteline3"
-        android:paddingStart="40dp"
-        android:paddingEnd="40dp"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp"
-        android:gravity="center"
-        android:foreground="@drawable/text_border"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/magicWend"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            tools:ignore="ButtonStyle"
-            android:background="@mipmap/magic_wend"/>
-
-        <Button
-            android:id="@+id/addFriend"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            tools:ignore="ButtonStyle"
-            android:background="@mipmap/add_friend"/>
-
-        <Button
-            android:id="@+id/sendMessage"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            tools:ignore="ButtonStyle"
-            android:background="@mipmap/message"/>
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/signature"
+        app:layout_constraintTop_toBottomOf="@+id/userLevelName"/>
+    
+    <priv.zxy.moonstep.customview.WaveViewByBezier
+        android:id="@+id/waveView"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:layout_margin="25dp"
-        android:gravity="center"
-        android:padding="10dp"
-        android:text="踏碎这踏不碎的天，踩碎这踩不碎的地，如果世界变换，诸天神魔，我也让他不覆万载岁月。"
-        android:textColor="@color/white"
-        android:textSize="12sp"
-        app:layout_constraintTop_toBottomOf="@+id/function" />
-
-    <View
-        android:id="@+id/whiteline4"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_margin="20dp"
-        android:background="#72eade"
-        app:layout_constraintTop_toBottomOf="@id/signature" />
+        app:layout_constraintBottom_toBottomOf="parent"/>
 </android.support.constraint.ConstraintLayout>

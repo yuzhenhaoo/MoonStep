@@ -20,45 +20,31 @@ public class MoonFriend extends LitePalSupport implements Parcelable{
     private String gender;
 
     //用户种族
-    private String race;
+    private String raceName;
+
+    //种族描述
+    private String raceDescription;
 
     //用户阶别
-    private String level;
+    private String levelName;
 
-    //用户宠物
-    private String pet;
+    //用户阶别描述
+    private String levelDescription;
 
-    //用户头像(存储用户头像的时候，要存储的实际上是二进制的字节)
-    private byte[] headPortrait;
+    //当前称号
+    private String currentTitle;
+
+    //用户头像存储的是网络上的路径
+    private String headPortraitPath;
 
     //用户签名
-    private String signature;
+    private String signature;//
 
     //当前用户是否已经登陆,0没有登陆，1登陆,获取方式详见REST API
     private int isOnline;
 
     public MoonFriend(){
 
-    }
-
-    protected MoonFriend(Parcel in) {
-        nickName = in.readString();
-        phoneNumber = in.readString();
-        gender = in.readString();
-        race = in.readString();
-        level = in.readString();
-        pet = in.readString();
-        headPortrait = in.createByteArray();
-        signature = in.readString();
-        isOnline = in.readInt();
-    }
-
-    public int getIsOnline() {
-        return isOnline;
-    }
-
-    public void setIsOnline(int isOnline) {
-        this.isOnline = isOnline;
     }
 
     public String getNickName() {
@@ -85,36 +71,52 @@ public class MoonFriend extends LitePalSupport implements Parcelable{
         this.gender = gender;
     }
 
-    public String getRace() {
-        return race;
+    public String getRaceName() {
+        return raceName;
     }
 
-    public void setRace(String race) {
-        this.race = race;
+    public void setRaceName(String raceName) {
+        this.raceName = raceName;
     }
 
-    public String getLevel() {
-        return level;
+    public String getRaceDescription() {
+        return raceDescription;
     }
 
-    public void setLevel(String level) {
-        this.level = level;
+    public void setRaceDescription(String raceDescription) {
+        this.raceDescription = raceDescription;
     }
 
-    public String getPet() {
-        return pet;
+    public String getLevelName() {
+        return levelName;
     }
 
-    public void setPet(String pet) {
-        this.pet = pet;
+    public void setLevelName(String levelName) {
+        this.levelName = levelName;
     }
 
-    public byte[] getHeadPortrait() {
-        return headPortrait;
+    public String getLevelDescription() {
+        return levelDescription;
     }
 
-    public void setHeadPortrait(byte[] headPortrait) {
-        this.headPortrait = headPortrait;
+    public void setLevelDescription(String levelDescription) {
+        this.levelDescription = levelDescription;
+    }
+
+    public String getCurrentTitle() {
+        return currentTitle;
+    }
+
+    public void setCurrentTitle(String currentTitle) {
+        this.currentTitle = currentTitle;
+    }
+
+    public String getHeadPortraitPath() {
+        return headPortraitPath;
+    }
+
+    public void setHeadPortraitPath(String headPortraitPath) {
+        this.headPortraitPath = headPortraitPath;
     }
 
     public String getSignature() {
@@ -124,6 +126,29 @@ public class MoonFriend extends LitePalSupport implements Parcelable{
     public void setSignature(String signature) {
         this.signature = signature;
     }
+
+    public int getIsOnline() {
+        return isOnline;
+    }
+
+    public void setIsOnline(int isOnline) {
+        this.isOnline = isOnline;
+    }
+
+    protected MoonFriend(Parcel in) {
+        nickName = in.readString();
+        phoneNumber = in.readString();
+        gender = in.readString();
+        raceName = in.readString();
+        levelName = in.readString();
+        levelDescription = in.readString();
+        raceDescription = in.readString();
+        currentTitle = in.readString();
+        headPortraitPath = in.readString();
+        signature = in.readString();
+        isOnline = in.readInt();
+    }
+
 
     @Override
     public int describeContents() {
@@ -135,10 +160,12 @@ public class MoonFriend extends LitePalSupport implements Parcelable{
         dest.writeString(nickName);
         dest.writeString(phoneNumber);
         dest.writeString(gender);
-        dest.writeString(race);
-        dest.writeString(level);
-        dest.writeString(pet);
-        dest.writeByteArray(headPortrait);
+        dest.writeString(raceName);
+        dest.writeString(levelName);
+        dest.writeString(levelDescription);
+        dest.writeString(raceDescription);
+        dest.writeString(currentTitle);
+        dest.writeString(headPortraitPath);
         dest.writeString(signature);
         dest.writeInt(isOnline);
     }

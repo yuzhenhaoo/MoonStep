@@ -1,5 +1,7 @@
 package priv.zxy.moonstep.utils.dbUtils;
 
+import android.app.Service;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -19,6 +21,7 @@ import priv.zxy.moonstep.helper.EMHelper;
 import priv.zxy.moonstep.EM.bean.VolleyCallback;
 import priv.zxy.moonstep.kernel.Application;
 import priv.zxy.moonstep.kernel.bean.ErrorCode;
+import priv.zxy.moonstep.kernel.bean.ServiceBase;
 import priv.zxy.moonstep.utils.LogUtil;
 
 public class ChangePasswordUtil {
@@ -40,8 +43,8 @@ public class ChangePasswordUtil {
 
     public void changePassword(final VolleyCallback volleyCallback, final String phoneNumber, final String password) {
         //请求地址
-        String url = "http://120.79.154.236:8080/MoonStep/ChangePasswordServlet";
-        String tag = "LogUtilin";
+        String url = ServiceBase.CHANGE_PASSWORD_SERVLET_URL;
+        String tag = "Login";
         //取得请求队列
         RequestQueue requestQueue = Volley.newRequestQueue(Application.getContext());
 

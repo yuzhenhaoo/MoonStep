@@ -1,218 +1,334 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/commerce_background2">
+    <ImageView
+        android:id="@+id/petImage"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:foreground="@drawable/border1"
+        android:background="@color/Black"/>
 
-    <TextView
-        android:id="@+id/petNameTv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bt3"
-        android:gravity="center"
-        android:padding="15dp"
-        android:text="月灵狗"
-        android:textColor="@color/Black"
-        android:fontFamily="@font/fontfamily1"
-        android:textSize="40sp"
-        android:layout_marginBottom="40dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+    <ImageView
+        android:id="@+id/propertyFaceIV"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@drawable/background3"
+        app:layout_constraintTop_toBottomOf="@id/petImage"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
-    <TextView
-        android:id="@+id/petLevelTv"
+    <ImageView
+        android:id="@+id/fieldGuide"
         android:layout_width="80dp"
-        android:layout_height="60dp"
-        android:padding="5dp"
-        android:text="一阶"
-        android:gravity="center"
-        android:textColor="@color/Black"
-        android:fontFamily="@font/fontfamily2"
-        android:textSize="20sp"
-        android:background="@drawable/bt3"
-        android:layout_margin="20dp"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/Bt1"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:background="@drawable/bt2"
-        android:layout_marginStart="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/Bt2"
+        android:layout_height="80dp"
+        android:layout_margin="15dp"
+        android:src="@drawable/ui4"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"/>
 
     <Button
-        android:id="@+id/Bt2"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:background="@drawable/bt2"
-        android:layout_marginStart="10dp"
-        app:layout_constraintTop_toBottomOf="@+id/Bt1"
-        app:layout_constraintBottom_toTopOf="@+id/Bt3"
-        app:layout_constraintLeft_toLeftOf="parent"/>
-
-    <Button
-        android:id="@+id/Bt3"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:background="@drawable/bt2"
-        android:layout_marginStart="10dp"
-        app:layout_constraintTop_toBottomOf="@+id/Bt2"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toBottomOf="@+id/Bt4"/>
-
-    <Button
-        android:id="@+id/Bt4"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:background="@drawable/bt2"
-        android:layout_marginStart="10dp"
-        app:layout_constraintTop_toBottomOf="@+id/Bt3"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toBottomOf="@+id/Bt5"/>
-
-    <Button
-        android:id="@+id/Bt5"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:background="@drawable/bt2"
-        android:layout_marginStart="10dp"
-        app:layout_constraintTop_toBottomOf="@+id/Bt4"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
-
-    <ImageView
-        android:id="@+id/petIV"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:contentDescription="@string/nothing"
-        android:layout_marginBottom="150dp"
-        android:src="@drawable/pet_test"
-        android:translationZ="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-    <ImageView
-        android:id="@+id/petStage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/nothing"
-        android:src="@drawable/pet_stage"
-        android:layout_marginBottom="80dp"
-        app:layout_constraintBottom_toBottomOf="parent"/>
-
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/petPropertyConstraintLayout"
+        android:id="@+id/bt1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#49000000"
-        android:padding="10dp"
-        android:layout_marginStart="10dp"
-        android:fontFamily="@font/fontfamily1"
+        android:background="@drawable/button1"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        android:text="喂食"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:fontFamily="@font/fontfamily3"
+        android:gravity="center"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintTop_toTopOf="parent"/>
 
-        <TextView
-            android:id="@+id/petNickNameTV"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="宠物昵称:"
-            android:textColor="@color/div_white"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+    <Button
+        android:id="@+id/bt2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button1"
+        app:layout_constraintRight_toRightOf="parent"
+        android:text="喂食"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:fontFamily="@font/fontfamily3"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintTop_toBottomOf="@id/bt1"/>
 
-        <TextView
-            android:id="@+id/petNickName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="狗蛋"
-            android:textColor="@color/div_white"
-            app:layout_constraintLeft_toRightOf="@+id/petNickNameTV"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintRight_toRightOf="parent"/>
+    <Button
+        android:id="@+id/bt3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button1"
+        app:layout_constraintRight_toRightOf="parent"
+        android:text="喂食"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:fontFamily="@font/fontfamily3"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintTop_toBottomOf="@id/bt2"/>
 
-        <TextView
-            android:id="@+id/petLevelTV"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="宠物族属:"
-            android:textColor="@color/div_white"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/petNickNameTV"/>
+    <Button
+        android:id="@+id/bt4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button1"
+        app:layout_constraintRight_toRightOf="parent"
+        android:text="喂食"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:fontFamily="@font/fontfamily3"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintTop_toBottomOf="@id/bt3"/>
 
-        <TextView
-            android:id="@+id/petLevel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="灵犬科"
-            android:textColor="@color/div_white"
-            app:layout_constraintLeft_toRightOf="@id/petLevelTV"
-            app:layout_constraintTop_toBottomOf="@+id/petNickName"
-            app:layout_constraintRight_toRightOf="parent"/>
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:src="@drawable/number_background"
+        app:layout_constraintBottom_toBottomOf="@+id/petImage"
+        app:layout_constraintLeft_toRightOf="@+id/tv1" />
 
-        <TextView
-            android:id="@+id/petGradeTV"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="宠物等级:"
-            android:textColor="@color/div_white"
-            android:gravity="start"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/petLevelTV"/>
+    <ImageView
+        android:id="@+id/diamond1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ui2"
+        app:layout_constraintBottom_toBottomOf="@id/petImage"
+        app:layout_constraintLeft_toRightOf="@+id/uiIV1"/>
 
-        <TextView
-            android:id="@+id/petGrade"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="30"
-            android:textColor="@color/div_white"
-            app:layout_constraintLeft_toRightOf="@+id/petGradeTV"
-            app:layout_constraintTop_toBottomOf="@+id/petLevel"
-            app:layout_constraintRight_toRightOf="parent"/>
+    <ImageView
+        android:id="@+id/diamond2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ui2"
+        app:layout_constraintBottom_toBottomOf="@id/petImage"
+        app:layout_constraintLeft_toRightOf="@+id/diamond1"/>
 
-        <TextView
-            android:id="@+id/petFTAbilityTV"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="宠物战斗力:"
-            android:textColor="@color/div_white"
-            android:gravity="start"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/petGradeTV"/>
+    <ImageView
+        android:id="@+id/diamond3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ui2"
+        app:layout_constraintBottom_toBottomOf="@id/petImage"
+        app:layout_constraintLeft_toRightOf="@+id/diamond2"/>
 
-        <TextView
-            android:id="@+id/petFTAbility"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="3000"
-            android:textColor="@color/div_white"
-            app:layout_constraintLeft_toRightOf="@+id/petFTAbilityTV"
-            app:layout_constraintTop_toBottomOf="@id/petGrade"
-            app:layout_constraintRight_toRightOf="parent"/>
+    <ImageView
+        android:id="@+id/diamond4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ui2"
+        app:layout_constraintBottom_toBottomOf="@id/petImage"
+        app:layout_constraintLeft_toRightOf="@+id/diamond3"/>
 
-        <TextView
-            android:id="@+id/petSkillTV"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="宠物技能:"
-            android:textColor="@color/div_white"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/petFTAbilityTV"/>
+    <ImageView
+        android:id="@+id/uiIV1"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/ui1"
+        app:layout_constraintBottom_toBottomOf="@id/petImage"
+        app:layout_constraintHorizontal_bias="0.600"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
-        <TextView
-            android:id="@+id/petSkill"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
-            app:layout_constraintTop_toBottomOf="@+id/petSkillTV"
-            app:layout_constraintStart_toStartOf="parent"
-            android:textColor="@color/div_white"
-            android:text="收益加成10%"/>
+    <ImageView
+        android:id="@+id/uiIV2"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:src="@drawable/maturity"
+        android:layout_margin="12dp"
+        app:layout_constraintBottom_toBottomOf="@id/petImage"
+        app:layout_constraintHorizontal_bias="0.630"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
 
-    </android.support.constraint.ConstraintLayout>
+    <TextView
+        android:id="@+id/tv1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="战力:"
+        android:textColor="@color/Gold"
+        android:textSize="25sp"
+        android:translationZ="10dp"
+        android:layout_margin="10dp"
+        android:fontFamily="@font/fontfamily3"
+        app:layout_constraintBottom_toBottomOf="@+id/petImage"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <TextView
+        android:id="@+id/petCompatAbilityTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1008"
+        android:textColor="@color/Gold"
+        android:textSize="22sp"
+        android:translationZ="10dp"
+        android:layout_margin="7dp"
+        android:textStyle="italic"
+        app:layout_constraintBottom_toBottomOf="@+id/petImage"
+        app:layout_constraintLeft_toRightOf="@+id/tv1" />
+
+    <TextView
+        android:id="@+id/uiIV3"
+        android:layout_width="150dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/background4"
+        android:fontFamily="@font/fontfamily3"
+        android:textColor="#edd9a2"
+        android:gravity="center"
+        android:textSize="17sp"
+        android:paddingBottom="20dp"
+        android:paddingTop="5dp"
+        android:paddingEnd="5dp"
+        android:paddingStart="5dp"
+        android:text="增加拥有者20％当前资源， 每日收益增加30%，发掘宝物 概率+30%"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/skillTV"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ui3"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/uiIV3"/>
+
+    <ImageView
+        android:id="@+id/petIntroduceIV"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/background5"
+        android:layout_marginStart="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/uiIV3"
+        app:layout_constraintTop_toTopOf="@+id/uiIV3"/>
+
+    <TextView
+        android:id="@+id/petIntroduceTV"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="50dp"
+        android:gravity="center"
+        android:text="玲玲珑珑天地间，花开花落一千年。"
+        android:textColor="#edb979"
+        android:padding="5dp"
+        android:textSize="12sp"
+        app:layout_constraintTop_toTopOf="@id/petIntroduceIV"
+        app:layout_constraintBottom_toBottomOf="@id/petIntroduceIV"
+        app:layout_constraintLeft_toLeftOf="@id/petIntroduceIV"
+        app:layout_constraintRight_toRightOf="@id/petIntroduceIV"/>
+
+    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/user_image"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="19dp"
+        android:layout_gravity="center"
+        android:src="@drawable/my_photo"
+        app:civ_border_color="#c0c0c0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/petImage"/>
+
+    <ImageView
+        android:id="@+id/headBackgroundIV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ui5"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="10dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/petImage" />
+
+    <TextView
+        android:id="@+id/levelNameTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:text="等阶:"
+        android:fontFamily="@font/fontfamily3"
+        android:textColor="@color/Gold"
+        app:layout_constraintBottom_toTopOf="@+id/petIntroduceIV"
+        app:layout_constraintEnd_toEndOf="@+id/headBackgroundIV"
+        app:layout_constraintStart_toStartOf="@+id/headBackgroundIV"
+        app:layout_constraintTop_toTopOf="@+id/headBackgroundIV" />
+
+    <TextView
+        android:id="@+id/levelName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="三阶"
+        android:textColor="@color/Gold"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:fontFamily="@font/fontfamily3"
+        app:layout_constraintTop_toTopOf="@+id/levelNameTV"
+        app:layout_constraintLeft_toRightOf="@+id/raceNameTV"/>
+
+    <TextView
+        android:id="@+id/raceNameTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:text="种族:"
+        android:textColor="@color/Gold"
+        android:fontFamily="@font/fontfamily3"
+        app:layout_constraintBottom_toTopOf="@+id/petIntroduceIV"
+        app:layout_constraintEnd_toEndOf="@+id/headBackgroundIV"
+        app:layout_constraintStart_toStartOf="@+id/headBackgroundIV"
+        app:layout_constraintTop_toTopOf="@+id/levelNameTV"/>
+
+    <TextView
+        android:id="@+id/raceName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="月灵种"
+        android:textColor="@color/Gold"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/fontfamily3"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/petIntroduceIV"
+        app:layout_constraintStart_toEndOf="@id/raceNameTV"
+        app:layout_constraintTop_toTopOf="@+id/levelNameTV"/>
+
+    <ImageView
+        android:id="@+id/skillBackgroundIV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ui6"
+        app:layout_constraintTop_toBottomOf="@id/petImage"
+        app:layout_constraintRight_toRightOf="@+id/skillTV"
+        app:layout_constraintLeft_toLeftOf="@id/skillTV"
+        android:layout_margin="20dp"/>
+
+    <TextView
+        android:id="@+id/skillTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ui7"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        android:text="陨落星空"
+        android:textColor="@color/Gold"
+        android:fontFamily="@font/fontfamily3"
+        app:layout_constraintTop_toBottomOf="@id/skillBackgroundIV"
+        app:layout_constraintRight_toRightOf="parent"/>
 </android.support.constraint.ConstraintLayout>

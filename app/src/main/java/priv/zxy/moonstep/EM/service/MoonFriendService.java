@@ -121,19 +121,21 @@ public class MoonFriendService extends Service {
     }
 
     /**
-     * 关于使用litepal对于信息的存储，我不知道为什么每次保存都必须重建一个新的对象，不然保存智慧对第一次生效，有可能不单单指查询，增删改可能也一样。
+     * 关于使用litepal对于信息的存储，我不知道为什么每次保存都必须重建一个新的对象，不然保存只会对第一次生效，有可能不单单指查询，增删改可能也一样。
      * @param user
      */
     public void saveUserToMoonFriendDataBase(MoonFriend user){
         MoonFriend moonFriend = new MoonFriend();
         moonFriend.setNickName(user.getNickName());
-        moonFriend.setGender(user.getGender());
-        moonFriend.setLevel(user.getLevel());
-        moonFriend.setPet(user.getPet());
         moonFriend.setPhoneNumber(user.getPhoneNumber());
-        moonFriend.setRace(user.getRace());
+        moonFriend.setGender(user.getGender());
+        moonFriend.setHeadPortraitPath(user.getHeadPortraitPath());
         moonFriend.setSignature(user.getSignature());
-        moonFriend.setHeadPortrait(user.getHeadPortrait());
+        moonFriend.setCurrentTitle(user.getCurrentTitle());
+        moonFriend.setRaceName(user.getCurrentTitle());
+        moonFriend.setRaceDescription(user.getRaceDescription());
+        moonFriend.setLevelName(user.getLevelName());
+        moonFriend.setLevelDescription(user.getLevelDescription());
         if (moonFriend.save()){
             LogUtil.d("MoonFriendService","月友信息存储成功");
         }else{

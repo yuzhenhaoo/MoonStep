@@ -73,9 +73,9 @@ public class UserInfoActivity extends BaseActivity implements IUserInfoView {
     @Override
     public void updateData() {
         nickName.setText(personInfo.getNickName());
-        userLevel.setText(personInfo.getLevel());
-        userPet.setText(personInfo.getPet());
-        userRace.setText(personInfo.getRace());
+        userLevel.setText(personInfo.getLevelName());
+        userPet.setText("还没有写好");
+        userRace.setText(personInfo.getRaceName());
         signature.setText(personInfo.getSignature());
     }
 

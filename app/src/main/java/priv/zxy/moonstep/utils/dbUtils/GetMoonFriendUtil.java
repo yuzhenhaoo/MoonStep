@@ -54,14 +54,16 @@ public class GetMoonFriendUtil {
                         String result = jsonObject.getString("Result");
                         if (result.equals("success")) {
                             MoonFriend moonFriend = new MoonFriend();
+                            moonFriend.setNickName(jsonObject.getString("nickName"));
                             moonFriend.setPhoneNumber(jsonObject.getString("phoneNumber"));
                             moonFriend.setGender(jsonObject.getString("gender"));
-                            moonFriend.setRace(jsonObject.getString("race"));
-                            moonFriend.setLevel(jsonObject.getString("level"));
-                            moonFriend.setPet(jsonObject.getString("pet"));
-                            moonFriend.setNickName(jsonObject.getString("nickName"));
+                            moonFriend.setHeadPortraitPath(jsonObject.getString("headPortraitPath"));
                             moonFriend.setSignature(jsonObject.getString("signature"));
-//                                moonFriend.setHeadPortrait(jsonObject.getString("portrait").getBytes());
+                            moonFriend.setCurrentTitle(jsonObject.getString("currentTitle"));
+                            moonFriend.setRaceName(jsonObject.getString("raceName"));
+                            moonFriend.setRaceDescription(jsonObject.getString("raceDescription"));
+                            moonFriend.setLevelName(jsonObject.getString("levelName"));
+                            moonFriend.setLevelDescription(jsonObject.getString("levelDescription"));
                             volleyCallback.getMoonFriend(moonFriend);
                             LogUtil.e(TAG, "获取好友信息成功");
                         } else if(result.equals("error")){

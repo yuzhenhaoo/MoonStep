@@ -17,6 +17,7 @@ import java.util.Map;
 import priv.zxy.moonstep.EM.bean.VolleyCallback;
 import priv.zxy.moonstep.kernel.Application;
 import priv.zxy.moonstep.kernel.bean.ErrorCode;
+import priv.zxy.moonstep.kernel.bean.ServiceBase;
 import priv.zxy.moonstep.utils.LogUtil;
 
 /**
@@ -43,8 +44,8 @@ public class PhoneCheckUtil {
 
     public void phoneCheck(final VolleyCallback volleyCallback, final String phoneNumber){
         //请求地址
-        String url = "http://120.79.154.236:8080/MoonStep/CheckPhoneServlet";
-        String tag = "LogUtilin";
+        String url = ServiceBase.CHECK_PHONE_SERVLET_URL;
+        String tag = "login";
         //取得请求队列
         RequestQueue requestQueue = Volley.newRequestQueue(Application.getContext());
 

@@ -2,8 +2,6 @@ package priv.zxy.moonstep.utils.dbUtils;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -17,8 +15,13 @@ import priv.zxy.moonstep.EM.bean.VolleyCallback;
 import priv.zxy.moonstep.db.MoonFriend;
 import priv.zxy.moonstep.kernel.Application;
 import priv.zxy.moonstep.kernel.bean.ErrorCode;
+import priv.zxy.moonstep.kernel.bean.ServiceBase;
 import priv.zxy.moonstep.utils.LogUtil;
 
+/**
+ * 注意，为了保障数据的安全性，对于幸运值的获取，我们必须单独设置一个函数来单独的获取，开始的时候加载一次，进行加密后存储进入杂项数据库中，需要用到的时候先检测网络
+ * 如果存在网络，就从网络上获取幸运值的内容，如果不存在网络，就从加密的数据中进行解密获取幸运值。
+ */
 public class GetMyInformationUtil {
 
     private static final String TAG = "GetMyInformationUtil";
@@ -36,7 +39,7 @@ public class GetMyInformationUtil {
     
     public void returnMyInfo(final VolleyCallback volleyCallback, final String userId) {
         //请求地址
-        String url = "http://120.79.154.236:8080/MoonStep/CheckUserID";
+        String url = ServiceBase.CHECK_USERID_SERVLET_URL;
         final String tag = "myself";
         //取得请求队列
         RequestQueue requestQueue = Volley.newRequestQueue(Application.getContext());
@@ -53,14 +56,16 @@ public class GetMyInformationUtil {
                         if (result.equals("success")) {
                             //检验成功
                             MoonFriend moonFriend = new MoonFriend();
+                            moonFriend.setNickName(jsonObject.getString("nickName"));
                             moonFriend.setPhoneNumber(jsonObject.getString("phoneNumber"));
                             moonFriend.setGender(jsonObject.getString("gender"));
-                            moonFriend.setRace(jsonObject.getString("race"));
-                            moonFriend.setLevel(jsonObject.getString("level"));
-                            moonFriend.setNickName(jsonObject.getString("nickName"));
+                            moonFriend.setHeadPortraitPath(jsonObject.getString("headPortraitPath"));
                             moonFriend.setSignature(jsonObject.getString("signature"));
-//                                moonFriend.setHeadPortrait(jsonObject.getString("portrait").getBytes());
-                            moonFriend.setPet(jsonObject.getString("pet"));
+                            moonFriend.setCurrentTitle(jsonObject.getString("currentTitle"));
+                            moonFriend.setRaceName(jsonObject.getString("raceName"));
+                            moonFriend.setRaceDescription(jsonObject.getString("raceDescription"));
+                            moonFriend.setLevelName(jsonObject.getString("levelName"));
+                            moonFriend.setLevelDescription(jsonObject.getString("levelDescription"));
                             volleyCallback.getMoonFriend(moonFriend);
                             LogUtil.d(TAG, "获取个人信息成功");
                         } else if(result.equals("error")){

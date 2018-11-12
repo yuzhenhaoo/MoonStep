@@ -5,8 +5,6 @@ import android.content.Context;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -19,14 +17,14 @@ import java.util.Map;
 import priv.zxy.moonstep.db.MoonFriend;
 import priv.zxy.moonstep.helper.EMHelper;
 import priv.zxy.moonstep.EM.bean.VolleyCallback;
+import priv.zxy.moonstep.kernel.Application;
 import priv.zxy.moonstep.kernel.bean.ErrorCode;
+import priv.zxy.moonstep.kernel.bean.ServiceBase;
 import priv.zxy.moonstep.utils.LogUtil;
 
 public class PhoneRegisterUtil {
 
     private static final String TAG = "PhoneRegisterUtil";
-
-    private Context mContext;
 
     private static PhoneRegisterUtil instance;
 
@@ -51,10 +49,10 @@ public class PhoneRegisterUtil {
      */
     public void RegisterRequest(final VolleyCallback volleyCallback, final String PhoneNumber, final  String NickName, final String PassWord, final String Gender){
         //请求地址
-        String url = "http://120.79.154.236:8080/MoonStep/NewServlet";
+        String url = ServiceBase.REGISTER_SERVLET_URL;
         String tag = "LogUtilin";
         //取得请求队列
-        RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+        RequestQueue requestQueue = Volley.newRequestQueue(Application.getContext());
 
         //防止重复请求，所以先取消tag标识的请求队列
         requestQueue.cancelAll(tag);
@@ -66,7 +64,7 @@ public class PhoneRegisterUtil {
                         JSONObject jsonObject = (JSONObject) new JSONObject(response).get("params");
                         String result = jsonObject.getString("Result");
                         if (result.equals("success")){
-                            EMHelper.getInstance(mContext).registerUser(new VolleyCallback() {
+                            EMHelper.getInstance(Application.getContext()).registerUser(new VolleyCallback() {
                                 @Override
                                 public String onSuccess(String result) throws InterruptedException {
                                     volleyCallback.onSuccess();

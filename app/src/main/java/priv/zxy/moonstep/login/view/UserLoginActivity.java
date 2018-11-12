@@ -212,12 +212,12 @@ public class UserLoginActivity extends BaseActivity implements IUserLoginView {
 
     @Override
     public void initAccount(SharedPreferencesUtil preference) {
-        accountEt.setText(SharedPreferencesUtil.getInstance(mContext).readLogUtilinInfo().get("UserName"));
+        accountEt.setText(SharedPreferencesUtil.getInstance(mContext).readLoginInfo().get("UserName"));
     }
 
     @Override
     public void initPassword(SharedPreferencesUtil preference) {
-        passwordEt.setText(SharedPreferencesUtil.getInstance(mContext).readLogUtilinInfo().get("PassWd"));
+        passwordEt.setText(SharedPreferencesUtil.getInstance(mContext).readLoginInfo().get("PassWd"));
     }
 
     @Override
@@ -237,6 +237,6 @@ public class UserLoginActivity extends BaseActivity implements IUserLoginView {
 
     @Override
     public void fixLogUtilinPreferences(String username, String passwordEt) {
-        SharedPreferencesUtil.getInstance(mContext).fixSuccessedLogUtilinAccountAndPassword(username, passwordEt);
+        SharedPreferencesUtil.getInstance(mContext).fixSuccessedLoginAccountAndPassword(username, passwordEt);
     }
 }

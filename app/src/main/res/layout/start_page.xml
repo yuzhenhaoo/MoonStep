@@ -9,7 +9,7 @@
         android:id="@+id/hTextView"
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:text=""
+        android:text="可是，我真的爱你"
         android:textColor="@color/white"
         android:gravity="center"
         android:translationZ="3dp"

@@ -1,6 +1,5 @@
 package priv.zxy.moonstep.commerce.view;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -9,15 +8,22 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.ImageView;
 
 import com.hyphenate.exceptions.HyphenateException;
 import com.yalantis.phoenix.PullToRefreshView;
@@ -30,6 +36,7 @@ import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.db.MoonFriend;
 import priv.zxy.moonstep.commerce.presenter.MoonFriendAdapter;
 import priv.zxy.moonstep.commerce.presenter.MoonFriendPresenter;
+import priv.zxy.moonstep.kernel.Application;
 import priv.zxy.moonstep.utils.LogUtil;
 
 public class MoonFriendFragment extends Fragment implements IMoonFriendView{
@@ -46,9 +53,6 @@ public class MoonFriendFragment extends Fragment implements IMoonFriendView{
 
     private long REFRESH_DELAY = 1000;
 
-    @SuppressLint("StaticFieldLeak")
-    private static MoonFriendFragment instance;
-
     private MoonFriendPresenter moonFriendPresenter;
 
     private List<MoonFriend> mList = null;//月友结果集
@@ -60,13 +64,6 @@ public class MoonFriendFragment extends Fragment implements IMoonFriendView{
     private LocalReceiver localReceiver;
 
     private LocalBroadcastManager localBroadcastManager;
-
-    public static MoonFriendFragment getInstance() {
-        if (instance == null) {
-            instance = new MoonFriendFragment();
-        }
-        return instance;
-    }
 
     @Override
     public void onAttach(Context context) {
@@ -106,7 +103,7 @@ public class MoonFriendFragment extends Fragment implements IMoonFriendView{
     }
 
     public void initView() {
-        mPullToRefreshView = view.findViewById(R.id.pull_to_refresh);
+//        mPullToRefreshView = view.findViewById(R.id.pull_to_refresh);
         recyclerView = view.findViewById(R.id.recycleview);
 
         initRecyclerView();
@@ -120,28 +117,37 @@ public class MoonFriendFragment extends Fragment implements IMoonFriendView{
         moonFriendPresenter = new MoonFriendPresenter(this, mContext, mActivity);
 
         //设置刷新事件的监听
-        mPullToRefreshView.setOnRefreshListener(() -> mPullToRefreshView.postDelayed(() -> {
-            mPullToRefreshView.setRefreshing(false);
-            try {
-                try {
-                    checkClientAndDatabase(mList);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                mList = LitePal.findAll(MoonFriend.class);
-                mAdapter.clear();
-                mAdapter.addAll(mList);
-                mAdapter.notifyDataSetChanged();//设置Adapter的刷新
-            } catch (HyphenateException e) {
-                e.printStackTrace();
-            }
-        }, REFRESH_DELAY));
+//        mPullToRefreshView.setOnRefreshListener(() -> mPullToRefreshView.postDelayed(() -> {
+//            mPullToRefreshView.setRefreshing(false);
+//            try {
+//                try {
+//                    checkClientAndDatabase(mList);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//                mList = LitePal.findAll(MoonFriend.class);
+//                mAdapter.clear();
+//                mAdapter.addAll(mList);
+//                mAdapter.notifyDataSetChanged();//设置Adapter的刷新
+//            } catch (HyphenateException e) {
+//                e.printStackTrace();
+//            }
+//        }, REFRESH_DELAY));
 
         intentFilter = new IntentFilter();
         intentFilter.addAction("priv.zxy.moonstep.commerce.view.LOCAL_BROADCAST");
         localBroadcastManager = LocalBroadcastManager.getInstance(this.getActivity());
         localReceiver = new LocalReceiver();
         localBroadcastManager.registerReceiver(localReceiver, intentFilter);
+
+        String name = "星空的熔炉";
+        Toolbar toolbar = (Toolbar)view.findViewById(R.id.toolbar);
+        CollapsingToolbarLayout collapsingToolbar = view.findViewById(R.id.collapsing_toolbar);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        collapsingToolbar.setTitle(name);
+        Button rotateVortex = view.findViewById(R.id.rotateVortex);
+        Animation rotationAnimation = AnimationUtils.loadAnimation(Application.getContext(),R.anim.rotate_anim);
+        rotateVortex.startAnimation(rotationAnimation);
     }
 
     public void initRecyclerView(){
@@ -172,4 +178,5 @@ public class MoonFriendFragment extends Fragment implements IMoonFriendView{
             mAdapter.notifyDataSetChanged();//一旦监听到消息就让界面刷新
         }
     }
+
 }

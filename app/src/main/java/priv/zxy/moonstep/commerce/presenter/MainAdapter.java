@@ -6,23 +6,23 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.view.ViewGroup;
 
 import priv.zxy.moonstep.commerce.view.FirstMainPageFragment1;
-import priv.zxy.moonstep.commerce.view.FirstMainPageFragment2;
+import priv.zxy.moonstep.commerce.view.PetFragment;
 import priv.zxy.moonstep.commerce.view.MoonFriendFragment;
-import priv.zxy.moonstep.commerce.view.PersonalInfoFragment;
+import priv.zxy.moonstep.commerce.view.PersonalSurfaceFragment;
 
 public class MainAdapter extends FragmentPagerAdapter {
     private final int PAGER_COUNT = 4;
     private FirstMainPageFragment1 myFragment1 = null;
-    private FirstMainPageFragment2 myFragment2 = null;
+    private PetFragment myFragment2 = null;
     private MoonFriendFragment myFragment3 = null;
-    private PersonalInfoFragment myFragment4 = null;
+    private PersonalSurfaceFragment myFragment4 = null;
 
     public MainAdapter(FragmentManager fm){
         super(fm);
         myFragment1 = new FirstMainPageFragment1();
-        myFragment2 = new FirstMainPageFragment2();
+        myFragment2 = new PetFragment();
         myFragment3 = new MoonFriendFragment();
-        myFragment4 = new PersonalInfoFragment();
+        myFragment4 = new PersonalSurfaceFragment();
     }
 
     @Override

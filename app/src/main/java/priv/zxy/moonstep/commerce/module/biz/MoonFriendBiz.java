@@ -87,13 +87,15 @@ public class MoonFriendBiz implements IMoonFriendBiz {
     private void saveUserToMoonFriendDataBase(MoonFriend mf) {
         MoonFriend moonFriend = new MoonFriend();
         moonFriend.setNickName(mf.getNickName());
-        moonFriend.setGender(mf.getGender());
-        moonFriend.setLevel(mf.getLevel());
-        moonFriend.setPet(mf.getPet());
         moonFriend.setPhoneNumber(mf.getPhoneNumber());
-        moonFriend.setRace(mf.getRace());
+        moonFriend.setGender(mf.getGender());
+        moonFriend.setHeadPortraitPath(mf.getHeadPortraitPath());
         moonFriend.setSignature(mf.getSignature());
-        moonFriend.setHeadPortrait(mf.getHeadPortrait());
+        moonFriend.setCurrentTitle(mf.getCurrentTitle());
+        moonFriend.setRaceName(mf.getRaceName());
+        moonFriend.setRaceDescription(mf.getRaceDescription());
+        moonFriend.setLevelName(mf.getLevelName());
+        moonFriend.setLevelDescription(mf.getLevelDescription());
         if (moonFriend.save()) {
             LogUtil.d(TAG, "月友信息存储成功");
         } else {

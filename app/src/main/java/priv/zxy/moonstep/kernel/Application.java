@@ -38,6 +38,8 @@ import priv.zxy.moonstep.commerce.view.ChattingActivity;
 
 public class Application extends LitePalApplication {
 
+    public static int START_IMAGE_MAX_NUMBER = 9;//这里设定的是startPage的数量
+
     private static Context mContext;
 
     private static final String TAG = "Application";
@@ -72,7 +74,7 @@ public class Application extends LitePalApplication {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        String phoneNumber = SharedPreferencesUtil.getInstance(mContext).readLogUtilinInfo().get("UserName");
+                        String phoneNumber = SharedPreferencesUtil.getInstance(mContext).readLoginInfo().get("UserName");
                         GetMyInformationUtil.getInstance().returnMyInfo(new VolleyCallback() {
                             @Override
                             public String onSuccess(String result) {
@@ -96,7 +98,7 @@ public class Application extends LitePalApplication {
 
                             @Override
                             public void getMoonFriend(MoonFriend moonFriend) {
-                                SharedPreferencesUtil.getInstance(mContext).saveMySelfInformation(moonFriend.getNickName(), moonFriend.getLevel(), moonFriend.getPet(), moonFriend.getRace(), moonFriend.getSignature());
+                                SharedPreferencesUtil.getInstance(mContext).saveMySelfInformation(moonFriend.getNickName(), moonFriend.getRaceName(), moonFriend.getRaceDescription(), moonFriend.getHeadPortraitPath(), moonFriend.getSignature(), moonFriend.getCurrentTitle(), moonFriend.getLevelName(), moonFriend.getLevelDescription());
                             }
 
                             @Override

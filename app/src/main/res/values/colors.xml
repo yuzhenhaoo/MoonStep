@@ -4,8 +4,6 @@
     <color name="colorAccent">#FF4081</color>
     <color name="div_white">#FFFFFF</color>
     <color name="transparent">#00FFFFFF</color>
-    <color name="text_Grey">#c1c1c2</color>
-    <color name="colorWhite">#ffffff</color>
     <color name="text_gray">#8D7A71</color>
     <color name="text_yellow">#FFC800</color>
     <color name="white">#FFFFFF</color>
@@ -27,7 +25,6 @@
     <color name="Gold">#FFD700</color>
     <color name="Red">#FF0000</color>
     <color name="Gray">#808080</color>
-    <color name="TransprantGray">#a0808080</color>
     <color name="LittleGray">#d7d5d5</color>
     <color name="Black">#000000</color>
     <color name="LittleBlack">#414040</color>
@@ -35,6 +32,5 @@
     <color name="menu_fragment_background">#B3000000</color>
     <color name="menu_item_background">#f2f2f2</color>
     <color name="divider_color">#b5b5b5</color>
-    <color name="DeepBlue">#842e3743</color>
 
 </resources>

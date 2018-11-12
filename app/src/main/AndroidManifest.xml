@@ -95,6 +95,9 @@
             android:name=".login.view.UserChangePasswordActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+        <activity android:name=".commerce.view.UserDetailActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
         <!-- 设置环信应用的AppKey -->
         <meta-data
             android:name="EASEMOB_APPKEY"

@@ -39,10 +39,10 @@ public class SharedPreferencesUtil {
     /**
      * 存储第一次登陆的信息
      */
-    public void saveFirstLogUtilin(){
+    public void saveFirstLogin(){
         SharedPreferences sp = context.getSharedPreferences("mysp",Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
-        editor.putString("LogUtilging_ability","Is_first_LogUtilging");
+        editor.putString("Logging_ability","Is_first_Logging");
         editor.apply();
     }
 
@@ -50,9 +50,9 @@ public class SharedPreferencesUtil {
      * 检测当前是否为第一次登陆
      * @return
      */
-    public Boolean isFirstLogUtilin(){
+    public Boolean isFirstLogin(){
         SharedPreferences sp = context.getSharedPreferences("mysp", Context.MODE_PRIVATE);
-        return !sp.contains("LogUtilging_ability");
+        return !sp.contains("Logging_ability");
     }
 
     /**
@@ -74,7 +74,7 @@ public class SharedPreferencesUtil {
         return !sp.contains("IsInitedDataBase");
     }
 
-    public void saveSuccessedLogUtilinAccountAndPassword(String username, String passwd){
+    public void saveSuccessedLoginAccountAndPassword(String username, String passwd){
         SharedPreferences sp = context.getSharedPreferences("mysp",Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.putString("UserName", username);
@@ -83,7 +83,7 @@ public class SharedPreferencesUtil {
         editor.commit();
     }
 
-    public void fixSuccessedLogUtilinAccountAndPassword(String username, String passwd){
+    public void fixSuccessedLoginAccountAndPassword(String username, String passwd){
         SharedPreferences sp = context.getSharedPreferences("mysp", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.putString("UserName", username);
@@ -92,14 +92,14 @@ public class SharedPreferencesUtil {
         editor.commit();
     }
 
-    public void fixFailLogUtilinInfo(){
+    public void fixFailLoginInfo(){
         SharedPreferences sp = context.getSharedPreferences("mysp", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.putBoolean("IsSuccessed", false);
         editor.commit();
     }
 
-    public Map<String, String> readLogUtilinInfo(){
+    public Map<String, String> readLoginInfo(){
         Map<String, String> data = new HashMap<String, String>();
         SharedPreferences sp = context.getSharedPreferences("mysp", Context.MODE_PRIVATE);
         data.put("UserName", sp.getString("UserName", ""));
@@ -107,19 +107,22 @@ public class SharedPreferencesUtil {
         return data;
     }
 
-    public boolean isSuccessedLogUtilined(){
+    public boolean isSuccessedLogined(){
         SharedPreferences sp = context.getSharedPreferences("mysp", Context.MODE_PRIVATE);
         return sp.getBoolean("IsSuccessed", false);
     }
 
-    public void saveMySelfInformation(String nickName, String userLevel, String userPet, String userRace, String signature){
+    public void saveMySelfInformation(String nickName, String userRaceName, String userRaceDiscription, String headPath, String userSignature, String userCurrentTitle, String userLevel, String userLevelDiscription){
         SharedPreferences sp = context.getSharedPreferences("personalInfo", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.putString("nickName", nickName);
+        editor.putString("userRaceName", userRaceName);
+        editor.putString("userRaceDiscription", userRaceDiscription);
+        editor.putString("userHeadPath", headPath);
+        editor.putString("userSignature", userSignature);
+        editor.putString("userCurrentTitle", userCurrentTitle);
         editor.putString("userLevel", userLevel);
-        editor.putString("userPet", userPet);
-        editor.putString("userRace", userRace);
-        editor.putString("signature", signature);
+        editor.putString("userLevelDiscription", userLevelDiscription);
         editor.putString("isSaved", "");
         editor.commit();
     }

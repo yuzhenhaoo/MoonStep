@@ -20,6 +20,7 @@ import java.util.Map;
 
 import priv.zxy.moonstep.kernel.Application;
 import priv.zxy.moonstep.kernel.MessageReceiverService;
+import priv.zxy.moonstep.kernel.bean.ServiceBase;
 import priv.zxy.moonstep.login.module.biz.OnLoginListener;
 import priv.zxy.moonstep.utils.LogUtil;
 import priv.zxy.moonstep.utils.SharedPreferencesUtil;
@@ -42,10 +43,10 @@ public class LoginUtil {
         return instance;
     }
 
-    public void LogUtilinRequest(final OnLoginListener LogUtilinListener, final  String phoneNumber, final String inputPassword){
+    public void LogUtilinRequest(final OnLoginListener loginListener, final  String phoneNumber, final String inputPassword){
         //请求地址
-        String url = "http://120.79.154.236:8080/MoonStep/LogUtilinServlet";
-        String tag = "LogUtilin";
+        String url = ServiceBase.LOGIN_SERVLET_URL;
+        String tag = "login";
         //取得请求队列
         RequestQueue requestQueue = Volley.newRequestQueue(Application.getContext());
 
@@ -65,14 +66,11 @@ public class LoginUtil {
                                 @Override
                                 public void onSuccess() {
                                     //保证进入主页面后本地会话和群组都 load 完毕。
-                                    new Thread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            EMClient.getInstance().groupManager().loadAllGroups();
-                                            EMClient.getInstance().chatManager().loadAllConversations();
-                                        }
+                                    new Thread(() -> {
+                                        EMClient.getInstance().groupManager().loadAllGroups();
+                                        EMClient.getInstance().chatManager().loadAllConversations();
                                     }).start();
-                                    LogUtilinListener.LogUtilinSuccess();//只有当环信服务器也登陆成功的时候才触发回调方法
+                                    loginListener.LogUtilinSuccess();//只有当环信服务器也登陆成功的时候才触发回调方法
                                     LogUtil.d(TAG, "登录聊天服务器成功！");
                                 }
 
@@ -88,24 +86,24 @@ public class LoginUtil {
                             });
 
                             //将数据存入
-                            SharedPreferencesUtil.getInstance(Application.getContext()).saveSuccessedLogUtilinAccountAndPassword(phoneNumber, inputPassword);
+                            SharedPreferencesUtil.getInstance(Application.getContext()).saveSuccessedLoginAccountAndPassword(phoneNumber, inputPassword);
 
                             //我们需要在登录成功的时候再次启动一次MessageReceiverService
                             Application.getContext().startService(new Intent(Application.getContext(), MessageReceiverService.class));
                         } else {
-                            LogUtilinListener.LogUtilinFail(ErrorCode.PhoneNumberOrPasswordIsWrong);
+                            loginListener.LogUtilinFail(ErrorCode.PhoneNumberOrPasswordIsWrong);
 
                             //将mysp文件中的登录成功标记位置为false
-                            SharedPreferencesUtil.getInstance(Application.getContext()).fixFailLogUtilinInfo();
+                            SharedPreferencesUtil.getInstance(Application.getContext()).fixFailLoginInfo();
                         }
                     } catch (JSONException e) {
                         //做自己的请求异常操作
-                        LogUtilinListener.LogUtilinFail(ErrorCode.JSONException);
+                        loginListener.LogUtilinFail(ErrorCode.JSONException);
                         LogUtil.e(TAG, e.getMessage());
                     }
                 }, error -> {
                     //做自己的响应错误操作，如Toast提示（“请稍后重试”等）
-                    LogUtilinListener.LogUtilinFail(ErrorCode.NetNotResponse);
+            loginListener.LogUtilinFail(ErrorCode.NetNotResponse);
                     LogUtil.e(TAG, error.getMessage());
                 }) {
             @Override
