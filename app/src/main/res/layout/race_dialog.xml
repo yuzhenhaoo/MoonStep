@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="350dp"
+    android:layout_height="600dp">
+
+    <ImageView
+        android:id="@+id/background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/ui9" />
+
+    <ImageView
+        android:id="@+id/raceHeadImage"
+        android:layout_width="190dp"
+        android:layout_height="240dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="90dp"
+        android:background="#fff"
+        android:scaleType="fitXY"
+        android:src="@drawable/ui8"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/raceName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:ems="1"
+        android:gravity="center"
+        android:text="月灵族"
+        android:textColor="#000"
+        android:textSize="50sp"
+        app:layout_constraintVertical_bias="0.22"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/raceHeadImage"
+        app:layout_constraintTop_toTopOf="@+id/background"
+        tools:ignore="MissingConstraints" />
+
+    <ImageView
+        android:id="@+id/raceIcon"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_margin="10dp"
+        android:background="#ffc352"
+        app:layout_constraintLeft_toLeftOf="@id/raceHeadImage"
+        app:layout_constraintTop_toTopOf="@id/raceHeadImage" />
+
+    <ImageView
+        android:id="@+id/luckyIcon"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:background="#000"
+        app:layout_constraintBottom_toBottomOf="@+id/raceHeadImage"
+        app:layout_constraintEnd_toEndOf="@+id/raceHeadImage" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:text="每日月灵石+1"
+        android:textColor="#000"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/raceHeadImage"
+        app:layout_constraintStart_toEndOf="@+id/raceHeadImage" />
+
+    <TextView
+        android:id="@+id/raceDescription"
+        android:layout_width="299dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/ui10"
+        android:padding="7dp"
+        android:textColor="#000"
+        android:text="圆月时间五族之一，智障圆月时间五族之一，智障圆月时间五族之一，智障圆月时间五族之一，智障圆月时间五族之一，智障圆月时间五族之一，智障"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/background"
+        app:layout_constraintStart_toStartOf="@+id/background"
+        app:layout_constraintTop_toBottomOf="@id/raceHeadImage" />
+
+    <Button
+        android:id="@+id/click"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/ui10"
+        android:textColor="#000"
+        android:text="click"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/raceDescription" />
+
+</android.support.constraint.ConstraintLayout>
