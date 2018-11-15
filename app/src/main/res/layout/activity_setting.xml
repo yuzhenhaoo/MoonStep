@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#aeaeae">
+    <TextView
+        android:id="@+id/accountSetting"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="#000"
+        android:textColor="@color/white"
+        android:text="账号设置"
+        android:gravity="center_vertical"
+        android:paddingStart="20dp"
+        android:paddingEnd="5dp"
+        android:textSize="22sp"
+        android:drawableRight="@mipmap/right_white"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/phoneNumber"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="8dp"
+        android:background="#6c6c6c"
+        android:drawableRight="@mipmap/right_white"
+        android:gravity="center_vertical"
+        android:paddingStart="20dp"
+        android:paddingEnd="5dp"
+        android:text="手机号修改"
+        android:textColor="@color/white"
+        android:textSize="22sp"
+        app:layout_constraintTop_toBottomOf="@+id/accountSetting" />
+
+    <TextView
+        android:id="@+id/help"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="8dp"
+        android:background="#6c6c6c"
+        android:drawableRight="@mipmap/right_white"
+        android:gravity="center_vertical"
+        android:paddingStart="20dp"
+        android:paddingEnd="5dp"
+        android:text="关于圆月行"
+        android:textColor="@color/white"
+        android:textSize="22sp"
+        app:layout_constraintTop_toBottomOf="@+id/phoneNumber" />
+
+    <TextView
+        android:id="@+id/cleanChatSpace"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="8dp"
+        android:background="#6c6c6c"
+        android:drawableRight="@mipmap/right_white"
+        android:gravity="center_vertical"
+        android:paddingStart="20dp"
+        android:paddingEnd="5dp"
+        android:text="聊天记录清理"
+        android:textColor="@color/white"
+        android:textSize="22sp"
+        app:layout_constraintTop_toBottomOf="@+id/help" />
+
+    <TextView
+        android:id="@+id/exitLogin"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="#940000"
+        android:gravity="center"
+        android:paddingStart="20dp"
+        android:paddingEnd="5dp"
+        android:text="退出当前账号"
+        android:elevation="10dp"
+        android:textColor="@color/white"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toBottomOf="parent" />
+</android.support.constraint.ConstraintLayout>

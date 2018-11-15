@@ -37,7 +37,7 @@
             android:textColor="@color/LittleBlack"
             android:gravity="center_vertical"
             android:text="中国"
-            android:drawableEnd="@mipmap/right_key"/>
+            android:drawableEnd="@mipmap/right_black"/>
     </LinearLayout>
     <View
         android:id="@+id/country_line"

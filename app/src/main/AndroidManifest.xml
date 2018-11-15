@@ -98,10 +98,17 @@
         <activity android:name=".commerce.view.UserDetailActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
+        <activity android:name=".settings.SettingActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
+
+
         <!-- 设置环信应用的AppKey -->
         <meta-data
             android:name="EASEMOB_APPKEY"
             android:value="1106181001228289#moonstep" />
+
+
         <!-- 声明SDK所需的service SDK核心功能 -->
         <service
             android:name="com.hyphenate.chat.EMChatService"
@@ -110,6 +117,8 @@
             android:name="com.hyphenate.chat.EMJobService"
             android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE" />
+
+
         <!-- 声明SDK所需的receiver -->
         <receiver android:name="com.hyphenate.chat.EMMonitorReceiver">
             <intent-filter>
@@ -130,8 +139,10 @@
             </intent-filter>
         </receiver>
         <!-- -exported决定应用是否能被其它应用隐式调用，默认为false,当设置为false地时候，即使设置了intent-filter，也不能被其它应用隐式调用 -->
+
+
         <service
-            android:name=".EM.service.MoonFriendService"
+            android:name=".EM$service$MoonFriendService"
             android:exported="false" />
         <receiver
             android:name=".kernel.BootReceiver"

@@ -12,19 +12,6 @@ import android.widget.TextView;
 import priv.zxy.moonstep.R;
 
 /**
- * 调用的方法：（写在onClick里面）
- *                 final MyDialog myDialog = new MyDialog(Activity.this);
-                    myDialog.setOnClickListener(new MyDialog.onClickListener() {
-                    @Override
-                    public void onClick() {
-                        Toast.makeText(Activity.this, "恭喜你已经成功", Toast.LENGTH_SHORT).show();
-                        myDialog.dismiss();//让dialog消失
-                    }
-                    });
-                    myDialog.show();//让dialog显示
- */
-
-/**
  * 创建人: Administrator
  * 创建时间: 2018/11/13
  * 描述:用来在用户创建了账户后显示当前种族信息
@@ -41,7 +28,7 @@ public class RaceDialog extends Dialog {
 
     private TextView raceDescription;
 
-    private Button click;
+    private Button clickBt;
 
     private onClickListener onClickListener = null;
 
@@ -72,7 +59,7 @@ public class RaceDialog extends Dialog {
         raceIcon = (ImageView) findViewById(R.id.raceIcon);
         luckyIconIV = (ImageView) findViewById(R.id.luckyIcon);
         raceDescription = (TextView) findViewById(R.id.raceDescription);
-        click = (Button) findViewById(R.id.click);
+        clickBt = (Button) findViewById(R.id.click);
     }
 
     private void initData(){
@@ -80,12 +67,9 @@ public class RaceDialog extends Dialog {
     }
 
     private void initEvent(){
-        click.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (onClickListener != null){
-                    onClickListener.onClick();
-                }
+        clickBt.setOnClickListener(v -> {
+            if (onClickListener != null){
+                onClickListener.onClick();
             }
         });
     }
@@ -95,6 +79,6 @@ public class RaceDialog extends Dialog {
     }
 
     public interface onClickListener{
-        public void onClick();
+        void onClick();
     }
 }

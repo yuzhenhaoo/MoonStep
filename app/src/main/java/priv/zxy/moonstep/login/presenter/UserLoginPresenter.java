@@ -44,7 +44,7 @@ public class UserLoginPresenter {
         userBiz.doLogUtilin(userLogUtilinView.getUserPhoneNumber(), userLogUtilinView.getUserPassword(), new OnLoginListener() {
             @Override
             public void LogUtilinSuccess() {
-                userLogUtilinView.fixLogUtilinPreferences(userLogUtilinView.getUserPhoneNumber(), userLogUtilinView.getUserPassword());
+                userLogUtilinView.setLoginPreferences(userLogUtilinView.getUserPhoneNumber(), userLogUtilinView.getUserPassword());
                 userLogUtilinView.handleSendMessage();
                 userLogUtilinView.toMainActivity();
             }

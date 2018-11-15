@@ -16,7 +16,7 @@ public class ServiceBase {
 
     public static String CHECK_PHONE_SERVLET_URL = "http://120.79.154.236:8080/MoonStep/CheckPhoneServlet";
 
-    public static String REGISTER_SERVLET_URL = "http://120.79.154.236:8080/MoonStep/NewServlet";
+    public static String REGISTER_SERVLET_URL = "http://120.79.154.236:8080/MoonStep/RegisterServlet";
 
     public static String LOGIN_SERVLET_URL = "http://120.79.154.236:8080/MoonStep/LoginServlet";
 

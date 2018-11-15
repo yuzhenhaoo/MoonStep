@@ -1,7 +1,5 @@
 package priv.zxy.moonstep.utils.dbUtils;
 
-import android.content.Context;
-
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -14,14 +12,15 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import priv.zxy.moonstep.db.MoonFriend;
 import priv.zxy.moonstep.helper.EMHelper;
-import priv.zxy.moonstep.EM.bean.VolleyCallback;
 import priv.zxy.moonstep.kernel.Application;
 import priv.zxy.moonstep.kernel.bean.ErrorCode;
 import priv.zxy.moonstep.kernel.bean.ServiceBase;
 import priv.zxy.moonstep.utils.LogUtil;
 
+/**
+ * 注册账号
+ */
 public class PhoneRegisterUtil {
 
     private static final String TAG = "PhoneRegisterUtil";
@@ -47,10 +46,10 @@ public class PhoneRegisterUtil {
      * @param PassWord 密码
      * @Param Gender 性别
      */
-    public void RegisterRequest(final VolleyCallback volleyCallback, final String PhoneNumber, final  String NickName, final String PassWord, final String Gender){
+    public void RegisterRequest(final CallBack callBack, final String PhoneNumber, final  String NickName, final String PassWord, final String Gender){
         //请求地址
         String url = ServiceBase.REGISTER_SERVLET_URL;
-        String tag = "LogUtilin";
+        String tag = "Login";
         //取得请求队列
         RequestQueue requestQueue = Volley.newRequestQueue(Application.getContext());
 
@@ -62,59 +61,50 @@ public class PhoneRegisterUtil {
                 response -> {
                     try {
                         JSONObject jsonObject = (JSONObject) new JSONObject(response).get("params");
-                        String result = jsonObject.getString("Result");
+                        String result = jsonObject.getString("result");
+                        final String raceCode = jsonObject.getString("RaceCode");
+                        final String raceName = jsonObject.getString("RaceName");
+                        final String raceDescription = jsonObject.getString("RaceDescription");
                         if (result.equals("success")){
-                            EMHelper.getInstance(Application.getContext()).registerUser(new VolleyCallback() {
+                            EMHelper.getInstance(Application.getContext()).registerUser(new EMHelper.Callback() {
+
                                 @Override
-                                public String onSuccess(String result) throws InterruptedException {
-                                    volleyCallback.onSuccess();
-                                    return null;
+                                public void onSuccess() {
+                                    callBack.onSuccess(raceCode, raceName, raceDescription);
                                 }
 
                                 @Override
-                                public boolean onSuccess() {
-                                    return false;
+                                public void onFail() {
+                                    callBack.onFail(ErrorCode.PasswordFormatISNotRight);
                                 }
 
-                                @Override
-                                public String onFail(String error) {
-                                    return null;
-                                }
-
-                                @Override
-                                public boolean onFail() {
-                                    volleyCallback.getErrorCode(ErrorCode.PasswordFormatISNotRight);
-                                    return false;
-                                }
-
-                                @Override
-                                public void getMoonFriend(MoonFriend moonFriend) {
-
-                                }
-
-                                @Override
-                                public void getErrorCode(ErrorCode errorCode) {
-
-                                }
                             }, "moonstep" + PhoneNumber, PassWord, NickName);
                         }
                     } catch (JSONException e) {
                         //做自己的请求异常操作
-                        volleyCallback.getErrorCode(ErrorCode.JSONException);
+                        callBack.onFail(ErrorCode.JSONException);
                         LogUtil.e(TAG, e.getMessage());
                     }
                 }, error -> {
-                    volleyCallback.getErrorCode(ErrorCode.NetNotResponse);
+            callBack.onFail(ErrorCode.NetNotResponse);
                     LogUtil.i(TAG, error.getMessage());
                 }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("PhoneNumber", PhoneNumber);
+//                params.put("PhoneNumber", PhoneNumber);
+                params.put("PhoneNumber", "15809669723");
                 params.put("NickName",NickName);
                 params.put("PassWord", PassWord);
                 params.put("Gender",Gender);
                 return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<String, String>();
+                headers.put("Charset", "ISO-8859-1");
+                return headers;
             }
         };
 
@@ -123,5 +113,12 @@ public class PhoneRegisterUtil {
 
         //将请求添加到队列中
         requestQueue.add(request);
+    }
+
+    public interface CallBack{
+
+        void onSuccess(String raceCode, String raceName, String raceDescription);
+
+        void onFail(ErrorCode errorCode);
     }
 }

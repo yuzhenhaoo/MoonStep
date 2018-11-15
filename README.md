@@ -306,3 +306,12 @@ Bug类型：`在Application中查找并向MoonStep_Palace中添加User对象的�
 Bug解决措施：已经解决，解决方式：在第一次加载的时候，将好友的信息存储到SQLite中，一方面减少对网络请求的依赖，递增速度，第二个是在好友页面直接从本地数据库中加载的话，比从网络上重新加载要快了许多。
 
 Bug解决时间：2018/10/12
+
+Bug类型：在tomcat配置的后台中，使用Servlet接收中文数据的时候出现了乱码问题，但是之前测试的时候中文是可以正常显示的，然后尝试
+`request.setCharacterEncoding("utf-8")`和`response.setContentType("text/html;character=utf-8")`都没有什么用处。
+
+Bug解决措施：在接收数据的时候，先解码然后译码，将tomcat本身支持的ISO-8859-1的编码方式转换为UFT-8的编码方式，经测试，问题成功解决，语法具体如下:
+
+`String xxx = new String(request.getParameter("xxx").getBytes("ISO-8859-1"),"UTF-8").trim();`
+
+Bug解决时间：2018/11/15 

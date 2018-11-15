@@ -1,7 +1,6 @@
 package priv.zxy.moonstep.utils;
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -38,7 +37,7 @@ public class ToastUtil {
 
     public void showToast(String content){
         LayoutInflater inflater = mActivity.getLayoutInflater();
-        View layout = inflater.inflate(R.layout.my_toast, null);
+        View layout = inflater.inflate(R.layout.toast, null);
         ImageView imageView = layout.findViewById(R.id.image);
         TextView textView = layout.findViewById(R.id.textview);
         textView.setText(content);

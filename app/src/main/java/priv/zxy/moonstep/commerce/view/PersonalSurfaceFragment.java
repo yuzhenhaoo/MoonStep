@@ -40,7 +40,7 @@ import priv.zxy.moonstep.login.view.UserLoginActivity;
 /**
  * 检查settings按钮设置是否可以生效，若是不能生效，则说明是toolbar设置的问题，针对toolbar进行改进。
  */
-public class PersonalSurfaceFragment extends Fragment implements OnMenuItemClickListener, OnMenuItemLongClickListener {
+public class PersonalSurfaceFragment extends Fragment {
 
     private static final String TAG = "PersonalSurfaceFragment";
     private View view;
@@ -48,6 +48,7 @@ public class PersonalSurfaceFragment extends Fragment implements OnMenuItemClick
     private ArrayList<MenuObject> menuObjects = new ArrayList<>();
     private Activity mActivity;
     private WaveViewByBezier waveViewByBezier;
+    private AnimationButton bt;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,15 +61,28 @@ public class PersonalSurfaceFragment extends Fragment implements OnMenuItemClick
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fg_main_first_subpage4, container, false);
-//        initView();
-//        updateData();
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        AnimationButton bt = view.findViewById(R.id.clickButton);
+
+        initView();
+
+        initEvent();
+
+    }
+
+    private void initView(){
+        bt = view.findViewById(R.id.clickButton);
+
+        waveViewByBezier = view.findViewById(R.id.waveView);
+    }
+
+    private void initEvent(){
+        waveViewByBezier.startAnimation();
+
         bt.setAnimationButtonListener(new AnimationButton.AnimationButtonListener(){
             @Override
             public void onClickListener() {
@@ -81,10 +95,6 @@ public class PersonalSurfaceFragment extends Fragment implements OnMenuItemClick
                 bt.reset();
             }
         });
-
-        waveViewByBezier = view.findViewById(R.id.waveView);
-        waveViewByBezier.startAnimation();
-//        initView();
     }
 
     private void jumpToDetailActivity(){
@@ -110,137 +120,4 @@ public class PersonalSurfaceFragment extends Fragment implements OnMenuItemClick
         waveViewByBezier.stopAnimation();
     }
 
-    @SuppressLint("ClickableViewAccessibility")
-    public void initView() {
-        initToolbar();
-        initMenuFragment();
-    }
-
-    //若要使用页面设置弹窗效果，必须要使用toolbar，然而约束布局toolbar不显示
-    private void initToolbar() {
-        Toolbar mToolbar = view.findViewById(R.id.toolbar);
-        ((AppCompatActivity) mActivity).setSupportActionBar(mToolbar);
-        if (((AppCompatActivity) mActivity).getSupportActionBar() != null) {
-            ((AppCompatActivity) mActivity).getSupportActionBar().setHomeButtonEnabled(true);
-            ((AppCompatActivity) mActivity).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            ((AppCompatActivity) mActivity).getSupportActionBar().setDisplayShowTitleEnabled(false);
-        }
-    }
-
-    private void initMenuFragment() {
-        MenuParams menuParams = new MenuParams();
-        menuParams.setActionBarSize((int) getResources().getDimension(R.dimen.tool_bar_height));
-        menuParams.setMenuObjects(getMenuObjects());
-        menuParams.setClosableOutside(false);
-        mMenuDiaLogFragment = ContextMenuDialogFragment.newInstance(menuParams);
-        mMenuDiaLogFragment.setItemClickListener(this);
-        mMenuDiaLogFragment.setItemLongClickListener(this);
-    }
-
-    private void popupDiaLogUtil() {
-        final MyDialog myDialog = new MyDialog(mActivity);
-        myDialog.setTitle("退出提示!");
-        myDialog.setContent("退出登陆后我们会继续保留您的账户数据，记得常回来看看哦！");
-        myDialog.setNegativeClickLister("取消", new MyDialog.onNegativeClickListener() {
-            @Override
-            public void onNegativeClick() {
-                myDialog.dismiss();
-            }
-        });
-        myDialog.setPositiveClickLister("确认", () -> {
-            menuObjects.clear();
-            Intent intent = new Intent(mActivity, UserLoginActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            new Thread(() -> {
-                EMClient.getInstance().logout(true);//退出EMC的服务，让当前用户不在线
-            }).start();
-            if (BuildConfig.DEBUG) LogUtil.d("PersonalSurfaceFragment", "用户已经成功下线");
-            startActivity(intent);
-        });
-        myDialog.show();
-    }
-
-    private List<MenuObject> getMenuObjects() {
-        menuObjects.clear();
-        MenuObject close = new MenuObject("关闭");
-        close.setResource(R.mipmap.close);
-
-        MenuObject send = new MenuObject("修改背景图片");
-        send.setResource(R.mipmap.wrench);
-
-        MenuObject like = new MenuObject("修改个人信息");
-        Bitmap b = BitmapFactory.decodeResource(getResources(), R.mipmap.personal_info);
-        like.setBitmap(b);
-
-        MenuObject addFr = new MenuObject("黑名单");
-        BitmapDrawable bd = new BitmapDrawable(getResources(),
-                BitmapFactory.decodeResource(getResources(), R.mipmap.black_list));
-        addFr.setDrawable(bd);
-
-        MenuObject addFav = new MenuObject("意见反馈");
-        addFav.setResource(R.mipmap.feedback);
-
-        MenuObject LogUtilOut = new MenuObject("退出登录");
-        LogUtilOut.setResource(R.mipmap.log_out);
-
-        menuObjects.add(close);
-        menuObjects.add(send);
-        menuObjects.add(like);
-        menuObjects.add(addFr);
-        menuObjects.add(addFav);
-        menuObjects.add(LogUtilOut);
-        return menuObjects;
-    }
-
-    //初始化选项菜单
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        //一旦不设置menu.clear()属性，就会导致activity的的menu和fragment的menu一起显示出来，展示的效果会变成三个点加menu的菜单
-        menu.clear();
-        mActivity.getMenuInflater().inflate(R.menu.context_menu, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.context_menu:
-                if (getFragmentManager().findFragmentByTag(ContextMenuDialogFragment.TAG) == null) {
-                    mMenuDiaLogFragment.show(getFragmentManager(), ContextMenuDialogFragment.TAG);
-                }
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onMenuItemClick(View clickedView, int position) {
-        switch (position) {
-            case 0:
-
-                break;
-            case 1:
-
-                break;
-            case 2:
-
-                break;
-            case 3:
-
-                break;
-            case 4:
-
-                break;
-            case 5:
-                //这里设置一个弹窗，确认是否登出当前账号
-                popupDiaLogUtil();
-                break;
-        }
-    }
-
-    @Override
-    public void onMenuItemLongClick(View view, int i) {
-
-    }
 }

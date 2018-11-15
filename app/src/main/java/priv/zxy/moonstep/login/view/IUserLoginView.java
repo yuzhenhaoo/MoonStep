@@ -27,11 +27,9 @@ public interface IUserLoginView {
 
     void initPassword(SharedPreferencesUtil preference);
 
-    void showSuccessTip();
-
     void showErrorTip(ErrorCode errorCode);
 
     void handleSendMessage();
 
-    void fixLogUtilinPreferences(String username, String password);
+    void setLoginPreferences(String username, String password);
 }

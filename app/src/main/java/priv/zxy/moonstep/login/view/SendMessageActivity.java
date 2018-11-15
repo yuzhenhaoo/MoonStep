@@ -12,7 +12,6 @@ import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.ContentLoadingProgressBar;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -23,7 +22,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 //import cn.smssdk.EventHandler;
 //import cn.smssdk.SMSSDK;
@@ -120,7 +118,7 @@ public class SendMessageActivity extends BaseActivity implements ISendMessageVie
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.send_message_activity);
+        setContentView(R.layout.activity_message);
         initView();
     }
 

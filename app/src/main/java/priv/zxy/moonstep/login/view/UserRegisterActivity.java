@@ -23,13 +23,18 @@ import android.widget.RadioGroup;
 import com.hyphenate.exceptions.HyphenateException;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
+import priv.zxy.moonstep.EM.bean.VolleyCallback;
 import priv.zxy.moonstep.R;
+import priv.zxy.moonstep.customview.RaceDialog;
+import priv.zxy.moonstep.db.MoonFriend;
 import priv.zxy.moonstep.kernel.BaseActivity;
+import priv.zxy.moonstep.utils.LogUtil;
 import priv.zxy.moonstep.utils.ShowErrorReason;
 import priv.zxy.moonstep.utils.ToastUtil;
 import priv.zxy.moonstep.kernel.bean.ErrorCode;
 import priv.zxy.moonstep.login.presenter.UserRegisterPresenter;
 import priv.zxy.moonstep.main.view.MainActivity;
+import priv.zxy.moonstep.utils.dbUtils.PhoneRegisterUtil;
 
 /**
  *  Created by Zxy on 2018/9/23
@@ -37,14 +42,13 @@ import priv.zxy.moonstep.main.view.MainActivity;
 
 public class UserRegisterActivity extends BaseActivity implements IUserRegisterView {
 
+    private static final String TAG = "UserRegisterActivity";
     private MaterialEditText accountName;
     private RadioGroup radioGroup;
-    private RadioButton man;
-    private RadioButton woman;
     private MaterialEditText password;
     private MaterialEditText passwordCheck;
     private Button clickRegister;
-    private Button returnLogUtilinPage;
+    private Button returnLoginPage;
     private ImageView backButton;
     private View deepBackground;
     private View plainBackground;
@@ -52,10 +56,14 @@ public class UserRegisterActivity extends BaseActivity implements IUserRegisterV
     private String phoneNumber;
     private Context mContext;
     private Activity mActivity;
+    private RaceDialog raceDialog;
     private String nickName;
     private String userPassword = "";
     private String confirmPassword = "";
-    private String userGender = "";
+    private String userGender = "男";
+    private String raceCode;
+    private String raceName;
+    private String raceDescription;
 
     //创建一个桥接对象，通过Presenter完成和Module层的交互
     private UserRegisterPresenter userRegisterPresenter;
@@ -76,31 +84,42 @@ public class UserRegisterActivity extends BaseActivity implements IUserRegisterV
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register_activity);
         initView();
+        initData();
+        initEvent();
     }
 
     @SuppressLint("ClickableViewAccessibility")
     private void initView() {
         accountName = (MaterialEditText) findViewById(R.id.accountName);
         radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
-        man = (RadioButton) findViewById(R.id.man);
-        woman = (RadioButton) findViewById(R.id.woman);
         password = (MaterialEditText) findViewById(R.id.password);
-        passwordCheck = (MaterialEditText) findViewById(R.id.password_check);
-        clickRegister = (Button) findViewById(R.id.click_register);
-        returnLogUtilinPage = (Button) findViewById(R.id.return_LogUtilin_page);
+        passwordCheck = (MaterialEditText) findViewById(R.id.passwordCheck);
+        clickRegister = (Button) findViewById(R.id.clickRegister);
+        returnLoginPage = (Button) findViewById(R.id.returnLoginpage);
         backButton = (ImageView) findViewById(R.id.back_button);
         deepBackground = (View) findViewById(R.id.deepBackground);
         plainBackground = (View) findViewById(R.id.plainBackground);
         progressBar = (ContentLoadingProgressBar) findViewById(R.id.progressBar);
+        raceDialog = new RaceDialog(this);
         mContext = this.getApplicationContext();
         mActivity = this;
 
         shake = AnimationUtils.loadAnimation(this, R.anim.shake);
 
-        phoneNumber = getPhoneNumber();
-
         userRegisterPresenter = new UserRegisterPresenter(this, mActivity, mContext);
-        hideLoading();
+
+    }
+
+    private void initData(){
+        phoneNumber = getPhoneNumber();
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private void initEvent(){
+        raceDialog.setOnClickListener(()->{
+            raceDialog.dismiss();
+            toMainActivity();
+        });
 
         backButton.setOnTouchListener((v, event) -> {
             switch(event.getAction()){
@@ -114,67 +133,54 @@ public class UserRegisterActivity extends BaseActivity implements IUserRegisterV
             return true;
         });
 
-        clickRegister.setOnTouchListener((view, motionEvent) -> {
-            switch (motionEvent.getAction()) {
+        clickRegister.setOnClickListener(view-> {
+            getData();
+            LogUtil.d(TAG, userGender);
+            PhoneRegisterUtil.getInstance().RegisterRequest(new PhoneRegisterUtil.CallBack() {
+                @Override
+                public void onSuccess(String rc, String rn, String rd) {
+                    raceCode = rc;
+                    raceName = rn;
+                    raceDescription = rd;
+                    raceDialog.show();
+                }
+
+                @Override
+                public void onFail(ErrorCode errorCode) {
+                    ShowErrorReason.getInstance(UserRegisterActivity.this).show(errorCode);
+                }
+            }, phoneNumber, nickName, userPassword, userGender);
+        });
+
+        returnLoginPage.setOnTouchListener((v, event) -> {
+            switch (event.getAction()){
                 case MotionEvent.ACTION_DOWN:
-                    clickRegister.setAnimation(shake);
-                    showLoading();
+                    returnLoginPage.setAnimation(shake);
                     break;
                 case MotionEvent.ACTION_UP:
-                    getData();
-                    new Thread(() -> {
-                        Looper.prepare();
-                        try {
-                            userRegisterPresenter.doRegister(phoneNumber, nickName, userPassword,  confirmPassword, userGender);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        } catch (HyphenateException e) {
-                            e.printStackTrace();
-                        }
-                        mHandler.sendEmptyMessage(0x01);
-                        Looper.loop();
-                    }).start();
+                    toLoginActivity();
                     break;
             }
             return true;
         });
 
-        returnLogUtilinPage.setOnTouchListener((v, event) -> {
-            switch (event.getAction()){
-                case MotionEvent.ACTION_DOWN:
-                    returnLogUtilinPage.setAnimation(shake);
+        radioGroup.setOnCheckedChangeListener((radioGroup, checkedId) -> {
+            switch (checkedId) {
+                case R.id.man:
+                    userGender = "男";
                     break;
-                case MotionEvent.ACTION_UP:
-                    toLogUtilinActivity();
+                case R.id.woman:
+                    userGender = "女";
                     break;
             }
-            return true;
         });
+
+        hideLoading();
     }
 
     @Override
     public String getUserName() {
         return null;
-    }
-
-    @Override
-    public String getUserPassWord() {
-        return null;
-    }
-
-    @Override
-    public void clearUserName() {
-        accountName.clearComposingText();
-    }
-
-    @Override
-    public void clearUserPassword() {
-        password.clearComposingText();
-    }
-
-    @Override
-    public void clearUserConfirmPassword() {
-        passwordCheck.clearComposingText();
     }
 
     @Override
@@ -197,7 +203,7 @@ public class UserRegisterActivity extends BaseActivity implements IUserRegisterV
     }
 
     @Override
-    public void toLogUtilinActivity() {
+    public void toLoginActivity() {
         Intent intent = new Intent(this, UserLoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -223,17 +229,6 @@ public class UserRegisterActivity extends BaseActivity implements IUserRegisterV
         nickName = accountName.getText().toString();
         userPassword = password.getText().toString();
         confirmPassword = passwordCheck.getText().toString();
-
-        radioGroup.setOnCheckedChangeListener((radioGroup, checkedId) -> {
-            switch (checkedId) {
-                case R.id.man:
-                    userGender = "男";
-                    break;
-                case R.id.woman:
-                    userGender = "女";
-                    break;
-            }
-        });
     }
 
     @Override

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/user_inf"
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_header_height"
@@ -21,27 +22,49 @@
         app:civ_border_color="#c0c0c0"
         app:civ_border_width="3dp" />
 
-    <LinearLayout
-        android:id="@+id/user_inf_text"
+    <TextView
+        android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="vertical">
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/fontfamily4"
+        android:paddingTop="@dimen/nav_header_vertical_spacing"
+        android:text="@string/nav_header_title"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        app:layout_constraintBottom_toTopOf="@+id/race"
+        app:layout_constraintStart_toEndOf="@+id/user_image"
+        app:layout_constraintTop_toTopOf="@+id/user_image" />
 
-        <TextView
-            android:id="@+id/name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="@dimen/nav_header_vertical_spacing"
-            android:text="@string/nav_header_title"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+    <TextView
+        android:id="@+id/race"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:fontFamily="@font/fontfamily4"
+        android:text="@string/nav_header_subtitle"
+        app:layout_constraintBottom_toBottomOf="@+id/user_image"
+        app:layout_constraintStart_toEndOf="@+id/user_image" />
 
-        <TextView
-            android:id="@+id/race"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/nav_header_subtitle" />
-    </LinearLayout>
+    <Button
+        android:id="@+id/settingBt"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@mipmap/setting"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-
-</LinearLayout>
+    <Button
+        android:id="@+id/mode"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@mipmap/moon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/settingBt"/>
+</android.support.constraint.ConstraintLayout>

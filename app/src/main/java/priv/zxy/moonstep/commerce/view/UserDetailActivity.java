@@ -16,6 +16,6 @@ public class UserDetailActivity extends BaseActivity{
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.personal_info);
+        setContentView(R.layout.activity_peronal_info);
     }
 }

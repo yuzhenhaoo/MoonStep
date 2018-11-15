@@ -1,26 +1,31 @@
 package priv.zxy.moonstep.main.view;
 
+import android.animation.Animator;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Service;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
+import android.view.animation.DecelerateInterpolator;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,18 +40,20 @@ import java.util.Map;
 
 import priv.zxy.moonstep.EM.service.MoonFriendService;
 import priv.zxy.moonstep.R;
+import priv.zxy.moonstep.kernel.Application;
 import priv.zxy.moonstep.kernel.BaseActivity;
 import priv.zxy.moonstep.login.view.UserLoginActivity;
+import priv.zxy.moonstep.settings.SettingActivity;
 import priv.zxy.moonstep.utils.LogUtil;
 import priv.zxy.moonstep.utils.SharedPreferencesUtil;
 import priv.zxy.moonstep.utils.ShowErrorReason;
-import priv.zxy.moonstep.db.Message;
 import priv.zxy.moonstep.kernel.bean.ErrorCode;
 import priv.zxy.moonstep.connectation.MainFifthPageActivity;
 import priv.zxy.moonstep.commerce.view.FirstMainPageFragmentParent;
 import priv.zxy.moonstep.task.FourthMainPageFragment;
 import priv.zxy.moonstep.gps.SecondMainPageFragmentParent;
 import priv.zxy.moonstep.title.ThirdMainPageFragment1;
+import priv.zxy.moonstep.utils.ToastUtil;
 
 /**
  * 我们可以在MainActivity中获得Moonfriends的获取和MessageQueue的获取
@@ -58,117 +65,149 @@ public class MainActivity extends BaseActivity
 
     private static final String TAG = "MainActivity";
 
+    private NavigationView navigationView;
+
+    private View nav_header_main;
+
     private TextView name;
 
     private TextView race;
 
-    private Context mContext;
+    private Button setting;
+
+    private Button mode;
+
+    private AnimatorSet animatorSet = new AnimatorSet();
 
     private Activity mActivity;
 
     private Intent service;
 
-    //定义一个变量，来标识是否退出
-    private static boolean isExit=false;
+    private static boolean isNight = true;
 
-    @SuppressLint("HandlerLeak")
-    private Handler handler = new Handler(){
-        @Override
-        public void handleMessage(android.os.Message msg) {
-            super.handleMessage(msg);
-            isExit = false;
-        }
-    };
-
-    private ServiceConnection connection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            LogUtil.d(TAG, "MoonFriendService Connected");
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            LogUtil.d(TAG, "MoonFriendService DisConnected");
-        }
-    };
-
-    //实现ConnectionListener接口
-    private class MyConnectionListener implements EMConnectionListener {
-        @Override
-        public void onConnected() {
-        }
-
-        @Override
-        public void onDisconnected(final int error){
-            runOnUiThread(() -> {
-                if (error == EMError.USER_REMOVED) {
-                    // 显示帐号已经被移除
-                    ShowErrorReason.getInstance(mActivity).show(ErrorCode.AccountISRemoverd);
-                    LogUtil.e("error", String.valueOf(error));
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    toLogUtilinActivity();//强制退出到登陆页面
-                } else if (error == EMError.USER_LOGIN_ANOTHER_DEVICE) {
-                    // 显示帐号在其他设备登录
-                    ShowErrorReason.getInstance(mActivity).show(ErrorCode.AccountIsLogUtilinInOtherDevice);
-                    LogUtil.e("error", String.valueOf(error));
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    toLogUtilinActivity();//强制退出到登陆页面
-                } else {
-                    if (NetUtils.hasNetwork(MainActivity.this)){
-                        //连接不到聊天服务器
-                        ShowErrorReason.getInstance(mActivity).show(ErrorCode.ConnectChatServiceFail);
-                        try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        toLogUtilinActivity();//强制退出到登陆页面
-                    }
-                    else{
-                        //当前网络不可用，请检查网络设置
-                        ShowErrorReason.getInstance(mActivity).show(ErrorCode.NetNotResponse);
-                        try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        toLogUtilinActivity();//强制退出到登陆页面
-                    }
-                }
-            });
-        }
-    }
+    private static boolean isExit = false;//定义一个变量，来标识是否退出
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SQLiteDatabase db = Connector.getDatabase();//实现数据库的创建
 
-        setContentView(R.layout.mainpage);
+        setContentView(R.layout.activity_main);
+
+        initView();
+
+        initData();
+
+        initEvent();
+
+    }
+
+    private void initView(){
+        bindService();
 
         getSupportFragmentManager().beginTransaction().replace(R.id.main_content, new FirstMainPageFragmentParent()).commit();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        mContext = this.getApplicationContext();
+        navigationView = findViewById(R.id.nav_view);
+        nav_header_main = navigationView.getHeaderView(0);
+
+        name = (TextView) nav_header_main.findViewById(R.id.name);
+        race = (TextView) nav_header_main.findViewById(R.id.race);
+        setting = (Button) nav_header_main.findViewById(R.id.settingBt);
+        mode = (Button) nav_header_main.findViewById(R.id.mode);
 
         mActivity = this;
 
-        bindService();
+        //设置Setting的动画
+        ObjectAnimator animator1 = ObjectAnimator.ofFloat(setting, "scaleX",1.0f, 1.3f);
+        ObjectAnimator animator2 = ObjectAnimator.ofFloat(setting, "scaleY",1.0f, 1.3f);
+        ObjectAnimator animator3 = ObjectAnimator.ofFloat(setting, "scaleX",1.3f, 1.0f);
+        ObjectAnimator animator4 = ObjectAnimator.ofFloat(setting, "scaleY",1.3f, 1.0f);
+        animator1.setInterpolator(new DecelerateInterpolator());
+        animator2.setInterpolator(new DecelerateInterpolator());
+        animator3.setInterpolator(new DecelerateInterpolator());
+        animator4.setInterpolator(new DecelerateInterpolator());
 
-        changeMyInformation();
+        animatorSet.playTogether(animator1, animator2);
+        animatorSet.play(animator2).before(animator3);
+        animatorSet.playTogether(animator3, animator4);
 
-        doEMConnectionListener();
+        if(Build.VERSION.SDK_INT >= 24){
+            animatorSet.getTotalDuration();
+            Log.d(TAG, String.valueOf(animatorSet.getTotalDuration()));
+        }
+    }
 
+    private void initData(){
+
+        try {
+            Map<String, String> data = SharedPreferencesUtil.getInstance(Application.getContext()).readMySelfInformation();
+            name.setText(data.get("nickName"));
+            race.setText(data.get("userRaceName"));
+        } catch (NullPointerException e) {
+            LogUtil.d(TAG, e.getMessage());
+        }
+    }
+
+    private void initEvent(){
+        //注册一个监听连接状态的listener
+        EMClient.getInstance().addConnectionListener(new MyConnectionListener());
+
+        mode.setOnClickListener(v -> mode.animate()
+                .alpha(0)
+                .setDuration(1000)
+                .setListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        if (isNight){
+                            mode.setBackgroundResource(R.drawable.sun);
+                            isNight = false;
+                            ToastUtil.getInstance(Application.getContext(), MainActivity.this).showToast("当前为白日模式");
+                            mode.setAlpha(1);
+                        }else{
+                            mode.setBackgroundResource(R.mipmap.moon);
+                            isNight = true;
+                            ToastUtil.getInstance(Application.getContext(), MainActivity.this).showToast("当前为夜晚模式");
+                            mode.setAlpha(1);
+                        }
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+
+                    }
+                }).start());
+
+        setting.setOnClickListener(v -> {
+            animatorSet.start();
+            new Thread(()->{
+                try{
+                    Thread.sleep(500);
+                }catch (InterruptedException e){
+                    e.printStackTrace();
+                    LogUtil.e(TAG, "Thread is Interrupted!");
+                }
+                animatorHandle.sendEmptyMessage(0x01);
+            }).start();
+        });
+    }
+
+    @Override
+    public void toSettingActivity(){
+        Intent intent = new Intent(this, SettingActivity.class);
+        startActivity(intent);
     }
 
     @Override
@@ -190,15 +229,6 @@ public class MainActivity extends BaseActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -215,23 +245,7 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public void changeMyInformation() {
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        View nav_header_main = navigationView.getHeaderView(0);
-        try {
-            name = (TextView) nav_header_main.findViewById(R.id.name);
-            race = (TextView) nav_header_main.findViewById(R.id.race);
-
-            Map<String, String> data = SharedPreferencesUtil.getInstance(mContext).readMySelfInformation();
-            name.setText(data.get("nickName"));
-            race.setText(data.get("userRace"));
-        } catch (NullPointerException e) {
-            LogUtil.d(TAG, e.getMessage());
-        }
-    }
-
-    @Override
-    public void toLogUtilinActivity() {
+    public void toLoginActivity() {
         Intent intent = new Intent(this, UserLoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -273,13 +287,6 @@ public class MainActivity extends BaseActivity
         super.onDestroy();
     }
 
-
-    @Override
-    public void doEMConnectionListener() {
-        //注册一个监听连接状态的listener
-        EMClient.getInstance().addConnectionListener(new MyConnectionListener());
-    }
-
     @Override
     public void bindService() {
         //绑定LoadingMoonFriendsService
@@ -308,11 +315,95 @@ public class MainActivity extends BaseActivity
     public void exit(){
         if (!isExit){
             isExit = true;
-            Toast.makeText(mContext, "再按一次退出程序", Toast.LENGTH_SHORT).show();
+            Toast.makeText(Application.getContext(), "再按一次退出程序", Toast.LENGTH_SHORT).show();
             handler.sendEmptyMessageDelayed(0, 2000);
         }else{
             finish();
             System.exit(0);
+        }
+    }
+
+    @SuppressLint("HandlerLeak")
+    private Handler handler = new Handler(){
+        @Override
+        public void handleMessage(android.os.Message msg) {
+            super.handleMessage(msg);
+            isExit = false;
+        }
+    };
+
+    @SuppressLint("HandlerLeak")
+    private Handler animatorHandle = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            toSettingActivity();
+        }
+    };
+
+    private ServiceConnection connection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            LogUtil.d(TAG, "MoonFriendService Connected");
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            LogUtil.d(TAG, "MoonFriendService DisConnected");
+        }
+    };
+
+    private class MyConnectionListener implements EMConnectionListener {
+        @Override
+        public void onConnected() {
+        }
+
+        @Override
+        public void onDisconnected(final int error){
+            runOnUiThread(() -> {
+                if (error == EMError.USER_REMOVED) {
+                    // 显示帐号已经被移除
+                    ShowErrorReason.getInstance(mActivity).show(ErrorCode.AccountISRemoverd);
+                    LogUtil.e("error", String.valueOf(error));
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    toLoginActivity();//强制退出到登陆页面
+                } else if (error == EMError.USER_LOGIN_ANOTHER_DEVICE) {
+                    // 显示帐号在其他设备登录
+                    ShowErrorReason.getInstance(mActivity).show(ErrorCode.AccountIsLogUtilinInOtherDevice);
+                    LogUtil.e("error", String.valueOf(error));
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    toLoginActivity();//强制退出到登陆页面
+                } else {
+                    if (NetUtils.hasNetwork(MainActivity.this)){
+                        //连接不到聊天服务器
+                        ShowErrorReason.getInstance(mActivity).show(ErrorCode.ConnectChatServiceFail);
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        toLoginActivity();//强制退出到登陆页面
+                    }
+                    else{
+                        //当前网络不可用，请检查网络设置
+                        ShowErrorReason.getInstance(mActivity).show(ErrorCode.NetNotResponse);
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        toLoginActivity();//强制退出到登陆页面
+                    }
+                }
+            });
         }
     }
 }

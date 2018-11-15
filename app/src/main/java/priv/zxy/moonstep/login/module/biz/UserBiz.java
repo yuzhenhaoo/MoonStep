@@ -53,14 +53,9 @@ public class UserBiz implements IUser {
     @Override
     public void doRegister(final String phoneNumber, String nickName, final String userPassword, String confirmUserPassword, String gender, final OnRegisterListener registerListener) throws InterruptedException{
         if (userPassword.equals(confirmUserPassword)) {
-            PhoneRegisterUtil.getInstance().RegisterRequest(new VolleyCallback() {
+            PhoneRegisterUtil.getInstance().RegisterRequest(new PhoneRegisterUtil.CallBack() {
                 @Override
-                public String onSuccess(String result) throws InterruptedException {
-                    return null;
-                }
-
-                @Override
-                public boolean onSuccess() throws InterruptedException {
+                public void onSuccess(String raceCode, String raceName, String raceDescription) {
                     new Thread(() -> {
                         try {
                             EMClient.getInstance().createAccount(phoneNumber, userPassword);//同步方法
@@ -69,26 +64,10 @@ public class UserBiz implements IUser {
                             registerListener.registerFail(ErrorCode.ECRegisterFail);
                         }
                     }).start();
-                    return true;
                 }
 
                 @Override
-                public String onFail(String error) {
-                    return null;
-                }
-
-                @Override
-                public boolean onFail() {
-                    return false;
-                }
-
-                @Override
-                public void getMoonFriend(MoonFriend moonFriend) {
-
-                }
-
-                @Override
-                public void getErrorCode(ErrorCode errorCode) {
+                public void onFail(ErrorCode errorCode) {
                     registerListener.registerFail(errorCode);
                 }
             }, phoneNumber, nickName, userPassword, gender);

@@ -94,7 +94,7 @@ public class LoginUtil {
                             loginListener.LogUtilinFail(ErrorCode.PhoneNumberOrPasswordIsWrong);
 
                             //将mysp文件中的登录成功标记位置为false
-                            SharedPreferencesUtil.getInstance(Application.getContext()).fixFailLoginInfo();
+                            SharedPreferencesUtil.getInstance(Application.getContext()).setFailLoginInfo();
                         }
                     } catch (JSONException e) {
                         //做自己的请求异常操作

@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.hanks.htextview.HTextView;
@@ -48,7 +47,7 @@ public class StartActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.start_page);
+        setContentView(R.layout.activity_start);
 
         initStartImageUrl();
 
@@ -66,7 +65,7 @@ public class StartActivity extends BaseActivity {
         hTextView = findViewById(R.id.hTextView);
         imageView = findViewById(R.id.imageView);
 
-        Glide.with(this).load(url).placeholder(R.drawable.start_background).dontAnimate().into(imageView);
+        Glide.with(this).load(url).placeholder(R.drawable.background7).dontAnimate().into(imageView);
 
         LogUtil.d(TAG, "url:" + url);
         imageView.animate().scaleX(1.2f).scaleY(1.2f).setDuration(8000).start();

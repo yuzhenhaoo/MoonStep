@@ -62,7 +62,7 @@ public class EMHelper {
      * @param passWord 用户密码
      * @param nickName 用户昵称
      */
-    public void registerUser(final VolleyCallback volleyCallback, final String userId, final String passWord, final String nickName){
+    public void registerUser(final Callback callback, final String userId, final String passWord, final String nickName){
         //请求地址
         String url = EMBase.getInstance().getBaseRequest() + EMBase.getInstance().getOrgName() + "/" + EMBase.getInstance().getAppName() + "/" + "users";
         StringRequest request = new StringRequest(
@@ -73,15 +73,13 @@ public class EMHelper {
                         JSONObject jsonObject = new JSONObject(response);
                         Boolean activated = jsonObject.getJSONArray("entities").getJSONObject(0).getBoolean("activated");
                         if (activated){
-                            volleyCallback.onSuccess();
+                            callback.onSuccess();
                         }else{
-                            volleyCallback.onFail();
+                            callback.onFail();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
                         LogUtil.e(TAG, "onResponse: ");
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
                     }
                 }, error -> {
                     error.printStackTrace();
@@ -325,5 +323,12 @@ public class EMHelper {
 
         //将请求添加到队列中
         requestQueue.add(request);
+    }
+
+    public interface Callback{
+
+        void onSuccess();
+
+        void onFail();
     }
 }

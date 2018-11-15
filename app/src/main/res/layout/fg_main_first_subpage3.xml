@@ -19,7 +19,7 @@
             app:contentScrim="@color/transparent"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-            <include layout="@layout/find_friend_item"/>
+            <include layout="@layout/fragment_find_friend"/>
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"

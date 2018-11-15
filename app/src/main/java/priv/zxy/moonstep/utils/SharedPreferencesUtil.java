@@ -83,7 +83,7 @@ public class SharedPreferencesUtil {
         editor.commit();
     }
 
-    public void fixSuccessedLoginAccountAndPassword(String username, String passwd){
+    public void setSuccessedLoginAccountAndPassword(String username, String passwd){
         SharedPreferences sp = context.getSharedPreferences("mysp", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.putString("UserName", username);
@@ -92,7 +92,7 @@ public class SharedPreferencesUtil {
         editor.commit();
     }
 
-    public void fixFailLoginInfo(){
+    public void setFailLoginInfo(){
         SharedPreferences sp = context.getSharedPreferences("mysp", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.putBoolean("IsSuccessed", false);
@@ -131,10 +131,13 @@ public class SharedPreferencesUtil {
         Map<String, String> data = new HashMap<String, String>();
         SharedPreferences sp = context.getSharedPreferences("personalInfo", Context.MODE_PRIVATE);
         data.put("nickName", sp.getString("nickName", ""));
+        data.put("userRaceName", sp.getString("userRaceName", ""));
+        data.put("userRaceDiscription", sp.getString("userRaceDiscription", ""));
+        data.put("userHeadPath", sp.getString("userHeadPath", ""));
+        data.put("userSignature", sp.getString("userSignature", ""));
+        data.put("userCurrentTitle", sp.getString("userCurrentTitle", ""));
         data.put("userLevel", sp.getString("userLevel", ""));
-        data.put("userPet", sp.getString("userPet", ""));
-        data.put("userRace", sp.getString("userRace", ""));
-        data.put("signature", sp.getString("signature", ""));
+        data.put("userLevelDiscription", sp.getString("userLevelDiscription", ""));
         return data;
     }
 

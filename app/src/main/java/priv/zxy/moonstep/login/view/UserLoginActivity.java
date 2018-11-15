@@ -9,7 +9,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.ContentLoadingProgressBar;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -76,7 +75,7 @@ public class UserLoginActivity extends BaseActivity implements IUserLoginView {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login_activity);
+        setContentView(R.layout.activity_login);
         initView();
     }
 
@@ -200,7 +199,8 @@ public class UserLoginActivity extends BaseActivity implements IUserLoginView {
 
     @Override
     public void toConfirmPhoneActivity() {
-        Intent intent = new Intent(this, VerifyPhoneActivity.class);
+//        Intent intent = new Intent(this, VerifyPhoneActivity.class);
+        Intent intent = new Intent(this, UserRegisterActivity.class);//测试用
         startActivity(intent);
     }
 
@@ -221,11 +221,6 @@ public class UserLoginActivity extends BaseActivity implements IUserLoginView {
     }
 
     @Override
-    public void showSuccessTip() {
-
-    }
-
-    @Override
     public void showErrorTip(ErrorCode errorCode) {
         ShowErrorReason.getInstance(mActivity).show(errorCode);
     }
@@ -236,7 +231,7 @@ public class UserLoginActivity extends BaseActivity implements IUserLoginView {
     }
 
     @Override
-    public void fixLogUtilinPreferences(String username, String passwordEt) {
-        SharedPreferencesUtil.getInstance(mContext).fixSuccessedLoginAccountAndPassword(username, passwordEt);
+    public void setLoginPreferences(String username, String passwordEt) {
+        SharedPreferencesUtil.getInstance(mContext).setSuccessedLoginAccountAndPassword(username, passwordEt);
     }
 }

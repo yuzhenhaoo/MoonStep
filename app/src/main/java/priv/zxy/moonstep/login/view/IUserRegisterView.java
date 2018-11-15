@@ -10,19 +10,11 @@ public interface IUserRegisterView {
 
     String getUserName();
 
-    String getUserPassWord();
-
-    void clearUserName();
-
-    void clearUserPassword();
-
-    void clearUserConfirmPassword();
-
     void showLoading();
 
     void hideLoading();
 
-    void toLogUtilinActivity();
+    void toLoginActivity();
 
     void toMainActivity();
 

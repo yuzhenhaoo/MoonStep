@@ -3,15 +3,14 @@ package priv.zxy.moonstep.main.view;
 import android.support.v4.app.Fragment;
 
 public interface IMainView {
+
     void addFragmentToStack(Fragment fragment);
 
     void toFifthPage();
 
-    void changeMyInformation();
+    void toSettingActivity();
 
-    void toLogUtilinActivity();
-
-    void doEMConnectionListener();
+    void toLoginActivity();
 
     void bindService();
 
