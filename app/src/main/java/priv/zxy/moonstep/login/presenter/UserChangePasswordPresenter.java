@@ -27,7 +27,7 @@ public class UserChangePasswordPresenter {
         this.userBiz = new UserBiz();
     }
 
-    public void toLogUtilinActivity(){
+    public void toLoginActivity(){
         changePasswordView.toLogUtilinActivity();
     }
 

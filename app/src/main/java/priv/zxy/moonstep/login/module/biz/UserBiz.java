@@ -6,6 +6,8 @@ package priv.zxy.moonstep.login.module.biz;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
+
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.exceptions.HyphenateException;
 
@@ -30,14 +32,14 @@ public class UserBiz implements IUser {
      * @param onLoginListener   登陆监听
      */
     @Override
-    public void doLogUtilin(String userPhoneNumber, String userPassword, final OnLoginListener onLoginListener) throws InterruptedException {
+    public void doLogin(String userPhoneNumber, String userPassword, final OnLoginListener onLoginListener) throws InterruptedException {
         if (userPhoneNumber != null && userPassword != null) {
             LoginUtil.getInstance().LogUtilinRequest(onLoginListener, userPhoneNumber, userPassword);
         } else {
             if(userPhoneNumber == null)
-                onLoginListener.LogUtilinFail(ErrorCode.PhoneNumberISEmpty);
+                onLoginListener.LoginFail(ErrorCode.PhoneNumberISEmpty);
             else
-                onLoginListener.LogUtilinFail(ErrorCode.PasswordIsEmpty);
+                onLoginListener.LoginFail(ErrorCode.PasswordIsEmpty);
         }
     }
 
@@ -55,15 +57,9 @@ public class UserBiz implements IUser {
         if (userPassword.equals(confirmUserPassword)) {
             PhoneRegisterUtil.getInstance().RegisterRequest(new PhoneRegisterUtil.CallBack() {
                 @Override
-                public void onSuccess(String raceCode, String raceName, String raceDescription) {
-                    new Thread(() -> {
-                        try {
-                            EMClient.getInstance().createAccount(phoneNumber, userPassword);//同步方法
-                            registerListener.registerSuccess();
-                        } catch (HyphenateException e) {
-                            registerListener.registerFail(ErrorCode.ECRegisterFail);
-                        }
-                    }).start();
+                public void onSuccess(String raceCode, String raceName, String raceDescription, String raceImage, String raceIcon) throws HyphenateException {
+                    registerListener.registerSuccess(raceName, raceDescription, raceImage, raceIcon);
+                    EMClient.getInstance().createAccount(phoneNumber, userPassword);//同步方法
                 }
 
                 @Override
@@ -230,4 +226,12 @@ public class UserBiz implements IUser {
             }
         }, phoneNumber);
     }
+
+    public interface OnRegisterListener {
+
+        void registerSuccess(String raceName, String raceDescription, String raceImage, String raceIcon);
+
+        void registerFail(ErrorCode errorCode);
+    }
+
 }

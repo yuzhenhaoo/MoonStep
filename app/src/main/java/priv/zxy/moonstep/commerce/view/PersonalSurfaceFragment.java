@@ -92,7 +92,6 @@ public class PersonalSurfaceFragment extends Fragment {
             @Override
             public void animationFinish() {
                 jumpToDetailActivity();
-                bt.reset();
             }
         });
     }
@@ -112,6 +111,7 @@ public class PersonalSurfaceFragment extends Fragment {
     public void onResume() {
         super.onResume();
         waveViewByBezier.resumeAnimation();
+        bt.reset();
     }
 
     @Override

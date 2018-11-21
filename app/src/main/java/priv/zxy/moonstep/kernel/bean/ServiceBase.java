@@ -22,4 +22,6 @@ public class ServiceBase {
 
     public static String GET_PET_INFO_SERVLET_URL = "http://120.79.154.236:8080/MoonStep/GetPetInfoServlet";
 
+    public static String LOCATION_SERVLET_URL = "http://120.79.154.236:8080/MoonStep/LocationServlet";
+
 }

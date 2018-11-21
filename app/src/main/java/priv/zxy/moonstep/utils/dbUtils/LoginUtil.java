@@ -28,7 +28,7 @@ import priv.zxy.moonstep.kernel.bean.ErrorCode;
 
 public class LoginUtil {
 
-    private static final String TAG = "LogUtilinUtil";
+    private static final String TAG = "LoginUtil";
 
     private static LoginUtil instance;
 
@@ -43,7 +43,7 @@ public class LoginUtil {
         return instance;
     }
 
-    public void LogUtilinRequest(final OnLoginListener loginListener, final  String phoneNumber, final String inputPassword){
+    public void LoginRequest(final OnLoginListener loginListener, final  String phoneNumber, final String inputPassword){
         //请求地址
         String url = ServiceBase.LOGIN_SERVLET_URL;
         String tag = "login";
@@ -70,7 +70,7 @@ public class LoginUtil {
                                         EMClient.getInstance().groupManager().loadAllGroups();
                                         EMClient.getInstance().chatManager().loadAllConversations();
                                     }).start();
-                                    loginListener.LogUtilinSuccess();//只有当环信服务器也登陆成功的时候才触发回调方法
+                                    loginListener.LoginSuccess();//只有当环信服务器也登陆成功的时候才触发回调方法
                                     LogUtil.d(TAG, "登录聊天服务器成功！");
                                 }
 
@@ -91,19 +91,19 @@ public class LoginUtil {
                             //我们需要在登录成功的时候再次启动一次MessageReceiverService
                             Application.getContext().startService(new Intent(Application.getContext(), MessageReceiverService.class));
                         } else {
-                            loginListener.LogUtilinFail(ErrorCode.PhoneNumberOrPasswordIsWrong);
+                            loginListener.LoginFail(ErrorCode.PhoneNumberOrPasswordIsWrong);
 
                             //将mysp文件中的登录成功标记位置为false
                             SharedPreferencesUtil.getInstance(Application.getContext()).setFailLoginInfo();
                         }
                     } catch (JSONException e) {
                         //做自己的请求异常操作
-                        loginListener.LogUtilinFail(ErrorCode.JSONException);
+                        loginListener.LoginFail(ErrorCode.JSONException);
                         LogUtil.e(TAG, e.getMessage());
                     }
                 }, error -> {
                     //做自己的响应错误操作，如Toast提示（“请稍后重试”等）
-            loginListener.LogUtilinFail(ErrorCode.NetNotResponse);
+            loginListener.LoginFail(ErrorCode.NetNotResponse);
                     LogUtil.e(TAG, error.getMessage());
                 }) {
             @Override

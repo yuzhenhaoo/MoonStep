@@ -26,35 +26,31 @@ import priv.zxy.moonstep.login.view.IUserLoginView;
 
 public class UserLoginPresenter {
     private IUser userBiz;
-    private IUserLoginView userLogUtilinView;//创建与LogUtilinView交互的View对象
-    private Activity mActivity;
-    private Context mContext;
+    private IUserLoginView userLoginView;//创建与LogUtilinView交互的View对象
 
-    public UserLoginPresenter(IUserLoginView userLogUtilinView, Activity mActivity, Context mContext){
-        this.userLogUtilinView = userLogUtilinView;
+    public UserLoginPresenter(IUserLoginView userLoginView){
+        this.userLoginView = userLoginView;
         this.userBiz = new UserBiz();
-        this.mActivity = mActivity;
-        this.mContext = mContext;
     }
 
     /**
      * 这个函数里实现View层和Module层的交互
      */
-    public void LogUtilin() throws InterruptedException {
-        userBiz.doLogUtilin(userLogUtilinView.getUserPhoneNumber(), userLogUtilinView.getUserPassword(), new OnLoginListener() {
+    public void Login() throws InterruptedException {
+        userBiz.doLogin(userLoginView.getUserPhoneNumber(), userLoginView.getUserPassword(), new OnLoginListener() {
             @Override
-            public void LogUtilinSuccess() {
-                userLogUtilinView.setLoginPreferences(userLogUtilinView.getUserPhoneNumber(), userLogUtilinView.getUserPassword());
-                userLogUtilinView.handleSendMessage();
-                userLogUtilinView.toMainActivity();
+            public void LoginSuccess() {
+                userLoginView.setLoginPreferences(userLoginView.getUserPhoneNumber(), userLoginView.getUserPassword());
+                userLoginView.handleSendMessage();
+                userLoginView.toMainActivity();
             }
 
             @Override
-            public void LogUtilinFail(final ErrorCode errorCode) {
-                userLogUtilinView.handleSendMessage();
+            public void LoginFail(final ErrorCode errorCode) {
+                userLoginView.handleSendMessage();
                 new Thread(() -> {
                     Looper.prepare();
-                    userLogUtilinView.showErrorTip(errorCode);
+                    userLoginView.showErrorTip(errorCode);
                     Looper.loop();
                 }).start();
             }
@@ -67,36 +63,36 @@ public class UserLoginPresenter {
      * @param preference SharedPreferences工具类对象
      */
     public void initAccountAndPassword(SharedPreferencesUtil preference){
-        userLogUtilinView.initAccount(preference);
-        userLogUtilinView.initPassword(preference);
+        userLoginView.initAccount(preference);
+        userLoginView.initPassword(preference);
     }
 
     /**
      * 用来显示刷新页面
      */
     public void showLoading(){
-        userLogUtilinView.showLoading();
+        userLoginView.showLoading();
     }
 
     /**
      * 用来隐藏刷新页面
      */
     public void hideLoading(){
-        userLogUtilinView.hideLoading();
+        userLoginView.hideLoading();
     }
 
     /**
      * 进入ConfrimPhoneActivity
      */
     public void toConfirmPhoneActivity(){
-        userLogUtilinView.toConfirmPhoneActivity();
+        userLoginView.toConfirmPhoneActivity();
     }
 
     /**
      * 进入ForgetPasswordActivity
      */
     public void toForgetPasswordActivity(){
-        userLogUtilinView.toForgetPasswordActivity();
+        userLoginView.toForgetPasswordActivity();
     }
 
 }

@@ -18,7 +18,7 @@ public interface IUser {
      * @param userPassword 用户密码
      * @param LogUtilinListener 登陆监听
      */
-    void doLogUtilin(String userName, String userPassword, OnLoginListener LogUtilinListener) throws InterruptedException;
+    void doLogin(String userName, String userPassword, OnLoginListener LogUtilinListener) throws InterruptedException;
 
     /**
      * doRegister也是纯粹的逻辑层，所以我们把它写在biz层中，用来获取网络上的数据
@@ -27,7 +27,7 @@ public interface IUser {
      * @param gender 性别
      * @param registerListener 注册监听
      */
-    void doRegister(String phoneNumber, String nickName, String userPassword, String confirmUserPassword,String gender, OnRegisterListener registerListener) throws InterruptedException, HyphenateException;
+    void doRegister(String phoneNumber, String nickName, String userPassword, String confirmUserPassword,String gender, UserBiz.OnRegisterListener registerListener) throws InterruptedException, HyphenateException;
 
     /**
      * doVerifyPhoneNumber用来处理手机号的验证问题，功能是连接到服务器上的数据库中并对用户的手机输入在数据库中进行查询，检查是否已经在数据库中存在

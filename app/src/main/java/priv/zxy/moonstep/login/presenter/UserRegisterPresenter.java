@@ -3,12 +3,14 @@ package priv.zxy.moonstep.login.presenter;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Looper;
+import android.util.Log;
 
 import com.hyphenate.exceptions.HyphenateException;
 
+import priv.zxy.moonstep.customview.RaceDialog;
+import priv.zxy.moonstep.kernel.Application;
 import priv.zxy.moonstep.kernel.bean.ErrorCode;
 import priv.zxy.moonstep.login.module.biz.IUser;
-import priv.zxy.moonstep.login.module.biz.OnRegisterListener;
 import priv.zxy.moonstep.login.module.biz.UserBiz;
 import priv.zxy.moonstep.login.view.IUserRegisterView;
 
@@ -17,32 +19,30 @@ import priv.zxy.moonstep.login.view.IUserRegisterView;
  */
 
 public class UserRegisterPresenter {
+
+    private static final String TAG = "UserRegisterPresenter";
+
     private IUser userBiz;
-    private IUserRegisterView userRegisterView;//创建与LogUtilinView交互的View对象
-    private Activity mActivity;
-    private Context mContext;
+
+    private IUserRegisterView userRegisterView;//创建与LoginView交互的View对象
 
     public UserRegisterPresenter(IUserRegisterView userRegisterView, Activity mActivity, Context mContext){
         this.userRegisterView = userRegisterView;
         this.userBiz = new UserBiz();
-        this.mActivity = mActivity;
-        this.mContext = mContext;
     }
 
     public void doRegister(String phoneNumber, String nickName, String userPassword, String confirmUserPassword, String gender) throws InterruptedException, HyphenateException {
-        userBiz.doRegister(phoneNumber, nickName, userPassword, confirmUserPassword, gender, new OnRegisterListener() {
+        userBiz.doRegister(phoneNumber, nickName, userPassword, confirmUserPassword, gender, new UserBiz.OnRegisterListener() {
             @Override
-            public void registerSuccess() {
-                new Thread(() -> userRegisterView.showRegisterSuccessTip()).start();
-                userRegisterView.toMainActivity();
-                userRegisterView.finishActivitySelf();
+            public void registerSuccess(String raceName, String raceDescription, String raceImage, String raceIcon) {
+                Log.d(TAG, "执行到了这里");
             }
 
             @Override
-            public void registerFail(final ErrorCode errorCode) {
+            public void registerFail(ErrorCode errorCode) {
                 new Thread(() -> {
                     Looper.prepare();
-                    userRegisterView.showRegisterFailTip(errorCode);
+                    userRegisterView.showErrorTip(errorCode);
                     Looper.loop();
                 }).start();
             }

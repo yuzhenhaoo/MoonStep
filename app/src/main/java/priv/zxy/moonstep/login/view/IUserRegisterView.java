@@ -24,12 +24,6 @@ public interface IUserRegisterView {
 
     void finishActivitySelf();
 
-    void showUserNameSuccessTip();
-
-    void showUserNameFailTip(ErrorCode errorCode);
-
-    void showRegisterSuccessTip();
-
-    void showRegisterFailTip(ErrorCode errorCode);
+    void showErrorTip(ErrorCode errorCode);
 
 }

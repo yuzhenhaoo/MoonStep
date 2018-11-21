@@ -2,6 +2,7 @@ package priv.zxy.moonstep.commerce.view;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.widget.Button;
 
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.kernel.BaseActivity;
@@ -13,9 +14,30 @@ import priv.zxy.moonstep.kernel.BaseActivity;
  **/
 public class UserDetailActivity extends BaseActivity{
 
+    private Button back;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_peronal_info);
+
+        initView();
+
+        initData();
+
+        initEvent();
+    }
+
+    private void initView(){
+        back = findViewById(R.id.backBt);
+    }
+
+    private void initData(){
+
+    }
+
+    private void initEvent(){
+        back.setOnClickListener(v->{
+            UserDetailActivity.this.finish();
+        });
     }
 }

@@ -86,7 +86,9 @@ public class EMBase {
         return baseRequest;
     }
 
-
+    /**
+     * 在這裡向Application的BroadCast发送广播，获取token值
+     */
     public void initDataFromDatabase(){
         String url = "http://120.79.154.236:8080/MoonStep/EMServlet";
         String tag = "orgName";

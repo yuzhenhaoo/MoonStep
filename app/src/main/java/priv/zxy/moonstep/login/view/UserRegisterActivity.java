@@ -11,6 +11,7 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -19,14 +20,17 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.hyphenate.exceptions.HyphenateException;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
+import priv.zxy.moonstep.BuildConfig;
 import priv.zxy.moonstep.EM.bean.VolleyCallback;
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.customview.RaceDialog;
 import priv.zxy.moonstep.db.MoonFriend;
+import priv.zxy.moonstep.kernel.Application;
 import priv.zxy.moonstep.kernel.BaseActivity;
 import priv.zxy.moonstep.utils.LogUtil;
 import priv.zxy.moonstep.utils.ShowErrorReason;
@@ -61,9 +65,6 @@ public class UserRegisterActivity extends BaseActivity implements IUserRegisterV
     private String userPassword = "";
     private String confirmPassword = "";
     private String userGender = "男";
-    private String raceCode;
-    private String raceName;
-    private String raceDescription;
 
     //创建一个桥接对象，通过Presenter完成和Module层的交互
     private UserRegisterPresenter userRegisterPresenter;
@@ -100,7 +101,6 @@ public class UserRegisterActivity extends BaseActivity implements IUserRegisterV
         deepBackground = (View) findViewById(R.id.deepBackground);
         plainBackground = (View) findViewById(R.id.plainBackground);
         progressBar = (ContentLoadingProgressBar) findViewById(R.id.progressBar);
-        raceDialog = new RaceDialog(this);
         mContext = this.getApplicationContext();
         mActivity = this;
 
@@ -116,10 +116,6 @@ public class UserRegisterActivity extends BaseActivity implements IUserRegisterV
 
     @SuppressLint("ClickableViewAccessibility")
     private void initEvent(){
-        raceDialog.setOnClickListener(()->{
-            raceDialog.dismiss();
-            toMainActivity();
-        });
 
         backButton.setOnTouchListener((v, event) -> {
             switch(event.getAction()){
@@ -135,21 +131,23 @@ public class UserRegisterActivity extends BaseActivity implements IUserRegisterV
 
         clickRegister.setOnClickListener(view-> {
             getData();
-            LogUtil.d(TAG, userGender);
-            PhoneRegisterUtil.getInstance().RegisterRequest(new PhoneRegisterUtil.CallBack() {
-                @Override
-                public void onSuccess(String rc, String rn, String rd) {
-                    raceCode = rc;
-                    raceName = rn;
-                    raceDescription = rd;
-                    raceDialog.show();
-                }
+            if (userPassword.equals(confirmPassword)){
+                PhoneRegisterUtil.getInstance().RegisterRequest(new PhoneRegisterUtil.CallBack() {
+                    @Override
+                    public void onSuccess(String raceCode, String raceName, String raceDescription, String raceImage, String raceIcon) throws HyphenateException {
+                        showDialog(raceName, raceDescription, raceImage, raceIcon);
+                        Log.d(TAG, raceImage);
+                        Log.d(TAG, raceIcon);
+                    }
 
-                @Override
-                public void onFail(ErrorCode errorCode) {
-                    ShowErrorReason.getInstance(UserRegisterActivity.this).show(errorCode);
-                }
-            }, phoneNumber, nickName, userPassword, userGender);
+                    @Override
+                    public void onFail(ErrorCode errorCode) {
+                        ShowErrorReason.getInstance(UserRegisterActivity.this).show(errorCode);
+                    }
+                }, "15616257889", nickName, userPassword,userGender);
+            }else{
+                ShowErrorReason.getInstance(UserRegisterActivity.this).show(ErrorCode.PasswordIsNotEqualsConfirmPassword);
+            }
         });
 
         returnLoginPage.setOnTouchListener((v, event) -> {
@@ -176,6 +174,16 @@ public class UserRegisterActivity extends BaseActivity implements IUserRegisterV
         });
 
         hideLoading();
+    }
+
+    private void showDialog(String raceName, String raceDescription, String raceImage, String raceIcon){
+        Toast.makeText(mContext, "注册成功，您得到的种族如上", Toast.LENGTH_SHORT).show();
+        final RaceDialog myDialog = new RaceDialog(this, raceName, raceDescription, raceImage, raceIcon);
+        //让dialog消失
+        myDialog.setOnClickListener(myDialog::dismiss);
+        myDialog.show();//让dialog显示
+
+        myDialog.setOnClickListener(this::toLoginActivity);
     }
 
     @Override
@@ -237,24 +245,8 @@ public class UserRegisterActivity extends BaseActivity implements IUserRegisterV
     }
 
     @Override
-    public void showUserNameSuccessTip() {
-        ToastUtil.getInstance(mContext, mActivity).showToast("恭喜！您的账号可以使用");
-
+    public void showErrorTip(ErrorCode errorCode) {
+        ShowErrorReason.getInstance(this).show(errorCode);
     }
 
-    @Override
-    public void showUserNameFailTip(ErrorCode errorCode) {
-        ShowErrorReason.getInstance(mActivity).show(errorCode);
-    }
-
-    @Override
-    public void showRegisterSuccessTip() {
-        ToastUtil.getInstance(mContext, mActivity).showToast("恭喜您，可以进入圆月世界了！");
-
-    }
-
-    @Override
-    public void showRegisterFailTip(ErrorCode errorCode) {
-        ShowErrorReason.getInstance(mActivity).show(errorCode);
-    }
 }

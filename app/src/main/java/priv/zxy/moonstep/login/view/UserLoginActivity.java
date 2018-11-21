@@ -80,7 +80,7 @@ public class UserLoginActivity extends BaseActivity implements IUserLoginView {
     }
 
     /**
-     * 关于clickLogUtilin中的逻辑处理，本来showLoading和hideLoading都是要放在presenter中减少activity的冗余度的，但是这里要做网络请求的话，必须要用到
+     * 关于clickLogin中的逻辑处理，本来showLoading和hideLoading都是要放在presenter中减少activity的冗余度的，但是这里要做网络请求的话，必须要用到
      * handler来处理UI界面的变化，不然可能会引起ANR，然而handler又必须使用在View中，所以showLoading和hideLoading不得不写在activity中。
      */
     @SuppressLint("ClickableViewAccessibility")
@@ -103,7 +103,7 @@ public class UserLoginActivity extends BaseActivity implements IUserLoginView {
 
         shake = AnimationUtils.loadAnimation(this, R.anim.shake);
 
-        userLogUtilinPresenter = new UserLoginPresenter(this, mActivity, mContext);
+        userLogUtilinPresenter = new UserLoginPresenter(this);
 
         userLogUtilinPresenter.initAccountAndPassword(SharedPreferencesUtil.getInstance(mContext));
 
@@ -121,7 +121,7 @@ public class UserLoginActivity extends BaseActivity implements IUserLoginView {
                     userLogUtilinPresenter.showLoading();
                     new Thread(() -> {
                         try {
-                            userLogUtilinPresenter.LogUtilin();
+                            userLogUtilinPresenter.Login();
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -151,12 +151,20 @@ public class UserLoginActivity extends BaseActivity implements IUserLoginView {
 
     @Override
     public String getUserPhoneNumber() {
-        return accountEt.getText().toString();
+        if (accountEt.getText()!=null){
+            return accountEt.getText().toString();
+        }else{
+            return "";
+        }
     }
 
     @Override
     public String getUserPassword() {
-        return passwordEt.getText().toString();
+        if (passwordEt.getText()!=null){
+            return passwordEt.getText().toString();
+        }else{
+            return "";
+        }
     }
 
     @Override
@@ -199,8 +207,8 @@ public class UserLoginActivity extends BaseActivity implements IUserLoginView {
 
     @Override
     public void toConfirmPhoneActivity() {
-//        Intent intent = new Intent(this, VerifyPhoneActivity.class);
-        Intent intent = new Intent(this, UserRegisterActivity.class);//测试用
+        Intent intent = new Intent(this, VerifyPhoneActivity.class);
+//        Intent intent = new Intent(this, UserRegisterActivity.class);//测试用
         startActivity(intent);
     }
 

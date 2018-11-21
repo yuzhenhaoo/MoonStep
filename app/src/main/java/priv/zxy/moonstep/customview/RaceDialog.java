@@ -4,12 +4,18 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
+import priv.zxy.moonstep.BuildConfig;
 import priv.zxy.moonstep.R;
+import priv.zxy.moonstep.kernel.Application;
 
 /**
  * 创建人: Administrator
@@ -18,28 +24,46 @@ import priv.zxy.moonstep.R;
  **/
 public class RaceDialog extends Dialog {
 
-    private ImageView raceHeadImage;
+    private ImageView raceHeadImageIV;
 
-    private TextView raceName;
+    private TextView raceNameTV;
 
-    private ImageView raceIcon;
+    private ImageView raceIconIV;
 
     private ImageView luckyIconIV;
 
-    private TextView raceDescription;
+    private TextView raceDescriptionTV;
 
-    private Button clickBt;
+    private String raceHeadPath;
+
+    private String raceName;
+
+    private String raceIconPath;
+
+    private String luckyIconPath;
+
+    private String raceDescription;
+
+    private Button click;
 
     private onClickListener onClickListener = null;
 
     public RaceDialog(@NonNull Context context) {
-        super(context);
+        super(context, R.style.MyDialog);
+    }
+
+    public RaceDialog(Context context, String raceName, String raceDescription, String raceHeadPath, String raceIconPath){
+        super(context, R.style.MyDialog);
+        this.raceHeadPath = raceHeadPath;
+        this.raceIconPath = raceIconPath;
+        this.raceName = raceName;
+        this.raceDescription = raceDescription;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.dialog);
+        setContentView(R.layout.dialog_race);
 
         setCanceledOnTouchOutside(false);//按空白处不能取消动画
 
@@ -54,20 +78,23 @@ public class RaceDialog extends Dialog {
     }
 
     private void initView() {
-        raceHeadImage = (ImageView) findViewById(R.id.raceHeadImage);
-        raceName = (TextView) findViewById(R.id.raceName);
-        raceIcon = (ImageView) findViewById(R.id.raceIcon);
+        raceHeadImageIV = (ImageView) findViewById(R.id.raceHeadImage);
+        raceNameTV = (TextView) findViewById(R.id.raceName);
+        raceIconIV = (ImageView) findViewById(R.id.raceIcon);
         luckyIconIV = (ImageView) findViewById(R.id.luckyIcon);
-        raceDescription = (TextView) findViewById(R.id.raceDescription);
-        clickBt = (Button) findViewById(R.id.click);
+        raceDescriptionTV = (TextView) findViewById(R.id.raceDescription);
+        click = (Button) findViewById(R.id.click);
     }
 
     private void initData(){
-
+        Glide.with(Application.getContext()).load(raceHeadPath).into(raceHeadImageIV);
+        Glide.with(Application.getContext()).load(raceIconPath).into(raceIconIV);
+        raceNameTV.setText(raceName);
+        raceDescriptionTV.setText(raceDescription);
     }
 
     private void initEvent(){
-        clickBt.setOnClickListener(v -> {
+        click.setOnClickListener(v -> {
             if (onClickListener != null){
                 onClickListener.onClick();
             }

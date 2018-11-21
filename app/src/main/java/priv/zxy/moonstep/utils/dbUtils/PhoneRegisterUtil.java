@@ -5,6 +5,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.hyphenate.exceptions.HyphenateException;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -62,15 +63,21 @@ public class PhoneRegisterUtil {
                     try {
                         JSONObject jsonObject = (JSONObject) new JSONObject(response).get("params");
                         String result = jsonObject.getString("result");
-                        final String raceCode = jsonObject.getString("RaceCode");
-                        final String raceName = jsonObject.getString("RaceName");
-                        final String raceDescription = jsonObject.getString("RaceDescription");
                         if (result.equals("success")){
+                            final String raceCode = jsonObject.getString("raceCode");
+                            final String raceName = jsonObject.getString("raceName");
+                            final String raceDescription = jsonObject.getString("raceDescription");
+                            final String raceImage = jsonObject.getString("raceImagePath");
+                            final String raceIcon = jsonObject.getString("raceIcon");
                             EMHelper.getInstance(Application.getContext()).registerUser(new EMHelper.Callback() {
 
                                 @Override
                                 public void onSuccess() {
-                                    callBack.onSuccess(raceCode, raceName, raceDescription);
+                                    try{
+                                        callBack.onSuccess(raceCode, raceName, raceDescription, raceImage, raceIcon);
+                                    }catch (HyphenateException e){
+                                        LogUtil.d(TAG, e.getErrorCode() + e.getMessage());
+                                    }
                                 }
 
                                 @Override
@@ -79,21 +86,19 @@ public class PhoneRegisterUtil {
                                 }
 
                             }, "moonstep" + PhoneNumber, PassWord, NickName);
+                        }else if (result.equals("error")){
+                            callBack.onFail(ErrorCode.PhoneNumberIsRegistered);
                         }
                     } catch (JSONException e) {
                         //做自己的请求异常操作
                         callBack.onFail(ErrorCode.JSONException);
                         LogUtil.e(TAG, e.getMessage());
                     }
-                }, error -> {
-            callBack.onFail(ErrorCode.NetNotResponse);
-                    LogUtil.i(TAG, error.getMessage());
-                }) {
+                }, error -> callBack.onFail(ErrorCode.NetNotResponse)) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-//                params.put("PhoneNumber", PhoneNumber);
-                params.put("PhoneNumber", "15809669723");
+                params.put("PhoneNumber", PhoneNumber);
                 params.put("NickName",NickName);
                 params.put("PassWord", PassWord);
                 params.put("Gender",Gender);
@@ -117,7 +122,7 @@ public class PhoneRegisterUtil {
 
     public interface CallBack{
 
-        void onSuccess(String raceCode, String raceName, String raceDescription);
+        void onSuccess(String raceCode, String raceName, String raceDescription, String raceImage, String raceIcon) throws HyphenateException;
 
         void onFail(ErrorCode errorCode);
     }

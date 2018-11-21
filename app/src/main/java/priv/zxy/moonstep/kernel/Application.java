@@ -9,6 +9,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 
 import com.baidu.mapapi.CoordType;
 import com.baidu.mapapi.SDKInitializer;
@@ -21,6 +22,7 @@ import org.litepal.LitePalApplication;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import priv.zxy.moonstep.EM.bean.VolleyCallback;
 import priv.zxy.moonstep.db.MoonFriend;
@@ -55,6 +57,8 @@ public class Application extends LitePalApplication {
 
     private IntentFilter intentFilter;
 
+    private static String token = null;//获取token值
+
     public static Context getContext(){
         return mContext;
     }
@@ -71,42 +75,39 @@ public class Application extends LitePalApplication {
 
             if (activity.getClass() == MainActivity.class) {
                 EMClient.getInstance().chatManager().addMessageListener(msgListener);//实施消息的监听
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        String phoneNumber = SharedPreferencesUtil.getInstance(mContext).readLoginInfo().get("UserName");
-                        GetMyInformationUtil.getInstance().returnMyInfo(new VolleyCallback() {
-                            @Override
-                            public String onSuccess(String result) {
-                                return null;
-                            }
+                new Thread(() -> {
+                    String phoneNumber = SharedPreferencesUtil.getInstance(mContext).readLoginInfo().get("UserName");
+                    GetMyInformationUtil.getInstance().returnMyInfo(new VolleyCallback() {
+                        @Override
+                        public String onSuccess(String result) {
+                            return null;
+                        }
 
-                            @Override
-                            public boolean onSuccess() throws InterruptedException {
-                                return false;
-                            }
+                        @Override
+                        public boolean onSuccess() throws InterruptedException {
+                            return false;
+                        }
 
-                            @Override
-                            public String onFail(String error) {
-                                return null;
-                            }
+                        @Override
+                        public String onFail(String error) {
+                            return null;
+                        }
 
-                            @Override
-                            public boolean onFail() {
-                                return false;
-                            }
+                        @Override
+                        public boolean onFail() {
+                            return false;
+                        }
 
-                            @Override
-                            public void getMoonFriend(MoonFriend moonFriend) {
-                                SharedPreferencesUtil.getInstance(mContext).saveMySelfInformation(moonFriend.getNickName(), moonFriend.getRaceName(), moonFriend.getRaceDescription(), moonFriend.getHeadPortraitPath(), moonFriend.getSignature(), moonFriend.getCurrentTitle(), moonFriend.getLevelName(), moonFriend.getLevelDescription());
-                            }
+                        @Override
+                        public void getMoonFriend(MoonFriend moonFriend) {
+                            SharedPreferencesUtil.getInstance(mContext).saveMySelfInformation(moonFriend.getNickName(), moonFriend.getRaceName(), moonFriend.getRaceDescription(), moonFriend.getHeadPortraitPath(), moonFriend.getSignature(), moonFriend.getCurrentTitle(), moonFriend.getLevelName(), moonFriend.getLevelDescription());
+                        }
 
-                            @Override
-                            public void getErrorCode(ErrorCode errorCode) {
-                                LogUtil.d(TAG, "获取个人信息失败");
-                            }
-                        }, "moonstep" + phoneNumber);
-                    }
+                        @Override
+                        public void getErrorCode(ErrorCode errorCode) {
+                            LogUtil.d(TAG, "获取个人信息失败");
+                        }
+                    }, "moonstep" + phoneNumber);
                 }).start();
             }else if (activity.getClass() == ChattingActivity.class){
                 EMClient.getInstance().chatManager().removeMessageListener(msgListener);//移除Listener
@@ -339,10 +340,19 @@ public class Application extends LitePalApplication {
         return processName;
     }
 
+    public static String getToken(){
+        Log.d(TAG, "getToken: "+token);
+        return token;
+    }
+
     private class LocalReceiver extends BroadcastReceiver{
         @Override
         public void onReceive(Context context, Intent intent) {
-            EMHelper.getInstance(mContext).initToken();
+
+                EMHelper.getInstance(mContext).initToken(token -> {
+                            Application.token = token;
+                            LogUtil.d(TAG, token);
+                });
         }
     }
 }

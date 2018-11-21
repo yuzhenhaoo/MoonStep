@@ -80,7 +80,6 @@ public class GetMyInformationUtil {
                 }, error -> {
                     //做自己的响应错误操作，如Toast提示（“请稍后重试”等）
                     volleyCallback.getErrorCode(ErrorCode.NetNotResponse);
-                    LogUtil.e(TAG, error.getMessage());
                 }) {
             @Override
             protected Map<String, String> getParams(){

@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
@@ -169,12 +170,12 @@ public class MainActivity extends BaseActivity
                         if (isNight){
                             mode.setBackgroundResource(R.drawable.sun);
                             isNight = false;
-                            ToastUtil.getInstance(Application.getContext(), MainActivity.this).showToast("当前为白日模式");
+                            ToastUtil.getInstance(Application.getContext(), MainActivity.this).showToast("已设置为日间模式");
                             mode.setAlpha(1);
                         }else{
                             mode.setBackgroundResource(R.mipmap.moon);
                             isNight = true;
-                            ToastUtil.getInstance(Application.getContext(), MainActivity.this).showToast("当前为夜晚模式");
+                            ToastUtil.getInstance(Application.getContext(), MainActivity.this).showToast("已设置为夜间模式");
                             mode.setAlpha(1);
                         }
                     }
