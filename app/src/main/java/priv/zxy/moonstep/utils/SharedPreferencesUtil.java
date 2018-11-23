@@ -7,16 +7,25 @@ import java.util.HashMap;
 import java.util.Map;
 
 import priv.zxy.moonstep.helper.EMHelper;
+import priv.zxy.moonstep.wheel.cache.FacadeSharedPreference;
 
 public class SharedPreferencesUtil {
-    private static final String TAG = "SharedPreferencesUtil";
+
+    private static String LOGGING_LIBRARY = "logging";
+
+    private static String PERSONAL_INFO_LIBRARY = "personalInfo";
+
+    private static String MESSAGE_TIP_LIBRARY = "tip";
 
     private Context context;
+
+    private FacadeSharedPreference sp;
 
     private static SharedPreferencesUtil instance;
 
     private SharedPreferencesUtil(Context context){
         this.context = context;
+        sp = new FacadeSharedPreference(context);
     }
 
     /**
@@ -39,112 +48,120 @@ public class SharedPreferencesUtil {
     /**
      * 存储第一次登陆的信息
      */
-    public void saveFirstLogin(){
-        SharedPreferences sp = context.getSharedPreferences("mysp",Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putString("Logging_ability","Is_first_Logging");
-        editor.apply();
+    public void setFirstLogin(){
+        sp.saveElement(LOGGING_LIBRARY,"firstLog", true);
     }
 
     /**
-     * 检测当前是否为第一次登陆
-     * @return
+     * 判断是否为第一次登陆
+     * @return 是第一次登录的话，返回True
+     *          非第一次登录的话，返回False
      */
     public Boolean isFirstLogin(){
-        SharedPreferences sp = context.getSharedPreferences("mysp", Context.MODE_PRIVATE);
-        return !sp.contains("Logging_ability");
+        return !sp.checkElement(LOGGING_LIBRARY, "firstLog");
     }
 
     /**
-     * 当第一登入的时候，需要使用MoonFriendService来初始化好友信息，初始化的时候使用SharedPreferences来存储记录
+     * 记录好友信息是否已经被加载过（既第一次检测）
      */
-    public void saveIsInitedDataBase(){
-        SharedPreferences sp = context.getSharedPreferences("mysp",Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putString("IsInitedDataBase","true");
-        editor.apply();
+    public void dataInitialized(){
+        sp.saveElement(LOGGING_LIBRARY, "dataIsInitialized", true);
     }
 
     /**
-     * 数据库已经进行过初始化的话，就返回false,不然就返回true
+     * @return 数据库已经进行过初始化的话，就返回false,不然就返回true
+     */
+    public boolean isDataInitialized(){
+        return !sp.checkElement(LOGGING_LIBRARY, "dataIsInitialized");
+    }
+
+    /**
+     * 当登陆成功的时候存储用户的昵称和密码
+     * @param username &
+     * @param passwd &
+     */
+    public void setSuccessLoginInfo(String username, String passwd){
+        Map<String, String> params = new HashMap<>();
+        params.put("UserName", username);
+        params.put("PassWd", passwd);
+        sp.save(LOGGING_LIBRARY, params);
+        sp.saveElement(LOGGING_LIBRARY, "IS_SUCCESS", true);
+    }
+
+    /**
+     * 当用户登陆失败的时候设置用户的登陆检测字段为false,直到下次登陆成功为止不允许自动登陆
+     */
+    public void setFailLoginInfo(){
+        sp.saveElement(LOGGING_LIBRARY, "IS_SUCCESS", false);
+    }
+
+    /**
+     * 读取登陆信息
      * @return
      */
-    public boolean readInitDataBase(){
-        SharedPreferences sp = context.getSharedPreferences("mysp", Context.MODE_PRIVATE);
-        return !sp.contains("IsInitedDataBase");
-    }
-
-    public void saveSuccessedLoginAccountAndPassword(String username, String passwd){
-        SharedPreferences sp = context.getSharedPreferences("mysp",Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putString("UserName", username);
-        editor.putString("PassWd", passwd);
-        editor.putBoolean("IsSuccessed", true);
-        editor.commit();
-    }
-
-    public void setSuccessedLoginAccountAndPassword(String username, String passwd){
-        SharedPreferences sp = context.getSharedPreferences("mysp", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putString("UserName", username);
-        editor.putString("PassWd", passwd);
-        editor.putBoolean("IsSuccessed", true);
-        editor.commit();
-    }
-
-    public void setFailLoginInfo(){
-        SharedPreferences sp = context.getSharedPreferences("mysp", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putBoolean("IsSuccessed", false);
-        editor.commit();
-    }
-
     public Map<String, String> readLoginInfo(){
-        Map<String, String> data = new HashMap<String, String>();
-        SharedPreferences sp = context.getSharedPreferences("mysp", Context.MODE_PRIVATE);
-        data.put("UserName", sp.getString("UserName", ""));
-        data.put("PassWd", sp.getString("PassWd",""));
+        Map<String, String> data = new HashMap<>();
+        data.put("UserName", sp.read(LOGGING_LIBRARY).get("UserName").toString());
+        data.put("PassWd", sp.read(LOGGING_LIBRARY).get("PassWd").toString());
         return data;
     }
 
-    public boolean isSuccessedLogined(){
-        SharedPreferences sp = context.getSharedPreferences("mysp", Context.MODE_PRIVATE);
-        return sp.getBoolean("IsSuccessed", false);
+    /**
+     * 判断上次登陆是否成功
+     * @return
+     */
+    public boolean isSuccessLogin(){
+        return sp.checkElement(LOGGING_LIBRARY, "IS_SUCCESS");
     }
 
+    /**
+     * 存储用户的个人信息
+     * @param nickName 昵称
+     * @param userRaceName 种族名称
+     * @param userRaceDiscription 种族描述
+     * @param headPath 头像的网络路径
+     * @param userSignature 用户签名
+     * @param userCurrentTitle 当前称号
+     * @param userLevel 用户阶别
+     * @param userLevelDiscription 用户阶别描述
+     */
     public void saveMySelfInformation(String nickName, String userRaceName, String userRaceDiscription, String headPath, String userSignature, String userCurrentTitle, String userLevel, String userLevelDiscription){
-        SharedPreferences sp = context.getSharedPreferences("personalInfo", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putString("nickName", nickName);
-        editor.putString("userRaceName", userRaceName);
-        editor.putString("userRaceDiscription", userRaceDiscription);
-        editor.putString("userHeadPath", headPath);
-        editor.putString("userSignature", userSignature);
-        editor.putString("userCurrentTitle", userCurrentTitle);
-        editor.putString("userLevel", userLevel);
-        editor.putString("userLevelDiscription", userLevelDiscription);
-        editor.putString("isSaved", "");
-        editor.commit();
+        Map<String ,String> params = new HashMap<>();
+        params.put("nickName", nickName);
+        params.put("userRaceName", userRaceName);
+        params.put("userRaceDiscription", userRaceDiscription);
+        params.put("userHeadPath", headPath);
+        params.put("userSignature", userSignature);
+        params.put("userCurrentTitle", userCurrentTitle);
+        params.put("userLevel", userLevel);
+        params.put("userLevelDiscription", userLevelDiscription);
+        sp.save(PERSONAL_INFO_LIBRARY, params);
+        sp.saveElement(PERSONAL_INFO_LIBRARY, "isSaved", true);
     }
 
+    /**
+     * 读取用户的个人信息
+     * 必须得加入一个判断，如果已经存入过个人信息的话，才能够进行读取
+     */
     public Map<String, String> readMySelfInformation(){
-        Map<String, String> data = new HashMap<String, String>();
-        SharedPreferences sp = context.getSharedPreferences("personalInfo", Context.MODE_PRIVATE);
-        data.put("nickName", sp.getString("nickName", ""));
-        data.put("userRaceName", sp.getString("userRaceName", ""));
-        data.put("userRaceDiscription", sp.getString("userRaceDiscription", ""));
-        data.put("userHeadPath", sp.getString("userHeadPath", ""));
-        data.put("userSignature", sp.getString("userSignature", ""));
-        data.put("userCurrentTitle", sp.getString("userCurrentTitle", ""));
-        data.put("userLevel", sp.getString("userLevel", ""));
-        data.put("userLevelDiscription", sp.getString("userLevelDiscription", ""));
+        Map<String, String> data = new HashMap<>();
+        data.put("nickName", sp.read(PERSONAL_INFO_LIBRARY).get("nickName").toString());
+        data.put("userRaceName", sp.read(PERSONAL_INFO_LIBRARY).get("userRaceName").toString());
+        data.put("userRaceDiscription", sp.read(PERSONAL_INFO_LIBRARY).get("userRaceDiscription").toString());
+        data.put("userHeadPath", sp.read(PERSONAL_INFO_LIBRARY).get("userHeadPath").toString());
+        data.put("userSignature", sp.read(PERSONAL_INFO_LIBRARY).get("userSignature").toString());
+        data.put("userCurrentTitle", sp.read(PERSONAL_INFO_LIBRARY).get("userCurrentTitle").toString());
+        data.put("userLevel", sp.read(PERSONAL_INFO_LIBRARY).get("userLevel").toString());
+        data.put("userLevelDiscription", sp.read(PERSONAL_INFO_LIBRARY).get("userLevelDiscription").toString());
         return data;
     }
 
+    /**
+     * 判断是否为第一次读取用户的个人信息
+     * @return
+     */
     public boolean isFirstSaveMySelfInformation(){
-        SharedPreferences sp = context.getSharedPreferences("personalInfo", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        return !sp.contains("isSaved");
+        return !sp.checkElement(PERSONAL_INFO_LIBRARY, "isSaved");
     }
 
     /**
@@ -152,11 +169,7 @@ public class SharedPreferencesUtil {
      * 为了让FirstMainPageFragmentParent对缓存进行检测并对用户进行提示
      */
     public void saveIsMessageTip(String phoneNumber){
-        SharedPreferences sp = context.getSharedPreferences("tip", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putString("message", "");
-        editor.putInt(phoneNumber, sp.getInt(phoneNumber, 0) + 1);
-        editor.commit();
+        sp.saveNumber(MESSAGE_TIP_LIBRARY, phoneNumber, 1, null);
     }
 
     /**

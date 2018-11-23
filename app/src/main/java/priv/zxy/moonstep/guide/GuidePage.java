@@ -52,9 +52,9 @@ public class GuidePage extends BaseActivity {
      */
     public void jumpActivity(){
         if(!SharedPreferencesUtil.getInstance(this).isFirstLogin()){
-            jumpLogUtilinActivity();
+            jumpLoginActivity();
         }
-        SharedPreferencesUtil.getInstance(this).saveFirstLogin();
+        SharedPreferencesUtil.getInstance(this).setFirstLogin();
     }
 
     private void initView(){
@@ -124,7 +124,7 @@ public class GuidePage extends BaseActivity {
 
     public void buttonListener(View v){
         if(button_is_clicked){
-            jumpLogUtilinActivity();
+            jumpLoginActivity();
         }
         button_is_clicked = true;
     }
@@ -132,7 +132,7 @@ public class GuidePage extends BaseActivity {
     /**
      * 通过intent的两个标记为来实现从Viewpager跳转到StartActivity的时候确保Viewpager_Activity的销毁
      */
-    public void jumpLogUtilinActivity(){
+    public void jumpLoginActivity(){
         Intent intent = new Intent(this, StartActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

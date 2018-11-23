@@ -1,41 +1,27 @@
 package priv.zxy.moonstep.commerce.view;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-import com.hyphenate.chat.EMClient;
 import com.yalantis.contextmenu.lib.ContextMenuDialogFragment;
 import com.yalantis.contextmenu.lib.MenuObject;
-import com.yalantis.contextmenu.lib.MenuParams;
-import com.yalantis.contextmenu.lib.interfaces.OnMenuItemClickListener;
-import com.yalantis.contextmenu.lib.interfaces.OnMenuItemLongClickListener;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 
-import priv.zxy.moonstep.BuildConfig;
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.customview.AnimationButton;
-import priv.zxy.moonstep.customview.MyDialog;
 import priv.zxy.moonstep.customview.WaveViewByBezier;
-import priv.zxy.moonstep.utils.LogUtil;
-import priv.zxy.moonstep.login.view.UserLoginActivity;
+import priv.zxy.moonstep.utils.SharedPreferencesUtil;
 
 /**
  * 检查settings按钮设置是否可以生效，若是不能生效，则说明是toolbar设置的问题，针对toolbar进行改进。
@@ -49,6 +35,8 @@ public class PersonalSurfaceFragment extends Fragment {
     private Activity mActivity;
     private WaveViewByBezier waveViewByBezier;
     private AnimationButton bt;
+    private TextView userNickName;
+    private TextView userLevelName;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,6 +49,7 @@ public class PersonalSurfaceFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fg_main_first_subpage4, container, false);
+        initView();
         return view;
     }
 
@@ -70,20 +59,30 @@ public class PersonalSurfaceFragment extends Fragment {
 
         initView();
 
+        initData();
+
         initEvent();
 
     }
 
-    private void initView(){
+    private void initView() {
         bt = view.findViewById(R.id.clickButton);
 
         waveViewByBezier = view.findViewById(R.id.waveView);
+        userNickName = view.findViewById(R.id.userNickName);
+        userLevelName = view.findViewById(R.id.userLevelName);
     }
 
-    private void initEvent(){
+    private void initData() {
+        Map<String, String> data = SharedPreferencesUtil.getInstance(this.getContext()).readMySelfInformation();
+        userNickName.setText(data.get("nickName"));
+        userLevelName.setText(data.get("userLevel"));
+    }
+
+    private void initEvent() {
         waveViewByBezier.startAnimation();
 
-        bt.setAnimationButtonListener(new AnimationButton.AnimationButtonListener(){
+        bt.setAnimationButtonListener(new AnimationButton.AnimationButtonListener() {
             @Override
             public void onClickListener() {
                 bt.start();
@@ -96,7 +95,7 @@ public class PersonalSurfaceFragment extends Fragment {
         });
     }
 
-    private void jumpToDetailActivity(){
+    private void jumpToDetailActivity() {
         Intent intent = new Intent(mActivity, UserDetailActivity.class);
         startActivity(intent);
     }

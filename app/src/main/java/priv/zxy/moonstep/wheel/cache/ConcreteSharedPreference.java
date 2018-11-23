@@ -5,11 +5,14 @@ import android.content.SharedPreferences;
 
 import java.util.Map;
 
+import priv.zxy.moonstep.utils.LogUtil;
+
 /**
  * 创建人: Administrator
  * 创建时间: 2018/11/21
  * 描述: 装饰模式的Conrete类，是SharedPreference的具体化实现
  *      具体的SharedPreferencesUtil中的内容封装在装饰类的子类之中
+ *      该Concrete类所做的具体是数据的存取操作
  **/
 
 public class ConcreteSharedPreference extends AbstractSharedPreference {
@@ -50,8 +53,9 @@ public class ConcreteSharedPreference extends AbstractSharedPreference {
     @Override
     Map<String, ?> read() {
         Map<String, ?> data;
-        SharedPreferences sp = context.getSharedPreferences("personalInfo", Context.MODE_PRIVATE);
+        SharedPreferences sp = context.getSharedPreferences(library, Context.MODE_PRIVATE);
         data = sp.getAll();
+        LogUtil.d("ConcreteSharedPreference", data.toString());
         return data;
     }
 

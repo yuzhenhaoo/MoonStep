@@ -54,6 +54,11 @@ public enum ErrorCode {
     PasswordIsEmpty,
 
     /**
+     * 密码错误
+     */
+    PasswordIsWrong,
+
+    /**
      * 验证密码位空
      */
     ConfirmPasswordIsEmpty,

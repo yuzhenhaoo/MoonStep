@@ -28,7 +28,7 @@ public class BootReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(final Context context, final Intent intent) {
         //在这里开启我们的一个后台Service默默加载一些消息。
-        if (intent.getAction().equals(ACTION) && SharedPreferencesUtil.getInstance(context).isSuccessedLogined()){
+        if (intent.getAction().equals(ACTION) && SharedPreferencesUtil.getInstance(context).isFirstLogin()){
             //同时应该在这里登录环信服务器
             final Map<String, String> LogUtilinInfo = SharedPreferencesUtil.getInstance(context).readLoginInfo();
             new Thread(() -> EMClient.getInstance().login("moonstep" + LogUtilinInfo.get("UserName"), LogUtilinInfo.get("PassWd"), new EMCallBack() {//回调

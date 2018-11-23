@@ -76,38 +76,40 @@ public class Application extends LitePalApplication {
             if (activity.getClass() == MainActivity.class) {
                 EMClient.getInstance().chatManager().addMessageListener(msgListener);//实施消息的监听
                 new Thread(() -> {
-                    String phoneNumber = SharedPreferencesUtil.getInstance(mContext).readLoginInfo().get("UserName");
-                    GetMyInformationUtil.getInstance().returnMyInfo(new VolleyCallback() {
-                        @Override
-                        public String onSuccess(String result) {
-                            return null;
-                        }
+                    if (SharedPreferencesUtil.getInstance(Application.getContext()).isSuccessLogin()){
+                        String phoneNumber = SharedPreferencesUtil.getInstance(mContext).readLoginInfo().get("UserName");
+                        GetMyInformationUtil.getInstance().returnMyInfo(new VolleyCallback() {
+                            @Override
+                            public String onSuccess(String result) {
+                                return null;
+                            }
 
-                        @Override
-                        public boolean onSuccess() throws InterruptedException {
-                            return false;
-                        }
+                            @Override
+                            public boolean onSuccess() throws InterruptedException {
+                                return false;
+                            }
 
-                        @Override
-                        public String onFail(String error) {
-                            return null;
-                        }
+                            @Override
+                            public String onFail(String error) {
+                                return null;
+                            }
 
-                        @Override
-                        public boolean onFail() {
-                            return false;
-                        }
+                            @Override
+                            public boolean onFail() {
+                                return false;
+                            }
 
-                        @Override
-                        public void getMoonFriend(MoonFriend moonFriend) {
-                            SharedPreferencesUtil.getInstance(mContext).saveMySelfInformation(moonFriend.getNickName(), moonFriend.getRaceName(), moonFriend.getRaceDescription(), moonFriend.getHeadPortraitPath(), moonFriend.getSignature(), moonFriend.getCurrentTitle(), moonFriend.getLevelName(), moonFriend.getLevelDescription());
-                        }
+                            @Override
+                            public void getMoonFriend(MoonFriend moonFriend) {
+                                SharedPreferencesUtil.getInstance(mContext).saveMySelfInformation(moonFriend.getNickName(), moonFriend.getRaceName(), moonFriend.getRaceDescription(), moonFriend.getHeadPortraitPath(), moonFriend.getSignature(), moonFriend.getCurrentTitle(), moonFriend.getLevelName(), moonFriend.getLevelDescription());
+                            }
 
-                        @Override
-                        public void getErrorCode(ErrorCode errorCode) {
-                            LogUtil.d(TAG, "获取个人信息失败");
-                        }
-                    }, "moonstep" + phoneNumber);
+                            @Override
+                            public void getErrorCode(ErrorCode errorCode) {
+                                LogUtil.d(TAG, "获取个人信息失败");
+                            }
+                        }, "moonstep" + phoneNumber);
+                    }
                 }).start();
             }else if (activity.getClass() == ChattingActivity.class){
                 EMClient.getInstance().chatManager().removeMessageListener(msgListener);//移除Listener

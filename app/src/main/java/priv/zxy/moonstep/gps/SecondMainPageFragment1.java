@@ -33,7 +33,9 @@ import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.helper.FileHelper;
 import priv.zxy.moonstep.kernel.Application;
 import priv.zxy.moonstep.kernel.bean.ErrorCode;
+import priv.zxy.moonstep.utils.LogUtil;
 import priv.zxy.moonstep.utils.SharedPreferencesUtil;
+import priv.zxy.moonstep.utils.ShowErrorReason;
 import priv.zxy.moonstep.utils.dbUtils.DownloadFileUtil;
 import priv.zxy.moonstep.utils.dbUtils.SetLocationUtil;
 
@@ -320,10 +322,10 @@ public class SecondMainPageFragment1 extends Fragment {
             String city = location.getCity();    //获取城市
             String district = location.getDistrict();    //获取区县
             String street = location.getStreet();    //获取街道信息
-            SetLocationUtil.getInstance().LoginRequest(new SetLocationUtil.Callback(){
+            SetLocationUtil.getInstance().LocationServlet(new SetLocationUtil.Callback() {
                 @Override
                 public void onSuccess() {
-
+                    LogUtil.d(TAG, "位置坐标发送成功");
                 }
 
                 @Override

@@ -52,7 +52,7 @@ public class MoonFriendService extends Service {
 
     @Override
     public void onCreate() {
-        if(SharedPreferencesUtil.getInstance(Application.getContext()).readInitDataBase()){
+        if(SharedPreferencesUtil.getInstance(Application.getContext()).isDataInitialized()){
             initMoonFriends();
         }
         super.onCreate();
@@ -69,6 +69,7 @@ public class MoonFriendService extends Service {
             try {
                 usernames = EMClient.getInstance().contactManager().getAllContactsFromServer();
                 for (String username : usernames) {
+                    LogUtil.d(TAG, username);
                     GetMoonFriendUtil.getInstance().returnMoonFriendInfo(new VolleyCallback() {
                         @Override
                         public String onSuccess(String result) throws InterruptedException {
@@ -105,7 +106,7 @@ public class MoonFriendService extends Service {
                     }, username);
                 }
                 LogUtil.d(TAG, "run: EM获取好友列表成功");
-                SharedPreferencesUtil.getInstance(Application.getContext()).saveIsInitedDataBase();
+                SharedPreferencesUtil.getInstance(Application.getContext()).dataInitialized();
             } catch (HyphenateException e) {
                 e.printStackTrace();
                 LogUtil.d(TAG, "run: EM获取好友列表失败：" + e.getMessage());

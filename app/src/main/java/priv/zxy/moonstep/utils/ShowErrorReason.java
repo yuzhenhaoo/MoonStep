@@ -85,6 +85,9 @@ public class ShowErrorReason {
             case MoonFriendUserIsNotExisted:
                 ToastUtil.getInstance(mContext, mActivity).showToast("月友账号不存在，可能是服务器端故障，请联系管理员");
                 break;
+            case PasswordIsWrong:
+                ToastUtil.getInstance(mContext, mActivity).showToast("密码错误");
+                break;
         }
     }
 }

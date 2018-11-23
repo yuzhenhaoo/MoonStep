@@ -30,20 +30,20 @@ import priv.zxy.moonstep.utils.LogUtil;
 public class SetLocationUtil {
     private static final String TAG = "LoginUtil";
 
-    private static LoginUtil instance;
+    private static SetLocationUtil instance;
 
-    public static LoginUtil getInstance(){
+    public static SetLocationUtil getInstance(){
         if (instance == null){
-            synchronized (LoginUtil.class){
+            synchronized (SetLocationUtil.class){
                 if (instance == null){
-                    instance = new LoginUtil();
+                    instance = new SetLocationUtil();
                 }
             }
         }
         return instance;
     }
 
-    public void LocationServlet(Callback callback, final String phoneNumber, final String address, final String latitude, final String longitude){
+    public void LocationServlet(Callback callback, final String phoneNumber, final String address, final double latitude, final double longitude){
         //请求地址
         String url = ServiceBase.LOCATION_SERVLET_URL;
         String tag = "location";
@@ -79,8 +79,8 @@ public class SetLocationUtil {
                 Map<String, String> params = new HashMap<>();
                 params.put("phoneNumber", phoneNumber);
                 params.put("address", address);
-                params.put("latitude", latitude);
-                params.put("longitude", longitude);
+                params.put("latitude", String.valueOf(latitude));
+                params.put("longitude", String.valueOf(longitude));
                 return params;
             }
         };

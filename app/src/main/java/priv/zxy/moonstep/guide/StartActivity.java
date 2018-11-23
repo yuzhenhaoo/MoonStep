@@ -71,10 +71,9 @@ public class StartActivity extends BaseActivity {
         imageView.animate().scaleX(1.2f).scaleY(1.2f).setDuration(8000).start();
 
         bt.setOnClickListener(v->{
-            jump_to_LogUtilin_page();
+            toLoginPage();
             isStarted = true;
         });
-
 
         final Handler mHandler = new Handler();
         Runnable runnable = new Runnable() {
@@ -104,7 +103,7 @@ public class StartActivity extends BaseActivity {
                         break;
                     case 8:
                         if (!isStarted){
-                            jump_to_LogUtilin_page();
+                            toLoginPage();
                         }
                         mHandler.removeCallbacks(this);
                         break;
@@ -114,8 +113,6 @@ public class StartActivity extends BaseActivity {
             }
         };
         mHandler.postDelayed(runnable, 1000);
-
-
     }
 
     /**
@@ -123,13 +120,13 @@ public class StartActivity extends BaseActivity {
      * 通过检索，直接跳入MainActivity中
      * 如果上次登录失败，登录成功与否的标记位被修改为false，那么就要进入到登录页面
      */
-    public  void jump_to_LogUtilin_page(){
-        if ( SharedPreferencesUtil.getInstance(this).isSuccessedLogined()){
+    public  void toLoginPage(){
+        if ( SharedPreferencesUtil.getInstance(this).isFirstLogin()){
             Intent intent = new Intent(this, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
-            //当无需通过LogUtilinActivity登录的时候就要开启MessageReceiverService
+            //当无需通过LoginActivity登录的时候就要开启MessageReceiverService
             startService(new Intent(this, MessageReceiverService.class));
         }else{
             Intent intent = new Intent(this, UserLoginActivity.class);

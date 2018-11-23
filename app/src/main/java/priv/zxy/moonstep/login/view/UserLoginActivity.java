@@ -58,7 +58,7 @@ public class UserLoginActivity extends BaseActivity implements IUserLoginView {
 
     private Context mContext;
 
-    private UserLoginPresenter userLogUtilinPresenter;
+    private UserLoginPresenter userLoginPresenter;
 
     //加载动画资源文件
     Animation shake;
@@ -103,13 +103,13 @@ public class UserLoginActivity extends BaseActivity implements IUserLoginView {
 
         shake = AnimationUtils.loadAnimation(this, R.anim.shake);
 
-        userLogUtilinPresenter = new UserLoginPresenter(this);
+        userLoginPresenter = new UserLoginPresenter(this);
 
-        userLogUtilinPresenter.initAccountAndPassword(SharedPreferencesUtil.getInstance(mContext));
+        userLoginPresenter.initAccountAndPassword(SharedPreferencesUtil.getInstance(mContext));
 
         accountEt.requestFocus();
 
-        userLogUtilinPresenter.hideLoading();
+        userLoginPresenter.hideLoading();
 
         clickBt.setOnTouchListener((v, event) -> {
             switch(event.getAction()){
@@ -118,10 +118,10 @@ public class UserLoginActivity extends BaseActivity implements IUserLoginView {
 //                        clickBt.setClickable(false);//设置不能再次点击，当失败了设置为恢复点击效果
                     break;
                 case MotionEvent.ACTION_UP:
-                    userLogUtilinPresenter.showLoading();
+                    userLoginPresenter.showLoading();
                     new Thread(() -> {
                         try {
-                            userLogUtilinPresenter.Login();
+                            userLoginPresenter.Login();
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -133,7 +133,7 @@ public class UserLoginActivity extends BaseActivity implements IUserLoginView {
 
         rgiPhoneBt.setOnClickListener(v -> {
             rgiPhoneBt.startAnimation(shake);
-            userLogUtilinPresenter.toConfirmPhoneActivity();
+            userLoginPresenter.toConfirmPhoneActivity();
         });
 
         fgPwdBt.setOnTouchListener((v, event) -> {
@@ -142,7 +142,7 @@ public class UserLoginActivity extends BaseActivity implements IUserLoginView {
                     fgPwdBt.startAnimation(shake);
                     break;
                 case MotionEvent.ACTION_UP:
-                    userLogUtilinPresenter.toForgetPasswordActivity();
+                    userLoginPresenter.toForgetPasswordActivity();
                     break;
             }
             return true;
@@ -239,7 +239,7 @@ public class UserLoginActivity extends BaseActivity implements IUserLoginView {
     }
 
     @Override
-    public void setLoginPreferences(String username, String passwordEt) {
-        SharedPreferencesUtil.getInstance(mContext).setSuccessedLoginAccountAndPassword(username, passwordEt);
+    public void setLoginPreferences(String username, String password) {
+        SharedPreferencesUtil.getInstance(mContext).setSuccessLoginInfo(username, password);
     }
 }

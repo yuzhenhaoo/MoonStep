@@ -34,7 +34,7 @@ public class UserBiz implements IUser {
     @Override
     public void doLogin(String userPhoneNumber, String userPassword, final OnLoginListener onLoginListener) throws InterruptedException {
         if (userPhoneNumber != null && userPassword != null) {
-            LoginUtil.getInstance().LogUtilinRequest(onLoginListener, userPhoneNumber, userPassword);
+            LoginUtil.getInstance().LoginRequest(onLoginListener, userPhoneNumber, userPassword);
         } else {
             if(userPhoneNumber == null)
                 onLoginListener.LoginFail(ErrorCode.PhoneNumberISEmpty);

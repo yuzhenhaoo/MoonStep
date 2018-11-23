@@ -3,8 +3,10 @@ package priv.zxy.moonstep.login.presenter;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Looper;
+import android.util.Log;
 
 import priv.zxy.moonstep.login.module.biz.OnLoginListener;
+import priv.zxy.moonstep.utils.LogUtil;
 import priv.zxy.moonstep.utils.SharedPreferencesUtil;
 import priv.zxy.moonstep.kernel.bean.ErrorCode;
 import priv.zxy.moonstep.login.module.biz.IUser;
@@ -63,8 +65,11 @@ public class UserLoginPresenter {
      * @param preference SharedPreferences工具类对象
      */
     public void initAccountAndPassword(SharedPreferencesUtil preference){
-        userLoginView.initAccount(preference);
-        userLoginView.initPassword(preference);
+        LogUtil.d("UserLoginPresenter", String.valueOf(preference.isSuccessLogin()));
+        if (preference.isSuccessLogin()){
+            userLoginView.initAccount(preference);
+            userLoginView.initPassword(preference);
+        }
     }
 
     /**

@@ -86,7 +86,7 @@ public class LoginUtil {
                             });
 
                             //将数据存入
-                            SharedPreferencesUtil.getInstance(Application.getContext()).saveSuccessedLoginAccountAndPassword(phoneNumber, inputPassword);
+                            SharedPreferencesUtil.getInstance(Application.getContext()).setSuccessLoginInfo(phoneNumber, inputPassword);
 
                             //我们需要在登录成功的时候再次启动一次MessageReceiverService
                             Application.getContext().startService(new Intent(Application.getContext(), MessageReceiverService.class));

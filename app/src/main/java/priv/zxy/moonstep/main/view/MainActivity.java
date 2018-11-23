@@ -142,7 +142,6 @@ public class MainActivity extends BaseActivity
     }
 
     private void initData(){
-
         try {
             Map<String, String> data = SharedPreferencesUtil.getInstance(Application.getContext()).readMySelfInformation();
             name.setText(data.get("nickName"));
