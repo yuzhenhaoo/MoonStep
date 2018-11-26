@@ -5,10 +5,12 @@ import android.content.SharedPreferences;
 
 import java.util.Map;
 
+import priv.zxy.moonstep.utils.LogUtil;
+
 /**
  * 创建人: Administrator
  * 创建时间: 2018/11/21
- * 描述:
+ * 描述: 继承自ConcreteSharedPreference，是拓展出的缓存处理类，目的是可以方便的操作缓存中的int型数据
  **/
 
 public class NumberConcreteSharedPreference extends ConcreteSharedPreference{
@@ -20,6 +22,7 @@ public class NumberConcreteSharedPreference extends ConcreteSharedPreference{
 
     public NumberConcreteSharedPreference(Context context) {
         super(context);
+        this.context = context;
     }
 
     public void setElement(String element) {
@@ -39,7 +42,10 @@ public class NumberConcreteSharedPreference extends ConcreteSharedPreference{
     }
 
     public void save(Map<String, String> data){
-        super.save(data);
+        if (data != null){
+            super.save(data);
+        }
+        LogUtil.d("NumberConcreteSharedPreference", element + "   " + number);
         SharedPreferences sp = context.getSharedPreferences(super.getLibrary(), mode);
         SharedPreferences.Editor editor = sp.edit();
         editor.putInt(element, sp.getInt(element, 0) + number);

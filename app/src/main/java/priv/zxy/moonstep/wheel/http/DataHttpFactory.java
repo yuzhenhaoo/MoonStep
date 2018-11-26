@@ -8,7 +8,7 @@ package priv.zxy.moonstep.wheel.http;
 public class DataHttpFactory extends HttpFactory {
 
     @Override
-    HttpBase createHttpObject() {
+    public HttpBase createHttpObject() {
         return new DataHttp();
     }
 }

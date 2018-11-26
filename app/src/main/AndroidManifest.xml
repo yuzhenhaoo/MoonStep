@@ -37,12 +37,10 @@
         android:roundIcon="@mipmap/icon_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:resizeableActivity="false"
-        tools:replace="android:icon,android:theme">
-        <meta-data
-            android:name="com.baidu.lbsapi.API_KEY"
-            android:value="Z04eBTKijK7hT3S4LloMeEAYXYMdALMG"/>
-
+        android:resizeableActivity="false">
+        <meta-data android:name="com.amap.api.v2.apikey" android:value="75f4c284d481bfa6556f8774b2c37d66">
+        </meta-data>
+        <service android:name="com.amap.api.location.APSService"></service>
         <activity
             android:name=".guide.GuidePage"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
@@ -101,6 +99,9 @@
         <activity android:name=".settings.SettingActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
+        <activity android:name=".gps.PackActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
 
 
         <!-- 设置环信应用的AppKey -->
@@ -142,7 +143,7 @@
 
 
         <service
-            android:name=""
+            android:name=".EM.service.MoonFriendService"
             android:exported="false" />
         <receiver
             android:name=".kernel.BootReceiver"

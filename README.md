@@ -287,13 +287,13 @@ Bug解决时间：2018/9/22
 
 Bug类型：`网络请求完毕后，没有相应地用户提示，并且activity异常崩溃，由于输出管道地损坏，没有报错信息地显示`
 
-Bug原因：在Presenter的事件监听中，不能直接在子Thread中使用Toast的方法，必须新创建一个子线程，然后才能在子线程中调用Toast方法，注意要给子线程一个Handler地循环机制。
+Bug描述：在Presenter的事件监听中，不能直接在子Thread中使用Toast的方法，必须新创建一个子线程，然后才能在子线程中调用Toast方法，注意要给子线程一个Handler地循环机制。
 
 Bug解决时间：9/25/2018
 
 - 2018/10/3
 
-Bug类型：`在使用环信的获取好友列表的功能的时候，返回错误:Unknown_server_error，无法正常获取当前用户的好友列表`
+Bug描述：`在使用环信的获取好友列表的功能的时候，返回错误:Unknown_server_error，无法正常获取当前用户的好友列表`
 
 Bug解决措施：只需要将对应的ECAPI放入一个子线程中就可以完成对于当前用户好友列表的获取了，具体原因不明。
 
@@ -301,13 +301,13 @@ Bug解决时间：2018/10/4
 
 - 2018/10/4
 
-Bug类型：`在Application中查找并向MoonStep_Palace中添加User对象的时候，由于是网络请求的缘故，传给List的数据会很慢，这样的话，Recycler中地adapter会逐渐刷新界面，然而，由于List尚未完全完成对于数据地请求操作,所以此时看来RecyclerView中地数据只能显示一部分，处理地方式是什么呢？`
+Bug描述：`在Application中查找并向MoonStep_Palace中添加User对象的时候，由于是网络请求的缘故，传给List的数据会很慢，这样的话，Recycler中地adapter会逐渐刷新界面，然而，由于List尚未完全完成对于数据地请求操作,所以此时看来RecyclerView中地数据只能显示一部分，处理地方式是什么呢？`
 
 Bug解决措施：已经解决，解决方式：在第一次加载的时候，将好友的信息存储到SQLite中，一方面减少对网络请求的依赖，递增速度，第二个是在好友页面直接从本地数据库中加载的话，比从网络上重新加载要快了许多。
 
 Bug解决时间：2018/10/12
 
-Bug类型：在tomcat配置的后台中，使用Servlet接收中文数据的时候出现了乱码问题，但是之前测试的时候中文是可以正常显示的，然后尝试
+Bug描述：在tomcat配置的后台中，使用Servlet接收中文数据的时候出现了乱码问题，但是之前测试的时候中文是可以正常显示的，然后尝试
 `request.setCharacterEncoding("utf-8")`和`response.setContentType("text/html;character=utf-8")`都没有什么用处。
 
 Bug解决措施：在接收数据的时候，先解码然后译码，将tomcat本身支持的ISO-8859-1的编码方式转换为UFT-8的编码方式，经测试，问题成功解决，语法具体如下:
@@ -315,3 +315,13 @@ Bug解决措施：在接收数据的时候，先解码然后译码，将tomcat�
 `String xxx = new String(request.getParameter("xxx").getBytes("ISO-8859-1"),"UTF-8").trim();`
 
 Bug解决时间：2018/11/15 
+
+Bug描述：在向远端数据库存储当前所在的位置经纬度的时候，用的网络请求框架Volley返回的Response为""，而使用okhttp3没有得到正确的回调，为了检测错误的原因，使用postman进行数据的传输，但是postman中可以得到正确的结果返回。
+
+Bug解决措施：postman可以得到正确的结果回调，这说明bug问题并不是后台的Servlet出了问题，那为什么android端使用的框架就不能得到正确的结果回调呢？一开始怀疑是框架自身的问题，于是把Volley换成了okhttp3，不行，又把okhttp3换成Fast Fast Android Networking，结果还是不行，这个时候报出来一个JSON异常，大致就是说回调的内容为""，而不是null，然后又把android端的数据放到postman中再次测试，没有结果回调！
+
+为什么我之前得到了正确的结果回调，现在却又没有回调结果了呢？
+
+很简单，因为我在客户端把要传过去的参数名打错了...卡了两天
+
+Bug解决时间：2018/11/26

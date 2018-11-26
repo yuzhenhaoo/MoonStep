@@ -8,8 +8,9 @@ import java.util.Map;
  * 创建人: Administrator
  * 创建时间: 2018/11/21
  * 描述:AbstractSharedPreference子类的外观类
- * 使用外观类，隐藏子系统的细节，只暴露相应的接口给外部客户端
+ * 使用外观模式，隐藏子系统的细节，只暴露相应的接口给外部客户端
  **/
+
 public class FacadeSharedPreference {
 
     JudgeConcreteSharedPreference judgeConcreteSharedPreference;

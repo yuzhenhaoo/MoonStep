@@ -17,6 +17,8 @@ public class SharedPreferencesUtil {
 
     private static String MESSAGE_TIP_LIBRARY = "tip";
 
+    private static String MAP_REFRESH_TIME_CHECK = "map";
+
     private Context context;
 
     private FacadeSharedPreference sp;
@@ -76,13 +78,13 @@ public class SharedPreferencesUtil {
     }
 
     /**
-     * 当登陆成功的时候存储用户的昵称和密码
+     * 当登陆成功的时候存储用户的手机号和密码
      * @param username &
      * @param passwd &
      */
     public void setSuccessLoginInfo(String username, String passwd){
         Map<String, String> params = new HashMap<>();
-        params.put("UserName", username);
+        params.put("PhoneNumber", username);
         params.put("PassWd", passwd);
         sp.save(LOGGING_LIBRARY, params);
         sp.saveElement(LOGGING_LIBRARY, "IS_SUCCESS", true);
@@ -101,7 +103,7 @@ public class SharedPreferencesUtil {
      */
     public Map<String, String> readLoginInfo(){
         Map<String, String> data = new HashMap<>();
-        data.put("UserName", sp.read(LOGGING_LIBRARY).get("UserName").toString());
+        data.put("PhoneNumber", sp.read(LOGGING_LIBRARY).get("PhoneNumber").toString());
         data.put("PassWd", sp.read(LOGGING_LIBRARY).get("PassWd").toString());
         return data;
     }
@@ -179,7 +181,7 @@ public class SharedPreferencesUtil {
      * @return
      */
     public int readMessageNumber(String phoneNumber){
-        SharedPreferences sp = context.getSharedPreferences("tip", Context.MODE_PRIVATE);
+        SharedPreferences sp = context.getSharedPreferences(MESSAGE_TIP_LIBRARY, Context.MODE_PRIVATE);
         return sp.getInt(phoneNumber, 0);
     }
 
@@ -187,7 +189,7 @@ public class SharedPreferencesUtil {
      * 当点击进入一个人的聊天页面，说明他的消息已经被看过来，此时应该将他的消息记录从缓存中清除。
      */
     public void handleMessageTip(String phoneNumber){
-        SharedPreferences sp = context.getSharedPreferences("tip", Context.MODE_PRIVATE);
+        SharedPreferences sp = context.getSharedPreferences(MESSAGE_TIP_LIBRARY, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.remove(phoneNumber);
         if (sp.contains("message") && sp.getAll().size() == 1){
@@ -201,7 +203,25 @@ public class SharedPreferencesUtil {
      * @return 当sp中包含的消息只有message地时候，说明这个时候没有任何新来的消息，那么就返回false，若非这种情况，就返回true
      */
     public boolean isMessageTip(){
-        SharedPreferences sp = context.getSharedPreferences("tip", Context.MODE_PRIVATE);
+        SharedPreferences sp = context.getSharedPreferences(MESSAGE_TIP_LIBRARY, Context.MODE_PRIVATE);
         return sp.getAll().size() > 1;
+    }
+
+    /**
+     * 从客户端接收当前时间，如果当前时间没有存入xml中，那么就存入（第一次）
+     * 如果当前时间已经存入xml中，就检测此刻时间距离上次存入的时间是否已经经过了3天，如果已经超过了3天，就继续存入，
+     * @param days
+     */
+    public boolean checkMapTime(int days){
+        if (days > readMapTime() + 3){
+            sp.saveNumber(MAP_REFRESH_TIME_CHECK, "days", 3, null);
+            return true;
+        }
+        return false;
+    }
+
+    private int readMapTime(){
+        SharedPreferences sp = context.getSharedPreferences(MAP_REFRESH_TIME_CHECK, Context.MODE_PRIVATE);
+        return sp.getInt("days", 0);
     }
 }

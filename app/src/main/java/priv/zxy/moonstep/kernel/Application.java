@@ -11,8 +11,7 @@ import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
-import com.baidu.mapapi.CoordType;
-import com.baidu.mapapi.SDKInitializer;
+import com.androidnetworking.AndroidNetworking;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
@@ -77,35 +76,15 @@ public class Application extends LitePalApplication {
                 EMClient.getInstance().chatManager().addMessageListener(msgListener);//实施消息的监听
                 new Thread(() -> {
                     if (SharedPreferencesUtil.getInstance(Application.getContext()).isSuccessLogin()){
-                        String phoneNumber = SharedPreferencesUtil.getInstance(mContext).readLoginInfo().get("UserName");
-                        GetMyInformationUtil.getInstance().returnMyInfo(new VolleyCallback() {
+                        String phoneNumber = SharedPreferencesUtil.getInstance(mContext).readLoginInfo().get("PhoneNumber");
+                        GetMyInformationUtil.getInstance().getUserInfo(new GetMyInformationUtil.Callback() {
                             @Override
-                            public String onSuccess(String result) {
-                                return null;
-                            }
-
-                            @Override
-                            public boolean onSuccess() throws InterruptedException {
-                                return false;
-                            }
-
-                            @Override
-                            public String onFail(String error) {
-                                return null;
-                            }
-
-                            @Override
-                            public boolean onFail() {
-                                return false;
-                            }
-
-                            @Override
-                            public void getMoonFriend(MoonFriend moonFriend) {
+                            public void onSuccess(MoonFriend moonFriend) {
                                 SharedPreferencesUtil.getInstance(mContext).saveMySelfInformation(moonFriend.getNickName(), moonFriend.getRaceName(), moonFriend.getRaceDescription(), moonFriend.getHeadPortraitPath(), moonFriend.getSignature(), moonFriend.getCurrentTitle(), moonFriend.getLevelName(), moonFriend.getLevelDescription());
                             }
 
                             @Override
-                            public void getErrorCode(ErrorCode errorCode) {
+                            public void onFail(ErrorCode errorCode) {
                                 LogUtil.d(TAG, "获取个人信息失败");
                             }
                         }, "moonstep" + phoneNumber);
@@ -216,25 +195,11 @@ public class Application extends LitePalApplication {
         }
     };
 
-    public void savedChattingMessage(String content, int direction, int type, String phoneNumber) {
-        Message message = new Message();
-        message.setContent(content);
-        message.setDirection(direction);//0、对方发送的;1、我发送的;
-        message.setObject(phoneNumber);
-        message.setType(type);//1、文字；2、图片；3、音频；4、视频；5、红包；6、文件；7、位置
-        message.save();
-        LogUtil.d(TAG, "savedChattingMessage:" + message);
-    }
-
     @Override
     public void onCreate() {
         super.onCreate();
-
-        SDKInitializer.initialize(getApplicationContext());
-
-        //自4.3.0起，百度地图SDK所有接口均支持百度坐标和国测局坐标，用此方法设置您使用的坐标类型.
-        //包括BD09LL和GCJ02两种坐标，默认是BD09LL坐标。
-        SDKInitializer.setCoordType(CoordType.BD09LL);
+        //初始化AndroidNetworking
+        AndroidNetworking.initialize(getApplicationContext());
 
         //注册Activity的生命周期回调接口。
         mContext = getApplicationContext();
@@ -345,6 +310,16 @@ public class Application extends LitePalApplication {
     public static String getToken(){
         Log.d(TAG, "getToken: "+token);
         return token;
+    }
+
+    public void savedChattingMessage(String content, int direction, int type, String phoneNumber) {
+        Message message = new Message();
+        message.setContent(content);
+        message.setDirection(direction);//0、对方发送的;1、我发送的;
+        message.setObject(phoneNumber);
+        message.setType(type);//1、文字；2、图片；3、音频；4、视频；5、红包；6、文件；7、位置
+        message.save();
+        LogUtil.d(TAG, "savedChattingMessage:" + message);
     }
 
     private class LocalReceiver extends BroadcastReceiver{

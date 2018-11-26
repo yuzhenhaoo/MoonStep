@@ -12,20 +12,29 @@ apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 28
-    buildToolsVersion '28.0.1'
     defaultConfig {
-        applicationId "priv.zxy.moonstep"
+//        applicationId "priv.zxy.moonstep"
         minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        packagingOptions {
+            exclude 'okhttp3/internal/publicsuffix/publicsuffixes.gz'
+        }
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+//        debug {
+//            minifyEnabled false
+//            zipAlignEnabled false
+//            shrinkResources false
+//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//            signingConfig signingConfigs.release
+//        }
     }
     compileOptions {
         setSourceCompatibility JavaVersion.VERSION_1_8
@@ -81,11 +90,20 @@ dependencies {
     implementation 'org.litepal.android:java:3.0.0'
     //动态加载库-ENViews
     implementation 'com.github.codeestX:ENViews:v1.0.3'
-    implementation 'hanks.xyz:htextview-library:0.1.2'
     implementation files('libs/glide-3.6.0.jar')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation files('libs/okhttp-3.12.0.jar')
-    implementation files('libs/okio-2.1.0.jar')
+    //高德地图
+    //3D
+    implementation 'com.amap.api:3dmap:latest.integration'
+    //2D
+    implementation 'com.amap.api:map2d:latest.integration'
+    //定位
+    implementation 'com.amap.api:location:latest.integration'
+    //搜索
+    implementation 'com.amap.api:search:latest.integration'
+
+    //Fast Android Networking
+    implementation 'com.amitshekhar.android:android-networking:1.0.2'
 }
 repositories {
     mavenCentral()

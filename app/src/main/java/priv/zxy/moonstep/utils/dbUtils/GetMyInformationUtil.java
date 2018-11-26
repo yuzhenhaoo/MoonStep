@@ -37,7 +37,7 @@ public class GetMyInformationUtil {
         return instance;
     }
     
-    public void returnMyInfo(final VolleyCallback volleyCallback, final String userId) {
+    public void getUserInfo(final Callback callback, final String userId) {
         //请求地址
         String url = ServiceBase.CHECK_USERID_SERVLET_URL;
         final String tag = "myself";
@@ -66,20 +66,20 @@ public class GetMyInformationUtil {
                             moonFriend.setRaceDescription(jsonObject.getString("raceDescription"));
                             moonFriend.setLevelName(jsonObject.getString("levelName"));
                             moonFriend.setLevelDescription(jsonObject.getString("levelDescription"));
-                            volleyCallback.getMoonFriend(moonFriend);
+                            callback.onSuccess(moonFriend);
                             LogUtil.d(TAG, "获取个人信息成功");
                         } else if(result.equals("error")){
                             //检验失败
-                            volleyCallback.getErrorCode(ErrorCode.MoonFriendUserIsNotExisted);
+                            callback.onFail(ErrorCode.MoonFriendUserIsNotExisted);
                         }
                     } catch (JSONException e) {
                         //做自己的请求异常操作
-                        volleyCallback.getErrorCode(ErrorCode.JSONException);
+                        callback.onFail(ErrorCode.JSONException);
                         LogUtil.e(TAG, e.getMessage());
                     }
                 }, error -> {
                     //做自己的响应错误操作，如Toast提示（“请稍后重试”等）
-                    volleyCallback.getErrorCode(ErrorCode.NetNotResponse);
+                    callback.onFail(ErrorCode.NetNotResponse);
                 }) {
             @Override
             protected Map<String, String> getParams(){
@@ -93,5 +93,12 @@ public class GetMyInformationUtil {
 
         //将请求添加到队列中
         requestQueue.add(request);
+    }
+
+    public interface Callback{
+
+        void onSuccess(MoonFriend moonFriend);
+
+        void onFail(ErrorCode errorCode);
     }
 }

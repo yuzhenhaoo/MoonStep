@@ -8,9 +8,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.hanks.htextview.HTextView;
 
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.kernel.Application;
@@ -38,7 +38,7 @@ public class StartActivity extends BaseActivity {
 
     private static int seconds = 0;
 
-    private HTextView hTextView;
+    private TextView textView;
 
     private ImageView imageView;
 
@@ -62,7 +62,7 @@ public class StartActivity extends BaseActivity {
 
     private void initView(){
         bt = findViewById(R.id.clickJump);
-        hTextView = findViewById(R.id.hTextView);
+        textView = findViewById(R.id.hTextView);
         imageView = findViewById(R.id.imageView);
 
         Glide.with(this).load(url).placeholder(R.drawable.background7).dontAnimate().into(imageView);
@@ -81,23 +81,23 @@ public class StartActivity extends BaseActivity {
             public void run() {
                 switch (seconds){
                     case 0:
-                        hTextView.animateText(words[seconds]);
+                        textView.setText(words[seconds]);
                         break;
                     case 1:
                         break;
                     case 2:
-                        hTextView.animateText(words[seconds]);
+                        textView.setText(words[seconds]);
                         break;
                     case 3:
                         bt.setVisibility(View.VISIBLE);
                         break;
                     case 4:
-                        hTextView.animateText(words[seconds]);
+                        textView.setText(words[seconds]);
                         break;
                     case 5:
                         break;
                     case 6:
-                        hTextView.animateText(words[seconds]);
+                        textView.setText(words[seconds]);
                         break;
                     case 7:
                         break;
@@ -121,7 +121,7 @@ public class StartActivity extends BaseActivity {
      * 如果上次登录失败，登录成功与否的标记位被修改为false，那么就要进入到登录页面
      */
     public  void toLoginPage(){
-        if ( SharedPreferencesUtil.getInstance(this).isFirstLogin()){
+        if ( SharedPreferencesUtil.getInstance(this).isSuccessLogin()){
             Intent intent = new Intent(this, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

@@ -20,12 +20,12 @@ public class DataHttp extends HttpBase {
     }
 
     @Override
-    void doPost(OnHttpResultListener onHttpResultListener) {
+    public void doPost(OnHttpResultListener onHttpResultListener) {
         super.doPost(onHttpResultListener);
     }
 
     @Override
-    void doPost(OnHttpResultListener onHttpResultListener, Map<String, String> params, Map<String, String> headers) {
+    public void doPost(OnHttpResultListener onHttpResultListener, Map<String, String> params, Map<String, String> headers) {
         super.doPost(onHttpResultListener, params, headers);
     }
 }

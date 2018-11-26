@@ -220,7 +220,7 @@ public class UserLoginActivity extends BaseActivity implements IUserLoginView {
 
     @Override
     public void initAccount(SharedPreferencesUtil preference) {
-        accountEt.setText(SharedPreferencesUtil.getInstance(mContext).readLoginInfo().get("UserName"));
+        accountEt.setText(SharedPreferencesUtil.getInstance(mContext).readLoginInfo().get("PhoneNumber"));
     }
 
     @Override

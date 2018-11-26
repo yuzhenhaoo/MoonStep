@@ -55,7 +55,7 @@ public class ConcreteSharedPreference extends AbstractSharedPreference {
         Map<String, ?> data;
         SharedPreferences sp = context.getSharedPreferences(library, Context.MODE_PRIVATE);
         data = sp.getAll();
-        LogUtil.d("ConcreteSharedPreference", data.toString());
+        LogUtil.d("ConcreteSharedPreference", "read" + data.toString());
         return data;
     }
 
@@ -72,6 +72,7 @@ public class ConcreteSharedPreference extends AbstractSharedPreference {
                 editor.putString(key, data.get(key));
             }
             editor.apply();
+            LogUtil.d("ConcreteSharedPreference", "save:" + data.toString());
         }else{
             /**
              * 这里跳出context为空的异常提示，并终止运行，可以让ContextIsNullException继承于NullPointerException

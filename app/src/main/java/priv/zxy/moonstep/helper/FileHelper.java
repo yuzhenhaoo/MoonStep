@@ -1,9 +1,6 @@
 package priv.zxy.moonstep.helper;
 
 import android.content.Context;
-import android.util.Log;
-
-import com.baidu.mapapi.map.MapView;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -12,7 +9,6 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import priv.zxy.moonstep.kernel.Application;
-import priv.zxy.moonstep.utils.LogUtil;
 
 /**
  * 创建人: Administrator
@@ -72,20 +68,22 @@ public class FileHelper {
     }
 
     /**
-     *
-     * 设置个性化地图config文件路径
+     * 由给定的目录名称和文件名称，所引导相应的文件
+     * @param context 上下文
+     * @param dirName 目录名称（在project的main目录下新建一个assets目录，并在其下面新建一个文件夹，名称就是dirName）
+     * @param fileName 要索引的文件就放在driName下面
      */
-    public static void setMapCustomFile(Context context, String PATH) {
+    public static String setMapCustomFile(Context context, String dirName, String fileName) {
         FileOutputStream out = null;
         InputStream inputStream = null;
         String moduleName = null;
         try {
             inputStream = context.getAssets()
-                    .open("customConfigFile/" + PATH);
+                    .open(dirName + "/" + fileName);
             byte[] b = new byte[inputStream.available()];
             inputStream.read(b);
             moduleName = context.getFilesDir().getAbsolutePath();
-            File f = new File(moduleName + "/" + PATH);
+            File f = new File(moduleName + "/" + fileName);
             if (f.exists()) {
                 f.delete();
             }
@@ -106,8 +104,6 @@ public class FileHelper {
                 e.printStackTrace();
             }
         }
-        MapView.setCustomMapStylePath(moduleName + "/" + PATH);
-
+        return moduleName + "/" + fileName;
     }
-
 }

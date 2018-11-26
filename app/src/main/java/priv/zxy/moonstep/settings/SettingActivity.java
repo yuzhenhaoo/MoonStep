@@ -77,7 +77,9 @@ public class SettingActivity extends AppCompatActivity implements ISettingView{
 
     @Override
     protected void onDestroy() {
-        myDialog.dismiss();
+        if (myDialog != null){
+            myDialog.dismiss();
+        }
         super.onDestroy();
     }
 

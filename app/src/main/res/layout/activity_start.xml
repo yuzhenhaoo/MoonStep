@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/Black">
 
-    <com.hanks.htextview.HTextView
+    <TextView
         android:id="@+id/hTextView"
         android:layout_width="match_parent"
         android:layout_height="150dp"
@@ -15,7 +15,6 @@
         android:translationZ="3dp"
         android:textSize="40sp"
         android:fontFamily="@font/fontfamily1"
-        app:animateType="anvil"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 

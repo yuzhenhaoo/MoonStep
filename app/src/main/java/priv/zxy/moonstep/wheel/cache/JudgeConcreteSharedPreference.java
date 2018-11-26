@@ -7,6 +7,8 @@ import android.content.SharedPreferences;
  * 创建人: Administrator
  * 创建时间: 2018/11/21
  * 描述: ConcreteSharedPreference类的子类，用来在原有ConcreteSharedPreference的基础上添加条件判断功能
+ *      既给定一个element，判断是否在所在库中，如果在的话，就返回为该element对应的值，如果不在，就返回false
+ *      简单来说，是用来处理缓存中存入的boolean类型的值
  **/
 
 public class JudgeConcreteSharedPreference extends ConcreteSharedPreference {

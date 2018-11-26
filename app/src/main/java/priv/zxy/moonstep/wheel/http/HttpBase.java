@@ -37,7 +37,7 @@ public class HttpBase extends AbstractHttpBase {
      * @param onHttpResultListener HttpBase监听器
      */
     @Override
-    void doGet(OnHttpResultListener onHttpResultListener) {
+    public void doGet(OnHttpResultListener onHttpResultListener) {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(URL)
@@ -64,7 +64,7 @@ public class HttpBase extends AbstractHttpBase {
      * @param onHttpResultListener HttpBase监听器
      */
     @Override
-    void doPost(OnHttpResultListener onHttpResultListener) {
+    public void doPost(OnHttpResultListener onHttpResultListener) {
         OkHttpClient mOkHttpClient = new OkHttpClient();
         RequestBody formBody = new FormBody.Builder()
                 .build();
@@ -96,7 +96,7 @@ public class HttpBase extends AbstractHttpBase {
      * @param onHttpResultListener HttpBase监听器
      * @param params Map类型的传递参数
      */
-    void doPost(OnHttpResultListener onHttpResultListener, Map<String, String> params, Map<String, String> headers){
+    public void doPost(OnHttpResultListener onHttpResultListener, Map<String, String> params, Map<String, String> headers){
         OkHttpClient mOkHttpClient = new OkHttpClient();
         FormBody.Builder builder = new FormBody.Builder();
         for (String key: params.keySet()){
