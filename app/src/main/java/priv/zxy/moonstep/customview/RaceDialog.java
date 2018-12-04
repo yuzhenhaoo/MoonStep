@@ -4,18 +4,14 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
-import priv.zxy.moonstep.BuildConfig;
 import priv.zxy.moonstep.R;
-import priv.zxy.moonstep.kernel.Application;
+import priv.zxy.moonstep.data.application.Application;
 
 /**
  * 创建人: Administrator

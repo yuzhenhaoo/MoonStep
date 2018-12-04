@@ -4,8 +4,8 @@ import com.hyphenate.exceptions.HyphenateException;
 
 import java.util.List;
 
-import priv.zxy.moonstep.db.MoonFriend;
+import priv.zxy.moonstep.framework.user.User;
 
 public interface IMoonFriendBiz {
-    void checkClientAndDatabase(List<MoonFriend> lists) throws HyphenateException, InterruptedException;
+    void checkClientAndDatabase(List<User> lists) throws HyphenateException, InterruptedException;
 }

@@ -45,7 +45,6 @@ public class NumberConcreteSharedPreference extends ConcreteSharedPreference{
         if (data != null){
             super.save(data);
         }
-        LogUtil.d("NumberConcreteSharedPreference", element + "   " + number);
         SharedPreferences sp = context.getSharedPreferences(super.getLibrary(), mode);
         SharedPreferences.Editor editor = sp.edit();
         editor.putInt(element, sp.getInt(element, 0) + number);

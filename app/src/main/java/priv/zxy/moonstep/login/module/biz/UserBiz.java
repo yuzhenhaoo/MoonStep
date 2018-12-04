@@ -6,26 +6,25 @@ package priv.zxy.moonstep.login.module.biz;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.exceptions.HyphenateException;
 
 //import cn.smssdk.SMSSDK;
-import priv.zxy.moonstep.EM.bean.VolleyCallback;
-import priv.zxy.moonstep.db.MoonFriend;
+import priv.zxy.moonstep.data.bean.VolleyCallback;
+import priv.zxy.moonstep.framework.user.User;
 import priv.zxy.moonstep.utils.dbUtils.ChangePasswordUtil;
 import priv.zxy.moonstep.utils.dbUtils.LoginUtil;
 import priv.zxy.moonstep.utils.dbUtils.PhoneCheckUtil;
 import priv.zxy.moonstep.utils.dbUtils.PhoneRegisterUtil;
 import priv.zxy.moonstep.utils.ToastUtil;
-import priv.zxy.moonstep.kernel.bean.ErrorCode;
+import priv.zxy.moonstep.data.bean.ErrorCode;
 
 public class UserBiz implements IUser {
 
     /**
-     * 在做doLogUtilin()之前，你必须先开启刷新页面，否则将会影响用户的体验
-     * 当doLogUtilin()方法的调用结束以后，你必须关闭刷新页面，否则将会无法使界面对用户进行响应
+     * 在做doLogin()之前，你必须先开启刷新页面，否则将会影响用户的体验
+     * 当doLogin()方法的调用结束以后，你必须关闭刷新页面，否则将会无法使界面对用户进行响应
      *
      * @param userPhoneNumber 用户名
      * @param userPassword    用户密码
@@ -113,7 +112,7 @@ public class UserBiz implements IUser {
                 }
 
                 @Override
-                public void getMoonFriend(MoonFriend moonFriend) {
+                public void getMoonFriend(User moonFriend) {
 
                 }
 
@@ -175,7 +174,7 @@ public class UserBiz implements IUser {
                 }
 
                 @Override
-                public void getMoonFriend(MoonFriend moonFriend) {
+                public void getMoonFriend(User moonFriend) {
 
                 }
 
@@ -216,7 +215,7 @@ public class UserBiz implements IUser {
             }
 
             @Override
-            public void getMoonFriend(MoonFriend moonFriend) {
+            public void getMoonFriend(User moonFriend) {
 
             }
 

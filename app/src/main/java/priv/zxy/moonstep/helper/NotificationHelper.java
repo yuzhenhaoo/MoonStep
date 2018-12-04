@@ -7,8 +7,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.support.v4.app.NotificationCompat;
 
+import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.R;
-import priv.zxy.moonstep.kernel.bean.NotificationEnum;
+import priv.zxy.moonstep.data.bean.NotificationEnum;
 
 /**
  * 创建人: Administrator
@@ -29,7 +30,7 @@ public class NotificationHelper {
             synchronized (NotificationHelper.class){
                 if (instance == null){
                     instance = new NotificationHelper();
-                    mContext = priv.zxy.moonstep.kernel.Application.getContext();
+                    mContext = Application.getContext();
                     manager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
                 }
             }

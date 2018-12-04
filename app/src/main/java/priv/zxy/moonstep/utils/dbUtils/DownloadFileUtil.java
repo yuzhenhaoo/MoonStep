@@ -7,7 +7,7 @@ import java.io.IOException;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import priv.zxy.moonstep.kernel.bean.ErrorCode;
+import priv.zxy.moonstep.data.bean.ErrorCode;
 
 /**
  * 创建人: Administrator

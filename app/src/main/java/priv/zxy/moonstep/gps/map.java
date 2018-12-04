@@ -22,18 +22,21 @@ import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
+import com.amap.api.maps.model.LatLng;
+import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
+
+import org.litepal.LitePal;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import priv.zxy.moonstep.R;
-import priv.zxy.moonstep.algorithm.ChooseType;
-import priv.zxy.moonstep.algorithm.DotChooseContext;
-import priv.zxy.moonstep.algorithm.MapDot;
+import priv.zxy.moonstep.algorithm.ChooseMapDotsAlgorithm.ChooseType;
+import priv.zxy.moonstep.algorithm.ChooseMapDotsAlgorithm.DotChooseContext;
+import priv.zxy.moonstep.algorithm.ChooseMapDotsAlgorithm.MapDot;
 import priv.zxy.moonstep.helper.FileHelper;
-import priv.zxy.moonstep.kernel.Application;
-import priv.zxy.moonstep.kernel.bean.ErrorCode;
+import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.utils.LogUtil;
 import priv.zxy.moonstep.utils.SharedPreferencesUtil;
 import priv.zxy.moonstep.utils.dbUtils.SetLocationUtil;
@@ -62,7 +65,6 @@ public class map extends Fragment{
     private AMapLocationClient mLocationClient = null;//声明AMapLocationClient类对象
 
     public AMapLocationClientOption mLocationOption = null;//声明AMapLocationClientOption对象
-
 
     @Nullable
     @Override
@@ -103,12 +105,12 @@ public class map extends Fragment{
         }
 
         aMap.setMapCustomEnable(true);//开启自定义地图
-        aMap.setCustomMapStylePath(FileHelper.setMapCustomFile(Application.getContext(), "customConfigFile", tuya));//设置自定义地图
-//        aMap.setCustomMapStylePath(FileHelper.setMapCustomFile(Application.getContext(), "customConfigFile", night));//设置自定义地图
+        aMap.setCustomMapStylePath(FileHelper.setMapCustomFile(Application.getContext(), "customConfigFile", tuya));//设置自定义地图tuya
+//        aMap.setCustomMapStylePath(FileHelper.setMapCustomFile(Application.getContext(), "customConfigFile", night));//设置自定义地图night
+        showDotsInMap();
         initLocationStyle();
         initLocationClient();
         initLocationOption();
-        showDotsInMap();
     }
 
     private void initEvent(){
@@ -157,15 +159,18 @@ public class map extends Fragment{
 
     /**
      * 控制将32个经纬度坐标点显示在地图中
+     * 但是在地图中显示寻宝位置存在一点点问题：第一次设置的时候，不能正确的显示所有宝藏的位置
      */
     private void showDotsInMap(){
-//        if (dots != null){
-//            for(MapDot dot : dots){
-//                saveMapDots(dot);
-//                LatLng latLng = new LatLng(dot.getLatitude(), dot.getLongitude());
-//                aMap.addMarker(new MarkerOptions().position(latLng).title("宝藏").snippet("等你来拿"));
-//            }
-//        }
+        LogUtil.d(TAG, "showDotsInMap");
+        List<MapDot> mapdots = LitePal.findAll(MapDot.class);
+        if (mapdots != null){
+            for (MapDot dot : mapdots){
+                LogUtil.d(TAG, dot.getLatitude() + "  " + dot.getLongitude());
+                LatLng latLng = new LatLng(dot.getLatitude(), dot.getLongitude());
+                aMap.addMarker(new MarkerOptions().position(latLng).title("宝藏").snippet("等你来拿"));
+            }
+        }
     }
 
     /**
@@ -173,12 +178,21 @@ public class map extends Fragment{
      * @param mapDots
      */
     private void saveMapDots(List<MapDot> mapDots){
+        clearMapDots();
         for(MapDot mapDot : mapDots){
             MapDot dot = new MapDot();
             dot.setLatitude(mapDot.getLatitude());
             dot.setLongitude(mapDot.getLongitude());
             dot.save();
         }
+    }
+
+    /**
+     * 每次存储之前，需要将当前已有的节点全部清除
+     * 删除所有id值大于0的数据
+     */
+    private void clearMapDots(){
+        LitePal.deleteAll(MapDot.class, "id > ?", "0");
     }
 
     @Override
@@ -281,6 +295,8 @@ public class map extends Fragment{
             LogUtil.d(TAG, "当前地址为:" + address);
             LogUtil.d(TAG, "当前维度为:" + latitude);
             LogUtil.d(TAG, "当前经度为:" + longtitude);
+
+
             if (SharedPreferencesUtil.getInstance(Application.getContext()).checkMapTime(days)){
                 //这里对32个宝藏位置坐标进行刷新，如果成功的话，就存入sqlite数据库中，并在地图上显示
                 DotChooseContext context = new DotChooseContext(ChooseType.SQUARE_CHOOSE);

@@ -5,7 +5,7 @@ import com.hyphenate.chat.EMMessage;
 
 import java.io.File;
 
-import priv.zxy.moonstep.kernel.bean.MessageType;
+import priv.zxy.moonstep.commerce.view.Friend.MessageType;
 import priv.zxy.moonstep.utils.LogUtil;
 
 public class MoonStepHelper {

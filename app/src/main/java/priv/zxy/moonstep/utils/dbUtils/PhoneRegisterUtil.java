@@ -14,9 +14,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import priv.zxy.moonstep.helper.EMHelper;
-import priv.zxy.moonstep.kernel.Application;
-import priv.zxy.moonstep.kernel.bean.ErrorCode;
-import priv.zxy.moonstep.kernel.bean.ServiceBase;
+import priv.zxy.moonstep.data.application.Application;
+import priv.zxy.moonstep.data.bean.ErrorCode;
+import priv.zxy.moonstep.data.bean.URLBase;
 import priv.zxy.moonstep.utils.LogUtil;
 
 /**
@@ -49,7 +49,7 @@ public class PhoneRegisterUtil {
      */
     public void RegisterRequest(final CallBack callBack, final String PhoneNumber, final  String NickName, final String PassWord, final String Gender){
         //请求地址
-        String url = ServiceBase.REGISTER_SERVLET_URL;
+        String url = URLBase.REGISTER_SERVLET_URL;
         String tag = "Login";
         //取得请求队列
         RequestQueue requestQueue = Volley.newRequestQueue(Application.getContext());

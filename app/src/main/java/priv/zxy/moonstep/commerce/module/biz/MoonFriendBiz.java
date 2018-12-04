@@ -7,11 +7,11 @@ import org.litepal.LitePal;
 
 import java.util.List;
 
-import priv.zxy.moonstep.EM.bean.VolleyCallback;
-import priv.zxy.moonstep.kernel.bean.ErrorCode;
+import priv.zxy.moonstep.data.bean.VolleyCallback;
+import priv.zxy.moonstep.data.bean.ErrorCode;
+import priv.zxy.moonstep.framework.user.User;
 import priv.zxy.moonstep.utils.LogUtil;
-import priv.zxy.moonstep.utils.dbUtils.GetMoonFriendUtil;
-import priv.zxy.moonstep.db.MoonFriend;
+import priv.zxy.moonstep.utils.dbUtils.GetUserInformationUtil;
 
 public class MoonFriendBiz implements IMoonFriendBiz {
 
@@ -30,44 +30,24 @@ public class MoonFriendBiz implements IMoonFriendBiz {
      * @throws InterruptedException
      */
     @Override
-    public void checkClientAndDatabase(final List<MoonFriend> lists) throws InterruptedException {
+    public void checkClientAndDatabase(final List<User> lists) throws InterruptedException {
         new Thread(()->{
             try {
                 final List<String> usernames = EMClient.getInstance().contactManager().getAllContactsFromServer();
                 if (lists.size() != usernames.size()) {
                     for (String username : usernames) {
-                        GetMoonFriendUtil.getInstance().returnMoonFriendInfo(new VolleyCallback() {
+                        GetUserInformationUtil.getInstance().getUserInfo(new GetUserInformationUtil.Callback() {
                             @Override
-                            public String onSuccess(String result) {
-                                return null;
-                            }
-
-                            @Override
-                            public boolean onSuccess() {
-                                return false;
-                            }
-
-                            @Override
-                            public String onFail(String error) {
-                                return null;
-                            }
-
-                            @Override
-                            public boolean onFail() {
-                                return false;
-                            }
-
-                            @Override
-                            public void getMoonFriend(MoonFriend moonFriend) {
-                                List<MoonFriend> newLists = null;
-                                newLists = LitePal.where("phonenumber = ?", moonFriend.getPhoneNumber()).find(MoonFriend.class);
-                                if (newLists == null) {//说明该条数据不存在于数据库中
+                            public void onSuccess(User moonFriend) {
+                                List<User> newLists = LitePal.where("phonenumber = ?", moonFriend.getPhoneNumber()).find(User.class);
+                                LogUtil.d(TAG, "getMoonFriend被调用了");
+                                if (newLists == null || newLists.size() == 0) {//说明该条数据不存在于数据库中
                                     saveUserToMoonFriendDataBase(moonFriend);
                                 }
                             }
 
                             @Override
-                            public void getErrorCode(ErrorCode errorCode) {
+                            public void onFail(ErrorCode errorCode) {
 
                             }
                         }, username);
@@ -84,18 +64,18 @@ public class MoonFriendBiz implements IMoonFriendBiz {
      *
      * @param mf 传递进来的好友对象
      */
-    private void saveUserToMoonFriendDataBase(MoonFriend mf) {
-        MoonFriend moonFriend = new MoonFriend();
-        moonFriend.setNickName(mf.getNickName());
+    private void saveUserToMoonFriendDataBase(User mf) {
+        User moonFriend = new User();
         moonFriend.setPhoneNumber(mf.getPhoneNumber());
+        moonFriend.setNickName(mf.getNickName());
         moonFriend.setGender(mf.getGender());
-        moonFriend.setHeadPortraitPath(mf.getHeadPortraitPath());
+        moonFriend.setRaceCode(mf.getRaceCode());
+        moonFriend.setHeadPath(mf.getHeadPath());
+        moonFriend.setLocation(mf.getLocation());
         moonFriend.setSignature(mf.getSignature());
         moonFriend.setCurrentTitle(mf.getCurrentTitle());
-        moonFriend.setRaceName(mf.getRaceName());
-        moonFriend.setRaceDescription(mf.getRaceDescription());
-        moonFriend.setLevelName(mf.getLevelName());
-        moonFriend.setLevelDescription(mf.getLevelDescription());
+        moonFriend.setLuckyValue(mf.getLuckyValue());
+//        moonFriend.setIsOnline(mf.getIsOnline());
         if (moonFriend.save()) {
             LogUtil.d(TAG, "月友信息存储成功");
         } else {

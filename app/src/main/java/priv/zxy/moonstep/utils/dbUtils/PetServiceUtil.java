@@ -12,10 +12,10 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import priv.zxy.moonstep.EM.bean.VolleyCallback;
-import priv.zxy.moonstep.kernel.Application;
-import priv.zxy.moonstep.kernel.bean.ErrorCode;
-import priv.zxy.moonstep.kernel.bean.ServiceBase;
+import priv.zxy.moonstep.data.bean.VolleyCallback;
+import priv.zxy.moonstep.data.application.Application;
+import priv.zxy.moonstep.data.bean.ErrorCode;
+import priv.zxy.moonstep.data.bean.URLBase;
 
 /**
  * 创建人: Administrator
@@ -38,7 +38,7 @@ public class PetServiceUtil {
     }
 
     public void getPetInfo(VolleyCallback volleyCallback, String phoneNumber){
-        String url = ServiceBase.GET_PET_INFO_SERVLET_URL;
+        String url = URLBase.GET_PET_INFO_SERVLET_URL;
         String tag = "getPetInfo";
 
         //获得请求队列

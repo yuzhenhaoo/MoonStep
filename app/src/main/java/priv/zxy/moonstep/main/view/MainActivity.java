@@ -33,19 +33,19 @@ import org.litepal.tablemanager.Connector;
 
 import java.util.Map;
 
-import priv.zxy.moonstep.EM.service.MoonFriendService;
+import priv.zxy.moonstep.service.MoonFriendService;
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.gps.map;
-import priv.zxy.moonstep.kernel.Application;
-import priv.zxy.moonstep.kernel.BaseActivity;
+import priv.zxy.moonstep.data.application.Application;
+import priv.zxy.moonstep.data.bean.BaseActivity;
 import priv.zxy.moonstep.login.view.UserLoginActivity;
 import priv.zxy.moonstep.settings.SettingActivity;
 import priv.zxy.moonstep.utils.LogUtil;
 import priv.zxy.moonstep.utils.SharedPreferencesUtil;
 import priv.zxy.moonstep.utils.ShowErrorReason;
-import priv.zxy.moonstep.kernel.bean.ErrorCode;
-import priv.zxy.moonstep.connectation.MainFifthPageActivity;
-import priv.zxy.moonstep.commerce.view.FirstMainPageFragmentParent;
+import priv.zxy.moonstep.data.bean.ErrorCode;
+import priv.zxy.moonstep.kefu.KeFuActivity;
+import priv.zxy.moonstep.commerce.view.FragmentParent;
 import priv.zxy.moonstep.task.FourthMainPageFragment;
 import priv.zxy.moonstep.title.ThirdMainPageFragment1;
 import priv.zxy.moonstep.utils.ToastUtil;
@@ -103,7 +103,7 @@ public class MainActivity extends BaseActivity
     private void initView(Bundle savedInstanceState){
         bindService();
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.main_content, new FirstMainPageFragmentParent()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_content, new FragmentParent()).commit();
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -228,7 +228,7 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void toFifthPage() {
-        Intent intent = new Intent(this, MainFifthPageActivity.class);
+        Intent intent = new Intent(this, KeFuActivity.class);
         startActivity(intent);
     }
 
@@ -247,7 +247,7 @@ public class MainActivity extends BaseActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_place) {
-            addFragmentToStack(new FirstMainPageFragmentParent());
+            addFragmentToStack(new FragmentParent());
         } else if (id == R.id.nav_real_world) {
             addFragmentToStack(new map());
         } else if (id == R.id.nav_wangguan) {

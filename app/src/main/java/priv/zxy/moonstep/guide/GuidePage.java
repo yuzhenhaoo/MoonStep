@@ -5,16 +5,13 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import priv.zxy.moonstep.R;
-import priv.zxy.moonstep.kernel.BaseActivity;
+import priv.zxy.moonstep.data.bean.BaseActivity;
 import priv.zxy.moonstep.utils.SharedPreferencesUtil;
 
 public class GuidePage extends BaseActivity {

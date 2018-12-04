@@ -17,9 +17,9 @@ import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
-import priv.zxy.moonstep.EM.bean.VolleyCallback;
-import priv.zxy.moonstep.kernel.Application;
-import priv.zxy.moonstep.kernel.bean.EMBase;
+import priv.zxy.moonstep.data.bean.VolleyCallback;
+import priv.zxy.moonstep.data.application.Application;
+import priv.zxy.moonstep.data.bean.EMBase;
 import priv.zxy.moonstep.utils.LogUtil;
 
 public class EMHelper {

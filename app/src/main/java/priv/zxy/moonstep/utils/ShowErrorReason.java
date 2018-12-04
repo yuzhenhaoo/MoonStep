@@ -3,8 +3,8 @@ package priv.zxy.moonstep.utils;
 import android.app.Activity;
 import android.content.Context;
 
-import priv.zxy.moonstep.kernel.Application;
-import priv.zxy.moonstep.kernel.bean.ErrorCode;
+import priv.zxy.moonstep.data.application.Application;
+import priv.zxy.moonstep.data.bean.ErrorCode;
 
 public class ShowErrorReason {
 

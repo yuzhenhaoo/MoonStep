@@ -7,10 +7,10 @@ import com.hyphenate.exceptions.HyphenateException;
 
 import java.util.List;
 
-import priv.zxy.moonstep.db.MoonFriend;
 import priv.zxy.moonstep.commerce.module.biz.IMoonFriendBiz;
 import priv.zxy.moonstep.commerce.module.biz.MoonFriendBiz;
-import priv.zxy.moonstep.commerce.view.IMoonFriendView;
+import priv.zxy.moonstep.commerce.view.Friend.IMoonFriendView;
+import priv.zxy.moonstep.framework.user.User;
 
 public class MoonFriendPresenter {
     IMoonFriendBiz moonFriendBiz;
@@ -25,7 +25,7 @@ public class MoonFriendPresenter {
         this.moonFriendBiz = new MoonFriendBiz();
     }
 
-    public void checkClientAndDatabase(List<MoonFriend> lists) throws HyphenateException, InterruptedException {
+    public void checkClientAndDatabase(List<User> lists) throws HyphenateException, InterruptedException {
         moonFriendBiz.checkClientAndDatabase(lists);
     }
 

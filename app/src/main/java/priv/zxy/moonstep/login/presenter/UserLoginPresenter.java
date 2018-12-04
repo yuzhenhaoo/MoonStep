@@ -1,14 +1,11 @@
 package priv.zxy.moonstep.login.presenter;
 
-import android.app.Activity;
-import android.content.Context;
 import android.os.Looper;
-import android.util.Log;
 
 import priv.zxy.moonstep.login.module.biz.OnLoginListener;
 import priv.zxy.moonstep.utils.LogUtil;
 import priv.zxy.moonstep.utils.SharedPreferencesUtil;
-import priv.zxy.moonstep.kernel.bean.ErrorCode;
+import priv.zxy.moonstep.data.bean.ErrorCode;
 import priv.zxy.moonstep.login.module.biz.IUser;
 import priv.zxy.moonstep.login.module.biz.UserBiz;
 import priv.zxy.moonstep.login.view.IUserLoginView;

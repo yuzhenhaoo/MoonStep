@@ -19,11 +19,11 @@ import android.widget.Button;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import priv.zxy.moonstep.R;
-import priv.zxy.moonstep.kernel.BaseActivity;
+import priv.zxy.moonstep.data.bean.BaseActivity;
 import priv.zxy.moonstep.login.presenter.UserLoginPresenter;
 import priv.zxy.moonstep.utils.SharedPreferencesUtil;
 import priv.zxy.moonstep.utils.ShowErrorReason;
-import priv.zxy.moonstep.kernel.bean.ErrorCode;
+import priv.zxy.moonstep.data.bean.ErrorCode;
 import priv.zxy.moonstep.main.view.MainActivity;
 
 /**

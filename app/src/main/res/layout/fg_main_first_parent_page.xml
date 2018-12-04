@@ -24,17 +24,18 @@
         android:background="#fff"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal">
-        <RadioButton
-            android:id="@+id/rb_moon"
-            style="@style/tab_menu_item"
-            android:drawableTop="@mipmap/moon_normal"
-            android:text="@string/tab_menu_moon" />
 
         <RadioButton
-            android:id="@+id/rb_pet"
+            android:id="@+id/rb_tree"
             style="@style/tab_menu_item"
-            android:drawableTop="@mipmap/pet_normal"
-            android:text="@string/tab_menu_pet" />
+            android:drawableTop="@mipmap/tree_normal"
+            android:text="@string/tab_menu_tree" />
+
+        <RadioButton
+            android:id="@+id/rb_community"
+            style="@style/tab_menu_item"
+            android:drawableTop="@mipmap/community_normal"
+            android:text="@string/tab_menu_community" />
 
         <RadioButton
             android:id="@+id/rb_heart"

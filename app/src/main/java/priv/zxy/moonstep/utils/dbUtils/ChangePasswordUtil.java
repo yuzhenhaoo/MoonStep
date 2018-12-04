@@ -1,7 +1,5 @@
 package priv.zxy.moonstep.utils.dbUtils;
 
-import android.app.Service;
-
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -14,12 +12,12 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import priv.zxy.moonstep.db.MoonFriend;
+import priv.zxy.moonstep.data.bean.URLBase;
+import priv.zxy.moonstep.framework.user.User;
 import priv.zxy.moonstep.helper.EMHelper;
-import priv.zxy.moonstep.EM.bean.VolleyCallback;
-import priv.zxy.moonstep.kernel.Application;
-import priv.zxy.moonstep.kernel.bean.ErrorCode;
-import priv.zxy.moonstep.kernel.bean.ServiceBase;
+import priv.zxy.moonstep.data.bean.VolleyCallback;
+import priv.zxy.moonstep.data.application.Application;
+import priv.zxy.moonstep.data.bean.ErrorCode;
 import priv.zxy.moonstep.utils.LogUtil;
 
 public class ChangePasswordUtil {
@@ -41,7 +39,7 @@ public class ChangePasswordUtil {
 
     public void changePassword(final VolleyCallback volleyCallback, final String phoneNumber, final String password) {
         //请求地址
-        String url = ServiceBase.CHANGE_PASSWORD_SERVLET_URL;
+        String url = URLBase.CHANGE_PASSWORD_SERVLET_URL;
         String tag = "Login";
         //取得请求队列
         RequestQueue requestQueue = Volley.newRequestQueue(Application.getContext());
@@ -82,7 +80,7 @@ public class ChangePasswordUtil {
                                     }
 
                                     @Override
-                                    public void getMoonFriend(MoonFriend moonFriend) {
+                                    public void getMoonFriend(User moonFriend) {
 
                                     }
 

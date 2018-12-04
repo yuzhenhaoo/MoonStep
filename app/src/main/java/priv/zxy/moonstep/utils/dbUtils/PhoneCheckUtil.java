@@ -3,8 +3,6 @@ package priv.zxy.moonstep.utils.dbUtils;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -14,10 +12,10 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import priv.zxy.moonstep.EM.bean.VolleyCallback;
-import priv.zxy.moonstep.kernel.Application;
-import priv.zxy.moonstep.kernel.bean.ErrorCode;
-import priv.zxy.moonstep.kernel.bean.ServiceBase;
+import priv.zxy.moonstep.data.bean.VolleyCallback;
+import priv.zxy.moonstep.data.application.Application;
+import priv.zxy.moonstep.data.bean.ErrorCode;
+import priv.zxy.moonstep.data.bean.URLBase;
 import priv.zxy.moonstep.utils.LogUtil;
 
 /**
@@ -44,7 +42,7 @@ public class PhoneCheckUtil {
 
     public void phoneCheck(final VolleyCallback volleyCallback, final String phoneNumber){
         //请求地址
-        String url = ServiceBase.CHECK_PHONE_SERVLET_URL;
+        String url = URLBase.CHECK_PHONE_SERVLET_URL;
         String tag = "login";
         //取得请求队列
         RequestQueue requestQueue = Volley.newRequestQueue(Application.getContext());

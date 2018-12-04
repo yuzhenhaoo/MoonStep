@@ -13,10 +13,10 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 import priv.zxy.moonstep.R;
-import priv.zxy.moonstep.kernel.Application;
-import priv.zxy.moonstep.kernel.BaseActivity;
-import priv.zxy.moonstep.kernel.MessageReceiverService;
-import priv.zxy.moonstep.kernel.bean.ServiceBase;
+import priv.zxy.moonstep.data.application.Application;
+import priv.zxy.moonstep.data.bean.URLBase;
+import priv.zxy.moonstep.data.bean.BaseActivity;
+import priv.zxy.moonstep.service.MessageReceiverService;
 import priv.zxy.moonstep.login.view.UserLoginActivity;
 import priv.zxy.moonstep.main.view.MainActivity;
 import priv.zxy.moonstep.utils.LogUtil;
@@ -57,7 +57,7 @@ public class StartActivity extends BaseActivity {
     private void initStartImageUrl(){
         int number = (int)(1 + Math.random()*(Application.START_IMAGE_MAX_NUMBER - 1 + 1));
         Log.d(TAG,"打印的数字是:" + String.valueOf(number));
-        url = ServiceBase.START_PAGE_URL + String.valueOf(number)+".png";
+        url = URLBase.START_PAGE_URL + String.valueOf(number)+".png";
     }
 
     private void initView(){

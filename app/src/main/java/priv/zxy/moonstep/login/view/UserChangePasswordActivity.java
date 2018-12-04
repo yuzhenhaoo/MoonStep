@@ -20,10 +20,10 @@ import android.widget.TextView;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import priv.zxy.moonstep.R;
-import priv.zxy.moonstep.kernel.BaseActivity;
+import priv.zxy.moonstep.data.bean.BaseActivity;
 import priv.zxy.moonstep.utils.ShowErrorReason;
 import priv.zxy.moonstep.utils.ToastUtil;
-import priv.zxy.moonstep.kernel.bean.ErrorCode;
+import priv.zxy.moonstep.data.bean.ErrorCode;
 import priv.zxy.moonstep.login.presenter.UserChangePasswordPresenter;
 
 /**

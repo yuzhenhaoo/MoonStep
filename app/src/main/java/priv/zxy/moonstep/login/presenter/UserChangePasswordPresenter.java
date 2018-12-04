@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Looper;
 
-import priv.zxy.moonstep.kernel.bean.ErrorCode;
+import priv.zxy.moonstep.data.bean.ErrorCode;
 import priv.zxy.moonstep.login.module.biz.IUser;
 import priv.zxy.moonstep.login.module.biz.OnChangePasswordListener;
 import priv.zxy.moonstep.login.module.biz.UserBiz;

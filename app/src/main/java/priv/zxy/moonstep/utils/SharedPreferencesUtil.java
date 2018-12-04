@@ -7,10 +7,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import priv.zxy.moonstep.helper.EMHelper;
+import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.wheel.cache.FacadeSharedPreference;
 
 public class SharedPreferencesUtil {
 
+    private static final String TAG = "SharedPreferencesUtil";
+    
     private static String LOGGING_LIBRARY = "logging";
 
     private static String PERSONAL_INFO_LIBRARY = "personalInfo";
@@ -119,24 +122,26 @@ public class SharedPreferencesUtil {
     /**
      * 存储用户的个人信息
      * @param nickName 昵称
-     * @param userRaceName 种族名称
-     * @param userRaceDiscription 种族描述
-     * @param headPath 头像的网络路径
+     * @param phoneNumber 电话号码
+     * @param gender 性别
+     * @param raceCode 种族编码
+     * @param headPath 头像路径
      * @param userSignature 用户签名
-     * @param userCurrentTitle 当前称号
-     * @param userLevel 用户阶别
-     * @param userLevelDiscription 用户阶别描述
+     * @param location 位置信息
+     * @param userCurrentTitle 用户当前称号
+     * @param luckyValue 幸运值
      */
-    public void saveMySelfInformation(String nickName, String userRaceName, String userRaceDiscription, String headPath, String userSignature, String userCurrentTitle, String userLevel, String userLevelDiscription){
+    public void saveMySelfInformation(String nickName, String phoneNumber, String gender, int raceCode, String headPath, String userSignature, String location, String userCurrentTitle, int luckyValue){
         Map<String ,String> params = new HashMap<>();
         params.put("nickName", nickName);
-        params.put("userRaceName", userRaceName);
-        params.put("userRaceDiscription", userRaceDiscription);
-        params.put("userHeadPath", headPath);
-        params.put("userSignature", userSignature);
-        params.put("userCurrentTitle", userCurrentTitle);
-        params.put("userLevel", userLevel);
-        params.put("userLevelDiscription", userLevelDiscription);
+        params.put("phoneNumber", phoneNumber);
+        params.put("gender", gender);
+        params.put("raceCode", String.valueOf(raceCode));
+        params.put("headPath", headPath);
+        params.put("signature", userSignature);
+        params.put("address", location);
+        params.put("currentTitleCode", userCurrentTitle);
+        params.put("luckyValue", String.valueOf(luckyValue));
         sp.save(PERSONAL_INFO_LIBRARY, params);
         sp.saveElement(PERSONAL_INFO_LIBRARY, "isSaved", true);
     }
@@ -148,13 +153,14 @@ public class SharedPreferencesUtil {
     public Map<String, String> readMySelfInformation(){
         Map<String, String> data = new HashMap<>();
         data.put("nickName", sp.read(PERSONAL_INFO_LIBRARY).get("nickName").toString());
-        data.put("userRaceName", sp.read(PERSONAL_INFO_LIBRARY).get("userRaceName").toString());
-        data.put("userRaceDiscription", sp.read(PERSONAL_INFO_LIBRARY).get("userRaceDiscription").toString());
-        data.put("userHeadPath", sp.read(PERSONAL_INFO_LIBRARY).get("userHeadPath").toString());
-        data.put("userSignature", sp.read(PERSONAL_INFO_LIBRARY).get("userSignature").toString());
-        data.put("userCurrentTitle", sp.read(PERSONAL_INFO_LIBRARY).get("userCurrentTitle").toString());
-        data.put("userLevel", sp.read(PERSONAL_INFO_LIBRARY).get("userLevel").toString());
-        data.put("userLevelDiscription", sp.read(PERSONAL_INFO_LIBRARY).get("userLevelDiscription").toString());
+        data.put("phoneNumber", sp.read(PERSONAL_INFO_LIBRARY).get("phoneNumber").toString());
+        data.put("gender", sp.read(PERSONAL_INFO_LIBRARY).get("gender").toString());
+        data.put("raceCode", sp.read(PERSONAL_INFO_LIBRARY).get("raceCode").toString());
+        data.put("headPath", sp.read(PERSONAL_INFO_LIBRARY).get("headPath").toString());
+        data.put("signature", sp.read(PERSONAL_INFO_LIBRARY).get("signature").toString());
+        data.put("address", sp.read(PERSONAL_INFO_LIBRARY).get("address").toString());
+        data.put("currentTitleCode", sp.read(PERSONAL_INFO_LIBRARY).get("currentTitleCode").toString());
+        data.put("luckyValue", sp.read(PERSONAL_INFO_LIBRARY).get("luckyValue").toString());
         return data;
     }
 
@@ -213,9 +219,19 @@ public class SharedPreferencesUtil {
      * @param days
      */
     public boolean checkMapTime(int days){
-        if (days > readMapTime() + 3){
-            sp.saveNumber(MAP_REFRESH_TIME_CHECK, "days", 3, null);
+        LogUtil.d(TAG, "days" + days);
+        LogUtil.d(TAG, "readMapTime()" + readMapTime());
+        SharedPreferences sps = Application.getContext().getSharedPreferences(MAP_REFRESH_TIME_CHECK, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sps.edit();
+
+        if (days >= readMapTime() + 3){//第一次的时候，只有过三天，才能重新存一次days
+            editor.putInt("days", days);
+            editor.apply();
             return true;
+        }else if (readMapTime() > days){
+            editor.putInt("days", days);
+            editor.apply();
+            return false;
         }
         return false;
     }

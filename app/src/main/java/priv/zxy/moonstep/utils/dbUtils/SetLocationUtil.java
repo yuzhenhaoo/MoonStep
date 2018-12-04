@@ -1,28 +1,13 @@
 package priv.zxy.moonstep.utils.dbUtils;
 
-import android.util.Log;
-
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
-import com.hyphenate.exceptions.HyphenateException;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import priv.zxy.moonstep.helper.EMHelper;
-import priv.zxy.moonstep.kernel.Application;
-import priv.zxy.moonstep.kernel.bean.ErrorCode;
-import priv.zxy.moonstep.kernel.bean.ServiceBase;
+import priv.zxy.moonstep.data.bean.URLBase;
 import priv.zxy.moonstep.utils.LogUtil;
 
 /**
@@ -55,7 +40,7 @@ public class SetLocationUtil {
      */
 //    public void LocationServlet(String phoneNumber,String address,String latitude,String longtutide){
 //        //请求地址
-//        String url = ServiceBase.LOCATION_SERVLET_URL;
+//        String url = URLBase.LOCATION_SERVLET_URL;
 //        String tag = "location";
 //        //取得请求队列
 //        RequestQueue requestQueue = Volley.newRequestQueue(Application.getContext());
@@ -107,7 +92,7 @@ public class SetLocationUtil {
 
     public void LocationServlet(String phoneNumber,String address,String latitude,String longtitude){{
         //请求地址
-        String url = ServiceBase.LOCATION_SERVLET_URL;
+        String url = URLBase.LOCATION_SERVLET_URL;
         LogUtil.d(TAG, phoneNumber + "  " + address + "  " + latitude + "  " + longtitude);
         AndroidNetworking.post(url)
                 .addBodyParameter("phoneNumber", phoneNumber)

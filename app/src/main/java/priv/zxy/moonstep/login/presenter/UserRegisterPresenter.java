@@ -7,9 +7,7 @@ import android.util.Log;
 
 import com.hyphenate.exceptions.HyphenateException;
 
-import priv.zxy.moonstep.customview.RaceDialog;
-import priv.zxy.moonstep.kernel.Application;
-import priv.zxy.moonstep.kernel.bean.ErrorCode;
+import priv.zxy.moonstep.data.bean.ErrorCode;
 import priv.zxy.moonstep.login.module.biz.IUser;
 import priv.zxy.moonstep.login.module.biz.UserBiz;
 import priv.zxy.moonstep.login.view.IUserRegisterView;

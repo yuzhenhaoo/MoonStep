@@ -1,7 +1,7 @@
 package priv.zxy.moonstep.login.view;
 
 import priv.zxy.moonstep.utils.SharedPreferencesUtil;
-import priv.zxy.moonstep.kernel.bean.ErrorCode;
+import priv.zxy.moonstep.data.bean.ErrorCode;
 
 /**
  *  Created by Zxy on 2018/9/21

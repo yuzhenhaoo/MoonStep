@@ -5,8 +5,6 @@ import android.content.Intent;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.hyphenate.EMCallBack;
@@ -18,13 +16,13 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import priv.zxy.moonstep.kernel.Application;
-import priv.zxy.moonstep.kernel.MessageReceiverService;
-import priv.zxy.moonstep.kernel.bean.ServiceBase;
+import priv.zxy.moonstep.data.application.Application;
+import priv.zxy.moonstep.data.bean.URLBase;
+import priv.zxy.moonstep.service.MessageReceiverService;
 import priv.zxy.moonstep.login.module.biz.OnLoginListener;
 import priv.zxy.moonstep.utils.LogUtil;
 import priv.zxy.moonstep.utils.SharedPreferencesUtil;
-import priv.zxy.moonstep.kernel.bean.ErrorCode;
+import priv.zxy.moonstep.data.bean.ErrorCode;
 
 public class LoginUtil {
 
@@ -45,7 +43,7 @@ public class LoginUtil {
 
     public void LoginRequest(final OnLoginListener loginListener, final  String phoneNumber, final String inputPassword){
         //请求地址
-        String url = ServiceBase.LOGIN_SERVLET_URL;
+        String url = URLBase.LOGIN_SERVLET_URL;
         String tag = "login";
         //取得请求队列
         RequestQueue requestQueue = Volley.newRequestQueue(Application.getContext());

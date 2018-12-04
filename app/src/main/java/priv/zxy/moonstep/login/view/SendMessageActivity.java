@@ -26,7 +26,7 @@ import android.widget.TextView;
 //import cn.smssdk.EventHandler;
 //import cn.smssdk.SMSSDK;
 import priv.zxy.moonstep.R;
-import priv.zxy.moonstep.kernel.BaseActivity;
+import priv.zxy.moonstep.data.bean.BaseActivity;
 import priv.zxy.moonstep.utils.ToastUtil;
 import priv.zxy.moonstep.login.presenter.UserSendMessagePresenter;
 
