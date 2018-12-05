@@ -10,29 +10,25 @@ There are so many beautiful things in the world, but you never know them, as the
 
 - 引导页
 
-![](https://i.imgur.com/h68ufIw.jpg)
+![](https://i.imgur.com/Td32Glo.png)
 
-![](https://i.imgur.com/lF8GOis.jpg)
+![](https://i.imgur.com/JNXZ15c.png)
 
-![](https://i.imgur.com/vqgwvFa.jpg)
+![](https://i.imgur.com/NjtSftH.png)
 
-![](https://i.imgur.com/SVLoGXD.jpg)
-
-![](https://i.imgur.com/bCNB2eN.png)
-
-![](https://i.imgur.com/kLNv1u3.png)
+![](https://i.imgur.com/LUFjHi4.png)
 
 - 登录界面
 
-![](https://i.imgur.com/HeacFrM.png)
+![](https://i.imgur.com/hFYE7LD.png)
 
 - 侧滑栏
 
-![](https://i.imgur.com/rwCj7VO.png)
+![](https://i.imgur.com/H9jO9c2.png)
 
 - 地图寻宝实现
 
-![](https://i.imgur.com/yWN8E61.png)
+![](https://i.imgur.com/GQzTwOX.png)
 
 ### 产品需求
 
