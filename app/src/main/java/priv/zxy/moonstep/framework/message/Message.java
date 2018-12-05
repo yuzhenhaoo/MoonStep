@@ -3,9 +3,12 @@ package priv.zxy.moonstep.framework.message;
 import org.litepal.crud.LitePalSupport;
 
 /**
- * 想要让表进行CRUD的操作，必须要让类继承与LitePalSupport这个类
- */
-public class Message extends LitePalSupport{
+ * 创建人: Administrator
+ * 创建时间: 2018/12/3
+ * 描述: 抽象消息类
+ **/
+
+public class Message extends LitePalSupport {
 
     private int id;
 
@@ -70,4 +73,5 @@ public class Message extends LitePalSupport{
     public void setContent(String content) {
         this.content = content;
     }
+
 }

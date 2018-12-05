@@ -1,7 +1,7 @@
 package priv.zxy.moonstep.framework.authority.factory;
 
-import priv.zxy.moonstep.framework.authority.AbstractAuthority;
-import priv.zxy.moonstep.framework.authority.PermanentAuthority;
+import priv.zxy.moonstep.framework.authority.base.AbstractAuthority;
+import priv.zxy.moonstep.framework.authority.base.PermanentAuthority;
 
 /**
  * 创建人: Administrator

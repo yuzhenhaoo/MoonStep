@@ -70,7 +70,7 @@ public class SendMessageActivity extends BaseActivity implements ISendMessageVie
 //    EventHandler eventHandler = new EventHandler() {
 //        @Override
 //        public void afterEvent(int event, int result, Object data) {
-//            Message msg = new Message();
+//            MessageOnline msg = new MessageOnline();
 //            msg.arg1 = event;
 //            msg.arg2 = result;
 //            msg.obj = data;
@@ -89,7 +89,7 @@ public class SendMessageActivity extends BaseActivity implements ISendMessageVie
 
 //    @SuppressLint("HandlerLeak")
 //    Handler mHandler = new Handler() {
-//        public void handleMessage(Message msg) {
+//        public void handleMessage(MessageOnline msg) {
 //            // TODO Auto-generated method stub
 //            super.handleMessage(msg);
 //            int event = msg.arg1;

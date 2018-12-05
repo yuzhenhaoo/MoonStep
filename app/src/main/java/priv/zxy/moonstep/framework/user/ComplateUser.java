@@ -1,11 +1,11 @@
 package priv.zxy.moonstep.framework.user;
 
-import priv.zxy.moonstep.framework.authority.AbstractAuthority;
+import priv.zxy.moonstep.framework.authority.base.AbstractAuthority;
 import priv.zxy.moonstep.framework.community.AbstractCommunity;
 import priv.zxy.moonstep.framework.good.AbstractGood;
 import priv.zxy.moonstep.framework.level.LevelEnum;
 import priv.zxy.moonstep.framework.location.AbstractLocation;
-import priv.zxy.moonstep.framework.message.AbstractMessage;
+import priv.zxy.moonstep.framework.message.Message;
 import priv.zxy.moonstep.framework.pet.AbstractPet;
 import priv.zxy.moonstep.framework.race.AbstractRace;
 import priv.zxy.moonstep.framework.state.UserState;
@@ -42,7 +42,7 @@ public class ComplateUser extends User {
     /**
      * 抽象消息类
      */
-    private AbstractMessage message;
+    private Message message;
 
     /**
      * 抽象状态类

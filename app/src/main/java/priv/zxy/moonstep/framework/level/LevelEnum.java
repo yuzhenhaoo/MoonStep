@@ -7,6 +7,7 @@ package priv.zxy.moonstep.framework.level;
  **/
 
 public enum LevelEnum {
+
     FIRST_LEVEL,
 
     SECOND_LEVEL,

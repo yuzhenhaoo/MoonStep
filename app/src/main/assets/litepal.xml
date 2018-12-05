@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <litepal>
     <dbname value="moonstep"></dbname>   <!-- 数据库的名字 -->
-    <version value="6"></version>  <!-- 数据库的版本号，每一次新的改变，数据库的版本号都要相应的+1，不然就不会生效-->
+    <version value="7"></version>  <!-- 数据库的版本号，每一次新的改变，数据库的版本号都要相应的+1，不然就不会生效-->
 
     <list>
         <!--包含当前好友信息的数据表-->

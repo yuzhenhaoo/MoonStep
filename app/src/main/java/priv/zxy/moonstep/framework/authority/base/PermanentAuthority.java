@@ -1,4 +1,4 @@
-package priv.zxy.moonstep.framework.authority;
+package priv.zxy.moonstep.framework.authority.base;
 
 /**
  * 创建人: Administrator

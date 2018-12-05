@@ -1,6 +1,6 @@
 package priv.zxy.moonstep.framework.authority.authorities;
 
-import priv.zxy.moonstep.framework.authority.FunctionAuthority;
+import priv.zxy.moonstep.framework.authority.base.FunctionAuthority;
 
 /**
  * 创建人: Administrator

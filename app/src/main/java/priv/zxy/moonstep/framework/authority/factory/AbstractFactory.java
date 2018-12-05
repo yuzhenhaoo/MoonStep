@@ -2,7 +2,7 @@ package priv.zxy.moonstep.framework.authority.factory;
 
 import java.util.HashMap;
 
-import priv.zxy.moonstep.framework.authority.AbstractAuthority;
+import priv.zxy.moonstep.framework.authority.base.AbstractAuthority;
 
 /**
  * 创建人: Administrator

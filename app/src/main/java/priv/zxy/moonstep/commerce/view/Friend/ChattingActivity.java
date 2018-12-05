@@ -35,12 +35,13 @@ import java.util.List;
 
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.data.bean.ActivityCollector;
+import priv.zxy.moonstep.framework.message.Message;
+import priv.zxy.moonstep.framework.message.MessageOnline;
 import priv.zxy.moonstep.framework.user.User;
 import priv.zxy.moonstep.utils.LogUtil;
 import priv.zxy.moonstep.utils.ToastUtil;
 import priv.zxy.moonstep.helper.MoonStepHelper;
 import priv.zxy.moonstep.adapter.ChattingMessageAdapter;
-import priv.zxy.moonstep.framework.message.Message;
 
 /**
  * 创建人: Administrator
@@ -55,7 +56,7 @@ public class ChattingActivity extends AppCompatActivity implements IChattingView
     private Activity mActivity;
     private Context mContext;
     private RecyclerView recyclerView;
-    private List<Message> messagesQueues = new ArrayList<Message>();
+    private List<Message> messagesQueues = new ArrayList<>();
     private ChattingMessageAdapter mAdapter;
     private Button back;
     private Button person_info;
@@ -77,7 +78,7 @@ public class ChattingActivity extends AppCompatActivity implements IChattingView
     private User moonFriend;
 
     /**
-     * 接收到的数据集合
+     * 接收到的服务端消息集合
      */
     private List<EMMessage> emMessages = null;
 
@@ -136,8 +137,6 @@ public class ChattingActivity extends AppCompatActivity implements IChattingView
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         ActivityCollector.addActivity(this);
-
-        LogUtil.d("ChattingActivity","onCreate");
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.fg_main_fifth_subpage);
@@ -222,7 +221,7 @@ public class ChattingActivity extends AppCompatActivity implements IChattingView
 
                         @Override
                         public void onAnimationEnd(Animator animation) {
-                            finisheThisActivity(mActivity);
+                            finishThisActivity(mActivity);
                         }
 
                         @Override
@@ -267,7 +266,7 @@ public class ChattingActivity extends AppCompatActivity implements IChattingView
      *       并将取出的列表初始化到页面当中，默认初始化30条，更早的需要通过recyclerView的刷新来控制
      */
     public void initList(){
-        messagesQueues = LitePal.where("object = ?", moonFriend.getPhoneNumber()).find(Message.class);
+        messagesQueues = MessageOnline.getInstance().getMessageFromDatabase(moonFriend.getPhoneNumber());
         //显示的想法：每个用户的历史聊天记录存储上限为1000条，如果上限超过1000，就把最早的一部分进行清除，保留最近的1000条消息记录
         //一开始最多只显示30条消息记录，如果要显示更多，则需要下拉刷新来控制，需要设置监听器。
         mAdapter.addAll(messagesQueues);
@@ -280,7 +279,7 @@ public class ChattingActivity extends AppCompatActivity implements IChattingView
     }
 
     @Override
-    public void finisheThisActivity(Activity mActivity) {
+    public void finishThisActivity(Activity mActivity) {
         this.finish();
     }
 
@@ -289,18 +288,17 @@ public class ChattingActivity extends AppCompatActivity implements IChattingView
      * 同时让scrollView下滑
      */
     @Override
-    public Message savedChattingMessage(String content,int direction,  int type, String phoneNumber) {
-        Message message = new Message();
-        message.setContent(content);
-        message.setDirection(direction);//0、对方发送的;1、我发送的;
-        message.setObject(phoneNumber);
-        message.setType(type);//1、文字；2、图片；3、音频；4、视频；5、红包；6、文件；7、位置
-        message.save();
-        messagesQueues.add(message);
-        mAdapter.add(message);
+    public Message savedChattingMessage(String content, int direction, int type, String phoneNumber) {
+        MessageOnline.getInstance().saveMessageToDataBase(content, direction, type, phoneNumber);
+        Message msg = new Message();
+        msg.setContent(content);
+        msg.setDirection(direction);
+        msg.setType(type);
+        msg.setObject("moonstep " + phoneNumber);
+        messagesQueues.add(msg);
+        mAdapter.add(msg);
         mAdapter.notifyDataSetChanged();
-        LogUtil.d("ChattingActivity", "savedChattingMessage:" + String.valueOf(recyclerView.getHeight()));
-        return message;
+        return msg;
     }
 
     @Override

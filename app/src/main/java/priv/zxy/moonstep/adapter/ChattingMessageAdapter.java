@@ -13,11 +13,12 @@ import java.util.List;
 
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.framework.message.Message;
+import priv.zxy.moonstep.framework.message.MessageOnline;
 import priv.zxy.moonstep.utils.LogUtil;
 
 public class ChattingMessageAdapter extends RecyclerView.Adapter<ChattingMessageAdapter.MyHolder> {
     private Context context;
-    private List<Message> lists = new ArrayList<Message>();
+    private List<Message> lists = new ArrayList<>();
 
     public interface IMsgViewType {
         int IMVT_COM_MSG = 0;// 收到对方的消息

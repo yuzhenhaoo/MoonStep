@@ -22,6 +22,7 @@ import org.litepal.LitePalApplication;
 import java.util.Iterator;
 import java.util.List;
 
+import priv.zxy.moonstep.framework.message.MessageOnline;
 import priv.zxy.moonstep.framework.user.User;
 import priv.zxy.moonstep.guide.StartActivity;
 import priv.zxy.moonstep.helper.EMHelper;
@@ -30,7 +31,6 @@ import priv.zxy.moonstep.data.bean.ErrorCode;
 import priv.zxy.moonstep.utils.LogUtil;
 import priv.zxy.moonstep.utils.SharedPreferencesUtil;
 import priv.zxy.moonstep.utils.dbUtils.GetUserInformationUtil;
-import priv.zxy.moonstep.framework.message.Message;
 import priv.zxy.moonstep.helper.MoonStepHelper;
 import priv.zxy.moonstep.main.view.MainActivity;
 import priv.zxy.moonstep.commerce.view.Friend.ChattingActivity;
@@ -147,7 +147,7 @@ public class Application extends LitePalApplication {
                 String[] msg = MoonStepHelper.getInstance().getMessageTypeWithBody(message.getBody().toString().trim());
                 switch (MoonStepHelper.getInstance().transformMessageType(msg[0])){
                     case TEXT://处理文本消息
-                        LogUtil.e("Message","来自于Application" + msg[1]);
+                        LogUtil.e("MessageOnline","来自于Application" + msg[1]);
                         savedChattingMessage(msg[1], 0, 1, message.getFrom().substring(8));
                         break;
                     case IMAGE://处理图片消息
@@ -311,13 +311,7 @@ public class Application extends LitePalApplication {
     }
 
     public void savedChattingMessage(String content, int direction, int type, String phoneNumber) {
-        Message message = new Message();
-        message.setContent(content);
-        message.setDirection(direction);//0、对方发送的;1、我发送的;
-        message.setObject(phoneNumber);
-        message.setType(type);//1、文字；2、图片；3、音频；4、视频；5、红包；6、文件；7、位置
-        message.save();
-        LogUtil.d(TAG, "savedChattingMessage:" + message);
+        MessageOnline.getInstance().saveMessageToDataBase(content, direction, type, phoneNumber);
     }
 
     private class LocalReceiver extends BroadcastReceiver{

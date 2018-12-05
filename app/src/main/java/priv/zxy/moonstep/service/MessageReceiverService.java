@@ -8,6 +8,7 @@ import android.support.v4.content.LocalBroadcastManager;
 
 import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.data.bean.ActivityCollector;
+import priv.zxy.moonstep.framework.message.MessageOnline;
 import priv.zxy.moonstep.utils.LogUtil;
 
 import com.hyphenate.EMMessageListener;
@@ -16,7 +17,6 @@ import com.hyphenate.chat.EMMessage;
 
 import java.util.List;
 
-import priv.zxy.moonstep.framework.message.Message;
 import priv.zxy.moonstep.helper.MoonStepHelper;
 import priv.zxy.moonstep.helper.NotificationHelper;
 import priv.zxy.moonstep.utils.SharedPreferencesUtil;
@@ -136,12 +136,6 @@ public class MessageReceiverService extends Service {
     }
 
     public void savedChattingMessage(String content, int direction, int type, String phoneNumber) {
-        Message message = new Message();
-        message.setContent(content);
-        message.setDirection(direction);//0、对方发送的;1、我发送的;
-        message.setObject(phoneNumber);
-        message.setType(type);//1、文字；2、图片；3、音频；4、视频；5、红包；6、文件；7、位置
-        message.save();
-        LogUtil.d(TAG, "savedChattingMessage:" + message);
+        MessageOnline.getInstance().saveMessageToDataBase(content, direction, type, phoneNumber);
     }
 }

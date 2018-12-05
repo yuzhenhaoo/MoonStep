@@ -9,6 +9,7 @@ import android.widget.Button;
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.adapter.ChattingMessageAdapter;
 import priv.zxy.moonstep.framework.message.Message;
+import priv.zxy.moonstep.framework.message.MessageOnline;
 import priv.zxy.moonstep.data.bean.BaseActivity;
 
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ public class KeFuActivity extends BaseActivity {
     private ChattingMessageAdapter mAdapter;
     private Button back;
     private Button person_info;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
