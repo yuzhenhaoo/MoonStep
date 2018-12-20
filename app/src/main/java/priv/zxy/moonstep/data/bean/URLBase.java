@@ -24,4 +24,6 @@ public class URLBase {
 
     public static String LOCATION_SERVLET_URL = "http://120.79.154.236:8080/MoonStep/LocationServlet";
 
+    public static String USER_GOOD_URL = "http://120.79.154.236:8080/MoonStep/GetUserGoodsServlet";
+
 }

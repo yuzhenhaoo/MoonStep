@@ -13,8 +13,9 @@ import priv.zxy.moonstep.utils.LogUtil;
 /**
  * 创建人: Administrator
  * 创建时间: 2018/11/25
- * 描述:
+ * 描述: 设置位置
  **/
+
 public class SetLocationUtil {
 
     private static final String TAG = "SetLocationUtil";
@@ -31,74 +32,15 @@ public class SetLocationUtil {
         return instance;
     }
 
-    /**
-     * response的回应一直为""，到底是怎么回事？
-     * @param phoneNumber
-     * @param address
-     * @param latitude
-     * @param longtutide
-     */
-//    public void LocationServlet(String phoneNumber,String address,String latitude,String longtutide){
-//        //请求地址
-//        String url = URLBase.LOCATION_SERVLET_URL;
-//        String tag = "location";
-//        //取得请求队列
-//        RequestQueue requestQueue = Volley.newRequestQueue(Application.getContext());
-//
-//        //防止重复请求，所以先取消tag标识的请求队列
-//        requestQueue.cancelAll(tag);
-//
-//        //创建StringRequest，定义字符串请求的请求方式为POST(省略第一个参数会默认为GET方式)
-//        final StringRequest request = new StringRequest(Request.Method.POST, url,
-//                response -> {
-//                    try {
-//                        LogUtil.d(TAG, "response");
-//                        JSONObject jsonObject = (JSONObject) new JSONObject(response).get("params");
-//                        String result = jsonObject.getString("result");
-//                        if (result.equals("success")){
-//                            LogUtil.d(TAG, "success");
-//                        }else if (result.equals("error")){
-//                            LogUtil.d(TAG, "error");
-//                        }
-//                    } catch (JSONException e) {
-//                        //做自己的请求异常操作
-//                        LogUtil.d(TAG, "JSONException");
-//                    }
-//                }, error -> {LogUtil.d(TAG, "error2");}) {
-//            @Override
-//            protected Map<String, String> getParams() throws AuthFailureError {
-//                Map<String, String> params = new HashMap<>();
-//                params.put("phoneNumber", phoneNumber);
-//                params.put("address",address);
-//                params.put("latitude", latitude);
-//                params.put("latitude",longtutide);
-//                return params;
-//            }
-//
-//            @Override
-//            public Map<String, String> getHeaders() throws AuthFailureError {
-//                Map<String, String> headers = new HashMap<String, String>();
-//                headers.put("Charset", "ISO-8859-1");
-//                return headers;
-//            }
-//        };
-//
-//        //设置Tag标签
-//        request.setTag(tag);
-//
-//        //将请求添加到队列中
-//        requestQueue.add(request);
-//    }
-
-    public void LocationServlet(String phoneNumber,String address,String latitude,String longtitude){{
+    public void LocationServlet(String phoneNumber,String address,String latitude,String longitude){
         //请求地址
         String url = URLBase.LOCATION_SERVLET_URL;
-        LogUtil.d(TAG, phoneNumber + "  " + address + "  " + latitude + "  " + longtitude);
+        LogUtil.d(TAG, phoneNumber + "  " + address + "  " + latitude + "  " + longitude);
         AndroidNetworking.post(url)
                 .addBodyParameter("phoneNumber", phoneNumber)
                 .addBodyParameter("address", address)
                 .addBodyParameter("latitude", latitude)
-                .addBodyParameter("longtitude", longtitude)
+                .addBodyParameter("longtitude", longitude)
                 .setTag("location")
                 .setPriority(Priority.MEDIUM)
                 .build()
@@ -113,5 +55,7 @@ public class SetLocationUtil {
                         LogUtil.d(TAG, anError.toString());
                     }
                 });
-    }}
+    }
+
+
 }

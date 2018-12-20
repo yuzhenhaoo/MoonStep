@@ -353,6 +353,17 @@ Bug解决措施：在temminal中施加以下命令:adb uninstall xxx.xxx.xxxxxxx
 
 Bug解决时间：2018/11/27
 
+----------
+
+*2018/12/09*
+
+Bug描述：背包界面物品显示不全
+
+Bug原因：GridView和ScrollView嵌套使用时，不能支持adapter的数据适配，只能适配到第一条数据
+
+Bug解决措施：去掉ScrollView，此问题是Google的Android系统设计的缺漏，不能更改源码的情况下，没有找到解决方案，只能去掉ScrollView。
+
+Bug解决时间：2018/12/09
 
 ### 系统架构
 

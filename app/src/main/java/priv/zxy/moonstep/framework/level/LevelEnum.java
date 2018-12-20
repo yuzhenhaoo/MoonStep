@@ -18,9 +18,11 @@ public enum LevelEnum {
 
     FIFTH_LEVEL,
 
-    SISTH_LEVEL,
+    SIXTH_LEVEL,
 
-    EIGHTTH_LEVEL,
+    SEVENTH_LEVEL,
+
+    EIGHTH_LEVEL,
 
     NINTH_LEVEL
 }
