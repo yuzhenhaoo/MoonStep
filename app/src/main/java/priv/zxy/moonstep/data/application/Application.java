@@ -16,6 +16,8 @@ import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMOptions;
+import com.squareup.leakcanary.LeakCanary;
+import com.squareup.leakcanary.RefWatcher;
 
 import org.litepal.LitePalApplication;
 
@@ -74,11 +76,11 @@ public class Application extends LitePalApplication {
                 EMClient.getInstance().chatManager().addMessageListener(msgListener);//实施消息的监听
                 new Thread(() -> {
                     if (SharedPreferencesUtil.getInstance(Application.getContext()).isSuccessLogin()){
-                        String phoneNumber = SharedPreferencesUtil.getInstance(mContext).readLoginInfo().get("PhoneNumber");
+                        String phoneNumber = SharedPreferencesUtil.getInstance(Application.getContext()).readLoginInfo().get("PhoneNumber");
                         GetUserInformationUtil.getInstance().getUserInfo(new GetUserInformationUtil.Callback() {
                             @Override
                             public void onSuccess(User moonFriend) {
-                                SharedPreferencesUtil.getInstance(mContext).saveMySelfInformation(moonFriend.getNickName(), moonFriend.getPhoneNumber(), moonFriend.getGender(), moonFriend.getRaceCode(), moonFriend.getHeadPath(), moonFriend.getSignature(), moonFriend.getLocation(), moonFriend.getCurrentTitle(), moonFriend.getLuckyValue());
+                                SharedPreferencesUtil.getInstance(Application.getContext()).saveMySelfInformation(moonFriend.getNickName(), moonFriend.getPhoneNumber(), moonFriend.getGender(), moonFriend.getRaceCode(), moonFriend.getHeadPath(), moonFriend.getSignature(), moonFriend.getLocation(), moonFriend.getCurrentTitle(), moonFriend.getLuckyValue());
                             }
 
                             @Override
@@ -159,7 +161,7 @@ public class Application extends LitePalApplication {
                     case VOICE://处理声音消息
                         break;
                 }
-                SharedPreferencesUtil.getInstance(mContext).saveIsMessageTip(message.getFrom().substring(8, message.getFrom().length()));//当来消息的时候，将消息提示的标记存储到缓存中。
+                SharedPreferencesUtil.getInstance(Application.getContext()).saveIsMessageTip(message.getFrom().substring(8, message.getFrom().length()));//当来消息的时候，将消息提示的标记存储到缓存中。
                 localBroadcastManager.sendBroadcast(intent);//发送本地广播
             }
         }
@@ -193,9 +195,19 @@ public class Application extends LitePalApplication {
         }
     };
 
+    public static RefWatcher mRefWatcher;//为了检测Fragment的内存泄漏
+
     @Override
     public void onCreate() {
         super.onCreate();
+        //初始化LeakCanary
+        if (LeakCanary.isInAnalyzerProcess(this)){
+            //This process is dedicated to LeakCanary for heap analysis.
+            //You should not init your app in this process
+            return;
+        }
+        mRefWatcher = LeakCanary.install(this);
+
         //初始化AndroidNetworking
         AndroidNetworking.initialize(getApplicationContext());
 

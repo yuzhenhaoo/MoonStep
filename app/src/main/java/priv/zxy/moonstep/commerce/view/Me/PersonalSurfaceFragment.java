@@ -20,6 +20,7 @@ import java.util.Map;
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.customview.AnimationButton;
 import priv.zxy.moonstep.customview.WaveViewByBezier;
+import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.utils.SharedPreferencesUtil;
 
 public class PersonalSurfaceFragment extends Fragment {
@@ -70,7 +71,7 @@ public class PersonalSurfaceFragment extends Fragment {
     }
 
     private void initData() {
-        Map<String, String> data = SharedPreferencesUtil.getInstance(this.getContext()).readMySelfInformation();
+        Map<String, String> data = SharedPreferencesUtil.getInstance(Application.getContext()).readMySelfInformation();
         userNickName.setText(data.get("nickName"));
         userLevelName.setText(data.get("userLevel"));
     }

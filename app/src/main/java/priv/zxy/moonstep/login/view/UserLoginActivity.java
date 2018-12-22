@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.ContentLoadingProgressBar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -18,7 +19,10 @@ import android.widget.Button;
 //import com.mob.MobSDK;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
+import java.lang.ref.WeakReference;
+
 import priv.zxy.moonstep.R;
+import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.data.bean.BaseActivity;
 import priv.zxy.moonstep.login.presenter.UserLoginPresenter;
 import priv.zxy.moonstep.utils.SharedPreferencesUtil;
@@ -63,14 +67,7 @@ public class UserLoginActivity extends BaseActivity implements IUserLoginView {
     //加载动画资源文件
     Animation shake;
 
-    @SuppressLint("HandlerLeak")
-    private Handler mHandler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            hideLoading();
-        }
-    };
+    private Handler mHandler;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -87,6 +84,7 @@ public class UserLoginActivity extends BaseActivity implements IUserLoginView {
     private void initView() {
         //MobSDK的初始化
 //        MobSDK.init(this);
+        mHandler = new MyHandler(this);
         weiXinBt = (Button) findViewById(R.id.weiXinBt);
         qqBt = (Button) findViewById(R.id.qqBt);
         weiBoBt = (Button) findViewById(R.id.weiBoBt);
@@ -220,12 +218,12 @@ public class UserLoginActivity extends BaseActivity implements IUserLoginView {
 
     @Override
     public void initAccount(SharedPreferencesUtil preference) {
-        accountEt.setText(SharedPreferencesUtil.getInstance(mContext).readLoginInfo().get("PhoneNumber"));
+        accountEt.setText(SharedPreferencesUtil.getInstance(Application.getContext()).readLoginInfo().get("PhoneNumber"));
     }
 
     @Override
     public void initPassword(SharedPreferencesUtil preference) {
-        passwordEt.setText(SharedPreferencesUtil.getInstance(mContext).readLoginInfo().get("PassWd"));
+        passwordEt.setText(SharedPreferencesUtil.getInstance(Application.getContext()).readLoginInfo().get("PassWd"));
     }
 
     @Override
@@ -241,5 +239,35 @@ public class UserLoginActivity extends BaseActivity implements IUserLoginView {
     @Override
     public void setLoginPreferences(String username, String password) {
         SharedPreferencesUtil.getInstance(mContext).setSuccessLoginInfo(username, password);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //移除所有的消息（防止Handler造成内存泄漏）
+        mHandler.removeCallbacksAndMessages(null);
+    }
+
+    /**
+     * 声明一个Handler的静态内部类可以防止持有当前activity的引用，这样的话，当GC回收垃圾的时候，就可以对当前activity进行回收，不会造成内存泄漏
+     * 声明一个弱引用，是为了可以调用activity中的方法，否则想在handle中处理，必须全部声明为静态的。
+     * 再一个，弱引用本身就是在GC检测到的 时候就回收。
+     */
+    private static class MyHandler extends Handler{
+
+        private WeakReference<UserLoginActivity> mActivity;
+
+        MyHandler(UserLoginActivity activity){
+            mActivity = new WeakReference<>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            UserLoginActivity activity = mActivity.get();
+            if (activity != null){
+                activity.hideLoading();
+            }
+        }
     }
 }

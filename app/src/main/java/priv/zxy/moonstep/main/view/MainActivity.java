@@ -31,6 +31,7 @@ import com.hyphenate.util.NetUtils;
 
 import org.litepal.tablemanager.Connector;
 
+import java.lang.ref.WeakReference;
 import java.util.Map;
 
 import priv.zxy.moonstep.service.MoonFriendService;
@@ -84,6 +85,8 @@ public class MainActivity extends BaseActivity
 
     private static boolean isExit = false;//定义一个变量，来标识是否退出
 
+    private AnimatorHandler animatorHandler;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -121,6 +124,8 @@ public class MainActivity extends BaseActivity
         effect = new ElasticityFactory().createEffectObject();
 
         effect.setAnimate(setting);
+
+        animatorHandler = new AnimatorHandler(this);
 
         //在程序打开的时候设置点击第一个按钮
         if (savedInstanceState == null) {
@@ -187,7 +192,7 @@ public class MainActivity extends BaseActivity
                     e.printStackTrace();
                     LogUtil.e(TAG, "Thread is Interrupted!");
                 }
-                animatorHandle.sendEmptyMessage(0x01);
+                animatorHandler.sendEmptyMessage(0x01);
             }).start();
         });
     }
@@ -304,30 +309,28 @@ public class MainActivity extends BaseActivity
         if (!isExit){
             isExit = true;
             Toast.makeText(Application.getContext(), "再按一次退出程序", Toast.LENGTH_SHORT).show();
-            handler.sendEmptyMessageDelayed(0, 2000);
+            new Thread(()->isExit = false);
         }else{
             finish();
             System.exit(0);
         }
     }
 
-    @SuppressLint("HandlerLeak")
-    private Handler handler = new Handler(){
-        @Override
-        public void handleMessage(android.os.Message msg) {
-            super.handleMessage(msg);
-            isExit = false;
-        }
-    };
+    private static class AnimatorHandler extends Handler{
 
-    @SuppressLint("HandlerLeak")
-    private Handler animatorHandle = new Handler(){
+        private WeakReference<MainActivity> weakReference;
+
+        AnimatorHandler(MainActivity mainActivity){
+            weakReference = new WeakReference<>(mainActivity);
+        }
+
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            toSettingActivity();
+            MainActivity activity = weakReference.get();
+            activity.toSettingActivity();
         }
-    };
+    }
 
     private ServiceConnection connection = new ServiceConnection() {
         @Override

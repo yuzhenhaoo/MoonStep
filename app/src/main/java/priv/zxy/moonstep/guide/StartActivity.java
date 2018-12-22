@@ -44,6 +44,8 @@ public class StartActivity extends BaseActivity {
 
     private String url = "";
 
+    private final Handler mHandler = new Handler();
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,7 +77,6 @@ public class StartActivity extends BaseActivity {
             isStarted = true;
         });
 
-        final Handler mHandler = new Handler();
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -121,7 +122,7 @@ public class StartActivity extends BaseActivity {
      * 如果上次登录失败，登录成功与否的标记位被修改为false，那么就要进入到登录页面
      */
     public  void toLoginPage(){
-        if ( SharedPreferencesUtil.getInstance(this).isSuccessLogin()){
+        if ( SharedPreferencesUtil.getInstance(Application.getContext()).isSuccessLogin()){
             Intent intent = new Intent(this, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -134,5 +135,12 @@ public class StartActivity extends BaseActivity {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //移除mHandler的所有消息和回调，防止当StartActivity结束以后，mHandler还持有StartActivity的引用，造成内存泄漏
+        mHandler.removeCallbacksAndMessages(null);
     }
 }

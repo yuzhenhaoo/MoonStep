@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import priv.zxy.moonstep.R;
+import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.data.bean.BaseActivity;
 import priv.zxy.moonstep.utils.SharedPreferencesUtil;
 
@@ -48,10 +49,10 @@ public class GuidePage extends BaseActivity {
      * 第二次登陆圆月行，直接进入登录页面
      */
     public void jumpActivity(){
-        if(!SharedPreferencesUtil.getInstance(this).isFirstLogin()){
+        if(!SharedPreferencesUtil.getInstance(Application.getContext()).isFirstLogin()){
             jumpLoginActivity();
         }
-        SharedPreferencesUtil.getInstance(this).setFirstLogin();
+        SharedPreferencesUtil.getInstance(Application.getContext()).setFirstLogin();
     }
 
     private void initView(){

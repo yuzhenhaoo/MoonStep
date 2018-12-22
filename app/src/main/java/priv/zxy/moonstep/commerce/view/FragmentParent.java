@@ -16,6 +16,8 @@ import android.view.ViewGroup;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import java.lang.ref.WeakReference;
+
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.adapter.MainAdapter;
 import priv.zxy.moonstep.data.application.Application;
@@ -41,23 +43,31 @@ public class FragmentParent extends Fragment {
 
     private Context mContext;
 
-    @SuppressLint("HandlerLeak")
-    private Handler mHandler = new Handler() {
+    private MyHandler mHandler;
+
+    private static class MyHandler extends Handler{
+        private WeakReference<FragmentParent> weakReference;
+
+        MyHandler(FragmentParent fragmentParent){
+            weakReference = new WeakReference<>(fragmentParent);
+        }
+
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            if (viewPager.getCurrentItem() != 2) {
+            FragmentParent instance = weakReference.get();
+            if (instance.viewPager.getCurrentItem() != 2){
                 switch (msg.what) {
                     case 0x00:
-                        rb_heart.setCompoundDrawables(null, changeBtnTop(R.drawable.tab_menu_heart_tip), null, null);
+                        instance.rb_heart.setCompoundDrawables(null, instance.changeBtnTop(R.drawable.tab_menu_heart_tip), null, null);
                         break;
                     case 0x01:
-                        rb_heart.setCompoundDrawables(null, changeBtnTop(R.drawable.tab_menu_heart), null, null);
+                        instance.rb_heart.setCompoundDrawables(null, instance.changeBtnTop(R.drawable.tab_menu_heart), null, null);
                         break;
                 }
             }
         }
-    };
+    }
 
     @Nullable
     @Override
@@ -82,8 +92,7 @@ public class FragmentParent extends Fragment {
         rb_me = view.findViewById(R.id.rb_me);
         viewPager.setCurrentItem(0);
         mContext = this.getContext();
-
-
+        mHandler = new MyHandler(this);
         new Thread(() -> {
             while (true) {
                 try {
@@ -91,7 +100,7 @@ public class FragmentParent extends Fragment {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                if (SharedPreferencesUtil.getInstance(mContext).isMessageTip()) {
+                if (SharedPreferencesUtil.getInstance(Application.getContext()).isMessageTip()) {
                     mHandler.sendEmptyMessage(0x00);
                 } else {
                     mHandler.sendEmptyMessage(0x01);

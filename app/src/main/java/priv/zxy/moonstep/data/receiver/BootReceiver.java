@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.service.MessageReceiverService;
 import priv.zxy.moonstep.utils.LogUtil;
 
@@ -30,9 +31,9 @@ public class BootReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(final Context context, final Intent intent) {
         //在这里开启我们的一个后台Service默默加载一些消息。
-        if (intent.getAction().equals(ACTION) && SharedPreferencesUtil.getInstance(context).isFirstLogin()){
+        if (intent.getAction() != null && intent.getAction().equals(ACTION) && SharedPreferencesUtil.getInstance(Application.getContext()).isFirstLogin()){
             //同时应该在这里登录环信服务器
-            final Map<String, String> LogUtilinInfo = SharedPreferencesUtil.getInstance(context).readLoginInfo();
+            final Map<String, String> LogUtilinInfo = SharedPreferencesUtil.getInstance(Application.getContext()).readLoginInfo();
             new Thread(() -> EMClient.getInstance().login("moonstep" + LogUtilinInfo.get("UserName"), LogUtilinInfo.get("PassWd"), new EMCallBack() {//回调
                 @Override
                 public void onSuccess() {

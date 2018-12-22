@@ -19,6 +19,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.lang.ref.WeakReference;
+
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.data.bean.BaseActivity;
 import priv.zxy.moonstep.utils.ShowErrorReason;
@@ -56,14 +58,7 @@ public class VerifyPhoneActivity extends BaseActivity implements IVerifyPhoneVie
     //加载动画资源
     private Animation shake;
 
-    @SuppressLint("HandlerLeak")
-    private Handler mHandler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            hideLoading();
-        }
-    };
+    private MyHandler mHandler;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -89,6 +84,7 @@ public class VerifyPhoneActivity extends BaseActivity implements IVerifyPhoneVie
         progressBar = (ContentLoadingProgressBar) findViewById(R.id.progressBar);
         mContext = this.getApplicationContext();
         mActivity = this;
+        mHandler = new MyHandler(this);
 
         hideLoading();
 
@@ -185,5 +181,20 @@ public class VerifyPhoneActivity extends BaseActivity implements IVerifyPhoneVie
     protected void onResume() {
         super.onResume();
         hideLoading();
+    }
+
+    private static class MyHandler extends Handler{
+        private WeakReference<VerifyPhoneActivity> weakReference;
+
+        MyHandler(VerifyPhoneActivity activity){
+            weakReference = new WeakReference<>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            VerifyPhoneActivity activity = weakReference.get();
+            activity.hideLoading();
+        }
     }
 }

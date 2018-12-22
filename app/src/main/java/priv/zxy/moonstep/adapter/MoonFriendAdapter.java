@@ -106,7 +106,7 @@ public class MoonFriendAdapter extends RecyclerView.Adapter<MoonFriendAdapter.My
 
         holder.itemView.setOnClickListener(view -> {
             JumpToChattingActivity(view, item);
-            SharedPreferencesUtil.getInstance(mContext).handleMessageTip(item.getPhoneNumber());
+            SharedPreferencesUtil.getInstance(Application.getContext()).handleMessageTip(item.getPhoneNumber());
         });
 
         EMHelper.getInstance(Application.getContext()).getUserState(new VolleyCallback() {
