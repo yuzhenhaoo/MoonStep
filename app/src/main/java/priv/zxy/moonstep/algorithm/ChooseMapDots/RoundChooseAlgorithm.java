@@ -1,4 +1,4 @@
-package priv.zxy.moonstep.algorithm.ChooseMapDotsAlgorithm;
+package priv.zxy.moonstep.algorithm.ChooseMapDots;
 
 import java.util.List;
 

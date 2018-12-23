@@ -17,9 +17,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import priv.zxy.moonstep.R;
+import priv.zxy.moonstep.data.bean.BaseFragment;
 
 
-public class FullInfoTabFragment extends Fragment {
+public class FullInfoTabFragment extends BaseFragment {
 
     private static final String EXTRA_SRORT_CARD_MODEL = "EXTRA_SRORT_CARD_MODEL";
     //    String transitionTag;

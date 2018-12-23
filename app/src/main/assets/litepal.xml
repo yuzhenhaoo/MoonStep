@@ -11,6 +11,6 @@
         <!--宠物信息表-->
         <mapping class="priv.zxy.moonstep.framework.pet.Pet"></mapping>
         <!--地图宝藏坐标点-->
-        <mapping class="priv.zxy.moonstep.algorithm.ChooseMapDotsAlgorithm.MapDot"></mapping>
+        <mapping class="priv.zxy.moonstep.algorithm.ChooseMapDots.MapDot"></mapping>
     </list>
 </litepal>

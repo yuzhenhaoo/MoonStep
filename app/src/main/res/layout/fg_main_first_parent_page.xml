@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <View
@@ -22,8 +23,8 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:background="#fff"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <RadioButton
             android:id="@+id/rb_tree"
@@ -50,4 +51,4 @@
             android:text="@string/tab_menu_me" />
     </RadioGroup>
 
-</RelativeLayout>
+</android.support.constraint.ConstraintLayout>

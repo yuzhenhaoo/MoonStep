@@ -9,8 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import priv.zxy.moonstep.R;
+import priv.zxy.moonstep.data.bean.BaseFragment;
 
-public class ThirdGuideFragment extends Fragment {
+public class ThirdGuideFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

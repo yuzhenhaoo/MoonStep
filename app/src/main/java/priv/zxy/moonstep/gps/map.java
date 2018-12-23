@@ -32,9 +32,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import priv.zxy.moonstep.R;
-import priv.zxy.moonstep.algorithm.ChooseMapDotsAlgorithm.ChooseType;
-import priv.zxy.moonstep.algorithm.ChooseMapDotsAlgorithm.DotChooseContext;
-import priv.zxy.moonstep.algorithm.ChooseMapDotsAlgorithm.MapDot;
+import priv.zxy.moonstep.algorithm.ChooseMapDots.ChooseType;
+import priv.zxy.moonstep.algorithm.ChooseMapDots.DotChooseContext;
+import priv.zxy.moonstep.algorithm.ChooseMapDots.MapDot;
 import priv.zxy.moonstep.helper.FileHelper;
 import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.utils.LogUtil;

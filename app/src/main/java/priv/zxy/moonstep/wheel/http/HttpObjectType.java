@@ -7,7 +7,7 @@ package priv.zxy.moonstep.wheel.http;
  **/
 public enum HttpObjectType {
 
-    FileHttp,
+    FILE_HTTP,
 
-    DataHttp
+    DATA_HTTP
 }

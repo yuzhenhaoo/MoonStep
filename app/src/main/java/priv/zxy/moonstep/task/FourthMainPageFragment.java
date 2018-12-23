@@ -14,9 +14,10 @@ import com.azoft.carousellayoutmanager.CarouselZoomPostLayoutListener;
 import com.azoft.carousellayoutmanager.CenterScrollListener;
 
 import priv.zxy.moonstep.R;
+import priv.zxy.moonstep.data.bean.BaseFragment;
 import priv.zxy.moonstep.utils.TaskInfoUtils;
 
-public class FourthMainPageFragment extends Fragment {
+public class FourthMainPageFragment extends BaseFragment {
 
     private View view;
     private RecyclerView recyclerView;

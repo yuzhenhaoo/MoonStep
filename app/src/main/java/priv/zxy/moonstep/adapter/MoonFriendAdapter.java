@@ -147,7 +147,7 @@ public class MoonFriendAdapter extends RecyclerView.Adapter<MoonFriendAdapter.My
         }, "moonstep" + item.getPhoneNumber());
         Random rd = new Random();
         holder.bubbleView.setBubbleColor(bubbleColor[rd.nextInt(bubbleColor.length - 1)]);//通过随机数设定气泡的颜色【有bug】
-        int messageNumber = SharedPreferencesUtil.getInstance(mContext).readMessageNumber(item.getPhoneNumber());
+        int messageNumber = SharedPreferencesUtil.getInstance(Application.getContext()).readMessageNumber(item.getPhoneNumber());
 //            holder.bubbleView.setTextColor();//这里可以用来设置文字的颜色
         if (messageNumber != 0) {
             holder.bubbleView.setVisibility(View.VISIBLE);

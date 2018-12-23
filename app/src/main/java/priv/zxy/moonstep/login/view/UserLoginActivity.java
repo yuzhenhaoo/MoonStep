@@ -103,7 +103,7 @@ public class UserLoginActivity extends BaseActivity implements IUserLoginView {
 
         userLoginPresenter = new UserLoginPresenter(this);
 
-        userLoginPresenter.initAccountAndPassword(SharedPreferencesUtil.getInstance(mContext));
+        userLoginPresenter.initAccountAndPassword(SharedPreferencesUtil.getInstance(Application.getContext()));
 
         accountEt.requestFocus();
 
@@ -238,7 +238,7 @@ public class UserLoginActivity extends BaseActivity implements IUserLoginView {
 
     @Override
     public void setLoginPreferences(String username, String password) {
-        SharedPreferencesUtil.getInstance(mContext).setSuccessLoginInfo(username, password);
+        SharedPreferencesUtil.getInstance(Application.getContext()).setSuccessLoginInfo(username, password);
     }
 
     @Override

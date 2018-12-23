@@ -1,6 +1,5 @@
 package priv.zxy.moonstep.commerce.view;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -8,7 +7,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,11 +19,12 @@ import java.lang.ref.WeakReference;
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.adapter.MainAdapter;
 import priv.zxy.moonstep.data.application.Application;
+import priv.zxy.moonstep.data.bean.BaseFragment;
 import priv.zxy.moonstep.utils.SharedPreferencesUtil;
 
-public class FragmentParent extends Fragment {
+public class FragmentParent extends BaseFragment {
 
-    private static final String TAG = "FirstMainPageFragmentPa";
+    private static final String TAG = "FragmentParent";
 
     private View view;
 
@@ -40,8 +39,6 @@ public class FragmentParent extends Fragment {
     private RadioButton rb_heart;
 
     private RadioButton rb_me;
-
-    private Context mContext;
 
     private MyHandler mHandler;
 
@@ -91,7 +88,6 @@ public class FragmentParent extends Fragment {
         rb_heart = view.findViewById(R.id.rb_heart);
         rb_me = view.findViewById(R.id.rb_me);
         viewPager.setCurrentItem(0);
-        mContext = this.getContext();
         mHandler = new MyHandler(this);
         new Thread(() -> {
             while (true) {
@@ -184,5 +180,11 @@ public class FragmentParent extends Fragment {
         Drawable drawableTop = Application.getContext().getResources().getDrawable(id);
         drawableTop.setBounds(0, 0, drawableTop.getMinimumWidth(), drawableTop.getMinimumHeight());
         return drawableTop;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        viewPager.setAdapter(null);//设置适配器为null，避免内存泄漏
     }
 }

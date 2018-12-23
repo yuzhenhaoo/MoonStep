@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
@@ -34,10 +33,11 @@ import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.adapter.MoonFriendAdapter;
 import priv.zxy.moonstep.commerce.presenter.MoonFriendPresenter;
 import priv.zxy.moonstep.data.application.Application;
+import priv.zxy.moonstep.data.bean.BaseFragment;
 import priv.zxy.moonstep.framework.user.User;
 import priv.zxy.moonstep.utils.LogUtil;
 
-public class MoonFriendFragment extends Fragment implements IMoonFriendView {
+public class MoonFriendFragment extends BaseFragment implements IMoonFriendView {
 
     private static final String TAG = "MoonFriendFragment";
 

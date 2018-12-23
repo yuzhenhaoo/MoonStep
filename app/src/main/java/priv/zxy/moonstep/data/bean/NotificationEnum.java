@@ -8,5 +8,5 @@ package priv.zxy.moonstep.data.bean;
 
 public enum NotificationEnum {
 
-    MessageTip,
+    MESSAGE_TIP,
 }

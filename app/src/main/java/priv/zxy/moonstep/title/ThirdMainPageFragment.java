@@ -5,7 +5,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.transition.Fade;
@@ -21,23 +20,17 @@ import com.cleveroad.fanlayoutmanager.callbacks.FanChildDrawingOrderCallback;
 import java.util.ArrayList;
 
 import priv.zxy.moonstep.R;
+import priv.zxy.moonstep.data.bean.BaseFragment;
 import priv.zxy.moonstep.utils.LogUtil;
 import priv.zxy.moonstep.utils.TitleNamesUtils;
 
-public class ThirdMainPageFragment1 extends Fragment {
+public class ThirdMainPageFragment extends BaseFragment {
     private RecyclerView recyclerView;
     private View view = null;
     private ThirdMainPageRecyclerViewAdapter mAdapter = null;
     private ArrayList<Integer> list = new ArrayList<Integer>();
     private FanLayoutManager fanLayoutManager;
     private Boolean is_collapse = false;
-
-    public static ThirdMainPageFragment1 newInstance(){
-        Bundle args = new Bundle();
-        ThirdMainPageFragment1 fragment = new ThirdMainPageFragment1();
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -78,38 +71,35 @@ public class ThirdMainPageFragment1 extends Fragment {
         mAdapter = new ThirdMainPageRecyclerViewAdapter(getContext());
         mAdapter.addAll(TitleNamesUtils.generateTitleNames());
 
-        mAdapter.setOnItemClickListener(new ThirdMainPageRecyclerViewAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClicked(int itemPosition,final View view) {
-                if (fanLayoutManager.getSelectedItemPosition() != itemPosition){
-                    fanLayoutManager.switchItem(recyclerView, itemPosition);
-                }else{
-                    fanLayoutManager.straightenSelectedItem(new Animator.AnimatorListener() {
-                        @Override
-                        public void onAnimationStart(Animator animator) {
+        mAdapter.setOnItemClickListener((itemPosition, view) -> {
+            if (fanLayoutManager.getSelectedItemPosition() != itemPosition){
+                fanLayoutManager.switchItem(recyclerView, itemPosition);
+            }else{
+                fanLayoutManager.straightenSelectedItem(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animator) {
 
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animator) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            onClick(view, fanLayoutManager.getSelectedItemPosition());
+                        } else {
+                            onClick(fanLayoutManager.getSelectedItemPosition());
                         }
+                    }
 
-                        @Override
-                        public void onAnimationEnd(Animator animator) {
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                onClick(view, fanLayoutManager.getSelectedItemPosition());
-                            } else {
-                                onClick(fanLayoutManager.getSelectedItemPosition());
-                            }
-                        }
+                    @Override
+                    public void onAnimationCancel(Animator animator) {
 
-                        @Override
-                        public void onAnimationCancel(Animator animator) {
+                    }
 
-                        }
+                    @Override
+                    public void onAnimationRepeat(Animator animator) {
 
-                        @Override
-                        public void onAnimationRepeat(Animator animator) {
-
-                        }
-                    });
-                }
+                    }
+                });
             }
         });
 
@@ -117,18 +107,15 @@ public class ThirdMainPageFragment1 extends Fragment {
 
         recyclerView.setChildDrawingOrderCallback(new FanChildDrawingOrderCallback(fanLayoutManager));
 
-        (view.findViewById(R.id.click_collpase)).setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                if(is_collapse){
-                    is_collapse = false;
-                    view.findViewById(R.id.click_collpase).setBackgroundResource(R.drawable.collapse_logo);
-                }else{
-                    is_collapse = true;
-                    view.findViewById(R.id.click_collpase).setBackgroundResource(R.drawable.open_logo);
-                }
-                fanLayoutManager.collapseViews();
+        (view.findViewById(R.id.click_collpase)).setOnClickListener(view -> {
+            if(is_collapse){
+                is_collapse = false;
+                view.findViewById(R.id.click_collpase).setBackgroundResource(R.drawable.collapse_logo);
+            }else{
+                is_collapse = true;
+                view.findViewById(R.id.click_collpase).setBackgroundResource(R.drawable.open_logo);
             }
+            fanLayoutManager.collapseViews();
         });
     }
 

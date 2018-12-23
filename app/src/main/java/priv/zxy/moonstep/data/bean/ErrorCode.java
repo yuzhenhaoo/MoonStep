@@ -12,94 +12,94 @@ public enum ErrorCode {
     /**
      * 电话号码为空
      */
-    PhoneNumberISEmpty,
+    PHONE_NUMBER_IS_EMPTY,
 
     /**
      * 网络没有响应
      */
-    NetNotResponse,
+    NET_NOT_RESPONSE,
 
     /**
      * 修改密码失败
      */
-    ChangePasswordFail,
+    CHANGE_PASSWORD_FAIL,
 
     /**
      * JSON数据异常
      */
-    JSONException,
+    JSON_EXCEPTION,
 
     /**
      * 电话号码已经注册了
      */
-    PhoneNumberIsRegistered,
+    PHONE_NUMBER_IS_REGISTERED,
 
     /**
      * 电话号码还没被注册
      */
-    PhoneNumberIsNotRegistered,
+    PHONE_NUMBER_IS_NOT_REGISTERED,
 
     /**
      * 电话号码/密码错误
      */
-    PhoneNumberOrPasswordIsWrong,
+    PHONE_NUMBER_OR_PASSWORD_IS_WRONG,
 
     /**
      * 密码格式不正确，应为6-16位
      */
-    PasswordFormatISNotRight,
+    PASSWORD_FOR_MAT_IS_NOT_RIGHT,
 
     /**
      * 密码为空
      */
-    PasswordIsEmpty,
+    PASSWORD_IS_EMPTY,
 
     /**
      * 密码错误
      */
-    PasswordIsWrong,
+    PASSWORD_IS_WRONG,
 
     /**
      * 验证密码位空
      */
-    ConfirmPasswordIsEmpty,
+    CONFIRM_PASSWORD_IS_EMPTY,
 
     /**
      * 密码不等于验证密码
      */
-    PasswordIsNotEqualsConfirmPassword,
+    PASSWORD_IS_NOT_EQUALS_CONFIRM_PASSWORD,
 
     /**
      * 服务器发生错误
      */
-    ServerIsFault,
+    SERVER_IS_FAULT,
 
     /**
      * EC注册失败
      */
-    ECRegisterFail,
+    EC_REGISTERD_FAIL,
 
     /**
      * 连接聊天服务器失败
      */
-    ConnectChatServiceFail,
+    CONNECT_CHAT_SERVICE_FAIL,
 
     /**
      * 账户已经被移除
      */
-    AccountISRemoverd,
+    ACCOUNT_IS_DELETED,
 
     /**
      * 账户在其它设备上登陆
      */
-    AccountIsLogUtilinInOtherDevice,
+    ACCOUNT_IS_LOGGING_IN_OTHER_DEVICE,
 
     /**
      * EC获取好友列表失败
      */
-    ECGetFriendsListFail,
+    EC_GET_FRIENDS_LIST_FAIL,
     /**
      * 月友账号不存在
      */
-    MoonFriendUserIsNotExisted
+    USER_IS_NOT_EXISTED
 }

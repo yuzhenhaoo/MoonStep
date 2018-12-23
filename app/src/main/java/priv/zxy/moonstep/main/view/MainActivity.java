@@ -1,7 +1,6 @@
 package priv.zxy.moonstep.main.view;
 
 import android.animation.Animator;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Service;
 import android.content.ComponentName;
@@ -48,7 +47,7 @@ import priv.zxy.moonstep.data.bean.ErrorCode;
 import priv.zxy.moonstep.kefu.KeFuActivity;
 import priv.zxy.moonstep.commerce.view.FragmentParent;
 import priv.zxy.moonstep.task.FourthMainPageFragment;
-import priv.zxy.moonstep.title.ThirdMainPageFragment1;
+import priv.zxy.moonstep.title.ThirdMainPageFragment;
 import priv.zxy.moonstep.utils.ToastUtil;
 import priv.zxy.moonstep.wheel.animate.AnimateEffect;
 import priv.zxy.moonstep.wheel.animate.ElasticityFactory;
@@ -256,7 +255,7 @@ public class MainActivity extends BaseActivity
         } else if (id == R.id.nav_real_world) {
             addFragmentToStack(new map());
         } else if (id == R.id.nav_wangguan) {
-            addFragmentToStack(new ThirdMainPageFragment1());
+            addFragmentToStack(new ThirdMainPageFragment());
         } else if (id == R.id.nav_task) {
             addFragmentToStack(new FourthMainPageFragment());
         } else if (id == R.id.nav_kefu) {

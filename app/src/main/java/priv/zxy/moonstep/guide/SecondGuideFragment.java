@@ -9,8 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import priv.zxy.moonstep.R;
+import priv.zxy.moonstep.data.bean.BaseFragment;
 
-public class SecondGuideFragment extends Fragment{
+public class SecondGuideFragment extends BaseFragment {
 
     @Nullable
     @Override

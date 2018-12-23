@@ -1,4 +1,4 @@
-package priv.zxy.moonstep.algorithm.ChooseMapDotsAlgorithm;
+package priv.zxy.moonstep.algorithm.ChooseMapDots;
 
 import java.util.List;
 
@@ -27,7 +27,7 @@ public class DotChooseContext {
         }
     }
 
-    public List<MapDot> getMapDots(double latitude, double longtutide, int number){
-        return dca.createDot(latitude, longtutide, number);
+    public List<MapDot> getMapDots(double latitude, double longitude, int number){
+        return dca.createDot(latitude, longitude, number);
     }
 }

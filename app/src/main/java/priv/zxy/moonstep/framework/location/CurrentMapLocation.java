@@ -3,7 +3,7 @@ package priv.zxy.moonstep.framework.location;
 import java.util.ArrayList;
 import java.util.List;
 
-import priv.zxy.moonstep.algorithm.ChooseMapDotsAlgorithm.MapDot;
+import priv.zxy.moonstep.algorithm.ChooseMapDots.MapDot;
 
 /**
  * 创建人: Administrator

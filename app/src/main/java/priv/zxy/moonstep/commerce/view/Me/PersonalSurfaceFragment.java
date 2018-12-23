@@ -21,9 +21,10 @@ import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.customview.AnimationButton;
 import priv.zxy.moonstep.customview.WaveViewByBezier;
 import priv.zxy.moonstep.data.application.Application;
+import priv.zxy.moonstep.data.bean.BaseFragment;
 import priv.zxy.moonstep.utils.SharedPreferencesUtil;
 
-public class PersonalSurfaceFragment extends Fragment {
+public class PersonalSurfaceFragment extends BaseFragment {
 
     private static final String TAG = "PersonalSurfaceFragment";
     private View view;
