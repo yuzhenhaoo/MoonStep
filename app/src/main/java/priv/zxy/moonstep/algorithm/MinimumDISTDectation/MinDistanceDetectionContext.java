@@ -11,25 +11,38 @@ import priv.zxy.moonstep.algorithm.ChooseMapDots.MapDot;
  * 目的是根据客户端的需求产生相应的算法子类，使得算法的更变不会动用户端造成影响
  **/
 
-public class MinDISTDetectionContext<T> {
+public class MinDistanceDetectionContext {
 
     private MapDot currentLocation;
     private List<MapDot> srcLocations;
     private int radius;
+    private AbstractMinDistanceDetection obj = null;
 
-    public MinDISTDetectionContext(MapDot currentLocation, List<MapDot> srcLocations, int radius){
+    public MinDistanceDetectionContext(MapDot currentLocation, List<MapDot> srcLocations, int radius, MinDistanceType minDISTType){
         this.currentLocation = currentLocation;
         this.srcLocations = srcLocations;
         this.radius = radius;
-    }
-
-    public AbstractMinDISTDetection getObj(MinDISTType minDISTType){
-        AbstractMinDISTDetection obj = null;
         switch (minDISTType){
             case MIN_DIST_TYPE:
-                obj = new MinDISTDetectionAlgorithm(srcLocations, currentLocation, radius);
+                obj = new MinDistanceDetectionAlgorithm(srcLocations, currentLocation, radius);
                 break;
         }
-        return obj;
     }
+
+    /**
+     * 获得精度半径范围内的半藏列表
+     * @return
+     */
+    public List<MapDot> getResult(){
+        return obj.getResult();
+    }
+
+    /**
+     * 获得精度半径范围内的宝藏数目
+     * @return
+     */
+    public int getLength(){
+        return obj.getResultLength();
+    }
+
 }

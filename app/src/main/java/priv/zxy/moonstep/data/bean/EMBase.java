@@ -12,8 +12,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import priv.zxy.moonstep.data.application.Application;
-import priv.zxy.moonstep.utils.LogUtil;
+import priv.zxy.moonstep.util.LogUtil;
 
+/**
+ * 创建人: Administrator
+ * 创建时间: 2018/10/19
+ * 描述: 从服务端获得相应的部分信息
+ **/
 public class EMBase {
 
     private static final String TAG = "EMBase";
@@ -26,7 +31,7 @@ public class EMBase {
 
     private String Client_Secret = null;
 
-    private static final String baseRequest = "http://a1.easemob.com/";
+    private static final String BASE_REQUEST = "http://a1.easemob.com/";
 
     private static EMBase instance = null;
 
@@ -81,7 +86,7 @@ public class EMBase {
     }
 
     public String getBaseRequest() {
-        return baseRequest;
+        return BASE_REQUEST;
     }
 
     /**

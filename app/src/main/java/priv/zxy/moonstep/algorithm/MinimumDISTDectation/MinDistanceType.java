@@ -6,6 +6,6 @@ package priv.zxy.moonstep.algorithm.MinimumDISTDectation;
  * 描述: 最小距离检测算法的枚举类
  **/
 
-public enum MinDISTType {
+public enum MinDistanceType {
     MIN_DIST_TYPE,
 }

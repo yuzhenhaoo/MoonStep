@@ -6,7 +6,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.Toast;
 
@@ -19,8 +18,8 @@ import priv.zxy.moonstep.adapter.Adapter;
 import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.framework.good.Props;
 import priv.zxy.moonstep.framework.good.bean.Good;
-import priv.zxy.moonstep.utils.LogUtil;
-import priv.zxy.moonstep.utils.SharedPreferencesUtil;
+import priv.zxy.moonstep.util.LogUtil;
+import priv.zxy.moonstep.util.SharedPreferencesUtil;
 
 /**
  * 创建人: Administrator

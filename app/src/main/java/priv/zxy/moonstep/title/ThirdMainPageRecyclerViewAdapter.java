@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import priv.zxy.moonstep.R;
-import priv.zxy.moonstep.utils.LogUtil;
+import priv.zxy.moonstep.util.LogUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;

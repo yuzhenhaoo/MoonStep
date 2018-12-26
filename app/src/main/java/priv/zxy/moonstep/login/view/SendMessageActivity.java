@@ -27,7 +27,7 @@ import android.widget.TextView;
 //import cn.smssdk.SMSSDK;
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.data.bean.BaseActivity;
-import priv.zxy.moonstep.utils.ToastUtil;
+import priv.zxy.moonstep.util.ToastUtil;
 import priv.zxy.moonstep.login.presenter.UserSendMessagePresenter;
 
 //import static cn.smssdk.SMSSDK.getVoiceVerifyCode;

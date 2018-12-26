@@ -21,8 +21,8 @@ import java.util.ArrayList;
 
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.data.bean.BaseFragment;
-import priv.zxy.moonstep.utils.LogUtil;
-import priv.zxy.moonstep.utils.TitleNamesUtils;
+import priv.zxy.moonstep.util.LogUtil;
+import priv.zxy.moonstep.util.TitleNamesUtils;
 
 public class ThirdMainPageFragment extends BaseFragment {
     private RecyclerView recyclerView;

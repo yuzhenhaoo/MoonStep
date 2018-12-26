@@ -40,15 +40,15 @@ import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.data.bean.BaseActivity;
 import priv.zxy.moonstep.login.view.UserLoginActivity;
 import priv.zxy.moonstep.settings.SettingActivity;
-import priv.zxy.moonstep.utils.LogUtil;
-import priv.zxy.moonstep.utils.SharedPreferencesUtil;
-import priv.zxy.moonstep.utils.ShowErrorReason;
-import priv.zxy.moonstep.data.bean.ErrorCode;
+import priv.zxy.moonstep.util.LogUtil;
+import priv.zxy.moonstep.util.SharedPreferencesUtil;
+import priv.zxy.moonstep.util.ShowErrorReasonUtil;
+import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
 import priv.zxy.moonstep.kefu.KeFuActivity;
 import priv.zxy.moonstep.commerce.view.FragmentParent;
 import priv.zxy.moonstep.task.FourthMainPageFragment;
 import priv.zxy.moonstep.title.ThirdMainPageFragment;
-import priv.zxy.moonstep.utils.ToastUtil;
+import priv.zxy.moonstep.util.ToastUtil;
 import priv.zxy.moonstep.wheel.animate.AnimateEffect;
 import priv.zxy.moonstep.wheel.animate.ElasticityFactory;
 
@@ -353,7 +353,7 @@ public class MainActivity extends BaseActivity
             runOnUiThread(() -> {
                 if (error == EMError.USER_REMOVED) {
                     // 显示帐号已经被移除
-                    ShowErrorReason.getInstance(mActivity).show(ErrorCode.AccountISRemoverd);
+                    ShowErrorReasonUtil.getInstance(mActivity).show(ErrorCodeEnum.ACCOUNT_IS_DELETED);
                     LogUtil.e("error", String.valueOf(error));
                     try {
                         Thread.sleep(1000);
@@ -363,7 +363,7 @@ public class MainActivity extends BaseActivity
                     toLoginActivity();//强制退出到登陆页面
                 } else if (error == EMError.USER_LOGIN_ANOTHER_DEVICE) {
                     // 显示帐号在其他设备登录
-                    ShowErrorReason.getInstance(mActivity).show(ErrorCode.AccountIsLogUtilinInOtherDevice);
+                    ShowErrorReasonUtil.getInstance(mActivity).show(ErrorCodeEnum.ACCOUNT_IS_LOGGING_IN_OTHER_DEVICE);
                     LogUtil.e("error", String.valueOf(error));
                     try {
                         Thread.sleep(1000);
@@ -374,7 +374,7 @@ public class MainActivity extends BaseActivity
                 } else {
                     if (NetUtils.hasNetwork(MainActivity.this)){
                         //连接不到聊天服务器
-                        ShowErrorReason.getInstance(mActivity).show(ErrorCode.ConnectChatServiceFail);
+                        ShowErrorReasonUtil.getInstance(mActivity).show(ErrorCodeEnum.CONNECT_CHAT_SERVICE_FAIL);
                         try {
                             Thread.sleep(1000);
                         } catch (InterruptedException e) {
@@ -384,7 +384,7 @@ public class MainActivity extends BaseActivity
                     }
                     else{
                         //当前网络不可用，请检查网络设置
-                        ShowErrorReason.getInstance(mActivity).show(ErrorCode.NetNotResponse);
+                        ShowErrorReasonUtil.getInstance(mActivity).show(ErrorCodeEnum.NET_NOT_RESPONSE);
                         try {
                             Thread.sleep(1000);
                         } catch (InterruptedException e) {

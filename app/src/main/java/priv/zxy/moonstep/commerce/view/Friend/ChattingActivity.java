@@ -26,8 +26,6 @@ import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
 
-import org.litepal.LitePal;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -38,8 +36,8 @@ import priv.zxy.moonstep.data.bean.ActivityCollector;
 import priv.zxy.moonstep.framework.message.Message;
 import priv.zxy.moonstep.framework.message.MessageOnline;
 import priv.zxy.moonstep.framework.user.User;
-import priv.zxy.moonstep.utils.LogUtil;
-import priv.zxy.moonstep.utils.ToastUtil;
+import priv.zxy.moonstep.util.LogUtil;
+import priv.zxy.moonstep.util.ToastUtil;
 import priv.zxy.moonstep.helper.MoonStepHelper;
 import priv.zxy.moonstep.adapter.ChattingMessageAdapter;
 

@@ -9,7 +9,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.TextView;
 
@@ -19,7 +18,7 @@ import priv.zxy.moonstep.BuildConfig;
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.customview.MyDialog;
 import priv.zxy.moonstep.login.view.UserLoginActivity;
-import priv.zxy.moonstep.utils.LogUtil;
+import priv.zxy.moonstep.util.LogUtil;
 
 /**
  * 创建人: Administrator

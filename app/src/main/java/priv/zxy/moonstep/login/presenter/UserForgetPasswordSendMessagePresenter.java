@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Looper;
 
-import priv.zxy.moonstep.data.bean.ErrorCode;
+import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
 import priv.zxy.moonstep.login.module.biz.IUser;
 import priv.zxy.moonstep.login.module.biz.OnPhoneCheckListener;
 import priv.zxy.moonstep.login.module.biz.UserBiz;
@@ -45,7 +45,7 @@ public class UserForgetPasswordSendMessagePresenter {
             }
 
             @Override
-            public void getErrcodeTips(ErrorCode errorCode) {
+            public void getErrcodeTips(ErrorCodeEnum errorCode) {
                 new Thread(() -> {
                     Looper.prepare();
                     forgetPasswordSendMessageView.showErrorTip();

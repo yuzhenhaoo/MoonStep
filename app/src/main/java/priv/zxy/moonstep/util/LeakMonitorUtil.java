@@ -1,4 +1,4 @@
-package priv.zxy.moonstep.utils;
+package priv.zxy.moonstep.util;
 
 import com.squareup.leakcanary.RefWatcher;
 
@@ -10,16 +10,16 @@ import priv.zxy.moonstep.data.application.Application;
  * 描述: 把LeakCanary的RefWatcher封装一下，方便使用。
  **/
 
-public class LeakMonitor {
+public class LeakMonitorUtil {
 
-    private static LeakMonitor instance = null;
+    private static LeakMonitorUtil instance = null;
     private static RefWatcher refWatcher = null;
 
-    public static LeakMonitor getInstance() {
+    public static LeakMonitorUtil getInstance() {
         if (instance == null){
-            synchronized (LeakMonitor.class){
+            synchronized (LeakMonitorUtil.class){
                 if (instance == null){
-                    instance = new LeakMonitor();
+                    instance = new LeakMonitorUtil();
                     refWatcher = Application.mRefWatcher;
                 }
             }

@@ -1,4 +1,4 @@
-package priv.zxy.moonstep.utils;
+package priv.zxy.moonstep.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;

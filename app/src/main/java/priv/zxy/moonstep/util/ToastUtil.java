@@ -1,4 +1,4 @@
-package priv.zxy.moonstep.utils;
+package priv.zxy.moonstep.util;
 
 import android.app.Activity;
 import android.content.Context;

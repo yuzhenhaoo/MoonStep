@@ -39,11 +39,12 @@ public class NotificationHelper {
     }
 
     /**
-     * 对于消息提示的通知应该放在后台中，当应用程序整个关闭的时候，只有一个后台在保活，这个时候检测是否有信息传递过来，如果有的话，就发送一条通知让用户看到
-     * Notification Level:PRIORITY_LOW
+     * 对于消息提示的通知应该放在后台中，当应用程序整个关闭的时候，只有一个后台在保活，
+     *     这个时候检测是否有信息传递过来，如果有的话，就发送一条通知让用户看到
+     *     Notification Level:PRIORITY_LOW
      * @return 通知实体
      */
-    private Notification setMessageTipNofitication(){
+    private Notification setMessageTipNotification(){
         return new NotificationCompat.Builder(mContext, "default")
                 .setContentText("月友消息提示")
                 .setContentText("您的月友给您发送了新的消息")
@@ -59,7 +60,7 @@ public class NotificationHelper {
 
     private int trsNotificationEnumToInt(NotificationEnum notificationEnum){
         switch (notificationEnum){
-            case MessageTip:
+            case MESSAGE_TIP:
                 return 1;
         }
         return 0;
@@ -67,9 +68,18 @@ public class NotificationHelper {
 
     public void showNotification(NotificationEnum notificationEnum){
         switch (notificationEnum){
-            case MessageTip:
-                manager.notify(trsNotificationEnumToInt(notificationEnum), setMessageTipNofitication());
+            case MESSAGE_TIP:
+                manager.notify(trsNotificationEnumToInt(notificationEnum), setMessageTipNotification());
                 break;
         }
+    }
+
+    /**
+     * 为了避免单例模式造成的内存泄漏，我们必须在对应的Activity结束的时候对对应的引用进行清理
+     *     便于GC的回收
+     */
+    public void clear(){
+        instance = null;
+        mContext = null;
     }
 }

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-import priv.zxy.moonstep.utils.LogUtil;
+import priv.zxy.moonstep.util.LogUtil;
 
 /**
  * 创建人: Administrator

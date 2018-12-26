@@ -8,8 +8,9 @@ import android.support.v4.content.LocalBroadcastManager;
 
 import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.data.bean.ActivityCollector;
+import priv.zxy.moonstep.data.bean.NotificationEnum;
 import priv.zxy.moonstep.framework.message.MessageOnline;
-import priv.zxy.moonstep.utils.LogUtil;
+import priv.zxy.moonstep.util.LogUtil;
 
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
@@ -19,9 +20,7 @@ import java.util.List;
 
 import priv.zxy.moonstep.helper.MoonStepHelper;
 import priv.zxy.moonstep.helper.NotificationHelper;
-import priv.zxy.moonstep.utils.SharedPreferencesUtil;
-
-import static priv.zxy.moonstep.data.bean.NotificationEnum.MessageTip;
+import priv.zxy.moonstep.util.SharedPreferencesUtil;
 
 /**
  * 创建人: Administrator
@@ -66,7 +65,7 @@ public class MessageReceiverService extends Service {
                 }
                 SharedPreferencesUtil.getInstance(Application.getContext()).saveIsMessageTip(message.getFrom().substring(8, message.getFrom().length()));//当来消息的时候，将消息提示的标记存储到缓存中。
                 localBroadcastManager.sendBroadcast(intent);//发送本地广播
-                NotificationHelper.getInstance().showNotification(MessageTip);
+                NotificationHelper.getInstance().showNotification(NotificationEnum.MESSAGE_TIP);
             }
         }
 
@@ -75,7 +74,7 @@ public class MessageReceiverService extends Service {
             //收到透传消息
             LogUtil.d(TAG, "收到透传消息");
             localBroadcastManager.sendBroadcast(intent);//发送本地广播
-            NotificationHelper.getInstance().showNotification(MessageTip);
+            NotificationHelper.getInstance().showNotification(NotificationEnum.MESSAGE_TIP);
         }
 
         @Override

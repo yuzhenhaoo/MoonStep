@@ -35,11 +35,13 @@ import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.algorithm.ChooseMapDots.ChooseType;
 import priv.zxy.moonstep.algorithm.ChooseMapDots.DotChooseContext;
 import priv.zxy.moonstep.algorithm.ChooseMapDots.MapDot;
+import priv.zxy.moonstep.algorithm.MinimumDISTDectation.MinDistanceDetectionContext;
+import priv.zxy.moonstep.algorithm.MinimumDISTDectation.MinDistanceType;
 import priv.zxy.moonstep.helper.FileHelper;
 import priv.zxy.moonstep.data.application.Application;
-import priv.zxy.moonstep.utils.LogUtil;
-import priv.zxy.moonstep.utils.SharedPreferencesUtil;
-import priv.zxy.moonstep.utils.dbUtils.SetLocationUtil;
+import priv.zxy.moonstep.util.LogUtil;
+import priv.zxy.moonstep.util.SharedPreferencesUtil;
+import priv.zxy.moonstep.DAO.SetLocationDAO;
 import priv.zxy.moonstep.wheel.animate.AnimateEffect;
 import priv.zxy.moonstep.wheel.animate.ElasticityFactory;
 
@@ -66,6 +68,10 @@ public class map extends Fragment{
 
     public AMapLocationClientOption mLocationOption = null;//声明AMapLocationClientOption对象
 
+    private List<MapDot> allMapDots = null;//记得关闭的时候要释放掉
+    private MapDot myDot = new MapDot();//我的位置
+
+    private int radius = 50;//设置探索的精度半径为50m
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -100,6 +106,8 @@ public class map extends Fragment{
         //在activity执行onCreate时执行mMapView.onCreate(savedInstanceState)，创建地图
         map.onCreate(savedInstanceState);
 
+        allMapDots = LitePal.findAll(MapDot.class);
+
         if (aMap == null){
             aMap = map.getMap();
         }
@@ -117,6 +125,28 @@ public class map extends Fragment{
         pack.setOnClickListener(v -> {
             effect.show();
             toPackActivity();
+        });
+
+        radar.setOnClickListener(v->{
+            //TODO TWO Things
+            /**
+             * 一件事就是找到精度半径范围内的寻宝地点
+             * 第二件事就是把探索过的地点去除。
+             */
+            new Thread(() -> {
+                List<MapDot> results = new MinDistanceDetectionContext(myDot, allMapDots, radius, MinDistanceType.MIN_DIST_TYPE).getResult();
+                for (MapDot result : results) {
+                    //这里针对每个result开始发放奖励，奖励从服务器获取，做一个耗时操作
+
+                }
+                //这里从地图中将探索过的地点去除（）
+                allMapDots.removeAll(results);
+                LitePal.deleteDatabase("MapDot.class");
+                showDotsInMap();
+                for (MapDot dot : allMapDots){
+                    dot.save();
+                }
+            }).start();
         });
     }
 
@@ -163,9 +193,8 @@ public class map extends Fragment{
      */
     private void showDotsInMap(){
         LogUtil.d(TAG, "showDotsInMap");
-        List<MapDot> mapdots = LitePal.findAll(MapDot.class);
-        if (mapdots != null){
-            for (MapDot dot : mapdots){
+        if (allMapDots != null){
+            for (MapDot dot : allMapDots){
                 LogUtil.d(TAG, dot.getLatitude() + "  " + dot.getLongitude());
                 LatLng latLng = new LatLng(dot.getLatitude(), dot.getLongitude());
                 aMap.addMarker(new MarkerOptions().position(latLng).title("宝藏").snippet("等你来拿"));
@@ -215,6 +244,7 @@ public class map extends Fragment{
         super.onDestroy();
         mLocationClient.onDestroy();//销毁定位客户端，同时销毁本地定位服务。
         map.onDestroy();
+        allMapDots = null;//不然会发生内存泄漏
     }
 
     @Override
@@ -277,13 +307,14 @@ public class map extends Fragment{
         if (location != null){
             String address = location.getAddress();//获得地址
             double latitude = location.getLatitude();//获取维度
-            double longtitude = location.getLongitude();//获取经度
+            double longitude = location.getLongitude();//获取经度
             float accuracy = location.getAccuracy();//获取精度
             String floor = location.getFloor();//获取当前室内定位的楼层
             int status = location.getGpsAccuracyStatus();//获取GPS的当前状态
             //获取定位时间
 //            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
+            myDot.setLatitude(latitude);
+            myDot.setLongitude(longitude);
 
             /**
              * 这里出现了一个错误，是由于dots本身不能将context中获得的结果引用过来导致的，但是context.getMapDots的确是获得了结果，只是对于dots而言结果却是not avaliable的
@@ -294,19 +325,18 @@ public class map extends Fragment{
             LogUtil.d(TAG, "当前时间为:" + days);
             LogUtil.d(TAG, "当前地址为:" + address);
             LogUtil.d(TAG, "当前维度为:" + latitude);
-            LogUtil.d(TAG, "当前经度为:" + longtitude);
-
+            LogUtil.d(TAG, "当前经度为:" + longitude);
 
             if (SharedPreferencesUtil.getInstance(Application.getContext()).checkMapTime(days)){
                 //这里对32个宝藏位置坐标进行刷新，如果成功的话，就存入sqlite数据库中，并在地图上显示
                 DotChooseContext context = new DotChooseContext(ChooseType.SQUARE_CHOOSE);
-                List<MapDot> dots = context.getMapDots(latitude, longtitude, 32);
+                List<MapDot> dots = context.getMapDots(latitude, longitude, 32);
                 LogUtil.d(TAG, dots.toString());
                 saveMapDots(dots);
             }
 
             String phoneNumber = SharedPreferencesUtil.getInstance(Application.getContext()).readLoginInfo().get("PhoneNumber");
-            SetLocationUtil.getInstance().LocationServlet(phoneNumber, address, String.valueOf(latitude), String.valueOf(longtitude));
+            SetLocationDAO.getInstance().LocationServlet(phoneNumber, address, String.valueOf(latitude), String.valueOf(longitude));
 
         }else{
             /**

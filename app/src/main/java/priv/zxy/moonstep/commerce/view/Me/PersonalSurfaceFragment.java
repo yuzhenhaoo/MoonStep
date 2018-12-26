@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +21,7 @@ import priv.zxy.moonstep.customview.AnimationButton;
 import priv.zxy.moonstep.customview.WaveViewByBezier;
 import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.data.bean.BaseFragment;
-import priv.zxy.moonstep.utils.SharedPreferencesUtil;
+import priv.zxy.moonstep.util.SharedPreferencesUtil;
 
 public class PersonalSurfaceFragment extends BaseFragment {
 

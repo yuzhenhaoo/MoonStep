@@ -26,9 +26,9 @@ import android.widget.TextView;
 //import cn.smssdk.SMSSDK;
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.data.bean.BaseActivity;
-import priv.zxy.moonstep.utils.ShowErrorReason;
-import priv.zxy.moonstep.utils.ToastUtil;
-import priv.zxy.moonstep.data.bean.ErrorCode;
+import priv.zxy.moonstep.util.ShowErrorReasonUtil;
+import priv.zxy.moonstep.util.ToastUtil;
+import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
 import priv.zxy.moonstep.login.presenter.UserForgetPasswordSendMessagePresenter;
 
 //import static cn.smssdk.SMSSDK.getVoiceVerifyCode;
@@ -277,7 +277,7 @@ public class ForgetPasswordSendMessageActivity extends BaseActivity implements I
 
     @Override
     public void showErrorTip() {
-        ShowErrorReason.getInstance(mActivity).show(ErrorCode.PhoneNumberIsNotRegistered);
+        ShowErrorReasonUtil.getInstance(mActivity).show(ErrorCodeEnum.PHONE_NUMBER_IS_NOT_REGISTERED);
     }
 
     @Override

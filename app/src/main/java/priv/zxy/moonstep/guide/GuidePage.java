@@ -13,7 +13,7 @@ import java.util.List;
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.data.bean.BaseActivity;
-import priv.zxy.moonstep.utils.SharedPreferencesUtil;
+import priv.zxy.moonstep.util.SharedPreferencesUtil;
 
 public class GuidePage extends BaseActivity {
     //引导页对象

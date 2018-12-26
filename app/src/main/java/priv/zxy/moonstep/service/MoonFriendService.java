@@ -14,12 +14,12 @@ import org.litepal.LitePal;
 import java.util.ArrayList;
 import java.util.List;
 
+import priv.zxy.moonstep.DAO.PullUserInfoDAO;
 import priv.zxy.moonstep.data.application.Application;
-import priv.zxy.moonstep.data.bean.ErrorCode;
+import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
 import priv.zxy.moonstep.framework.user.User;
-import priv.zxy.moonstep.utils.LogUtil;
-import priv.zxy.moonstep.utils.SharedPreferencesUtil;
-import priv.zxy.moonstep.utils.dbUtils.GetUserInformationUtil;
+import priv.zxy.moonstep.util.LogUtil;
+import priv.zxy.moonstep.util.SharedPreferencesUtil;
 
 /**
  * 这里创建Service的目的是为了在用户本地没有加载数据库信息的时候开始初始化的加载月友的信息并将其存储在数据库中
@@ -70,7 +70,7 @@ public class MoonFriendService extends Service {
                 usernames = EMClient.getInstance().contactManager().getAllContactsFromServer();
                 for (String username : usernames) {
                     LogUtil.d(TAG, username);
-                    GetUserInformationUtil.getInstance().getUserInfo(new GetUserInformationUtil.Callback() {
+                    PullUserInfoDAO.getInstance().getUserInfo(new PullUserInfoDAO.Callback() {
                         @Override
                         public void onSuccess(User moonFriend) {
                             List<User> newLists = LitePal.where("phonenumber = ?", moonFriend.getPhoneNumber()).find(User.class);
@@ -81,7 +81,7 @@ public class MoonFriendService extends Service {
                         }
 
                         @Override
-                        public void onFail(ErrorCode errorCode) {
+                        public void onFail(ErrorCodeEnum errorCode) {
 
                         }
                     }, username);

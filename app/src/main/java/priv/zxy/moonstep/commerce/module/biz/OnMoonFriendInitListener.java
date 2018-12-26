@@ -1,10 +1,10 @@
 package priv.zxy.moonstep.commerce.module.biz;
 
-import priv.zxy.moonstep.data.bean.ErrorCode;
+import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
 
 public interface OnMoonFriendInitListener {
 
     void initSuccess();
 
-    void initFail(ErrorCode errorCode);
+    void initFail(ErrorCodeEnum errorCode);
 }

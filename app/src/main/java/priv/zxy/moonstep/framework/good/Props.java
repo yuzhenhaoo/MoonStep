@@ -1,6 +1,6 @@
 package priv.zxy.moonstep.framework.good;
 
-import priv.zxy.moonstep.utils.dbUtils.UserGoodUtil;
+import priv.zxy.moonstep.DAO.UserGoodDAO;
 
 /**
  * 创建人: Administrator
@@ -11,8 +11,8 @@ import priv.zxy.moonstep.utils.dbUtils.UserGoodUtil;
 public class Props extends AbstractGood {
 
     @Override
-    public void getUserGoods(UserGoodUtil.CallBack callBack, String phoneNumber) {
-        UserGoodUtil.getInstance().getUserGood(callBack, phoneNumber);
+    public void getUserGoods(UserGoodDAO.CallBack callBack, String phoneNumber) {
+        UserGoodDAO.getInstance().getUserGood(callBack, phoneNumber);
     }
 
     @Override

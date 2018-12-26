@@ -5,8 +5,6 @@ import android.content.SharedPreferences;
 
 import java.util.Map;
 
-import priv.zxy.moonstep.utils.LogUtil;
-
 /**
  * 创建人: Administrator
  * 创建时间: 2018/11/21

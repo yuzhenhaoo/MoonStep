@@ -1,6 +1,6 @@
 package priv.zxy.moonstep.framework.good;
 
-import priv.zxy.moonstep.utils.dbUtils.UserGoodUtil;
+import priv.zxy.moonstep.DAO.UserGoodDAO;
 
 /**
  * 创建人: Administrator
@@ -10,7 +10,7 @@ import priv.zxy.moonstep.utils.dbUtils.UserGoodUtil;
 
 public abstract class AbstractGood {
 
-    abstract void getUserGoods(UserGoodUtil.CallBack callBack, String phoneNumber);
+    abstract void getUserGoods(UserGoodDAO.CallBack callBack, String phoneNumber);
 
     abstract void setUserGood(String phoneNumber, String goodCode, int number);
 }

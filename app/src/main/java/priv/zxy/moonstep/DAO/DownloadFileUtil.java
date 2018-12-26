@@ -1,4 +1,4 @@
-package priv.zxy.moonstep.utils.dbUtils;
+package priv.zxy.moonstep.DAO;
 
 import android.util.Log;
 
@@ -7,7 +7,7 @@ import java.io.IOException;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import priv.zxy.moonstep.data.bean.ErrorCode;
+import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
 
 /**
  * 创建人: Administrator
@@ -58,6 +58,6 @@ public class DownloadFileUtil {
 
         void onSuccess(String content);
 
-        void onFail(ErrorCode errorCode);
+        void onFail(ErrorCodeEnum errorCode);
     }
 }

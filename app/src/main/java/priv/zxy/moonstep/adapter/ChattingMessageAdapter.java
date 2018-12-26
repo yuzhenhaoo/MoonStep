@@ -13,8 +13,7 @@ import java.util.List;
 
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.framework.message.Message;
-import priv.zxy.moonstep.framework.message.MessageOnline;
-import priv.zxy.moonstep.utils.LogUtil;
+import priv.zxy.moonstep.util.LogUtil;
 
 public class ChattingMessageAdapter extends RecyclerView.Adapter<ChattingMessageAdapter.MyHolder> {
     private Context context;

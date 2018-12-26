@@ -1,4 +1,4 @@
-package priv.zxy.moonstep.utils.dbUtils;
+package priv.zxy.moonstep.DAO;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -12,38 +12,39 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import priv.zxy.moonstep.data.bean.VolleyCallback;
 import priv.zxy.moonstep.data.application.Application;
-import priv.zxy.moonstep.data.bean.ErrorCode;
-import priv.zxy.moonstep.data.bean.URLBase;
+import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
+import priv.zxy.moonstep.constant.URLBase;
 
 /**
  * 创建人: Administrator
  * 创建时间: 2018/11/7
  * 描述:
  **/
-public class PetServiceUtil {
+public class PetServiceDAO {
 
-    private static PetServiceUtil instance = null;
+    private static PetServiceDAO instance = null;
 
-    public static PetServiceUtil getInstance(){
+    private static final String PET_TAG = "pet";
+
+    private static final String URL = URLBase.GET_PET_INFO_SERVLET_URL;
+
+    public static PetServiceDAO getInstance(){
         if (instance == null){
-            synchronized (PetServiceUtil.class){
+            synchronized (PetServiceDAO.class){
                 if (instance == null){
-                    instance = new PetServiceUtil();
+                    instance = new PetServiceDAO();
                 }
             }
         }
         return instance;
     }
 
-    public void getPetInfo(VolleyCallback volleyCallback, String phoneNumber){
-        String url = URLBase.GET_PET_INFO_SERVLET_URL;
-        String tag = "getPetInfo";
+    public void getPetInfo(CallBack callBack, String phoneNumber){
 
         //获得请求队列
         RequestQueue requestQueue = Volley.newRequestQueue(Application.getContext());
-        StringRequest request = new StringRequest(Request.Method.POST, url,
+        StringRequest request = new StringRequest(Request.Method.POST, URL,
                 response -> {
                     try {
                         JSONObject jsonObject = (JSONObject) new JSONObject(response).get("result");
@@ -51,7 +52,7 @@ public class PetServiceUtil {
                         e.printStackTrace();
                     }
                 }, error -> {
-                volleyCallback.getErrorCode(ErrorCode.NetNotResponse);
+            callBack.onFail(ErrorCodeEnum.NET_NOT_RESPONSE);
         }){
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
@@ -60,8 +61,15 @@ public class PetServiceUtil {
                 return params;
             }
         };
-        request.setTag(tag);
+        request.setTag(PET_TAG);
 
         requestQueue.add(request);
+    }
+
+    public interface CallBack{
+
+        void onSuccess();
+
+        void onFail(ErrorCodeEnum errorCodeEnum);
     }
 }

@@ -11,14 +11,12 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.exceptions.HyphenateException;
 
 //import cn.smssdk.SMSSDK;
-import priv.zxy.moonstep.data.bean.VolleyCallback;
+import priv.zxy.moonstep.DAO.LoginDataRequestDAO;
+import priv.zxy.moonstep.DAO.RegisterDataRequestDAO;
 import priv.zxy.moonstep.framework.user.User;
-import priv.zxy.moonstep.utils.dbUtils.ChangePasswordUtil;
-import priv.zxy.moonstep.utils.dbUtils.LoginUtil;
-import priv.zxy.moonstep.utils.dbUtils.PhoneCheckUtil;
-import priv.zxy.moonstep.utils.dbUtils.PhoneRegisterUtil;
-import priv.zxy.moonstep.utils.ToastUtil;
-import priv.zxy.moonstep.data.bean.ErrorCode;
+import priv.zxy.moonstep.DAO.PhoneNumberIsInServerDAO;
+import priv.zxy.moonstep.util.ToastUtil;
+import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
 
 public class UserBiz implements IUser {
 
@@ -33,12 +31,12 @@ public class UserBiz implements IUser {
     @Override
     public void doLogin(String userPhoneNumber, String userPassword, final OnLoginListener onLoginListener) throws InterruptedException {
         if (userPhoneNumber != null && userPassword != null) {
-            LoginUtil.getInstance().LoginRequest(onLoginListener, userPhoneNumber, userPassword);
+            LoginDataRequestDAO.getInstance().login(onLoginListener, userPhoneNumber, userPassword);
         } else {
             if(userPhoneNumber == null)
-                onLoginListener.LoginFail(ErrorCode.PhoneNumberISEmpty);
+                onLoginListener.LoginFail(ErrorCodeEnum.PHONE_NUMBER_IS_EMPTY);
             else
-                onLoginListener.LoginFail(ErrorCode.PasswordIsEmpty);
+                onLoginListener.LoginFail(ErrorCodeEnum.PASSWORD_IS_EMPTY);
         }
     }
 
@@ -54,7 +52,7 @@ public class UserBiz implements IUser {
     @Override
     public void doRegister(final String phoneNumber, String nickName, final String userPassword, String confirmUserPassword, String gender, final OnRegisterListener registerListener) throws InterruptedException{
         if (userPassword.equals(confirmUserPassword)) {
-            PhoneRegisterUtil.getInstance().RegisterRequest(new PhoneRegisterUtil.CallBack() {
+            RegisterDataRequestDAO.getInstance().RegisterRequest(new RegisterDataRequestDAO.CallBack() {
                 @Override
                 public void onSuccess(String raceCode, String raceName, String raceDescription, String raceImage, String raceIcon) throws HyphenateException {
                     registerListener.registerSuccess(raceName, raceDescription, raceImage, raceIcon);
@@ -62,12 +60,12 @@ public class UserBiz implements IUser {
                 }
 
                 @Override
-                public void onFail(ErrorCode errorCode) {
+                public void onFail(ErrorCodeEnum errorCode) {
                     registerListener.registerFail(errorCode);
                 }
             }, phoneNumber, nickName, userPassword, gender);
         } else {
-            registerListener.registerFail(ErrorCode.PasswordIsNotEqualsConfirmPassword);
+            registerListener.registerFail(ErrorCodeEnum.PASSWORD_IS_NOT_EQUALS_CONFIRM_PASSWORD);
         }
     }
 
@@ -87,37 +85,16 @@ public class UserBiz implements IUser {
     public void doVerifyPhoneNumber(String phoneNumber, final OnVerifyPhoneNumber verifyPhoneNumber) throws InterruptedException {
         if (phoneNumber.equals("")) {
             // 这里应该设置一个具体的状态码：手机号为空
-            verifyPhoneNumber.verifyFail(ErrorCode.PhoneNumberISEmpty);
+            verifyPhoneNumber.verifyFail(ErrorCodeEnum.PHONE_NUMBER_IS_EMPTY);
         } else {
-            PhoneCheckUtil.getInstance().phoneCheck(new VolleyCallback() {
+            PhoneNumberIsInServerDAO.getInstance().check(new PhoneNumberIsInServerDAO.Callback() {
                 @Override
-                public String onSuccess(String result) {
-                    return null;
-                }
-
-                @Override
-                public boolean onSuccess() throws InterruptedException {
+                public void onSuccess() {
                     verifyPhoneNumber.verifySuccess();
-                    return true;
                 }
 
                 @Override
-                public String onFail(String error) {
-                    return null;
-                }
-
-                @Override
-                public boolean onFail() {
-                    return false;
-                }
-
-                @Override
-                public void getMoonFriend(User moonFriend) {
-
-                }
-
-                @Override
-                public void getErrorCode(ErrorCode errorCode) {
+                public void onFail(ErrorCodeEnum errorCode) {
                     verifyPhoneNumber.verifyFail(errorCode);
                 }
             }, phoneNumber);
@@ -141,86 +118,42 @@ public class UserBiz implements IUser {
 
     @Override
     public void setChangePassword(String phoneNumber, String password, String confirmPassword, final OnChangePasswordListener changePasswordListener) throws InterruptedException {
-        ErrorCode errorCode = null;
+        ErrorCodeEnum errorCode = null;
 
         if (password.equals("")) {
-            errorCode = ErrorCode.PasswordIsEmpty;
+            errorCode = ErrorCodeEnum.PASSWORD_IS_EMPTY;
         } else if (confirmPassword.equals("")) {
-            errorCode = ErrorCode.ConfirmPasswordIsEmpty;
+            errorCode = ErrorCodeEnum.CONFIRM_PASSWORD_IS_EMPTY;
         }
 
         if (password.equals(confirmPassword)) {
-
-            ChangePasswordUtil.getInstance().changePassword(new VolleyCallback() {
+            LoginDataRequestDAO.getInstance().changePassword(new LoginDataRequestDAO.CallBack() {
                 @Override
-                public String onSuccess(String result) {
-                    return null;
-                }
-
-                @Override
-                public boolean onSuccess() throws InterruptedException {
+                public void onSuccess() throws InterruptedException {
                     changePasswordListener.changePasswordSuccess();
-                    return true;
                 }
 
                 @Override
-                public String onFail(String error) {
-                    return null;
-                }
-
-                @Override
-                public boolean onFail() {
-                    return false;
-                }
-
-                @Override
-                public void getMoonFriend(User moonFriend) {
-
-                }
-
-                @Override
-                public void getErrorCode(ErrorCode errorCode) {
-                    changePasswordListener.changePasswordFail(errorCode);
+                public void onFail(ErrorCodeEnum errorCodeEnum) {
+                    changePasswordListener.changePasswordFail(errorCodeEnum);
                 }
             }, phoneNumber, password);
         } else {
-            errorCode = ErrorCode.PasswordIsNotEqualsConfirmPassword;
+            errorCode = ErrorCodeEnum.PASSWORD_IS_NOT_EQUALS_CONFIRM_PASSWORD;
         }
         if (errorCode != null) changePasswordListener.changePasswordFail(errorCode);
     }
 
     @Override
     public void judgeCanJumpToChangePasswordActivity(String phoneNumber, final OnPhoneCheckListener onPhoneCheckListener) throws InterruptedException {
-        PhoneCheckUtil.getInstance().phoneCheck(new VolleyCallback() {
+        PhoneNumberIsInServerDAO.getInstance().check(new PhoneNumberIsInServerDAO.Callback() {
             @Override
-            public String onSuccess(String result) {
-                return null;
-            }
-
-            @Override
-            public boolean onSuccess() throws InterruptedException {
+            public void onSuccess() {
                 onPhoneCheckListener.phoneIsNotExisted();
-                return true;
             }
 
             @Override
-            public String onFail(String error) {
-                return null;
-            }
-
-            @Override
-            public boolean onFail() {
-                onPhoneCheckListener.phoneIsExisted();
-                return true;
-            }
-
-            @Override
-            public void getMoonFriend(User moonFriend) {
-
-            }
-
-            @Override
-            public void getErrorCode(ErrorCode errorCode) {
+            public void onFail(ErrorCodeEnum errorCode) {
                 onPhoneCheckListener.getErrcodeTips(errorCode);
             }
         }, phoneNumber);
@@ -230,7 +163,7 @@ public class UserBiz implements IUser {
 
         void registerSuccess(String raceName, String raceDescription, String raceImage, String raceIcon);
 
-        void registerFail(ErrorCode errorCode);
+        void registerFail(ErrorCodeEnum errorCode);
     }
 
 }

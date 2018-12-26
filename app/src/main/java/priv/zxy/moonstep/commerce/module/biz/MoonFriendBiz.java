@@ -7,11 +7,10 @@ import org.litepal.LitePal;
 
 import java.util.List;
 
-import priv.zxy.moonstep.data.bean.VolleyCallback;
-import priv.zxy.moonstep.data.bean.ErrorCode;
+import priv.zxy.moonstep.DAO.PullUserInfoDAO;
+import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
 import priv.zxy.moonstep.framework.user.User;
-import priv.zxy.moonstep.utils.LogUtil;
-import priv.zxy.moonstep.utils.dbUtils.GetUserInformationUtil;
+import priv.zxy.moonstep.util.LogUtil;
 
 public class MoonFriendBiz implements IMoonFriendBiz {
 
@@ -36,7 +35,7 @@ public class MoonFriendBiz implements IMoonFriendBiz {
                 final List<String> usernames = EMClient.getInstance().contactManager().getAllContactsFromServer();
                 if (lists.size() != usernames.size()) {
                     for (String username : usernames) {
-                        GetUserInformationUtil.getInstance().getUserInfo(new GetUserInformationUtil.Callback() {
+                        PullUserInfoDAO.getInstance().getUserInfo(new PullUserInfoDAO.Callback() {
                             @Override
                             public void onSuccess(User moonFriend) {
                                 List<User> newLists = LitePal.where("phonenumber = ?", moonFriend.getPhoneNumber()).find(User.class);
@@ -47,7 +46,7 @@ public class MoonFriendBiz implements IMoonFriendBiz {
                             }
 
                             @Override
-                            public void onFail(ErrorCode errorCode) {
+                            public void onFail(ErrorCodeEnum errorCode) {
 
                             }
                         }, username);

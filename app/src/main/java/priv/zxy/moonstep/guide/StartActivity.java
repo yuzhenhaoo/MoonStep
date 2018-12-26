@@ -14,13 +14,13 @@ import com.bumptech.glide.Glide;
 
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.data.application.Application;
-import priv.zxy.moonstep.data.bean.URLBase;
+import priv.zxy.moonstep.constant.URLBase;
 import priv.zxy.moonstep.data.bean.BaseActivity;
 import priv.zxy.moonstep.service.MessageReceiverService;
 import priv.zxy.moonstep.login.view.UserLoginActivity;
 import priv.zxy.moonstep.main.view.MainActivity;
-import priv.zxy.moonstep.utils.LogUtil;
-import priv.zxy.moonstep.utils.SharedPreferencesUtil;
+import priv.zxy.moonstep.util.LogUtil;
+import priv.zxy.moonstep.util.SharedPreferencesUtil;
 
 /**
  * 这里的关键点是使用定时器Handler.postDelayed(new Runnable, int millions);

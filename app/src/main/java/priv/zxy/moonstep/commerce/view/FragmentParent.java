@@ -1,6 +1,5 @@
 package priv.zxy.moonstep.commerce.view;
 
-import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,7 +19,7 @@ import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.adapter.MainAdapter;
 import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.data.bean.BaseFragment;
-import priv.zxy.moonstep.utils.SharedPreferencesUtil;
+import priv.zxy.moonstep.util.SharedPreferencesUtil;
 
 public class FragmentParent extends BaseFragment {
 

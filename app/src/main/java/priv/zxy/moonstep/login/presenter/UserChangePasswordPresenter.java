@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Looper;
 
-import priv.zxy.moonstep.data.bean.ErrorCode;
+import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
 import priv.zxy.moonstep.login.module.biz.IUser;
 import priv.zxy.moonstep.login.module.biz.OnChangePasswordListener;
 import priv.zxy.moonstep.login.module.biz.UserBiz;
@@ -45,7 +45,7 @@ public class UserChangePasswordPresenter {
             }
 
             @Override
-            public void changePasswordFail(final ErrorCode errorCode) {
+            public void changePasswordFail(final ErrorCodeEnum errorCode) {
                 new Thread(() -> changePasswordView.showErrorTip(errorCode)).start();
             }
         });

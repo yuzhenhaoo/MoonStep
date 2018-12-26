@@ -1,4 +1,4 @@
-package priv.zxy.moonstep.utils.dbUtils;
+package priv.zxy.moonstep.DAO;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -13,9 +13,9 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import priv.zxy.moonstep.data.bean.URLBase;
+import priv.zxy.moonstep.constant.URLBase;
 import priv.zxy.moonstep.framework.good.bean.Good;
-import priv.zxy.moonstep.utils.LogUtil;
+import priv.zxy.moonstep.util.LogUtil;
 
 /**
  * 创建人: Administrator
@@ -23,16 +23,19 @@ import priv.zxy.moonstep.utils.LogUtil;
  * 描述: 获得用户物品的工具类
  **/
 
-public class UserGoodUtil {
+public class UserGoodDAO {
 
-    private static final String TAG = "UserGoodUtil";
-    private static UserGoodUtil instance;
+    private static final String TAG = "UserGoodDAO";
 
-    public static UserGoodUtil getInstance() {
+    private static final String GOOD_TAG = "good";
+
+    private static UserGoodDAO instance;
+
+    public static UserGoodDAO getInstance() {
         if (instance == null){
-            synchronized (UserGoodUtil.class){
+            synchronized (UserGoodDAO.class){
                 if (instance == null){
-                    instance = new UserGoodUtil();
+                    instance = new UserGoodDAO();
                 }
             }
         }
@@ -42,7 +45,6 @@ public class UserGoodUtil {
     public void getUserGood(CallBack callBack, String phoneNumber){
         //请求地址
         String url = URLBase.USER_GOOD_URL;
-        String tag = "good";
         OkHttpClient mOkHttpClient = new OkHttpClient();
         RequestBody formBody = new FormBody.Builder()
                 .add("phoneNumber", phoneNumber)
@@ -51,6 +53,7 @@ public class UserGoodUtil {
         Request request = new Request.Builder()
                 .url(url)
                 .post(formBody)
+                .tag(GOOD_TAG)
                 .build();
 
         Call call = mOkHttpClient.newCall(request);

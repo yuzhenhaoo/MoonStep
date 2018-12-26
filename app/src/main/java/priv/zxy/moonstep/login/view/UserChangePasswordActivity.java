@@ -21,9 +21,9 @@ import com.rengwuxian.materialedittext.MaterialEditText;
 
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.data.bean.BaseActivity;
-import priv.zxy.moonstep.utils.ShowErrorReason;
-import priv.zxy.moonstep.utils.ToastUtil;
-import priv.zxy.moonstep.data.bean.ErrorCode;
+import priv.zxy.moonstep.util.ShowErrorReasonUtil;
+import priv.zxy.moonstep.util.ToastUtil;
+import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
 import priv.zxy.moonstep.login.presenter.UserChangePasswordPresenter;
 
 /**
@@ -151,7 +151,7 @@ public class UserChangePasswordActivity extends BaseActivity implements IChangeP
     }
 
     @Override
-    public void showErrorTip(ErrorCode errorCode) {
-        ShowErrorReason.getInstance(mActivity).show(errorCode);
+    public void showErrorTip(ErrorCodeEnum errorCode) {
+        ShowErrorReasonUtil.getInstance(mActivity).show(errorCode);
     }
 }

@@ -8,7 +8,7 @@ package priv.zxy.moonstep.data.bean;
  * 一方面不能产生额外的错误码编号。
  */
 
-public enum ErrorCode {
+public enum ErrorCodeEnum {
     /**
      * 电话号码为空
      */
@@ -47,7 +47,7 @@ public enum ErrorCode {
     /**
      * 密码格式不正确，应为6-16位
      */
-    PASSWORD_FOR_MAT_IS_NOT_RIGHT,
+    PASSWORD_FORMAT_IS_NOT_RIGHT,
 
     /**
      * 密码为空
@@ -77,7 +77,7 @@ public enum ErrorCode {
     /**
      * EC注册失败
      */
-    EC_REGISTERD_FAIL,
+    EC_REGISTER_FAIL,
 
     /**
      * 连接聊天服务器失败

@@ -14,15 +14,14 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
-import priv.zxy.moonstep.data.bean.VolleyCallback;
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.customview.BubbleView;
 import priv.zxy.moonstep.commerce.view.Friend.ChattingActivity;
 import priv.zxy.moonstep.framework.user.User;
 import priv.zxy.moonstep.helper.EMHelper;
 import priv.zxy.moonstep.data.application.Application;
-import priv.zxy.moonstep.data.bean.ErrorCode;
-import priv.zxy.moonstep.utils.SharedPreferencesUtil;
+import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
+import priv.zxy.moonstep.util.SharedPreferencesUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -38,6 +37,14 @@ public class MoonFriendAdapter extends RecyclerView.Adapter<MoonFriendAdapter.My
     private final List<User> mItems = new ArrayList<>();
 
     private Context mContext;
+
+    private static final String ON_LINE = "online";
+
+    private static final String OFF_LINE = "online";
+
+    private static final String ZN_ON_Line = "在线";
+
+    private static final String ZN_OFF_LINE = "离线";
 
     private int[] bubbleColor =
             {Color.parseColor("#bce672"),
@@ -109,42 +116,27 @@ public class MoonFriendAdapter extends RecyclerView.Adapter<MoonFriendAdapter.My
             SharedPreferencesUtil.getInstance(Application.getContext()).handleMessageTip(item.getPhoneNumber());
         });
 
-        EMHelper.getInstance(Application.getContext()).getUserState(new VolleyCallback() {
+        EMHelper.getInstance(Application.getContext()).getUserState(new EMHelper.CallBack() {
             @Override
-            public String onSuccess(String result) {
-                if (result.equals("offline")) {
-                    holder.isOnline.setText("离线");
-                } else if (result.equals("online")) {
-                    holder.isOnline.setText("在线");
+            public void onSuccess(String result) {
+                if (result.equals(OFF_LINE)) {
+                    holder.isOnline.setText(ZN_OFF_LINE);
+                } else if (result.equals(ON_LINE)) {
+                    holder.isOnline.setText(ZN_ON_Line);
                 }
-                return null;
             }
 
             @Override
-            public boolean onSuccess() {
-                return false;
-            }
+            public void onSuccess() {}
 
             @Override
-            public String onFail(String error) {
-                return null;
-            }
+            public void onFail() {}
 
             @Override
-            public boolean onFail() {
-                return false;
-            }
+            public void onFail(ErrorCodeEnum errorCodeEnum) {}
 
-            @Override
-            public void getMoonFriend(User moonFriend) {
-
-            }
-
-            @Override
-            public void getErrorCode(ErrorCode errorCode) {
-
-            }
         }, "moonstep" + item.getPhoneNumber());
+
         Random rd = new Random();
         holder.bubbleView.setBubbleColor(bubbleColor[rd.nextInt(bubbleColor.length - 1)]);//通过随机数设定气泡的颜色【有bug】
         int messageNumber = SharedPreferencesUtil.getInstance(Application.getContext()).readMessageNumber(item.getPhoneNumber());

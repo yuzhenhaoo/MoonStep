@@ -1,4 +1,4 @@
-package priv.zxy.moonstep.utils.dbUtils;
+package priv.zxy.moonstep.DAO;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
@@ -7,8 +7,8 @@ import com.androidnetworking.interfaces.JSONObjectRequestListener;
 
 import org.json.JSONObject;
 
-import priv.zxy.moonstep.data.bean.URLBase;
-import priv.zxy.moonstep.utils.LogUtil;
+import priv.zxy.moonstep.constant.URLBase;
+import priv.zxy.moonstep.util.LogUtil;
 
 /**
  * 创建人: Administrator
@@ -16,16 +16,21 @@ import priv.zxy.moonstep.utils.LogUtil;
  * 描述: 设置位置
  **/
 
-public class SetLocationUtil {
+public class SetLocationDAO {
 
-    private static final String TAG = "SetLocationUtil";
-    private static SetLocationUtil instance;
+    private static final String TAG = "SetLocationDAO";
 
-    public static SetLocationUtil getInstance() {
+    private static SetLocationDAO instance;
+
+    private static final String URL = URLBase.LOCATION_SERVLET_URL;
+
+    private static final String LOCATION_TAG = "location";
+
+    public static SetLocationDAO getInstance() {
         if (instance == null){
-            synchronized (SetLocationUtil.class){
+            synchronized (SetLocationDAO.class){
                 if (instance == null){
-                    instance = new SetLocationUtil();
+                    instance = new SetLocationDAO();
                 }
             }
         }
@@ -34,14 +39,12 @@ public class SetLocationUtil {
 
     public void LocationServlet(String phoneNumber,String address,String latitude,String longitude){
         //请求地址
-        String url = URLBase.LOCATION_SERVLET_URL;
-        LogUtil.d(TAG, phoneNumber + "  " + address + "  " + latitude + "  " + longitude);
-        AndroidNetworking.post(url)
+        AndroidNetworking.post(URL)
                 .addBodyParameter("phoneNumber", phoneNumber)
                 .addBodyParameter("address", address)
                 .addBodyParameter("latitude", latitude)
                 .addBodyParameter("longtitude", longitude)
-                .setTag("location")
+                .setTag(LOCATION_TAG)
                 .setPriority(Priority.MEDIUM)
                 .build()
                 .getAsJSONObject(new JSONObjectRequestListener() {

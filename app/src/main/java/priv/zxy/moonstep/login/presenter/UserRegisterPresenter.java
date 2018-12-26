@@ -7,7 +7,7 @@ import android.util.Log;
 
 import com.hyphenate.exceptions.HyphenateException;
 
-import priv.zxy.moonstep.data.bean.ErrorCode;
+import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
 import priv.zxy.moonstep.login.module.biz.IUser;
 import priv.zxy.moonstep.login.module.biz.UserBiz;
 import priv.zxy.moonstep.login.view.IUserRegisterView;
@@ -37,7 +37,7 @@ public class UserRegisterPresenter {
             }
 
             @Override
-            public void registerFail(ErrorCode errorCode) {
+            public void registerFail(ErrorCodeEnum errorCode) {
                 new Thread(() -> {
                     Looper.prepare();
                     userRegisterView.showErrorTip(errorCode);

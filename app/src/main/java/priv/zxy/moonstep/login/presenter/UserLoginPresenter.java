@@ -3,9 +3,9 @@ package priv.zxy.moonstep.login.presenter;
 import android.os.Looper;
 
 import priv.zxy.moonstep.login.module.biz.OnLoginListener;
-import priv.zxy.moonstep.utils.LogUtil;
-import priv.zxy.moonstep.utils.SharedPreferencesUtil;
-import priv.zxy.moonstep.data.bean.ErrorCode;
+import priv.zxy.moonstep.util.LogUtil;
+import priv.zxy.moonstep.util.SharedPreferencesUtil;
+import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
 import priv.zxy.moonstep.login.module.biz.IUser;
 import priv.zxy.moonstep.login.module.biz.UserBiz;
 import priv.zxy.moonstep.login.view.IUserLoginView;
@@ -45,7 +45,7 @@ public class UserLoginPresenter {
             }
 
             @Override
-            public void LoginFail(final ErrorCode errorCode) {
+            public void LoginFail(final ErrorCodeEnum errorCode) {
                 userLoginView.handleSendMessage();
                 new Thread(() -> {
                     Looper.prepare();

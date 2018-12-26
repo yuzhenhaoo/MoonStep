@@ -17,10 +17,10 @@ import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
-import priv.zxy.moonstep.data.bean.VolleyCallback;
 import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.data.bean.EMBase;
-import priv.zxy.moonstep.utils.LogUtil;
+import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
+import priv.zxy.moonstep.util.LogUtil;
 
 public class EMHelper {
 
@@ -121,7 +121,7 @@ public class EMHelper {
      * @param passWord 用户密码
      * @param nickName 用户昵称
      */
-    public void registerUser(final Callback callback, final String userId, final String passWord, final String nickName){
+    public void registerUser(final CallBack callback, final String userId, final String passWord, final String nickName){
         //请求地址
         String url = EMBase.getInstance().getBaseRequest() + EMBase.getInstance().getOrgName() + "/" + EMBase.getInstance().getAppName() + "/" + "users";
         //取得请求队列
@@ -144,6 +144,8 @@ public class EMHelper {
                     } catch (JSONException e) {
                         e.printStackTrace();
                         LogUtil.e(TAG, "onResponse: ");
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
                 }, error -> {
                     error.printStackTrace();
@@ -178,11 +180,11 @@ public class EMHelper {
 
     /**
      * 修改密码
-     * @param volleyCallback 回调实例
+     * @param callback 回调实例
      * @param userId 用户id
      * @param password 密码
      */
-    public void changePassword(final VolleyCallback volleyCallback, String userId, final String password){
+    public void changePassword(final CallBack callback, String userId, final String password){
         //请求地址
         String url = EMBase.getInstance().getBaseRequest() + EMBase.getInstance().getOrgName() + "/" + EMBase.getInstance().getAppName() + "/" + "users" + "/" + userId + "/" + "password";
 
@@ -199,7 +201,7 @@ public class EMHelper {
                 url,
                 response -> {
                     try {
-                        volleyCallback.onSuccess();
+                        callback.onSuccess();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -231,11 +233,11 @@ public class EMHelper {
 
     /**
      * 修改昵称
-     * @param volleyCallback 回调实例
+     * @param callback 回调实例
      * @param userId 用户id
      * @param nickName 昵称
      */
-    public void changeNickName(final VolleyCallback volleyCallback, String userId, final String nickName){
+    public void changeNickName(final CallBack callback, String userId, final String nickName){
         //请求地址
         String url = EMBase.getInstance().getBaseRequest() + EMBase.getInstance().getOrgName() + "/" + EMBase.getInstance().getAppName() + "/" + "users" + "/" + userId;
 
@@ -252,7 +254,7 @@ public class EMHelper {
                 url,
                 response -> {
                     try {
-                        volleyCallback.onSuccess();
+                        callback.onSuccess();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -287,10 +289,10 @@ public class EMHelper {
      * Authorization: Bearer ${token}
      * 获得用户在线状态offline/online
      *
-     * @param volleyCallback 回调实例
+     * @param callBack 回调实例
      * @param userID "moonstep" + userPhoneNumber
      */
-    public void getUserState(final VolleyCallback volleyCallback, final String userID) {
+    public void getUserState(final CallBack callBack, final String userID) {
         //请求地址
         String url = EMBase.getInstance().getBaseRequest() + EMBase.getInstance().getOrgName() + "/" + EMBase.getInstance().getAppName() + "/" + "users" + "/" + userID + "/" + "status";
         String tag = "userState";
@@ -310,10 +312,10 @@ public class EMHelper {
                         jsonObject = (JSONObject) new JSONObject(response);
                         String user_state = jsonObject.getJSONObject("data").getString(userID);
                         LogUtil.d(TAG,user_state);
-                        if (volleyCallback != null) {
-                            volleyCallback.onSuccess(user_state);
+                        if (callBack != null) {
+                            callBack.onSuccess(user_state);
                         }
-                    } catch (JSONException | InterruptedException e) {
+                    } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 },
@@ -335,11 +337,15 @@ public class EMHelper {
         requestQueue.add(request);
     }
 
-    public interface Callback{
+    public interface CallBack{
 
-        void onSuccess();
+        void onSuccess(String obj);
+
+        void onSuccess() throws InterruptedException;
 
         void onFail();
+
+        void onFail(ErrorCodeEnum errorCodeEnum);
     }
 
     public interface GetTokenCallback{

@@ -23,9 +23,9 @@ import java.lang.ref.WeakReference;
 
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.data.bean.BaseActivity;
-import priv.zxy.moonstep.utils.ShowErrorReason;
-import priv.zxy.moonstep.utils.ToastUtil;
-import priv.zxy.moonstep.data.bean.ErrorCode;
+import priv.zxy.moonstep.util.ShowErrorReasonUtil;
+import priv.zxy.moonstep.util.ToastUtil;
+import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
 import priv.zxy.moonstep.login.presenter.UserVerifyPhoneNumberPresenter;
 
 /**
@@ -173,8 +173,8 @@ public class VerifyPhoneActivity extends BaseActivity implements IVerifyPhoneVie
     }
 
     @Override
-    public void showFailTip(ErrorCode errorCode) {
-        ShowErrorReason.getInstance(mActivity).show(errorCode);
+    public void showFailTip(ErrorCodeEnum errorCode) {
+        ShowErrorReasonUtil.getInstance(mActivity).show(errorCode);
     }
 
     @Override

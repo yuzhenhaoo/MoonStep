@@ -9,7 +9,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.ContentLoadingProgressBar;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -25,9 +24,9 @@ import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.data.bean.BaseActivity;
 import priv.zxy.moonstep.login.presenter.UserLoginPresenter;
-import priv.zxy.moonstep.utils.SharedPreferencesUtil;
-import priv.zxy.moonstep.utils.ShowErrorReason;
-import priv.zxy.moonstep.data.bean.ErrorCode;
+import priv.zxy.moonstep.util.SharedPreferencesUtil;
+import priv.zxy.moonstep.util.ShowErrorReasonUtil;
+import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
 import priv.zxy.moonstep.main.view.MainActivity;
 
 /**
@@ -227,8 +226,8 @@ public class UserLoginActivity extends BaseActivity implements IUserLoginView {
     }
 
     @Override
-    public void showErrorTip(ErrorCode errorCode) {
-        ShowErrorReason.getInstance(mActivity).show(errorCode);
+    public void showErrorTip(ErrorCodeEnum errorCode) {
+        ShowErrorReasonUtil.getInstance(mActivity).show(errorCode);
     }
 
     @Override

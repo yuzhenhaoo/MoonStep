@@ -22,14 +22,14 @@ import android.widget.Toast;
 import com.hyphenate.exceptions.HyphenateException;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
+import priv.zxy.moonstep.DAO.RegisterDataRequestDAO;
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.customview.RaceDialog;
 import priv.zxy.moonstep.data.bean.BaseActivity;
-import priv.zxy.moonstep.utils.ShowErrorReason;
-import priv.zxy.moonstep.data.bean.ErrorCode;
+import priv.zxy.moonstep.util.ShowErrorReasonUtil;
+import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
 import priv.zxy.moonstep.login.presenter.UserRegisterPresenter;
 import priv.zxy.moonstep.main.view.MainActivity;
-import priv.zxy.moonstep.utils.dbUtils.PhoneRegisterUtil;
 
 /**
  *  Created by Zxy on 2018/9/23
@@ -123,7 +123,7 @@ public class UserRegisterActivity extends BaseActivity implements IUserRegisterV
         clickRegister.setOnClickListener(view-> {
             getData();
             if (userPassword.equals(confirmPassword)){
-                PhoneRegisterUtil.getInstance().RegisterRequest(new PhoneRegisterUtil.CallBack() {
+                RegisterDataRequestDAO.getInstance().RegisterRequest(new RegisterDataRequestDAO.CallBack() {
                     @Override
                     public void onSuccess(String raceCode, String raceName, String raceDescription, String raceImage, String raceIcon) throws HyphenateException {
                         showDialog(raceName, raceDescription, raceImage, raceIcon);
@@ -132,12 +132,12 @@ public class UserRegisterActivity extends BaseActivity implements IUserRegisterV
                     }
 
                     @Override
-                    public void onFail(ErrorCode errorCode) {
-                        ShowErrorReason.getInstance(UserRegisterActivity.this).show(errorCode);
+                    public void onFail(ErrorCodeEnum errorCode) {
+                        ShowErrorReasonUtil.getInstance(UserRegisterActivity.this).show(errorCode);
                     }
-                }, "15616257889", nickName, userPassword,userGender);
+                }, phoneNumber, nickName, userPassword, userGender);
             }else{
-                ShowErrorReason.getInstance(UserRegisterActivity.this).show(ErrorCode.PasswordIsNotEqualsConfirmPassword);
+                ShowErrorReasonUtil.getInstance(UserRegisterActivity.this).show(ErrorCodeEnum.PASSWORD_IS_NOT_EQUALS_CONFIRM_PASSWORD);
             }
         });
 
@@ -236,8 +236,8 @@ public class UserRegisterActivity extends BaseActivity implements IUserRegisterV
     }
 
     @Override
-    public void showErrorTip(ErrorCode errorCode) {
-        ShowErrorReason.getInstance(this).show(errorCode);
+    public void showErrorTip(ErrorCodeEnum errorCode) {
+        ShowErrorReasonUtil.getInstance(this).show(errorCode);
     }
 
 }

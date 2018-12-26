@@ -1,7 +1,7 @@
 package priv.zxy.moonstep.login.view;
 
-import priv.zxy.moonstep.utils.SharedPreferencesUtil;
-import priv.zxy.moonstep.data.bean.ErrorCode;
+import priv.zxy.moonstep.util.SharedPreferencesUtil;
+import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
 
 /**
  *  Created by Zxy on 2018/9/21
@@ -27,7 +27,7 @@ public interface IUserLoginView {
 
     void initPassword(SharedPreferencesUtil preference);
 
-    void showErrorTip(ErrorCode errorCode);
+    void showErrorTip(ErrorCodeEnum errorCode);
 
     void handleSendMessage();
 

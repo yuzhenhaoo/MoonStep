@@ -1,6 +1,6 @@
 package priv.zxy.moonstep.login.module.biz;
 
-import priv.zxy.moonstep.data.bean.ErrorCode;
+import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
 
 /**
  * Created by Zxy on 2018/9/20
@@ -13,5 +13,5 @@ public interface OnLoginListener {
      */
     void LoginSuccess();
 
-    void LoginFail(ErrorCode errorCode);
+    void LoginFail(ErrorCodeEnum errorCode);
 }

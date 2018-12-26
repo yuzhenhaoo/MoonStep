@@ -24,15 +24,15 @@ import org.litepal.LitePalApplication;
 import java.util.Iterator;
 import java.util.List;
 
+import priv.zxy.moonstep.DAO.PullUserInfoDAO;
 import priv.zxy.moonstep.framework.message.MessageOnline;
 import priv.zxy.moonstep.framework.user.User;
 import priv.zxy.moonstep.guide.StartActivity;
 import priv.zxy.moonstep.helper.EMHelper;
 import priv.zxy.moonstep.data.bean.EMBase;
-import priv.zxy.moonstep.data.bean.ErrorCode;
-import priv.zxy.moonstep.utils.LogUtil;
-import priv.zxy.moonstep.utils.SharedPreferencesUtil;
-import priv.zxy.moonstep.utils.dbUtils.GetUserInformationUtil;
+import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
+import priv.zxy.moonstep.util.LogUtil;
+import priv.zxy.moonstep.util.SharedPreferencesUtil;
 import priv.zxy.moonstep.helper.MoonStepHelper;
 import priv.zxy.moonstep.main.view.MainActivity;
 import priv.zxy.moonstep.commerce.view.Friend.ChattingActivity;
@@ -58,6 +58,8 @@ public class Application extends LitePalApplication {
 
     private static String token = null;//获取token值
 
+    private static final String MOONSTEP = "moonstep";
+
     public static Context getContext(){
         return mContext;
     }
@@ -77,17 +79,19 @@ public class Application extends LitePalApplication {
                 new Thread(() -> {
                     if (SharedPreferencesUtil.getInstance(Application.getContext()).isSuccessLogin()){
                         String phoneNumber = SharedPreferencesUtil.getInstance(Application.getContext()).readLoginInfo().get("PhoneNumber");
-                        GetUserInformationUtil.getInstance().getUserInfo(new GetUserInformationUtil.Callback() {
+                        PullUserInfoDAO.getInstance().getUserInfo(new PullUserInfoDAO.Callback() {
                             @Override
                             public void onSuccess(User moonFriend) {
-                                SharedPreferencesUtil.getInstance(Application.getContext()).saveMySelfInformation(moonFriend.getNickName(), moonFriend.getPhoneNumber(), moonFriend.getGender(), moonFriend.getRaceCode(), moonFriend.getHeadPath(), moonFriend.getSignature(), moonFriend.getLocation(), moonFriend.getCurrentTitle(), moonFriend.getLuckyValue());
+                                SharedPreferencesUtil.getInstance(Application.getContext()).saveMySelfInformation(moonFriend.getNickName(),
+                                        moonFriend.getPhoneNumber(), moonFriend.getGender(), moonFriend.getRaceCode(), moonFriend.getHeadPath(),
+                                        moonFriend.getSignature(), moonFriend.getLocation(), moonFriend.getCurrentTitle(), moonFriend.getLuckyValue());
                             }
 
                             @Override
-                            public void onFail(ErrorCode errorCode) {
+                            public void onFail(ErrorCodeEnum errorCode) {
                                 LogUtil.d(TAG, "获取个人信息失败");
                             }
-                        }, "moonstep" + phoneNumber);
+                        }, MOONSTEP + phoneNumber);
                     }
                 }).start();
             }else if (activity.getClass() == ChattingActivity.class){

@@ -35,7 +35,7 @@ import priv.zxy.moonstep.commerce.presenter.MoonFriendPresenter;
 import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.data.bean.BaseFragment;
 import priv.zxy.moonstep.framework.user.User;
-import priv.zxy.moonstep.utils.LogUtil;
+import priv.zxy.moonstep.util.LogUtil;
 
 public class MoonFriendFragment extends BaseFragment implements IMoonFriendView {
 

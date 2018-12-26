@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.widget.Toast;
 
-import priv.zxy.moonstep.data.bean.ErrorCode;
+import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
 import priv.zxy.moonstep.login.module.biz.IUser;
 import priv.zxy.moonstep.login.module.biz.OnVerifyPhoneNumber;
 import priv.zxy.moonstep.login.module.biz.UserBiz;
@@ -56,7 +56,7 @@ public class UserVerifyPhoneNumberPresenter {
             }
 
             @Override
-            public void verifyFail(final ErrorCode errorCode) {
+            public void verifyFail(final ErrorCodeEnum errorCode) {
                 new Thread(() -> verifyPhoneView.showFailTip(errorCode)).start();
             }
         });

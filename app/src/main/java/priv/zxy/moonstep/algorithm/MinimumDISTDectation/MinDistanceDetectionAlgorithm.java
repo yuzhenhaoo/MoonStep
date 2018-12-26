@@ -11,7 +11,7 @@ import priv.zxy.moonstep.algorithm.ChooseMapDots.MapDotHelper;
  * 描述:地图上两点最小距离检测算法
  **/
 
-public class MinDISTDetectionAlgorithm extends AbstractMinDISTDetection<MapDot> {
+public class MinDistanceDetectionAlgorithm extends AbstractMinDistanceDetection {
 
     /**
      * 用户当前所在的位置坐标
@@ -38,7 +38,7 @@ public class MinDISTDetectionAlgorithm extends AbstractMinDISTDetection<MapDot> 
      */
     private static boolean isGetResult = false;
 
-    MinDISTDetectionAlgorithm(List<MapDot> srcLocations, MapDot currentLocation, int radius) {
+    MinDistanceDetectionAlgorithm(List<MapDot> srcLocations, MapDot currentLocation, int radius) {
         this.currentLocation = currentLocation;
         this.srcLocations = srcLocations;
         this.radius = radius;

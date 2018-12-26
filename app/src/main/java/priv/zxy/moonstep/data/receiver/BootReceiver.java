@@ -6,14 +6,14 @@ import android.content.Intent;
 
 import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.service.MessageReceiverService;
-import priv.zxy.moonstep.utils.LogUtil;
+import priv.zxy.moonstep.util.LogUtil;
 
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 
 import java.util.Map;
 
-import priv.zxy.moonstep.utils.SharedPreferencesUtil;
+import priv.zxy.moonstep.util.SharedPreferencesUtil;
 
 /**
  * 用来接收开机广播

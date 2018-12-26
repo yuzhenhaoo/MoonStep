@@ -1,4 +1,4 @@
-package priv.zxy.moonstep.utils;
+package priv.zxy.moonstep.util;
 
 /**
  * 创建人: Administrator
