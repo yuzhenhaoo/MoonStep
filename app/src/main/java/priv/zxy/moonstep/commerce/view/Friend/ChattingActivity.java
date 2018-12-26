@@ -264,7 +264,7 @@ public class ChattingActivity extends AppCompatActivity implements IChattingView
      *       并将取出的列表初始化到页面当中，默认初始化30条，更早的需要通过recyclerView的刷新来控制
      */
     public void initList(){
-        messagesQueues = MessageOnline.getInstance().getMessageFromDatabase(moonFriend.getPhoneNumber());
+        messagesQueues = MessageOnline.getInstance().listMessageFromDatabase(moonFriend.getPhoneNumber());
         //显示的想法：每个用户的历史聊天记录存储上限为1000条，如果上限超过1000，就把最早的一部分进行清除，保留最近的1000条消息记录
         //一开始最多只显示30条消息记录，如果要显示更多，则需要下拉刷新来控制，需要设置监听器。
         mAdapter.addAll(messagesQueues);

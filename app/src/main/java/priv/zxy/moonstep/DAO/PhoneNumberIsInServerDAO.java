@@ -9,7 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
-import priv.zxy.moonstep.constant.URLBase;
+import priv.zxy.moonstep.DAO.constant.URLBase;
 import priv.zxy.moonstep.util.LogUtil;
 
 /**

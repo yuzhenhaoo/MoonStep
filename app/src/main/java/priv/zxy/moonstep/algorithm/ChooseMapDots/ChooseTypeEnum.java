@@ -5,7 +5,7 @@ package priv.zxy.moonstep.algorithm.ChooseMapDots;
  * 创建时间: 2018/11/24
  * 描述:
  **/
-public enum ChooseType {
+public enum ChooseTypeEnum {
 
     SQUARE_CHOOSE,
 

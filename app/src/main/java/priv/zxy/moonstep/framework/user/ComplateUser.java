@@ -8,7 +8,7 @@ import priv.zxy.moonstep.framework.location.AbstractLocation;
 import priv.zxy.moonstep.framework.message.Message;
 import priv.zxy.moonstep.framework.pet.AbstractPet;
 import priv.zxy.moonstep.framework.race.AbstractRace;
-import priv.zxy.moonstep.framework.state.UserState;
+import priv.zxy.moonstep.framework.state.UserStateEnum;
 import priv.zxy.moonstep.framework.title.AbstractTitle;
 
 /**
@@ -47,7 +47,7 @@ public class ComplateUser extends User {
     /**
      * 抽象状态类
      */
-    private UserState state;
+    private UserStateEnum state;
 
     /**
      * 抽象种族类

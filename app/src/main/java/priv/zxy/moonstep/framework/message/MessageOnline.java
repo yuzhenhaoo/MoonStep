@@ -25,7 +25,7 @@ public class MessageOnline extends Message {
         return instance;
     }
 
-    public List<Message> getMessageFromDatabase(String phoneNumber){
+    public List<Message> listMessageFromDatabase(String phoneNumber){
         return LitePal.where("object = ?", phoneNumber).find(Message.class);
     }
 

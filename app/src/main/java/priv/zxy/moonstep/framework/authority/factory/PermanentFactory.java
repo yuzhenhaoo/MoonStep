@@ -1,7 +1,7 @@
 package priv.zxy.moonstep.framework.authority.factory;
 
 import priv.zxy.moonstep.framework.authority.base.AbstractAuthority;
-import priv.zxy.moonstep.framework.authority.base.PermanentAuthority;
+import priv.zxy.moonstep.framework.authority.base.AbstractPermanentAuthority;
 
 /**
  * 创建人: Administrator
@@ -31,11 +31,11 @@ public class PermanentFactory extends AbstractFactory {
      */
     @Override
     public AbstractAuthority createAuthority(String code) {
-        PermanentAuthority permanentAuthority;
+        AbstractPermanentAuthority permanentAuthority;
         try {
             Class<?> authorityClass = Class.forName(maps.get(code));
             Object object = authorityClass.newInstance();
-            permanentAuthority = (PermanentAuthority) object;
+            permanentAuthority = (AbstractPermanentAuthority) object;
             return permanentAuthority;
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
             e.printStackTrace();

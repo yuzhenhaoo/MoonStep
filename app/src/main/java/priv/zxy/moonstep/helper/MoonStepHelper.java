@@ -5,7 +5,7 @@ import com.hyphenate.chat.EMMessage;
 
 import java.io.File;
 
-import priv.zxy.moonstep.commerce.view.Friend.MessageType;
+import priv.zxy.moonstep.commerce.view.Friend.MessageTypeEnum;
 import priv.zxy.moonstep.util.LogUtil;
 
 public class MoonStepHelper {
@@ -168,20 +168,20 @@ public class MoonStepHelper {
      * @param type 消息类型
      * @return 相应的枚举类型
      */
-    public MessageType transformMessageType(String type){
+    public MessageTypeEnum transformMessageType(String type){
         switch (type) {
             case "txt":
-                return MessageType.TEXT;
+                return MessageTypeEnum.TEXT;
             case "image":
-                return MessageType.IMAGE;
+                return MessageTypeEnum.IMAGE;
             case "location":
-                return MessageType.LOCATION;
+                return MessageTypeEnum.LOCATION;
             case "video":
-                return MessageType.VIDEO;
+                return MessageTypeEnum.VIDEO;
             case "voice":
-                return MessageType.VOICE;
+                return MessageTypeEnum.VOICE;
         }
-        return MessageType.UNKNOWN_TYPE;
+        return MessageTypeEnum.UNKNOWN_TYPE;
     }
 
     /**

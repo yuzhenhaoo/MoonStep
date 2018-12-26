@@ -14,7 +14,7 @@ import com.bumptech.glide.Glide;
 
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.data.application.Application;
-import priv.zxy.moonstep.constant.URLBase;
+import priv.zxy.moonstep.DAO.constant.URLBase;
 import priv.zxy.moonstep.data.bean.BaseActivity;
 import priv.zxy.moonstep.service.MessageReceiverService;
 import priv.zxy.moonstep.login.view.UserLoginActivity;

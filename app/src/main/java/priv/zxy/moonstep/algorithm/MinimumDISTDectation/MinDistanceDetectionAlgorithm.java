@@ -1,5 +1,6 @@
 package priv.zxy.moonstep.algorithm.MinimumDISTDectation;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import priv.zxy.moonstep.algorithm.ChooseMapDots.MapDot;
@@ -31,7 +32,7 @@ public class MinDistanceDetectionAlgorithm extends AbstractMinDistanceDetection 
     /**
      * 在精度半径内的结果集
      */
-    private List<MapDot> results = null;
+    private List<MapDot> results = new ArrayList<>();
 
     /**
      * 是否已经经过了计算得到了结果，如果没有得到结果，需要重新进行一次计算。
@@ -45,10 +46,9 @@ public class MinDistanceDetectionAlgorithm extends AbstractMinDistanceDetection 
     }
 
     @Override
-    public List<MapDot> getResult() {
+    public List<MapDot> listResult() {
         isGetResult = true;
-        for (MapDot dot:
-             srcLocations) {
+        for (MapDot dot: srcLocations) {
             if (MapDotHelper.getInstance().getTwoDotsDistanceMetar(dot, currentLocation) <= radius){
                 results.add(dot);
             }
@@ -61,7 +61,7 @@ public class MinDistanceDetectionAlgorithm extends AbstractMinDistanceDetection 
         if (isGetResult){
             return results.size();
         }else{
-            return getResult().size();
+            return listResult().size();
         }
     }
 }

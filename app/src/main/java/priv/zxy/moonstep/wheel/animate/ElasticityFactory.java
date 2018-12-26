@@ -6,10 +6,10 @@ package priv.zxy.moonstep.wheel.animate;
  * 描述:波动效果工厂，用来产生波动动画的对象
  **/
 
-public class ElasticityFactory extends AnimateFactory {
+public class ElasticityFactory extends AbstractAnimateFactory {
 
     @Override
-    public AnimateEffect createEffectObject() {
+    public AbstractAnimateEffect createEffectObject() {
         return new ElasticityAnimation();
     }
 }

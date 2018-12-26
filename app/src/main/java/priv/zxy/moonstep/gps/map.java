@@ -32,17 +32,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import priv.zxy.moonstep.R;
-import priv.zxy.moonstep.algorithm.ChooseMapDots.ChooseType;
+import priv.zxy.moonstep.algorithm.ChooseMapDots.ChooseTypeEnum;
 import priv.zxy.moonstep.algorithm.ChooseMapDots.DotChooseContext;
 import priv.zxy.moonstep.algorithm.ChooseMapDots.MapDot;
 import priv.zxy.moonstep.algorithm.MinimumDISTDectation.MinDistanceDetectionContext;
-import priv.zxy.moonstep.algorithm.MinimumDISTDectation.MinDistanceType;
+import priv.zxy.moonstep.algorithm.MinimumDISTDectation.MinDistanceTypeEnum;
 import priv.zxy.moonstep.helper.FileHelper;
 import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.util.LogUtil;
 import priv.zxy.moonstep.util.SharedPreferencesUtil;
 import priv.zxy.moonstep.DAO.SetLocationDAO;
-import priv.zxy.moonstep.wheel.animate.AnimateEffect;
+import priv.zxy.moonstep.wheel.animate.AbstractAnimateEffect;
 import priv.zxy.moonstep.wheel.animate.ElasticityFactory;
 
 /**
@@ -54,24 +54,28 @@ import priv.zxy.moonstep.wheel.animate.ElasticityFactory;
 public class map extends Fragment{
 
     private static final String TAG = "map";
-    private AnimateEffect effect;
-    private Button pack;
-    private Button radar;
+
     private final String tuya = "tuya.data";
     private final String night = "night.data";
 
     private View view;
     private MapView map = null;
     private AMap aMap = null;//AMap 类是地图的控制器类，用来操作地图。它所承载的工作包括：地图图层切换（如卫星图、黑夜地图）、改变地图状态（地图旋转角度、俯仰角、中心点坐标和缩放级别）、添加点标记（Marker）、绘制几何图形(Polyline、Polygon、Circle)、各类事件监听(点击、手势等)等，AMap 是地图 SDK 最重要的核心类，诸多操作都依赖它完成。
+    private Button pack;
+    private Button radar;
+
+    private MapDot myDot = new MapDot();//我的位置
+    private List<MapDot> allMapDots = null;//记得关闭的时候要释放掉
+
     private MyLocationStyle myLocationStyle;//设置定位属性
     private AMapLocationClient mLocationClient = null;//声明AMapLocationClient类对象
 
     public AMapLocationClientOption mLocationOption = null;//声明AMapLocationClientOption对象
 
-    private List<MapDot> allMapDots = null;//记得关闭的时候要释放掉
-    private MapDot myDot = new MapDot();//我的位置
+    private static final int RADIUS = 5000;//设置探索的精度半径为50m
 
-    private int radius = 50;//设置探索的精度半径为50m
+    private AbstractAnimateEffect effect;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -134,16 +138,17 @@ public class map extends Fragment{
              * 第二件事就是把探索过的地点去除。
              */
             new Thread(() -> {
-                List<MapDot> results = new MinDistanceDetectionContext(myDot, allMapDots, radius, MinDistanceType.MIN_DIST_TYPE).getResult();
+                List<MapDot> results = new MinDistanceDetectionContext(myDot, allMapDots, RADIUS, MinDistanceTypeEnum.MIN_DIST_TYPE).listResult();
                 for (MapDot result : results) {
                     //这里针对每个result开始发放奖励，奖励从服务器获取，做一个耗时操作
 
                 }
-                //这里从地图中将探索过的地点去除（）
+                //这里从地图中将探索过的地点去除
                 allMapDots.removeAll(results);
                 LitePal.deleteDatabase("MapDot.class");
                 showDotsInMap();
                 for (MapDot dot : allMapDots){
+                    LogUtil.d(TAG, "-->" + dot.getLatitude() + ", " + dot.getLongitude());
                     dot.save();
                 }
             }).start();
@@ -329,8 +334,8 @@ public class map extends Fragment{
 
             if (SharedPreferencesUtil.getInstance(Application.getContext()).checkMapTime(days)){
                 //这里对32个宝藏位置坐标进行刷新，如果成功的话，就存入sqlite数据库中，并在地图上显示
-                DotChooseContext context = new DotChooseContext(ChooseType.SQUARE_CHOOSE);
-                List<MapDot> dots = context.getMapDots(latitude, longitude, 32);
+                DotChooseContext context = new DotChooseContext(ChooseTypeEnum.SQUARE_CHOOSE);
+                List<MapDot> dots = context.listMapDots(latitude, longitude, 32);
                 LogUtil.d(TAG, dots.toString());
                 saveMapDots(dots);
             }

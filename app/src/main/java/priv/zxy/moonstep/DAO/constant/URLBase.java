@@ -1,4 +1,4 @@
-package priv.zxy.moonstep.constant;
+package priv.zxy.moonstep.DAO.constant;
 
 /**
  * 创建人: Administrator

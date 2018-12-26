@@ -14,8 +14,7 @@ import org.json.JSONObject;
 
 import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
-import priv.zxy.moonstep.constant.URLBase;
-import priv.zxy.moonstep.framework.user.User;
+import priv.zxy.moonstep.DAO.constant.URLBase;
 import priv.zxy.moonstep.helper.EMHelper;
 import priv.zxy.moonstep.login.module.biz.OnLoginListener;
 import priv.zxy.moonstep.service.MessageReceiverService;

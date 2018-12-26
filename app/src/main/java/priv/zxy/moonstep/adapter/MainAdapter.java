@@ -1,5 +1,6 @@
 package priv.zxy.moonstep.adapter;
 
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -12,15 +13,15 @@ import priv.zxy.moonstep.commerce.view.Me.PersonalSurfaceFragment;
 
 public class MainAdapter extends FragmentPagerAdapter {
 
-    private final int PAGER_COUNT = 4;
+    private static final int PAGER_COUNT = 4;
 
-    private TreeActivity myFragment1 = null;
+    private TreeActivity myFragment1;
 
-    private MoonCommunity myFragment2 = null;
+    private MoonCommunity myFragment2;
 
-    private MoonFriendFragment myFragment3 = null;
+    private MoonFriendFragment myFragment3;
 
-    private PersonalSurfaceFragment myFragment4 = null;
+    private PersonalSurfaceFragment myFragment4;
 
     public MainAdapter(FragmentManager fm){
         super(fm);
@@ -36,12 +37,12 @@ public class MainAdapter extends FragmentPagerAdapter {
     }
 
     @Override
-    public Object instantiateItem(ViewGroup container, int position) {
+    public Object instantiateItem(@NonNull ViewGroup container, int position) {
         return super.instantiateItem(container, position);
     }
 
     @Override
-    public void destroyItem(ViewGroup container, int position, Object object) {
+    public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
         System.out.println("position Destroy" + position);
         super.destroyItem(container, position, object);
     }

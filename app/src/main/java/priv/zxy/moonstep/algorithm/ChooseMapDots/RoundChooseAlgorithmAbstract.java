@@ -8,10 +8,10 @@ import java.util.List;
  * 描述: 圆范围的选择算法
  **/
 
-public class RoundChooseAlgorithm extends DotChooseAlgorithm {
+public class RoundChooseAlgorithmAbstract extends AbstractDotChooseAlgorithm {
 
     @Override
-    public List<MapDot> createDot(double latitude, double longtutide, int number) {
+    public List<MapDot> listDots(double latitude, double longtutide, int number) {
         return null;
     }
 }

@@ -49,7 +49,7 @@ import priv.zxy.moonstep.commerce.view.FragmentParent;
 import priv.zxy.moonstep.task.FourthMainPageFragment;
 import priv.zxy.moonstep.title.ThirdMainPageFragment;
 import priv.zxy.moonstep.util.ToastUtil;
-import priv.zxy.moonstep.wheel.animate.AnimateEffect;
+import priv.zxy.moonstep.wheel.animate.AbstractAnimateEffect;
 import priv.zxy.moonstep.wheel.animate.ElasticityFactory;
 
 /**
@@ -78,7 +78,7 @@ public class MainActivity extends BaseActivity
 
     private Intent service;
 
-    private AnimateEffect effect;
+    private AbstractAnimateEffect effect;
 
     private static boolean isNight = true;
 

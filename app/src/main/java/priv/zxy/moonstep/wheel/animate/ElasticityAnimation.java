@@ -3,7 +3,6 @@ package priv.zxy.moonstep.wheel.animate;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.os.Build;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 
@@ -12,7 +11,7 @@ import android.view.animation.DecelerateInterpolator;
  * 创建时间: 2018/11/24
  * 描述: 弹性动画，主要表现为先扩大，后缩小，就像弹簧一样
  **/
-public class ElasticityAnimation extends AnimateEffect {
+public class ElasticityAnimation extends AbstractAnimateEffect {
 
     private AnimatorSet animatorSet = new AnimatorSet();
 

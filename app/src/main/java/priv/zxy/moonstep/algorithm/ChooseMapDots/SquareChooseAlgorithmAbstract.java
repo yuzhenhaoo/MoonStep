@@ -13,12 +13,12 @@ import priv.zxy.moonstep.util.LogUtil;
  * 描述: 封装了正方形范围的选择算法
  **/
 
-public class SquareChooseAlgorithm extends DotChooseAlgorithm {
+public class SquareChooseAlgorithmAbstract extends AbstractDotChooseAlgorithm {
 
-    private static final String TAG = "SquareChooseAlgorithm";
+    private static final String TAG = "SquareChooseAlgorithmAbstract";
 
     @Override
-    public List<MapDot> createDot(double latitude, double longtutide, int number) {
+    public List<MapDot> listDots(double latitude, double longtutide, int number) {
         DecimalFormat df = new DecimalFormat( "0.000000");//保留6位小数
         List<MapDot> result = new ArrayList<>();
         int i;

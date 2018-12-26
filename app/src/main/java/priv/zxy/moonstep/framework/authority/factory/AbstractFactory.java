@@ -19,7 +19,7 @@ abstract class AbstractFactory {
      */
     AbstractFactory(){
         maps = new HashMap<>();
-        maps.put("600001", "ForceAddingFriend");
+        maps.put("600001", "ForceAddingFriendFunction");
         maps.put("600002", "SendFriendRequestFunction");
     }
 

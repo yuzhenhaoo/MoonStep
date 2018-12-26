@@ -34,7 +34,7 @@ public class CurrentMapLocation extends AbstractLocation{
         }
     }
 
-    public List<MapDot> getAllMapDots(){
+    public List<MapDot> listMapDots(){
         if (mapDots != null){
             return mapDots;
         }

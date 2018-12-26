@@ -1,6 +1,6 @@
 package priv.zxy.moonstep.framework.state;
 
-public enum UserState {
+public enum UserStateEnum {
 
     //用户在线
     ON_LINE,

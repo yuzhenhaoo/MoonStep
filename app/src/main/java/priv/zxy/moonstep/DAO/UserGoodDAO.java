@@ -13,7 +13,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import priv.zxy.moonstep.constant.URLBase;
+import priv.zxy.moonstep.DAO.constant.URLBase;
 import priv.zxy.moonstep.framework.good.bean.Good;
 import priv.zxy.moonstep.util.LogUtil;
 

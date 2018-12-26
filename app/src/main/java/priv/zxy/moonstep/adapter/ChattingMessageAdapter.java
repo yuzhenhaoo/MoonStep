@@ -16,6 +16,9 @@ import priv.zxy.moonstep.framework.message.Message;
 import priv.zxy.moonstep.util.LogUtil;
 
 public class ChattingMessageAdapter extends RecyclerView.Adapter<ChattingMessageAdapter.MyHolder> {
+
+    private static final String TAG = "ChattingMessageAdapter";
+
     private Context context;
     private List<Message> lists = new ArrayList<>();
 
@@ -68,10 +71,10 @@ public class ChattingMessageAdapter extends RecyclerView.Adapter<ChattingMessage
     public ChattingMessageAdapter.MyHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         View view = null;
         if(viewType == IMsgViewType.IMVT_TO_MSG){
-            LogUtil.d("TAG","发送消息");
+            LogUtil.d(TAG,"发送消息");
             view = LayoutInflater.from(context).inflate(R.layout.fg_main_fifth_item_right, viewGroup, false);
         }else if(viewType == IMsgViewType.IMVT_COM_MSG){
-            LogUtil.d("TAG","接收消息");
+            LogUtil.d(TAG,"接收消息");
             view = LayoutInflater.from(context).inflate(R.layout.fg_main_fifth_item_left, viewGroup, false);
         }
         return new ChattingMessageAdapter.MyHolder(view);

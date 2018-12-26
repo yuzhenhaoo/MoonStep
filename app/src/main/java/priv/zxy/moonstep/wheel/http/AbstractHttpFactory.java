@@ -6,7 +6,7 @@ package priv.zxy.moonstep.wheel.http;
  * 描述: Factory的抽象接口
  *       工厂模式
  **/
-abstract class HttpFactory {
+abstract class AbstractHttpFactory {
 
     abstract HttpBase createHttpObject();
 }

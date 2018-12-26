@@ -32,20 +32,19 @@ import java.util.Random;
  * 我需要在该adapter中判断用户是否在线，方法就是利用环信的Rest进行网络数据的请求
  */
 public class MoonFriendAdapter extends RecyclerView.Adapter<MoonFriendAdapter.MyHolder> {
-    private static final String TAG = "MoonFriendAdapter";
 
-    private final List<User> mItems = new ArrayList<>();
+    private static final String TAG = "MoonFriendAdapter";
 
     private Context mContext;
 
+    private final List<User> mItems = new ArrayList<>();
+
+    private static final String MOONSTEP = "moonstep";
+    private static final String MOONSTEP_FRIEND = "moonfriend";
     private static final String ON_LINE = "online";
-
-    private static final String OFF_LINE = "online";
-
+    private static final String OFF_LINE = "offline";
     private static final String ZN_ON_Line = "在线";
-
     private static final String ZN_OFF_LINE = "离线";
-
     private int[] bubbleColor =
             {Color.parseColor("#bce672"),
                     Color.parseColor("#ff7500"),
@@ -85,12 +84,11 @@ public class MoonFriendAdapter extends RecyclerView.Adapter<MoonFriendAdapter.My
     @Override
     public MoonFriendAdapter.MyHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.moon_friend_item, viewGroup, false);
-        //是自定义ViewHolder持有我们的item
         return new MoonFriendAdapter.MyHolder(view);
     }
 
     /**
-     * onbindViewHolder负责将每个子项绑定数据
+     * onBindViewHolder负责将每个子项绑定数据
      * 我们操作item
      * itemView是底层的属性，表示当前ViewHolder持有的这个view本身
      *
@@ -135,7 +133,7 @@ public class MoonFriendAdapter extends RecyclerView.Adapter<MoonFriendAdapter.My
             @Override
             public void onFail(ErrorCodeEnum errorCodeEnum) {}
 
-        }, "moonstep" + item.getPhoneNumber());
+        }, MOONSTEP + item.getPhoneNumber());
 
         Random rd = new Random();
         holder.bubbleView.setBubbleColor(bubbleColor[rd.nextInt(bubbleColor.length - 1)]);//通过随机数设定气泡的颜色【有bug】
@@ -151,8 +149,8 @@ public class MoonFriendAdapter extends RecyclerView.Adapter<MoonFriendAdapter.My
 
     private void JumpToChattingActivity(View view, User item) {
         Intent intent = new Intent(view.getContext(), ChattingActivity.class);
-//        intent.putExtra("headPortrait", item.getHeadPortrait());//暂时还不知道Bitmap怎么通过Activity进行传输
-        intent.putExtra("moonfriend", item);
+//        intent.putExtra("headPortrait", item.getHeadPortrait());// 暂时还不知道Bitmap怎么通过Activity进行传输
+        intent.putExtra(MOONSTEP_FRIEND, item);
         view.getContext().startActivity(intent);
     }
 

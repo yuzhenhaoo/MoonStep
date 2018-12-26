@@ -1,6 +1,6 @@
 package priv.zxy.moonstep.commerce.view.Friend;
 
-public enum MessageType {
+public enum MessageTypeEnum {
     /**
      * 文本消息
      */

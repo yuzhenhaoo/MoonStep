@@ -87,7 +87,6 @@ public class ForgetPasswordSendMessageActivity extends BaseActivity implements I
 //    @SuppressLint("HandlerLeak")
 //    Handler mHandler = new Handler() {
 //        public void handleMessage(MessageOnline msg) {
-//            // TODO Auto-generated method stub
 //            super.handleMessage(msg);
 //            int event = msg.arg1;
 //            int result = msg.arg2;

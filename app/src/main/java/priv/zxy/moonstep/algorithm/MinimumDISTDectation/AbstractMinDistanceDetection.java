@@ -14,7 +14,7 @@ public abstract class AbstractMinDistanceDetection {
 
     private static final String TAG = "AbstractMinDistanceDetection";
 
-    public abstract List<MapDot> getResult();
+    public abstract List<MapDot> listResult();
 
     public abstract int getResultLength();
 }

@@ -18,7 +18,7 @@ public class MinDistanceDetectionContext {
     private int radius;
     private AbstractMinDistanceDetection obj = null;
 
-    public MinDistanceDetectionContext(MapDot currentLocation, List<MapDot> srcLocations, int radius, MinDistanceType minDISTType){
+    public MinDistanceDetectionContext(MapDot currentLocation, List<MapDot> srcLocations, int radius, MinDistanceTypeEnum minDISTType){
         this.currentLocation = currentLocation;
         this.srcLocations = srcLocations;
         this.radius = radius;
@@ -30,11 +30,11 @@ public class MinDistanceDetectionContext {
     }
 
     /**
-     * 获得精度半径范围内的半藏列表
+     * 获得精度半径范围内的宝藏列表
      * @return
      */
-    public List<MapDot> getResult(){
-        return obj.getResult();
+    public List<MapDot> listResult(){
+        return obj.listResult();
     }
 
     /**

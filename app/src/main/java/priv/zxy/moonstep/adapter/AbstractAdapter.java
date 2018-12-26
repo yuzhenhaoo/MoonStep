@@ -22,16 +22,16 @@ import priv.zxy.moonstep.data.application.Application;
  * 描述:
  **/
 
-public abstract class Adapter<T> extends BaseAdapter {
+public abstract class AbstractAdapter<T> extends BaseAdapter {
 
     private List<T> mData;
     private int mLayoutRes;           //布局id
 
 
-    public Adapter() {
+    public AbstractAdapter() {
     }
 
-    public Adapter(List<T> mData, int mLayoutRes) {
+    public AbstractAdapter(List<T> mData, int mLayoutRes) {
         this.mData = mData;
         this.mLayoutRes = mLayoutRes;
     }

@@ -7,7 +7,7 @@ import com.androidnetworking.interfaces.JSONObjectRequestListener;
 
 import org.json.JSONObject;
 
-import priv.zxy.moonstep.constant.URLBase;
+import priv.zxy.moonstep.DAO.constant.URLBase;
 import priv.zxy.moonstep.util.LogUtil;
 
 /**

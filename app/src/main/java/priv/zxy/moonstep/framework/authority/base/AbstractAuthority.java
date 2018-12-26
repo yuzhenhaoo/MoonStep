@@ -12,9 +12,9 @@ package priv.zxy.moonstep.framework.authority.base;
 
 public abstract class AbstractAuthority {
 
-    public String authorityCode = null;
+    private String authorityCode = null;
 
-    public String authorityDescription = null;
+    private String authorityDescription = null;
 
     public void setAuthorityCode(String authorityCode) {
         this.authorityCode = authorityCode;

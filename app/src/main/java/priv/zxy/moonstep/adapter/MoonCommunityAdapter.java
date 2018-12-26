@@ -39,9 +39,6 @@ public class MoonCommunityAdapter extends RecyclerView.Adapter<MoonCommunityAdap
 
     /**
      * 给每个item绑定数据
-     *
-     * @param myHolder
-     * @param position
      */
     @Override
     public void onBindViewHolder(@NonNull MyHolder myHolder, int position) {

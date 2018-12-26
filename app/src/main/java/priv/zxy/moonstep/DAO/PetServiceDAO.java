@@ -14,7 +14,7 @@ import java.util.Map;
 
 import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
-import priv.zxy.moonstep.constant.URLBase;
+import priv.zxy.moonstep.DAO.constant.URLBase;
 
 /**
  * 创建人: Administrator

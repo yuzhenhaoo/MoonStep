@@ -7,8 +7,7 @@ package priv.zxy.moonstep.wheel.animate;
  *      不用简单工厂模式的原因是因为会破坏OCP原则，不用其他设计模式的原因是，情景不符合
  **/
 
-public abstract class AnimateFactory {
+public abstract class AbstractAnimateFactory {
 
-    public abstract AnimateEffect createEffectObject();
-
+    public abstract AbstractAnimateEffect createEffectObject();
 }
