@@ -23,12 +23,14 @@ import com.amap.api.maps.AMap;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
+import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
 
 import org.litepal.LitePal;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import priv.zxy.moonstep.R;
@@ -55,24 +57,27 @@ public class map extends Fragment{
 
     private static final String TAG = "map";
 
-    private final String tuya = "tuya.data";
-    private final String night = "night.data";
+    private static final String TUYA = "tuya.data";
+    private static final String NIGHT = "night.data";
+    private static final String CUSTOM_MAP_DIR = "customConfigFile";
 
     private View view;
-    private MapView map = null;
-    private AMap aMap = null;//AMap 类是地图的控制器类，用来操作地图。它所承载的工作包括：地图图层切换（如卫星图、黑夜地图）、改变地图状态（地图旋转角度、俯仰角、中心点坐标和缩放级别）、添加点标记（Marker）、绘制几何图形(Polyline、Polygon、Circle)、各类事件监听(点击、手势等)等，AMap 是地图 SDK 最重要的核心类，诸多操作都依赖它完成。
     private Button pack;
     private Button radar;
 
+    private MapView map = null;
+    private AMap aMap = null;//AMap 类是地图的控制器类，用来操作地图。它所承载的工作包括：地图图层切换（如卫星图、黑夜地图）、改变地图状态（地图旋转角度、俯仰角、中心点坐标和缩放级别）、添加点标记（Marker）、绘制几何图形(Polyline、Polygon、Circle)、各类事件监听(点击、手势等)等，AMap 是地图 SDK 最重要的核心类，诸多操作都依赖它完成。
+
     private MapDot myDot = new MapDot();//我的位置
     private List<MapDot> allMapDots = null;//记得关闭的时候要释放掉
+    private LinkedList<Marker> markers = null;
 
     private MyLocationStyle myLocationStyle;//设置定位属性
     private AMapLocationClient mLocationClient = null;//声明AMapLocationClient类对象
 
     public AMapLocationClientOption mLocationOption = null;//声明AMapLocationClientOption对象
 
-    private static final int RADIUS = 5000;//设置探索的精度半径为50m
+    private static final int RADIUS = 10000;//设置探索的精度半径为50m
 
     private AbstractAnimateEffect effect;
 
@@ -117,9 +122,9 @@ public class map extends Fragment{
         }
 
         aMap.setMapCustomEnable(true);//开启自定义地图
-        aMap.setCustomMapStylePath(FileHelper.setMapCustomFile(Application.getContext(), "customConfigFile", tuya));//设置自定义地图tuya
+        aMap.setCustomMapStylePath(FileHelper.setMapCustomFile(Application.getContext(), CUSTOM_MAP_DIR, TUYA));//设置自定义地图tuya
 //        aMap.setCustomMapStylePath(FileHelper.setMapCustomFile(Application.getContext(), "customConfigFile", night));//设置自定义地图night
-        showDotsInMap();
+        initMarkers();
         initLocationStyle();
         initLocationClient();
         initLocationOption();
@@ -140,17 +145,18 @@ public class map extends Fragment{
             new Thread(() -> {
                 List<MapDot> results = new MinDistanceDetectionContext(myDot, allMapDots, RADIUS, MinDistanceTypeEnum.MIN_DIST_TYPE).listResult();
                 for (MapDot result : results) {
-                    //这里针对每个result开始发放奖励，奖励从服务器获取，做一个耗时操作
-
+                    //TODO 这里针对每个result开始发放奖励，奖励从服务器获取，做一个耗时操作
+                    LogUtil.d(TAG, "result:" + result.getLatitude() + result.getLongitude());
                 }
-                //这里从地图中将探索过的地点去除
-                allMapDots.removeAll(results);
-                LitePal.deleteDatabase("MapDot.class");
-                showDotsInMap();
-                for (MapDot dot : allMapDots){
-                    LogUtil.d(TAG, "-->" + dot.getLatitude() + ", " + dot.getLongitude());
-                    dot.save();
+                for (MapDot i : results){ // 删除所有的范围内的标记点
+                    for (MapDot j : allMapDots){
+                        if (i.equals(j)){
+                            allMapDots.remove(j);
+                            j.delete(); // 在Sqlite中删除在经度范围内的宝藏点
+                        }
+                    }
                 }
+                updateDotsInMap();
             }).start();
         });
     }
@@ -193,16 +199,23 @@ public class map extends Fragment{
     }
 
     /**
-     * 控制将32个经纬度坐标点显示在地图中
-     * 但是在地图中显示寻宝位置存在一点点问题：第一次设置的时候，不能正确的显示所有宝藏的位置
+     * 控制标记点的刷新
      */
-    private void showDotsInMap(){
-        LogUtil.d(TAG, "showDotsInMap");
+    private void updateDotsInMap(){
+        markers.clear();
+        initMarkers();
+        map.invalidate();//刷新地图
+    }
+
+    private void initMarkers(){
         if (allMapDots != null){
-            for (MapDot dot : allMapDots){
-                LogUtil.d(TAG, dot.getLatitude() + "  " + dot.getLongitude());
+            for(MapDot dot : allMapDots){
                 LatLng latLng = new LatLng(dot.getLatitude(), dot.getLongitude());
-                aMap.addMarker(new MarkerOptions().position(latLng).title("宝藏").snippet("等你来拿"));
+                MarkerOptions options = new MarkerOptions();
+                options.title("宝藏").position(latLng).icon();
+                Marker marker = aMap.addMarker(options);
+                marker.setObject(new MapDot());//标记Marker的类型
+                markers.add(marker);
             }
         }
     }

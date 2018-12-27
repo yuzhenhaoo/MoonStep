@@ -30,4 +30,13 @@ public class MapDot extends LitePalSupport {
         this.longitude = longitude;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        MapDot object = (MapDot) obj;
+        if (this == object) return true; // 检查this和obj是不是同一个对象
+        if (object == null) return false;// 检查obj是不是为空
+        if (getClass() != object.getClass()) return false; //判断this与obj是不是同一个类，分为两种情况
+        if (!(obj instanceof MapDot)) return false;
+        return object.getLatitude() == this.getLatitude() && object.getLongitude() == this.getLongitude();
+    }
 }
