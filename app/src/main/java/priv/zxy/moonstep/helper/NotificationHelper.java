@@ -62,6 +62,8 @@ public class NotificationHelper {
         switch (notificationEnum){
             case MESSAGE_TIP:
                 return 1;
+            default:
+
         }
         return 0;
     }
@@ -71,6 +73,7 @@ public class NotificationHelper {
             case MESSAGE_TIP:
                 manager.notify(trsNotificationEnumToInt(notificationEnum), setMessageTipNotification());
                 break;
+            default:
         }
     }
 

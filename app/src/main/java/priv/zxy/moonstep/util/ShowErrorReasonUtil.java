@@ -88,6 +88,8 @@ public class ShowErrorReasonUtil {
             case PASSWORD_IS_WRONG:
                 ToastUtil.getInstance(mContext, mActivity).showToast("密码错误");
                 break;
+            default:
+                ToastUtil.getInstance(mContext, mActivity).showToast("输入错误");
         }
     }
 

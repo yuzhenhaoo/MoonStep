@@ -12,4 +12,5 @@ public class ElasticityFactory extends AbstractAnimateFactory {
     public AbstractAnimateEffect createEffectObject() {
         return new ElasticityAnimation();
     }
+
 }

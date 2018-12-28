@@ -6,7 +6,7 @@ package priv.zxy.moonstep.commerce.view.Community;
  * 描述: 社区消息的类
  **/
 
-public class CommunityBase {
+public class BaseCommunityMessage {
 
     private String mediaPath;
 

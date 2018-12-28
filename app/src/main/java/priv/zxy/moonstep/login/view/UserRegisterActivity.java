@@ -116,6 +116,8 @@ public class UserRegisterActivity extends BaseActivity implements IUserRegisterV
                 case MotionEvent.ACTION_UP:
                     finishActivitySelf();
                     break;
+                default:
+                    break;
             }
             return true;
         });
@@ -149,6 +151,8 @@ public class UserRegisterActivity extends BaseActivity implements IUserRegisterV
                 case MotionEvent.ACTION_UP:
                     toLoginActivity();
                     break;
+                default:
+                    break;
             }
             return true;
         });
@@ -161,6 +165,8 @@ public class UserRegisterActivity extends BaseActivity implements IUserRegisterV
                 case R.id.woman:
                     userGender = "女";
                     break;
+                default:
+                    throw new RuntimeException("性別輸入格式錯誤");
             }
         });
 

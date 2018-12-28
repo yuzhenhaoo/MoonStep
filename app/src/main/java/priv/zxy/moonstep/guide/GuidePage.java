@@ -105,6 +105,8 @@ public class GuidePage extends BaseActivity {
                     case 4:
                         buttonListener(findViewById(R.id.image_button));
                         break;
+                    default:
+                        break;
                 }
             }
 

@@ -29,14 +29,36 @@ public class ElasticityAnimation extends AbstractAnimateEffect {
         animatorSet.playTogether(animator1, animator2);
         animatorSet.play(animator2).before(animator3);
         animatorSet.playTogether(animator3, animator4);
-
         if(Build.VERSION.SDK_INT >= 24){
             animatorSet.getTotalDuration();
         }
     }
 
     @Override
+    public void setAnimate(View view, long duration) {
+
+    }
+
+    @Override
+    public void cancelAnimate() {
+        animatorSet.cancel();
+    }
+
+    @Override
     public void show() {
         animatorSet.start();
+    }
+
+    @Override
+    public Object getAnimateObj() {
+        if (animatorSet == null){
+            return null;
+        }
+        return animatorSet;
+    }
+
+    @Override
+    public boolean isRunning() {
+        return animatorSet.isRunning();
     }
 }

@@ -16,13 +16,19 @@ import java.util.List;
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.adapter.MoonCommunityAdapter;
 
+/**
+ * 创建人: Administrator
+ * 创建时间: 2018/11/28
+ * 描述: 月友社区的Fragment(第二个子页面)
+ **/
 
 public class MoonCommunity extends Fragment {
     private RecyclerView recyclerview;
     private RecyclerView.LayoutManager layoutManager;
     private MoonCommunityAdapter mAdapter;
-    private List<CommunityBase> lists = new ArrayList<>();//初始化一部分信息列表
+    private List<BaseCommunityMessage> lists = new ArrayList<>();//初始化一部分信息列表
     private View view;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -44,7 +50,7 @@ public class MoonCommunity extends Fragment {
     }
 
     private void initData(){
-        CommunityBase communityBase = new CommunityBase();
+        BaseCommunityMessage communityBase = new BaseCommunityMessage();
         communityBase.setAddress("安居客圣诞节");
         communityBase.setLangtitude("192.123456");
         communityBase.setLongitude("28.988645");

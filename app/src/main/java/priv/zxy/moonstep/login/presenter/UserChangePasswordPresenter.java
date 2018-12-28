@@ -17,19 +17,12 @@ import priv.zxy.moonstep.login.view.IChangePasswordView;
 public class UserChangePasswordPresenter {
     private IUser userBiz;
     private IChangePasswordView changePasswordView;
-    private Context mContext;
-    private Activity mActivity;
 
     public UserChangePasswordPresenter(IChangePasswordView changePasswordView, Context mContext, Activity mActivity){
         this.changePasswordView = changePasswordView;
-        this.mContext = mContext;
-        this.mActivity = mActivity;
         this.userBiz = new UserBiz();
     }
 
-    public void toLoginActivity(){
-        changePasswordView.toLogUtilinActivity();
-    }
 
     public void setChangePassword(String phoneNumber, String password, String confirmPassword) throws InterruptedException {
         userBiz.setChangePassword(phoneNumber, password, confirmPassword, new OnChangePasswordListener() {
@@ -40,7 +33,7 @@ public class UserChangePasswordPresenter {
                     changePasswordView.showSuccessTip();
                     Looper.loop();
                 }).start();
-                changePasswordView.toLogUtilinActivity();
+                changePasswordView.toLoginActivity();
                 changePasswordView.hideLoading();
             }
 

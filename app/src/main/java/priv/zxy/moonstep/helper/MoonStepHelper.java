@@ -180,6 +180,7 @@ public class MoonStepHelper {
                 return MessageTypeEnum.VIDEO;
             case "voice":
                 return MessageTypeEnum.VOICE;
+            default:
         }
         return MessageTypeEnum.UNKNOWN_TYPE;
     }

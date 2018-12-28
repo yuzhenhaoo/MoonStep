@@ -108,6 +108,8 @@ public class StartActivity extends BaseActivity {
                         }
                         mHandler.removeCallbacks(this);
                         break;
+                    default:
+                        break;
                 }
                 seconds += 1;
                 mHandler.postDelayed(this, 1000);

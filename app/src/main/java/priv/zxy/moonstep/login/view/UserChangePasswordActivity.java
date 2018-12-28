@@ -30,7 +30,7 @@ import priv.zxy.moonstep.login.presenter.UserChangePasswordPresenter;
  *  Created by Zxy on 2018/9/23
  */
 
-public class UserChangePasswordActivity extends BaseActivity implements IChangePasswordView {
+public class UserChangePasswordActivity extends BaseActivity implements IChangePasswordView{
     private TextView phone;
     private MaterialEditText password;
     private MaterialEditText confirmPassword;
@@ -85,25 +85,16 @@ public class UserChangePasswordActivity extends BaseActivity implements IChangeP
                     showLoading();
                     break;
                 case MotionEvent.ACTION_DOWN:
-                    final String pwd = getPassword();
-                    final String conPwd = getConfirmPassword();
-                    new Thread(() -> {
-                        try {
-                            userChangePasswordPresenter.setChangePassword(phoneNum, pwd, conPwd);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        mHandler.sendEmptyMessage(0x01);
-                    }).start();
-
+                    changePassword();
+                    break;
+                default:
                     break;
             }
             return true;
         });
     }
 
-    @Override
-    public void showLoading() {
+    private void showLoading() {
         progressBar.show();
         try {
             Thread.sleep(200);
@@ -121,24 +112,21 @@ public class UserChangePasswordActivity extends BaseActivity implements IChangeP
         progressBar.hide();
     }
 
-    @Override
-    public String getPhoneNumber() {
+    private String getPhoneNumber() {
         Intent intent = getIntent();
         return intent.getStringExtra("phoneNumber");
     }
 
-    @Override
-    public String getPassword() {
+    private String getPassword() {
         return password.getText().toString();
     }
 
-    @Override
-    public String getConfirmPassword() {
+    private String getConfirmPassword() {
         return confirmPassword.getText().toString();
     }
 
     @Override
-    public void toLogUtilinActivity() {
+    public void toLoginActivity() {
         Intent intent = new Intent(this, UserLoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -153,5 +141,19 @@ public class UserChangePasswordActivity extends BaseActivity implements IChangeP
     @Override
     public void showErrorTip(ErrorCodeEnum errorCode) {
         ShowErrorReasonUtil.getInstance(mActivity).show(errorCode);
+    }
+
+    @Override
+    public void changePassword(){
+        final String pwd = getPassword();
+        final String conPwd = getConfirmPassword();
+        new Thread(() -> {
+            try {
+                userChangePasswordPresenter.setChangePassword(getPhoneNumber(), pwd, conPwd);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            mHandler.sendEmptyMessage(0x01);
+        }).start();
     }
 }

@@ -186,6 +186,8 @@ public class ForgetPasswordSendMessageActivity extends BaseActivity implements I
                         Looper.loop();
                     }).start();
                     break;
+                default:
+                    break;
             }
             return true;
         });
@@ -203,6 +205,8 @@ public class ForgetPasswordSendMessageActivity extends BaseActivity implements I
                     break;
                 case MotionEvent.ACTION_UP:
                     sendVoiceCode();
+                    break;
+                default:
                     break;
             }
             return true;

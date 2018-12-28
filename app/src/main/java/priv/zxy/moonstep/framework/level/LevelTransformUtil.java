@@ -41,6 +41,7 @@ public class LevelTransformUtil {
                 return LevelEnum.EIGHTH_LEVEL;
             case '9':
                 return LevelEnum.NINTH_LEVEL;
+            default:
         }
         return null;
     }
@@ -65,6 +66,7 @@ public class LevelTransformUtil {
                 return LevelEnum.EIGHTH_LEVEL;
             case 9:
                 return LevelEnum.NINTH_LEVEL;
+            default:
         }
         return null;
     }

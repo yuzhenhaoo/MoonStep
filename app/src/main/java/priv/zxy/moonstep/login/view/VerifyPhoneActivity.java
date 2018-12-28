@@ -116,6 +116,8 @@ public class VerifyPhoneActivity extends BaseActivity implements IVerifyPhoneVie
                         mHandler.sendEmptyMessage(0x01);
                     }).start();
                     break;
+                default:
+                    break;
             }
             return true;
         });

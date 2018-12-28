@@ -5,10 +5,12 @@ import android.content.Intent;
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -34,19 +36,15 @@ public class LoginDataRequestDAO {
     private static LoginDataRequestDAO instance;
 
     private static final String MOONSTEP = "moonstep";
-
     private static final String LOGIN_TAG = "login";
-
     private static final String CHANGE_PASSWORD_TAG = "change";
-
     private static final String PARSE_RESULT = "Result";
-
     private static final String PARSE_PARAMS = "params";
-
     private static final String PARSE_SUCCESS = "success";
-
     private static final String PARSE_ERROR_0 = "error0";
     private static final String PARSE_ERROR_1 = "error1";
+    private static final String PHONE_NUMBER = "PhoneNumber";
+    private static final String PASSWORD = "PassWord";
 
     private static final String URL = URLBase.LOGIN_SERVLET_URL;
 
@@ -65,8 +63,8 @@ public class LoginDataRequestDAO {
 
     public void login(final OnLoginListener loginListener, final  String phoneNumber, final String inputPassword){
         AndroidNetworking.post(URL)
-                .addBodyParameter("phoneNumber", phoneNumber)
-                .addBodyParameter("PassWord", inputPassword)
+                .addBodyParameter(PHONE_NUMBER, phoneNumber)
+                .addBodyParameter(PASSWORD, inputPassword)
                 .setTag(LOGIN_TAG)
                 .setPriority(Priority.MEDIUM)
                 .build()
@@ -74,10 +72,11 @@ public class LoginDataRequestDAO {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
+                            LogUtil.d(TAG, "JSONObject" + response.toString());
                             JSONObject jsonObject = (JSONObject) new JSONObject(response.toString()).get(PARSE_PARAMS);
                             String result = jsonObject.getString(PARSE_RESULT);
                             if (result.equals(PARSE_SUCCESS)) {
-                                /**
+                                /*
                                  * 登录环信服务器
                                  */
                                 loginEMServer(loginListener, phoneNumber, inputPassword);

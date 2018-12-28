@@ -112,7 +112,6 @@ public class UserLoginActivity extends BaseActivity implements IUserLoginView {
             switch(event.getAction()){
                 case MotionEvent.ACTION_DOWN:
                     clickBt.startAnimation(shake);
-//                        clickBt.setClickable(false);//设置不能再次点击，当失败了设置为恢复点击效果
                     break;
                 case MotionEvent.ACTION_UP:
                     userLoginPresenter.showLoading();
@@ -123,6 +122,8 @@ public class UserLoginActivity extends BaseActivity implements IUserLoginView {
                             e.printStackTrace();
                         }
                     }).start();
+                    break;
+                default:
                     break;
             }
             return true;
@@ -140,6 +141,8 @@ public class UserLoginActivity extends BaseActivity implements IUserLoginView {
                     break;
                 case MotionEvent.ACTION_UP:
                     userLoginPresenter.toForgetPasswordActivity();
+                    break;
+                default:
                     break;
             }
             return true;
@@ -243,14 +246,14 @@ public class UserLoginActivity extends BaseActivity implements IUserLoginView {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        //移除所有的消息（防止Handler造成内存泄漏）
+        // 移除所有的消息（防止Handler造成内存泄漏）
         mHandler.removeCallbacksAndMessages(null);
     }
 
     /**
      * 声明一个Handler的静态内部类可以防止持有当前activity的引用，这样的话，当GC回收垃圾的时候，就可以对当前activity进行回收，不会造成内存泄漏
-     * 声明一个弱引用，是为了可以调用activity中的方法，否则想在handle中处理，必须全部声明为静态的。
-     * 再一个，弱引用本身就是在GC检测到的 时候就回收。
+     *     声明一个弱引用，是为了可以调用activity中的方法，否则想在handle中处理，必须全部声明为静态的。
+     *     再一个，弱引用本身就是在GC检测到的 时候就回收。
      */
     private static class MyHandler extends Handler{
 

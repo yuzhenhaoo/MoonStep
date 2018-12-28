@@ -182,6 +182,8 @@ public class SendMessageActivity extends BaseActivity implements ISendMessageVie
                         Looper.loop();
                     }).start();
                     break;
+                default:
+                    break;
             }
             return true;
         });
@@ -199,6 +201,8 @@ public class SendMessageActivity extends BaseActivity implements ISendMessageVie
                     break;
                 case MotionEvent.ACTION_UP:
                     sendVoiceCode();
+                    break;
+                default:
                     break;
             }
             return true;

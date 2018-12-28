@@ -16,7 +16,7 @@ import java.util.List;
 
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.data.application.Application;
-import priv.zxy.moonstep.commerce.view.Community.CommunityBase;
+import priv.zxy.moonstep.commerce.view.Community.BaseCommunityMessage;
 
 /**
  * 创建人: Administrator
@@ -26,7 +26,7 @@ import priv.zxy.moonstep.commerce.view.Community.CommunityBase;
 
 public class MoonCommunityAdapter extends RecyclerView.Adapter<MoonCommunityAdapter.MyHolder> {
 
-    private final List<CommunityBase> mItems = new ArrayList<>();
+    private final List<BaseCommunityMessage> mItems = new ArrayList<>();
     private View view;//子类item
 
     @NonNull
@@ -42,7 +42,7 @@ public class MoonCommunityAdapter extends RecyclerView.Adapter<MoonCommunityAdap
      */
     @Override
     public void onBindViewHolder(@NonNull MyHolder myHolder, int position) {
-        CommunityBase cb = mItems.get(position);
+        BaseCommunityMessage cb = mItems.get(position);
         Glide.with(Application.getContext()).load(cb.getMediaPath()).into(myHolder.mediaOrImage);
         myHolder.address.setText(cb.getAddress());
         myHolder.langtitude.setText(cb.getLangtitude());
@@ -54,7 +54,7 @@ public class MoonCommunityAdapter extends RecyclerView.Adapter<MoonCommunityAdap
         return mItems.size();
     }
 
-    public boolean add(CommunityBase item) {
+    public boolean add(BaseCommunityMessage item) {
         boolean isAdded = mItems.add(item);
         if (isAdded) {
             notifyDataSetChanged();
@@ -62,7 +62,7 @@ public class MoonCommunityAdapter extends RecyclerView.Adapter<MoonCommunityAdap
         return isAdded;
     }
 
-    public boolean addAll(Collection<CommunityBase> items) {
+    public boolean addAll(Collection<BaseCommunityMessage> items) {
         boolean isAdded = mItems.addAll(items);
         if (isAdded) {
             notifyDataSetChanged();

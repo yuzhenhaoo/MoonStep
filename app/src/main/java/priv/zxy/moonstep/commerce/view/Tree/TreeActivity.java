@@ -12,10 +12,12 @@ import android.widget.Button;
 
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.commerce.view.Tree.PetActivity;
+import priv.zxy.moonstep.gps.PackActivity;
 
 public class TreeActivity extends Fragment {
 
     private Button petBt;
+    private Button pack;
     private View view;
 
     @Nullable
@@ -35,6 +37,7 @@ public class TreeActivity extends Fragment {
 
     private void initView() {
         petBt = (Button) view.findViewById(R.id.petBt);
+        pack = (Button) view.findViewById(R.id.pack);
     }
 
     private void initData(){
@@ -43,10 +46,21 @@ public class TreeActivity extends Fragment {
 
     private void initEvent(){
         petBt.setOnClickListener(v -> toPetActivity());
+        pack.setOnClickListener(v -> toPackActivity());
     }
 
     private void toPetActivity(){
         Intent intent = new Intent(this.getContext(), PetActivity.class);
         startActivity(intent);
+    }
+
+    /**
+     * 跳转到背包页面
+     */
+    private void toPackActivity(){
+        if (this.getContext() != null){
+            Intent intent = new Intent(this.getContext(), PackActivity.class);
+            this.getContext().startActivity(intent);
+        }
     }
 }

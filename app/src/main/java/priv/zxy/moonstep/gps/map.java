@@ -3,6 +3,8 @@ package priv.zxy.moonstep.gps;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +24,7 @@ import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.MapView;
+import com.amap.api.maps.model.BitmapDescriptor;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
@@ -30,6 +34,7 @@ import com.amap.api.maps.model.MyLocationStyle;
 import org.litepal.LitePal;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -49,8 +54,8 @@ import priv.zxy.moonstep.wheel.animate.ElasticityFactory;
 
 /**
  * 地图这里可以加上权限功能：
- * 我们利用百度地图的特性，可以显示出来不同类别的地图，把地图的类别和权限相互对应，更高等级的权限可以看到不同视野的地图
- * 不同的地图可以得到的奖励也有所不同。
+ *     我们利用百度地图的特性，可以显示出来不同类别的地图，把地图的类别和权限相互对应，更高等级的权限可以看到不同视野的地图
+ *     不同的地图可以得到的奖励也有所不同。
  */
 
 public class map extends Fragment{
@@ -66,14 +71,19 @@ public class map extends Fragment{
     private Button radar;
 
     private MapView map = null;
-    private AMap aMap = null;// AMap 类是地图的控制器类，用来操作地图。它所承载的工作包括：地图图层切换（如卫星图、黑夜地图）、改变地图状态（地图旋转角度、俯仰角、中心点坐标和缩放级别）、添加点标记（Marker）、绘制几何图形(Polyline、Polygon、Circle)、各类事件监听(点击、手势等)等，AMap 是地图 SDK 最重要的核心类，诸多操作都依赖它完成。
+    /**
+     * AMap 类是地图的控制器类，用来操作地图。
+     *     它所承载的工作包括：地图图层切换（如卫星图、黑夜地图）、改变地图状态（地图旋转角度、俯仰角、中心点坐标和缩放级别）、
+     *     添加点标记（Marker）、绘制几何图形(Polyline、Polygon、Circle)、各类事件监听(点击、手势等)等，AMap 是地图 SDK 最重要的核心类，诸多操作都依赖它完成。
+     */
+    private AMap aMap = null;
     private MyLocationStyle myLocationStyle;// 设置定位属性
     private AMapLocationClient mLocationClient = null;// 声明AMapLocationClient类对象
     public AMapLocationClientOption mLocationOption = null;// 声明AMapLocationClientOption对象
 
     private MapDot myDot = new MapDot();// 用户当前位置
     private List<MapDot> allMapDots = null;// 用户地图中的所有“宝藏”地点
-    private LinkedList<Marker> markers = null;
+    private List<Marker> markers = new LinkedList<>();
 
     private AbstractAnimateEffect effect;
 
@@ -94,30 +104,33 @@ public class map extends Fragment{
     @Override
     public void onResume() {
         super.onResume();
-        //在activity执行onResume时执行map.onResume(),重新绘制加载地图
+        // 在activity执行onResume时执行map.onResume(),重新绘制加载地图
         map.onResume();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        //在activity执行onPause时执行map.onPause()，暂停地图的绘制
-        mLocationClient.stopLocation();//停止定位后，本地定位服务并不会被销毁
+        // 在activity执行onPause时执行map.onPause()，暂停地图的绘制
+        // 停止定位后，本地定位服务并不会被销毁
+        mLocationClient.stopLocation();
         map.onPause();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mLocationClient.onDestroy();//销毁定位客户端，同时销毁本地定位服务。
+        // 销毁定位客户端，同时销毁本地定位服务。
+        mLocationClient.onDestroy();
         map.onDestroy();
-        allMapDots = null;//不然会发生内存泄漏
+        // 不然会发生内存泄漏
+        allMapDots = null;
     }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        //在activity执行onSaveInstanceState时执行mMapView.onSaveInstanceState (outState)，保存地图当前的状态
+        // 在activity执行onSaveInstanceState时执行mMapView.onSaveInstanceState (outState)，保存地图当前的状态
         map.onSaveInstanceState(outState);
     }
 
@@ -217,19 +230,30 @@ public class map extends Fragment{
                     // TODO : (标记人:张晓翼，标记时间，2018/12/27)
                     LogUtil.d(TAG, "result:" + result.getLatitude() + result.getLongitude());
                 }
+                Log.d(TAG, String.valueOf(allMapDots.size()));
                 // 删除所有的范围内的标记点
-                for (MapDot i : results){
-                    for (MapDot j : allMapDots){
-                        if (i.equals(j)){
-                            allMapDots.remove(j);
-                            // 在Sqlite中删除在经度范围内的宝藏点
-                            j.delete();
-                        }
-                    }
-                }
+                deleteGaugePointInMapDots(results);
+                // 重新展示界面标记点
                 updateDotsInMap();
             }).start();
         });
+    }
+
+    /**
+     * 从所有点中删除经度范围内的标记点
+     * @param gaugePoints 待删除点
+     */
+    private void deleteGaugePointInMapDots(List<MapDot> gaugePoints){
+        Iterator<MapDot> it = allMapDots.iterator();
+        while (it.hasNext()){
+            MapDot item = it.next();
+            if (gaugePoints.contains(item)){
+                Log.d(TAG, "deleteGaugePointInMapDots-->" + item.getLongitude() + item.getLongitude());
+                it.remove();
+                // 从数据库中删除标记点
+                item.delete();
+            }
+        }
     }
 
     /**
@@ -284,20 +308,25 @@ public class map extends Fragment{
      * 定位属性
      */
     private void initLocationOption(){
-        //初始化AMapLocationClientOption对象
+        // 初始化AMapLocationClientOption对象
         mLocationOption = new AMapLocationClientOption();
-        mLocationOption.setInterval(3000);//设置定位间隔，单位毫秒
-        mLocationClient.setLocationOption(mLocationOption);//给定位客户端对象设置定位参数
-        mLocationClient.startLocation();//启动定位
+        // 设置定位间隔，单位毫秒
+        mLocationOption.setInterval(3000);
+        // 给定位客户端对象设置定位参数
+        mLocationClient.setLocationOption(mLocationOption);
+        // 启动定位
+        mLocationClient.startLocation();
     }
 
     /**
      * 控制标记点的刷新
+     * 当点击了检测后，如果检测成功，那么标记点刷新
      */
     private void updateDotsInMap(){
         markers.clear();
         initMarkers();
-        map.invalidate();//刷新地图
+        // 刷新地图
+        map.invalidate();
     }
 
     private void initMarkers(){
@@ -305,9 +334,12 @@ public class map extends Fragment{
             for(MapDot dot : allMapDots){
                 LatLng latLng = new LatLng(dot.getLatitude(), dot.getLongitude());
                 MarkerOptions options = new MarkerOptions();
-                options.title("宝藏").position(latLng).icon();
+                Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.gauge_point);
+                BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(bitmap);
+                options.title("gold").position(latLng).icon(bitmapDescriptor);
                 Marker marker = aMap.addMarker(options);
-                marker.setObject(new MapDot());//标记Marker的类型
+                // 标记Marker的类型
+//                marker.setObject(new MapDot());
                 markers.add(marker);
             }
         }
@@ -343,12 +375,12 @@ public class map extends Fragment{
             float accuracy = location.getAccuracy();//获取精度
             String floor = location.getFloor();//获取当前室内定位的楼层
             int status = location.getGpsAccuracyStatus();//获取GPS的当前状态
-            //获取定位时间
+            // 获取定位时间
 //            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             myDot.setLatitude(latitude);
             myDot.setLongitude(longitude);
 
-            /**
+            /*
              * 这里出现了一个错误，是由于dots本身不能将context中获得的结果引用过来导致的，但是context.getMapDots的确是获得了结果，只是对于dots而言结果却是not avaliable的
              * 所以只要解决dots=context.getMapDots的问题就好了
              */
@@ -360,7 +392,7 @@ public class map extends Fragment{
             LogUtil.d(TAG, "当前经度为:" + longitude);
 
             if (SharedPreferencesUtil.getInstance(Application.getContext()).checkMapTime(days)){
-                //这里对32个宝藏位置坐标进行刷新，如果成功的话，就存入sqlite数据库中，并在地图上显示
+                // 这里对32个宝藏位置坐标进行刷新，如果成功的话，就存入sqlite数据库中，并在地图上显示
                 DotChooseContext context = new DotChooseContext(ChooseTypeEnum.SQUARE_CHOOSE);
                 List<MapDot> dots = context.listMapDots(latitude, longitude, 32);
                 LogUtil.d(TAG, dots.toString());
@@ -371,7 +403,7 @@ public class map extends Fragment{
             SetLocationDAO.getInstance().LocationServlet(phoneNumber, address, String.valueOf(latitude), String.valueOf(longitude));
 
         }else{
-            /**
+            /*
              * 同时使用日志处理工具，对错误和异常进行记录
              */
             LogUtil.e("AmapError","location Error, ErrCode:"

@@ -9,7 +9,6 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 
 import com.androidnetworking.AndroidNetworking;
 import com.hyphenate.EMMessageListener;
@@ -31,6 +30,7 @@ import priv.zxy.moonstep.guide.StartActivity;
 import priv.zxy.moonstep.helper.EMHelper;
 import priv.zxy.moonstep.data.bean.EMBase;
 import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
+import priv.zxy.moonstep.login.view.UserLoginActivity;
 import priv.zxy.moonstep.util.LogUtil;
 import priv.zxy.moonstep.util.SharedPreferencesUtil;
 import priv.zxy.moonstep.helper.MoonStepHelper;
@@ -39,13 +39,13 @@ import priv.zxy.moonstep.commerce.view.Friend.ChattingActivity;
 
 public class Application extends LitePalApplication {
 
-    public static int START_IMAGE_MAX_NUMBER = 9;//这里设定的是startPage的数量
-
-    private static Context mContext;
-
     private static final String TAG = "Application";
+    public static int START_IMAGE_MAX_NUMBER = 9;//这里设定的是startPage的数量
+    private static final String MOONSTEP = "moonstep";
 
-    // 记录是否已经初始化
+    /**
+     * 记录是否已经初始化
+     */
     private boolean isInit = false;
 
     private LocalBroadcastManager localBroadcastManager;
@@ -56,192 +56,76 @@ public class Application extends LitePalApplication {
 
     private IntentFilter intentFilter;
 
-    private static String token = null;//获取token值
+    private static Context context;
 
-    private static final String MOONSTEP = "moonstep";
+    /**
+     * 与EM服务器交互的token值
+     */
+    private static String token = null;
 
     public static Context getContext(){
-        return mContext;
+        return context;
     }
-
-    private ActivityLifecycleCallbacks activityLifecycleCallbacks = new ActivityLifecycleCallbacks() {
-
-        /**
-         * 对MainActivity实施的监听：当登陆成功后，进入到MainActivity当中，就已经将登陆信息存入到了Preference当中，这个时候只要从Preference中直接取出phoneNumber就好
-         * @param activity
-         * @param savedInstanceState
-         */
-        @Override
-        public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-
-            if (activity.getClass() == MainActivity.class) {
-                EMClient.getInstance().chatManager().addMessageListener(msgListener);//实施消息的监听
-                new Thread(() -> {
-                    if (SharedPreferencesUtil.getInstance(Application.getContext()).isSuccessLogin()){
-                        String phoneNumber = SharedPreferencesUtil.getInstance(Application.getContext()).readLoginInfo().get("PhoneNumber");
-                        PullUserInfoDAO.getInstance().getUserInfo(new PullUserInfoDAO.Callback() {
-                            @Override
-                            public void onSuccess(User moonFriend) {
-                                SharedPreferencesUtil.getInstance(Application.getContext()).saveMySelfInformation(moonFriend.getNickName(),
-                                        moonFriend.getPhoneNumber(), moonFriend.getGender(), moonFriend.getRaceCode(), moonFriend.getHeadPath(),
-                                        moonFriend.getSignature(), moonFriend.getLocation(), moonFriend.getCurrentTitle(), moonFriend.getLuckyValue());
-                            }
-
-                            @Override
-                            public void onFail(ErrorCodeEnum errorCode) {
-                                LogUtil.d(TAG, "获取个人信息失败");
-                            }
-                        }, MOONSTEP + phoneNumber);
-                    }
-                }).start();
-            }else if (activity.getClass() == ChattingActivity.class){
-                EMClient.getInstance().chatManager().removeMessageListener(msgListener);//移除Listener
-            }else if (activity.getClass() == StartActivity.class){
-                localBroadcastManager.registerReceiver(localReceiver, intentFilter);
-                EMBase.getInstance().initDataFromDatabase();
-            }
-        }
-
-        @Override
-        public void onActivityStarted(Activity activity) {
-
-        }
-
-        @Override
-        public void onActivityResumed(Activity activity) {
-
-        }
-
-        @Override
-        public void onActivityPaused(Activity activity) {
-
-        }
-
-        @Override
-        public void onActivityStopped(Activity activity) {
-
-        }
-
-        @Override
-        public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
-
-        }
-
-        @Override
-        public void onActivityDestroyed(Activity activity) {
-            if (activity.getClass() == ChattingActivity.class){
-                EMClient.getInstance().chatManager().addMessageListener(msgListener);//实施消息的监听
-            } else if (activity.getClass() == MainActivity.class){
-                EMClient.getInstance().chatManager().removeMessageListener(msgListener);//移除Listener
-            } else if (activity.getClass() == StartActivity.class){
-                localBroadcastManager.unregisterReceiver(localReceiver);
-            }
-        }
-    };
-
-    private List<EMMessage> emMessages = null;
-
-    //通过EM获取好友的消息队列
-    private EMMessageListener msgListener = new EMMessageListener() {
-
-        @Override
-        public void onMessageReceived(List<EMMessage> messages) {
-            LogUtil.d(TAG,"接收到了消息:");
-            emMessages = messages;
-            for(EMMessage message: emMessages){
-//                LogUtil.d(TAG,"message来源:    " + message.getFrom().substring(8, message.getFrom().length()));
-                String[] msg = MoonStepHelper.getInstance().getMessageTypeWithBody(message.getBody().toString().trim());
-                switch (MoonStepHelper.getInstance().transformMessageType(msg[0])){
-                    case TEXT://处理文本消息
-                        LogUtil.e("MessageOnline","来自于Application" + msg[1]);
-                        savedChattingMessage(msg[1], 0, 1, message.getFrom().substring(8));
-                        break;
-                    case IMAGE://处理图片消息
-                        break;
-                    case VIDEO://处理视频消息
-                        break;
-                    case LOCATION://处理位置消息
-                        break;
-                    case VOICE://处理声音消息
-                        break;
-                }
-                SharedPreferencesUtil.getInstance(Application.getContext()).saveIsMessageTip(message.getFrom().substring(8, message.getFrom().length()));//当来消息的时候，将消息提示的标记存储到缓存中。
-                localBroadcastManager.sendBroadcast(intent);//发送本地广播
-            }
-        }
-
-        @Override
-        public void onCmdMessageReceived(List<EMMessage> messages) {
-            //收到透传消息
-            LogUtil.d(TAG, "收到透传消息");
-            localBroadcastManager.sendBroadcast(intent);//发送本地广播
-        }
-
-        @Override
-        public void onMessageRead(List<EMMessage> messages) {
-            //收到已读回执
-            LogUtil.d(TAG, "收到已读回执");
-            localBroadcastManager.sendBroadcast(intent);//发送本地广播
-        }
-
-        @Override
-        public void onMessageDelivered(List<EMMessage> message) {
-            //收到已送达回执
-            LogUtil.d(TAG, "收到已送达回执");
-            localBroadcastManager.sendBroadcast(intent);//发送本地广播
-        }
-
-        @Override
-        public void onMessageChanged(EMMessage message, Object change) {
-            //消息状态变动
-            LogUtil.d(TAG, "消息状态变动");
-            localBroadcastManager.sendBroadcast(intent);//发送本地广播
-        }
-    };
 
     public static RefWatcher mRefWatcher;//为了检测Fragment的内存泄漏
 
     @Override
     public void onCreate() {
         super.onCreate();
-        //初始化LeakCanary
+        // 初始化LeakCanary
         if (LeakCanary.isInAnalyzerProcess(this)){
-            //This process is dedicated to LeakCanary for heap analysis.
-            //You should not init your app in this process
             return;
         }
         mRefWatcher = LeakCanary.install(this);
 
+        context = getApplicationContext();
+
         //初始化AndroidNetworking
         AndroidNetworking.initialize(getApplicationContext());
 
-        //注册Activity的生命周期回调接口。
-        mContext = getApplicationContext();
-
-        localBroadcastManager = LocalBroadcastManager.getInstance(mContext);//获取实例
-
+        localBroadcastManager = LocalBroadcastManager.getInstance(context);//获取实例
         localReceiver = new LocalReceiver();
 
         intentFilter = new IntentFilter();
-
         intentFilter.addAction("priv.zxy.moonstep.kernel.bean.LOCAL_BROADCAST");
-
         intent = new Intent("priv.zxy.moonstep.commerce.view.LOCAL_BROADCAST");
 
         registerActivityLifecycleCallbacks(activityLifecycleCallbacks);
         initEaseMob();
     }
 
+    /**
+     * 获取服务端的token值
+     * @return token
+     */
+    public static String getToken(){
+        return token;
+    }
+
+    /**
+     * 存储聊天消息
+     * @param content 内容
+     * @param direction 传输方向
+     * @param type 消息类型
+     * @param phoneNumber 消息对象
+     */
+    public void savedChattingMessage(String content, int direction, int type, String phoneNumber) {
+        MessageOnline.getInstance().saveMessageToDataBase(content, direction, type, phoneNumber);
+    }
+
+    /**
+     * 初始化Mob短信SDK
+     */
     private void initEaseMob() {
         // 获取当前进程 id 并取得进程名
         int pid = android.os.Process.myPid();
         String processAppName = getAppName(pid);
-        /**
+        /*
          * 如果app启用了远程的service，此application:onCreate会被调用2次
          * 为了防止环信SDK被初始化2次，加此判断会保证SDK被初始化1次
          * 默认的app会在以包名为默认的process name下运行，如果查到的process name不是app的process name就立即返回
          */
-        if (processAppName == null || !processAppName.equalsIgnoreCase(mContext.getPackageName())) {
+        if (processAppName == null || !processAppName.equalsIgnoreCase(context.getPackageName())) {
             // 则此application的onCreate 是被service 调用的，直接返回
             return;
         }
@@ -250,13 +134,44 @@ public class Application extends LitePalApplication {
         }
 
         // 调用初始化方法初始化sdk
-        EMClient.getInstance().init(mContext, initOptions());
+        EMClient.getInstance().init(context, initOptions());
 
         // 设置开启debug模式
         EMClient.getInstance().setDebugMode(true);
 
         // 设置初始化已经完成
         isInit = true;
+    }
+
+
+    /**
+     * 清理数据库SQLite中存储的用户名，用户密码等信息
+     */
+    private void cleanLoginInformation(){
+        SharedPreferencesUtil.getInstance(context).setFailLoginInfo();
+    }
+
+    /**
+     * 获取用户信息
+     */
+    private void getUserInformation(){
+        boolean isLoginResult = SharedPreferencesUtil.getInstance(context).isSuccessLogin();
+        if (isLoginResult){
+            String phoneNumber = SharedPreferencesUtil.getInstance(context).readLoginInfo().get("PhoneNumber");
+            PullUserInfoDAO.getInstance().getUserInfo(new PullUserInfoDAO.Callback() {
+                @Override
+                public void onSuccess(User moonFriend) {
+                    SharedPreferencesUtil.getInstance(context).saveMySelfInformation(moonFriend.getNickName(),
+                            moonFriend.getPhoneNumber(), moonFriend.getGender(), moonFriend.getRaceCode(), moonFriend.getHeadPath(),
+                            moonFriend.getSignature(), moonFriend.getLocation(), moonFriend.getCurrentTitle(), moonFriend.getLuckyValue());
+                }
+
+                @Override
+                public void onFail(ErrorCodeEnum errorCode) {
+                    LogUtil.d(TAG, "获取个人信息失败");
+                }
+            }, MOONSTEP + phoneNumber);
+        }
     }
 
     /**
@@ -270,13 +185,12 @@ public class Application extends LitePalApplication {
         // 设置Appkey，如果配置文件已经配置，这里可以不用设置
         // options.setAppKey("lzan13#hxsdkdemo");
         // 设置自动登录
-        /**
+        /*
          * 自动登录在以下几种情况下会被取消：
-
-         用户调用了 SDK 的登出动作；
-         用户在别的设备上更改了密码，导致此设备上自动登录失败；
-         用户的账号被从服务器端删除；
-         用户从另一个设备登录，把当前设备上登录的用户踢出。
+             用户调用了 SDK 的登出动作；
+             用户在别的设备上更改了密码，导致此设备上自动登录失败；
+             用户的账号被从服务器端删除；
+             用户从另一个设备登录，把当前设备上登录的用户踢出。
          */
 //        options.setAutoLogUtilin(true);
         // 设置是否需要发送已读回执
@@ -321,23 +235,138 @@ public class Application extends LitePalApplication {
         return processName;
     }
 
-    public static String getToken(){
-        Log.d(TAG, "getToken: "+token);
-        return token;
-    }
-
-    public void savedChattingMessage(String content, int direction, int type, String phoneNumber) {
-        MessageOnline.getInstance().saveMessageToDataBase(content, direction, type, phoneNumber);
-    }
-
     private class LocalReceiver extends BroadcastReceiver{
         @Override
         public void onReceive(Context context, Intent intent) {
 
-                EMHelper.getInstance(mContext).initToken(token -> {
+                EMHelper.getInstance(context).initToken(token -> {
                             Application.token = token;
                             LogUtil.d(TAG, token);
                 });
         }
     }
+
+    //通过EM获取好友的消息队列
+    private EMMessageListener msgListener = new EMMessageListener() {
+
+        @Override
+        public void onMessageReceived(List<EMMessage> messages) {
+            LogUtil.d(TAG,"接收到了消息:");
+            for(EMMessage message: messages){
+//                LogUtil.d(TAG,"message来源:    " + message.getFrom().substring(8, message.getFrom().length()));
+                String[] msg = MoonStepHelper.getInstance().getMessageTypeWithBody(message.getBody().toString().trim());
+                switch (MoonStepHelper.getInstance().transformMessageType(msg[0])){
+                    case TEXT://处理文本消息
+                        LogUtil.e("MessageOnline","来自于Application" + msg[1]);
+                        savedChattingMessage(msg[1], 0, 1, message.getFrom().substring(8));
+                        break;
+                    case IMAGE://处理图片消息
+                        break;
+                    case VIDEO://处理视频消息
+                        break;
+                    case LOCATION://处理位置消息
+                        break;
+                    case VOICE://处理声音消息
+                        break;
+                }
+                SharedPreferencesUtil.getInstance(context).saveIsMessageTip(message.getFrom().substring(8, message.getFrom().length()));//当来消息的时候，将消息提示的标记存储到缓存中。
+                localBroadcastManager.sendBroadcast(intent);//发送本地广播
+            }
+        }
+
+        @Override
+        public void onCmdMessageReceived(List<EMMessage> messages) {
+            //收到透传消息
+            LogUtil.d(TAG, "收到透传消息");
+            localBroadcastManager.sendBroadcast(intent);//发送本地广播
+        }
+
+        @Override
+        public void onMessageRead(List<EMMessage> messages) {
+            //收到已读回执
+            LogUtil.d(TAG, "收到已读回执");
+            localBroadcastManager.sendBroadcast(intent);//发送本地广播
+        }
+
+        @Override
+        public void onMessageDelivered(List<EMMessage> message) {
+            //收到已送达回执
+            LogUtil.d(TAG, "收到已送达回执");
+            localBroadcastManager.sendBroadcast(intent);//发送本地广播
+        }
+
+        @Override
+        public void onMessageChanged(EMMessage message, Object change) {
+            //消息状态变动
+            LogUtil.d(TAG, "消息状态变动");
+            localBroadcastManager.sendBroadcast(intent);//发送本地广播
+        }
+    };
+
+    private ActivityLifecycleCallbacks activityLifecycleCallbacks = new ActivityLifecycleCallbacks() {
+
+        /**
+         * 对MainActivity实施的监听：当登陆成功后，进入到MainActivity当中，就已经将登陆信息存入到了Preference当中，
+         *     这个时候只要从Preference中直接取出phoneNumber就好
+         * @param activity 活动
+         * @param savedInstanceState 存储信息
+         */
+        @Override
+        public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+            /*
+            在UserLoginActivity中清空用户的登陆信息
+                防止用户在第一登陆失败后，第二次回退后登陆可成功登陆
+             */
+            if (activity.getClass() == UserLoginActivity.class){
+                cleanLoginInformation();
+            }
+            if (activity.getClass() == MainActivity.class) {
+                EMClient.getInstance().chatManager().addMessageListener(msgListener);//实施消息的监听
+                new Thread(() -> getUserInformation()).start();
+            }
+            if (activity.getClass() == ChattingActivity.class){
+                EMClient.getInstance().chatManager().removeMessageListener(msgListener);//移除Listener
+            }
+            if (activity.getClass() == StartActivity.class){
+                localBroadcastManager.registerReceiver(localReceiver, intentFilter);
+                EMBase.getInstance().initDataFromDatabase();
+            }
+        }
+
+        @Override
+        public void onActivityStarted(Activity activity) {
+
+        }
+
+        @Override
+        public void onActivityResumed(Activity activity) {
+
+        }
+
+        @Override
+        public void onActivityPaused(Activity activity) {
+
+        }
+
+        @Override
+        public void onActivityStopped(Activity activity) {
+
+        }
+
+        @Override
+        public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+
+        }
+
+        @Override
+        public void onActivityDestroyed(Activity activity) {
+            if (activity.getClass() == ChattingActivity.class){
+                EMClient.getInstance().chatManager().addMessageListener(msgListener);//实施消息的监听
+            } else if (activity.getClass() == MainActivity.class){
+                EMClient.getInstance().chatManager().removeMessageListener(msgListener);//移除Listener
+            } else if (activity.getClass() == StartActivity.class){
+                localBroadcastManager.unregisterReceiver(localReceiver);
+            }
+        }
+    };
 }

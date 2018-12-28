@@ -1,5 +1,6 @@
 package priv.zxy.moonstep.commerce.view.Friend;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -16,11 +17,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.hyphenate.exceptions.HyphenateException;
 import com.yalantis.phoenix.PullToRefreshView;
@@ -35,38 +39,41 @@ import priv.zxy.moonstep.commerce.presenter.MoonFriendPresenter;
 import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.data.bean.BaseFragment;
 import priv.zxy.moonstep.framework.user.User;
-import priv.zxy.moonstep.util.LogUtil;
+import priv.zxy.moonstep.wheel.animate.AbstractAnimateEffect;
+import priv.zxy.moonstep.wheel.animate.AbstractAnimateFactory;
+import priv.zxy.moonstep.wheel.animate.ElasticityFactory;
+import priv.zxy.moonstep.wheel.animate.RotationAnimateFactory;
 
 public class MoonFriendFragment extends BaseFragment implements IMoonFriendView {
 
     private static final String TAG = "MoonFriendFragment";
+    private static final long REFRESH_DELAY = 1000;
+    private static final String name = "星空漩涡";
 
     private View view = null;
-
     private RecyclerView recyclerView;
+    private List<User> mList = null;//月友结果集
+    private MoonFriendAdapter mAdapter;
+    private Button chooseButton;//选择按钮
 
     private LinearLayoutManager layoutManager;
 
+    /**
+     * 刷新View和下拉菜单会发生冲突，两者不能兼顾，选择性抛弃下拉刷新菜单
+     */
     private PullToRefreshView mPullToRefreshView;
-
-    private long REFRESH_DELAY = 1000;
 
     private MoonFriendPresenter moonFriendPresenter;
 
-    private List<User> mList = null;//月友结果集
-
-    private MoonFriendAdapter mAdapter;
-
     private IntentFilter intentFilter;
-
     private LocalReceiver localReceiver;
-
     private LocalBroadcastManager localBroadcastManager;
+    private AbstractAnimateEffect rotateEffect;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        //这里开始初始化好友列表
+        // 初始化好友列表
         mList = LitePal.findAll(User.class);
     }
 
@@ -80,6 +87,7 @@ public class MoonFriendFragment extends BaseFragment implements IMoonFriendView 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fg_main_first_subpage3, container, false);
         initView();
+        initEvent();
         return view;
     }
 
@@ -91,7 +99,6 @@ public class MoonFriendFragment extends BaseFragment implements IMoonFriendView 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        LogUtil.d(TAG, "onActivityCreated");
     }
 
     @Override
@@ -114,7 +121,8 @@ public class MoonFriendFragment extends BaseFragment implements IMoonFriendView 
 
         moonFriendPresenter = new MoonFriendPresenter(this, mContext, mActivity);
 
-        //设置刷新事件的监听
+        /// 注释原因：上面已经说过，因为刷新事件会和下拉熔炉界面发生冲突
+        // 设置刷新事件的监听
 //        mPullToRefreshView.setOnRefreshListener(() -> mPullToRefreshView.postDelayed(() -> {
 //            mPullToRefreshView.setRefreshing(false);
 //            try {
@@ -138,14 +146,19 @@ public class MoonFriendFragment extends BaseFragment implements IMoonFriendView 
         localReceiver = new LocalReceiver();
         localBroadcastManager.registerReceiver(localReceiver, intentFilter);
 
-        String name = "星空的熔炉";
         Toolbar toolbar = (Toolbar)view.findViewById(R.id.toolbar);
         CollapsingToolbarLayout collapsingToolbar = view.findViewById(R.id.collapsing_toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         collapsingToolbar.setTitle(name);
-        Button rotateVortex = view.findViewById(R.id.rotateVortex);
-        Animation rotationAnimation = AnimationUtils.loadAnimation(Application.getContext(),R.anim.rotate_anim);
-        rotateVortex.startAnimation(rotationAnimation);
+        ImageView rotateVortex = (ImageView) view.findViewById(R.id.rotateVortex);
+        chooseButton = (Button) view.findViewById(R.id.choose_button);
+
+        // TODO (张晓翼，2018/12/28, 说老实话，我不知道这里是不是会发生内存泄漏)
+        AbstractAnimateFactory factory = new RotationAnimateFactory();
+        rotateEffect = factory.createEffectObject();
+        AbstractAnimateEffect rotateEffect2 = factory.createEffectObject();
+        rotateEffect2.setAnimate(rotateVortex, 800L);
+        rotateEffect2.show();
     }
 
     public void initRecyclerView(){
@@ -157,6 +170,28 @@ public class MoonFriendFragment extends BaseFragment implements IMoonFriendView 
         }
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(mAdapter);
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private void initEvent(){
+        chooseButton.setOnTouchListener((v, event) -> {
+            if (rotateEffect.isRunning()) {
+                rotateEffect.cancelAnimate();
+            }
+            switch (event.getAction()){
+                case MotionEvent.ACTION_DOWN:
+                    rotateEffect.setAnimate(chooseButton);
+                    rotateEffect.show();
+                    break;
+                case MotionEvent.ACTION_UP:
+                    // TODO 弹出一个背包dialog,用来将已有物品拖拽到黑洞上(张晓翼，2018/12/28)
+                    rotateEffect.cancelAnimate();
+                    Toast.makeText(Application.getContext(), "弹出了背包dialog", Toast.LENGTH_SHORT).show();
+                    break;
+                default:
+            }
+            return false;
+        });
     }
 
     @Override
@@ -176,5 +211,4 @@ public class MoonFriendFragment extends BaseFragment implements IMoonFriendView 
             mAdapter.notifyDataSetChanged();//一旦监听到消息就让界面刷新
         }
     }
-
 }
