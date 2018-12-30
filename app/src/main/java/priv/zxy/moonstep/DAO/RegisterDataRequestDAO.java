@@ -9,9 +9,10 @@ import com.hyphenate.exceptions.HyphenateException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import priv.zxy.moonstep.DAO.constant.DaoConstant;
 import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
-import priv.zxy.moonstep.DAO.constant.URLBase;
+import priv.zxy.moonstep.DAO.constant.UrlBase;
 import priv.zxy.moonstep.helper.EMHelper;
 import priv.zxy.moonstep.util.LogUtil;
 
@@ -27,19 +28,9 @@ public class RegisterDataRequestDAO {
 
     private static RegisterDataRequestDAO instance;
 
-    private static final String MOONSTEP = "moonstep";
-
     private static final String REGISTER_TAG = "register";
 
-    private static final String PARSE_RESULT = "result";
-
-    private static final String PARSE_PARAMS = "params";
-
-    private static final String PARSE_SUCCESS = "success";
-
-    private static final String PARSE_ERROR = "error";
-
-    private static final String URL = URLBase.REGISTER_SERVLET_URL;
+    private static final String URL = UrlBase.REGISTER_SERVLET_URL;
 
     public static RegisterDataRequestDAO getInstance() {
         if (instance == null){
@@ -55,10 +46,10 @@ public class RegisterDataRequestDAO {
     public void RegisterRequest(final CallBack callBack, final String phoneNumber,
                                 final  String nickName, final String password, final String gender){
         AndroidNetworking.post(URL)
-                .addBodyParameter("PhoneNumber", phoneNumber)
-                .addBodyParameter("NickName", nickName)
-                .addBodyParameter("PassWord", password)
-                .addBodyParameter("Gender", gender)
+                .addBodyParameter(DaoConstant.PHONE_NUMBER, phoneNumber)
+                .addBodyParameter(DaoConstant.NICK_NAME, nickName)
+                .addBodyParameter(DaoConstant.PASSWORD, password)
+                .addBodyParameter(DaoConstant.GENDER, gender)
                 .addHeaders("Charset", "ISO-8859-1")
                 .setTag(REGISTER_TAG)
                 .setPriority(Priority.MEDIUM)
@@ -68,17 +59,17 @@ public class RegisterDataRequestDAO {
                     public void onResponse(JSONObject response) {
                         JSONObject jsonObject = null;
                         try {
-                            jsonObject = (JSONObject) new JSONObject(response.toString()).get(PARSE_PARAMS);
-                            String result = jsonObject.getString(PARSE_RESULT);
-                            if (result.equals(PARSE_SUCCESS)){
-                                final String raceCode = jsonObject.getString("raceCode");
-                                final String raceName = jsonObject.getString("raceName");
-                                final String raceDescription = jsonObject.getString("raceDescription");
-                                final String raceImage = jsonObject.getString("raceImagePath");
-                                final String raceIcon = jsonObject.getString("raceIcon");
+                            jsonObject = (JSONObject) new JSONObject(response.toString()).get(DaoConstant.PARAMS);
+                            String result = jsonObject.getString(DaoConstant.RESULT);
+                            if (result.equals(DaoConstant.SUCCESS)){
+                                final String raceCode = jsonObject.getString(DaoConstant.RACE_CODE);
+                                final String raceName = jsonObject.getString(DaoConstant.RACE_NAME);
+                                final String raceDescription = jsonObject.getString(DaoConstant.RACE_DESCRIPTION);
+                                final String raceImage = jsonObject.getString(DaoConstant.HEAD_PATH);
+                                final String raceIcon = jsonObject.getString(DaoConstant.RACE_ICON);
                                 registerEMAccount(callBack, raceCode, raceName, raceDescription, raceImage, raceIcon, phoneNumber,
                                         nickName, password);
-                            } else if (result.equals(PARSE_ERROR)){
+                            } else if (result.equals(DaoConstant.FAIL)){
                                 callBack.onFail(ErrorCodeEnum.PHONE_NUMBER_IS_REGISTERED);
                             }
                         } catch (JSONException e) {
@@ -123,7 +114,7 @@ public class RegisterDataRequestDAO {
 
             }
 
-        }, MOONSTEP + phoneNumber, password, nickName);
+        }, DaoConstant.MOONSTEP + phoneNumber, password, nickName);
     }
 
     public interface CallBack{

@@ -7,7 +7,8 @@ import com.androidnetworking.interfaces.JSONObjectRequestListener;
 
 import org.json.JSONObject;
 
-import priv.zxy.moonstep.DAO.constant.URLBase;
+import priv.zxy.moonstep.DAO.constant.DaoConstant;
+import priv.zxy.moonstep.DAO.constant.UrlBase;
 import priv.zxy.moonstep.util.LogUtil;
 
 /**
@@ -22,7 +23,7 @@ public class SetLocationDAO {
 
     private static SetLocationDAO instance;
 
-    private static final String URL = URLBase.LOCATION_SERVLET_URL;
+    private static final String URL = UrlBase.LOCATION_SERVLET_URL;
 
     private static final String LOCATION_TAG = "location";
 
@@ -40,10 +41,10 @@ public class SetLocationDAO {
     public void LocationServlet(String phoneNumber,String address,String latitude,String longitude){
         //请求地址
         AndroidNetworking.post(URL)
-                .addBodyParameter("phoneNumber", phoneNumber)
-                .addBodyParameter("address", address)
-                .addBodyParameter("latitude", latitude)
-                .addBodyParameter("longtitude", longitude)
+                .addBodyParameter(DaoConstant.PHONE_NUMBER, phoneNumber)
+                .addBodyParameter(DaoConstant.ADDRESS, address)
+                .addBodyParameter(DaoConstant.LATITUDE, latitude)
+                .addBodyParameter(DaoConstant.LONGTITUDE, longitude)
                 .setTag(LOCATION_TAG)
                 .setPriority(Priority.MEDIUM)
                 .build()

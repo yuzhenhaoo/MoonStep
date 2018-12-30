@@ -12,9 +12,10 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import priv.zxy.moonstep.DAO.constant.DaoConstant;
 import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
-import priv.zxy.moonstep.DAO.constant.URLBase;
+import priv.zxy.moonstep.DAO.constant.UrlBase;
 
 /**
  * 创建人: Administrator
@@ -27,7 +28,7 @@ public class PetServiceDAO {
 
     private static final String PET_TAG = "pet";
 
-    private static final String URL = URLBase.GET_PET_INFO_SERVLET_URL;
+    private static final String URL = UrlBase.GET_PET_INFO_SERVLET_URL;
 
     public static PetServiceDAO getInstance(){
         if (instance == null){
@@ -47,7 +48,7 @@ public class PetServiceDAO {
         StringRequest request = new StringRequest(Request.Method.POST, URL,
                 response -> {
                     try {
-                        JSONObject jsonObject = (JSONObject) new JSONObject(response).get("result");
+                        JSONObject jsonObject = (JSONObject) new JSONObject(response).get(DaoConstant.RESULT);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -57,7 +58,7 @@ public class PetServiceDAO {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("PhoneNumber", phoneNumber);
+                params.put(DaoConstant.PHONE_NUMBER, phoneNumber);
                 return params;
             }
         };

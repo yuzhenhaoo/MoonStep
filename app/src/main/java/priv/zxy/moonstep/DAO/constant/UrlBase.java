@@ -6,7 +6,7 @@ package priv.zxy.moonstep.DAO.constant;
  * 描述: 服务器基类，用来存储连接服务器的地址
  **/
 
-public class URLBase {
+public class UrlBase {
 
     public static final String START_PAGE_URL = "http://120.79.154.236:8080/start/";
 

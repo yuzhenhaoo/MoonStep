@@ -33,6 +33,7 @@ import org.litepal.tablemanager.Connector;
 import java.lang.ref.WeakReference;
 import java.util.Map;
 
+import priv.zxy.moonstep.constant.SharedConstant;
 import priv.zxy.moonstep.service.MoonFriendService;
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.gps.map;
@@ -136,8 +137,9 @@ public class MainActivity extends BaseActivity
         try {
             Map<String, String> data = SharedPreferencesUtil.getInstance(Application.getContext()).readMySelfInformation();
             LogUtil.d(TAG, data.toString());
-            name.setText(data.get("nickName"));
-            race.setText(data.get("userRaceName"));
+            name.setText(data.get(SharedConstant.NICK_NAME));
+            // TODO (张晓翼，2018/12/30， 这里服务器传过来的是当前的种族码，不是种族名称)
+            race.setText(data.get(SharedConstant.RACE_CODE));
         } catch (NullPointerException e) {
             LogUtil.d(TAG, e.getMessage());
         }

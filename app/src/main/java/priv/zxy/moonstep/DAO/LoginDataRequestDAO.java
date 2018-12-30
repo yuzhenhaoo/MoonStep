@@ -5,18 +5,17 @@ import android.content.Intent;
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
-import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import priv.zxy.moonstep.DAO.constant.DaoConstant;
 import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
-import priv.zxy.moonstep.DAO.constant.URLBase;
+import priv.zxy.moonstep.DAO.constant.UrlBase;
 import priv.zxy.moonstep.helper.EMHelper;
 import priv.zxy.moonstep.login.module.biz.OnLoginListener;
 import priv.zxy.moonstep.service.MessageReceiverService;
@@ -38,17 +37,12 @@ public class LoginDataRequestDAO {
     private static final String MOONSTEP = "moonstep";
     private static final String LOGIN_TAG = "login";
     private static final String CHANGE_PASSWORD_TAG = "change";
-    private static final String PARSE_RESULT = "Result";
-    private static final String PARSE_PARAMS = "params";
-    private static final String PARSE_SUCCESS = "success";
     private static final String PARSE_ERROR_0 = "error0";
     private static final String PARSE_ERROR_1 = "error1";
-    private static final String PHONE_NUMBER = "PhoneNumber";
-    private static final String PASSWORD = "PassWord";
 
-    private static final String URL = URLBase.LOGIN_SERVLET_URL;
+    private static final String URL = UrlBase.LOGIN_SERVLET_URL;
 
-    private static final String URL2 = URLBase.CHANGE_PASSWORD_SERVLET_URL;
+    private static final String URL2 = UrlBase.CHANGE_PASSWORD_SERVLET_URL;
 
     public static LoginDataRequestDAO getInstance() {
         if (instance == null){
@@ -63,8 +57,8 @@ public class LoginDataRequestDAO {
 
     public void login(final OnLoginListener loginListener, final  String phoneNumber, final String inputPassword){
         AndroidNetworking.post(URL)
-                .addBodyParameter(PHONE_NUMBER, phoneNumber)
-                .addBodyParameter(PASSWORD, inputPassword)
+                .addBodyParameter(DaoConstant.PHONE_NUMBER, phoneNumber)
+                .addBodyParameter(DaoConstant.PASSWORD, inputPassword)
                 .setTag(LOGIN_TAG)
                 .setPriority(Priority.MEDIUM)
                 .build()
@@ -72,10 +66,9 @@ public class LoginDataRequestDAO {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            LogUtil.d(TAG, "JSONObject" + response.toString());
-                            JSONObject jsonObject = (JSONObject) new JSONObject(response.toString()).get(PARSE_PARAMS);
-                            String result = jsonObject.getString(PARSE_RESULT);
-                            if (result.equals(PARSE_SUCCESS)) {
+                            JSONObject jsonObject = (JSONObject) new JSONObject(response.toString()).get(DaoConstant.PARAMS);
+                            String result = jsonObject.getString(DaoConstant.RESULT);
+                            if (result.equals(DaoConstant.SUCCESS)) {
                                 /*
                                  * 登录环信服务器
                                  */
@@ -164,9 +157,9 @@ public class LoginDataRequestDAO {
                         JSONObject jsonObject = null;
                         try {
                             jsonObject = (JSONObject) new JSONObject(response.toString()).get("params");
-                            String result = jsonObject.getString(PARSE_RESULT);
+                            String result = jsonObject.getString(DaoConstant.RESULT);
                             switch (result){
-                                case PARSE_SUCCESS:
+                                case DaoConstant.SUCCESS:
                                     updateEMUserPassword(callback, phoneNumber, password);
                                     break;
                                 case PARSE_ERROR_0:
@@ -211,7 +204,7 @@ public class LoginDataRequestDAO {
             public void onFail(ErrorCodeEnum errorCodeEnum) {
 
             }
-        }, "moonstep" + phoneNumber, password);
+        }, MOONSTEP + phoneNumber, password);
     }
 
     public interface CallBack{

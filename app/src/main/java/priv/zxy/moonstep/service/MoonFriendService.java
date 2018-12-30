@@ -117,7 +117,7 @@ public class MoonFriendService extends Service {
         moonFriend.setHeadPath(mf.getHeadPath());
         moonFriend.setLocation(mf.getLocation());
         moonFriend.setSignature(mf.getSignature());
-        moonFriend.setCurrentTitle(mf.getCurrentTitle());
+        moonFriend.setCurrentTitleCode(mf.getCurrentTitleCode());
         moonFriend.setLuckyValue(mf.getLuckyValue());
 //        moonFriend.setIsOnline(mf.getIsOnline());
         if (moonFriend.save()) {

@@ -69,12 +69,12 @@ public class User extends LitePalSupport implements Parcelable {
         this.address = address;
     }
 
-    public String getCurrentTitle() {
-        return currentTitle;
+    public String getCurrentTitleCode() {
+        return currentTitleCode;
     }
 
-    public void setCurrentTitle(String currentTitle) {
-        this.currentTitle = currentTitle;
+    public void setCurrentTitleCode(String currentTitleCode) {
+        this.currentTitleCode = currentTitleCode;
     }
 
     public int getLuckyValue() {
@@ -121,7 +121,7 @@ public class User extends LitePalSupport implements Parcelable {
     private String address;
 
     //用户当前称号
-    private String currentTitle;
+    private String currentTitleCode;
 
     //幸运值
     private int luckyValue;
@@ -143,7 +143,7 @@ public class User extends LitePalSupport implements Parcelable {
         headPath = in.readString();
         signature = in.readString();
         address = in.readString();
-        currentTitle = in.readString();
+        currentTitleCode = in.readString();
         luckyValue = in.readInt();
         isOnline = in.readInt();
     }
@@ -164,7 +164,7 @@ public class User extends LitePalSupport implements Parcelable {
         dest.writeString(headPath);
         dest.writeString(signature);
         dest.writeString(address);
-        dest.writeString(currentTitle);
+        dest.writeString(currentTitleCode);
         dest.writeInt(luckyValue);
 //        dest.writeInt(isOnline);
     }

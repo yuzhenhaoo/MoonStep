@@ -119,8 +119,22 @@
             android:name="com.hyphenate.chat.EMJobService"
             android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE" />
+        <service
+            android:name=".service.MoonFriendService"
+            android:exported="false" />
+        <service
+            android:name=".service.MessageReceiverService"
+            android:exported="false"/>
 
 
+        <receiver
+            android:name=".data.receiver.BootReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
         <!-- 声明SDK所需的receiver -->
         <receiver android:name="com.hyphenate.chat.EMMonitorReceiver">
             <intent-filter>
@@ -141,20 +155,12 @@
             </intent-filter>
         </receiver>
         <!-- -exported决定应用是否能被其它应用隐式调用，默认为false,当设置为false地时候，即使设置了intent-filter，也不能被其它应用隐式调用 -->
-
-
-        <service
-            android:name=".service.MoonFriendService"
-            android:exported="false" />
-        <receiver
-            android:name=".data.receiver.BootReceiver"
-            android:enabled="true"
-            android:exported="true">
+        <receiver android:name="priv.zxy.network.NetStateReceiver">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="network.android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
-        <service android:name=".service.MessageReceiverService" />
     </application>
 
 </manifest>

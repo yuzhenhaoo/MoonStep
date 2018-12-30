@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import priv.zxy.moonstep.R;
+import priv.zxy.moonstep.constant.SharedConstant;
 import priv.zxy.moonstep.customview.AnimationButton;
 import priv.zxy.moonstep.customview.WaveViewByBezier;
 import priv.zxy.moonstep.data.application.Application;
@@ -72,8 +73,9 @@ public class PersonalSurfaceFragment extends BaseFragment {
 
     private void initData() {
         Map<String, String> data = SharedPreferencesUtil.getInstance(Application.getContext()).readMySelfInformation();
-        userNickName.setText(data.get("nickName"));
-        userLevelName.setText(data.get("userLevel"));
+        userNickName.setText(data.get(SharedConstant.NICK_NAME));
+        // FIXME (张晓翼，2018/12/30， 这里的数据还没有传)
+        userLevelName.setText("一阶");
     }
 
     private void initEvent() {

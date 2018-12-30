@@ -4,8 +4,13 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import priv.zxy.moonstep.util.LogUtil;
+import priv.zxy.network.NetworkManager;
+import priv.zxy.network.bean.Network;
+import priv.zxy.network.type.NetType;
+import priv.zxy.network.utils.Constants;
 
 /**
  * 创建人: Administrator
@@ -22,6 +27,7 @@ public class BaseActivity extends AppCompatActivity {
         //隐藏通知栏
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         LogUtil.d("BaseActivity", getClass().getSimpleName());
+        // 把每一个继承了BaseActivity对ActivityCollector做入栈操作
         ActivityCollector.addActivity(this);
     }
 

@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.Toast;
 
 //import com.mob.MobSDK;
 import com.rengwuxian.materialedittext.MaterialEditText;
@@ -21,13 +22,19 @@ import com.rengwuxian.materialedittext.MaterialEditText;
 import java.lang.ref.WeakReference;
 
 import priv.zxy.moonstep.R;
+import priv.zxy.moonstep.constant.SharedConstant;
 import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.data.bean.BaseActivity;
 import priv.zxy.moonstep.login.presenter.UserLoginPresenter;
+import priv.zxy.moonstep.util.LogUtil;
 import priv.zxy.moonstep.util.SharedPreferencesUtil;
 import priv.zxy.moonstep.util.ShowErrorReasonUtil;
 import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
 import priv.zxy.moonstep.main.view.MainActivity;
+import priv.zxy.network.NetworkManager;
+import priv.zxy.network.bean.Network;
+import priv.zxy.network.type.NetType;
+import priv.zxy.network.utils.Constants;
 
 /**
  *  Created by Zxy on 2018/9/23
@@ -108,6 +115,17 @@ public class UserLoginActivity extends BaseActivity implements IUserLoginView {
 
         userLoginPresenter.hideLoading();
 
+        /*
+         * 我们需要注册监听，相当于让观察者(NetStateReceiver接收网络请求)
+         *     添加所有的被观察者对象(Activity, List<AnnotationMethod>)
+         */
+        NetworkManager.getInstance().registerObserver(this);
+
+        if (NetworkManager.getInstance().hasNetwork()) {
+            LogUtil.d(Constants.LOG_TAG, "onCreate() --> hasNetwork() --> true ");
+        }
+
+
         clickBt.setOnTouchListener((v, event) -> {
             switch(event.getAction()){
                 case MotionEvent.ACTION_DOWN:
@@ -147,6 +165,25 @@ public class UserLoginActivity extends BaseActivity implements IUserLoginView {
             }
             return true;
         });
+    }
+
+    @Network(netType = NetType.AUTO)
+    public void network(NetType netType){
+        switch (netType) {
+            case WIFI:
+                //告知用户已经恢复WIFI网络
+                Toast.makeText(mActivity, "您的WIFI已经恢复", Toast.LENGTH_SHORT).show();
+                break;
+            case CMNET:
+            case CMWAP:
+                Toast.makeText(mActivity, "您的数据流量已经打开", Toast.LENGTH_SHORT).show();
+                LogUtil.d(this.getClass().getName(), "网络已经连接， 网络类型:" + netType.name());
+                break;
+            case NONE:
+                Toast.makeText(mActivity, "您的网络未连接", Toast.LENGTH_SHORT).show();
+                LogUtil.d(this.getClass().getName(), "");
+            default:
+        }
     }
 
     @Override
@@ -220,12 +257,12 @@ public class UserLoginActivity extends BaseActivity implements IUserLoginView {
 
     @Override
     public void initAccount(SharedPreferencesUtil preference) {
-        accountEt.setText(SharedPreferencesUtil.getInstance(Application.getContext()).readLoginInfo().get("PhoneNumber"));
+        accountEt.setText(SharedPreferencesUtil.getInstance(Application.getContext()).readLoginInfo().get(SharedConstant.PHONE_NUMBER));
     }
 
     @Override
     public void initPassword(SharedPreferencesUtil preference) {
-        passwordEt.setText(SharedPreferencesUtil.getInstance(Application.getContext()).readLoginInfo().get("PassWd"));
+        passwordEt.setText(SharedPreferencesUtil.getInstance(Application.getContext()).readLoginInfo().get(SharedConstant.PASSWORD));
     }
 
     @Override
@@ -248,6 +285,8 @@ public class UserLoginActivity extends BaseActivity implements IUserLoginView {
         super.onDestroy();
         // 移除所有的消息（防止Handler造成内存泄漏）
         mHandler.removeCallbacksAndMessages(null);
+        NetworkManager.getInstance().unRegisterObserver(this);
+//        NetworkManager.getInstance().unRegisterAllObserver();
     }
 
     /**

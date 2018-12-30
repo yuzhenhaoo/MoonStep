@@ -14,7 +14,7 @@ import com.bumptech.glide.Glide;
 
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.data.application.Application;
-import priv.zxy.moonstep.DAO.constant.URLBase;
+import priv.zxy.moonstep.DAO.constant.UrlBase;
 import priv.zxy.moonstep.data.bean.BaseActivity;
 import priv.zxy.moonstep.service.MessageReceiverService;
 import priv.zxy.moonstep.login.view.UserLoginActivity;
@@ -59,7 +59,7 @@ public class StartActivity extends BaseActivity {
     private void initStartImageUrl(){
         int number = (int)(1 + Math.random()*(Application.START_IMAGE_MAX_NUMBER - 1 + 1));
         Log.d(TAG,"打印的数字是:" + String.valueOf(number));
-        url = URLBase.START_PAGE_URL + String.valueOf(number)+".png";
+        url = UrlBase.START_PAGE_URL + String.valueOf(number)+".png";
     }
 
     private void initView(){

@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 
@@ -24,6 +25,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import priv.zxy.moonstep.DAO.PullUserInfoDAO;
+import priv.zxy.moonstep.constant.SharedConstant;
 import priv.zxy.moonstep.framework.message.MessageOnline;
 import priv.zxy.moonstep.framework.user.User;
 import priv.zxy.moonstep.guide.StartActivity;
@@ -36,6 +38,7 @@ import priv.zxy.moonstep.util.SharedPreferencesUtil;
 import priv.zxy.moonstep.helper.MoonStepHelper;
 import priv.zxy.moonstep.main.view.MainActivity;
 import priv.zxy.moonstep.commerce.view.Friend.ChattingActivity;
+import priv.zxy.network.NetworkManager;
 
 public class Application extends LitePalApplication {
 
@@ -57,6 +60,8 @@ public class Application extends LitePalApplication {
     private IntentFilter intentFilter;
 
     private static Context context;
+
+    private static boolean isBackground = false;
 
     /**
      * 与EM服务器交互的token值
@@ -80,6 +85,8 @@ public class Application extends LitePalApplication {
 
         context = getApplicationContext();
 
+        NetworkManager.getInstance().init(this);
+
         //初始化AndroidNetworking
         AndroidNetworking.initialize(getApplicationContext());
 
@@ -92,6 +99,42 @@ public class Application extends LitePalApplication {
 
         registerActivityLifecycleCallbacks(activityLifecycleCallbacks);
         initEaseMob();
+    }
+
+    /**
+     * 程序终止的时候执行
+     * 当终止应用程序对象时调用，不保证一定被调用，
+     * 当程序是被内核终止以便为其它应用程序释放资源，那么将不会提醒。
+     */
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        LogUtil.d(TAG, "程序被终止了");
+        // 移除所有的网络监听观察者
+        NetworkManager.getInstance().unRegisterAllObserver();
+    }
+
+    /**
+     * 低内存的时候调用
+     */
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        LogUtil.d(TAG, "进入低内存环境");
+    }
+
+    /**
+     * 程序再进行内存清理时执行
+     * @param level 等级，记录应用即将进入后台运行
+     */
+    @Override
+    public void onTrimMemory(int level) {
+        super.onTrimMemory(level);
+        if (level == TRIM_MEMORY_UI_HIDDEN) {
+            isBackground = true;
+            // 进入后台的通知
+//            notifyBackground();
+        }
     }
 
     /**
@@ -157,13 +200,11 @@ public class Application extends LitePalApplication {
     private void getUserInformation(){
         boolean isLoginResult = SharedPreferencesUtil.getInstance(context).isSuccessLogin();
         if (isLoginResult){
-            String phoneNumber = SharedPreferencesUtil.getInstance(context).readLoginInfo().get("PhoneNumber");
+            String phoneNumber = SharedPreferencesUtil.getInstance(context).readLoginInfo().get(SharedConstant.PHONE_NUMBER);
             PullUserInfoDAO.getInstance().getUserInfo(new PullUserInfoDAO.Callback() {
                 @Override
                 public void onSuccess(User moonFriend) {
-                    SharedPreferencesUtil.getInstance(context).saveMySelfInformation(moonFriend.getNickName(),
-                            moonFriend.getPhoneNumber(), moonFriend.getGender(), moonFriend.getRaceCode(), moonFriend.getHeadPath(),
-                            moonFriend.getSignature(), moonFriend.getLocation(), moonFriend.getCurrentTitle(), moonFriend.getLuckyValue());
+                    SharedPreferencesUtil.getInstance(context).saveMySelfInformation(moonFriend);
                 }
 
                 @Override
@@ -317,9 +358,6 @@ public class Application extends LitePalApplication {
             在UserLoginActivity中清空用户的登陆信息
                 防止用户在第一登陆失败后，第二次回退后登陆可成功登陆
              */
-            if (activity.getClass() == UserLoginActivity.class){
-                cleanLoginInformation();
-            }
             if (activity.getClass() == MainActivity.class) {
                 EMClient.getInstance().chatManager().addMessageListener(msgListener);//实施消息的监听
                 new Thread(() -> getUserInformation()).start();
@@ -362,9 +400,11 @@ public class Application extends LitePalApplication {
         public void onActivityDestroyed(Activity activity) {
             if (activity.getClass() == ChattingActivity.class){
                 EMClient.getInstance().chatManager().addMessageListener(msgListener);//实施消息的监听
-            } else if (activity.getClass() == MainActivity.class){
+            }
+            if (activity.getClass() == MainActivity.class){
                 EMClient.getInstance().chatManager().removeMessageListener(msgListener);//移除Listener
-            } else if (activity.getClass() == StartActivity.class){
+            }
+            if (activity.getClass() == StartActivity.class){
                 localBroadcastManager.unregisterReceiver(localReceiver);
             }
         }

@@ -8,8 +8,9 @@ import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import priv.zxy.moonstep.DAO.constant.DaoConstant;
 import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
-import priv.zxy.moonstep.DAO.constant.URLBase;
+import priv.zxy.moonstep.DAO.constant.UrlBase;
 import priv.zxy.moonstep.util.LogUtil;
 
 /**
@@ -25,13 +26,7 @@ public class PhoneNumberIsInServerDAO {
 
     private static final String CHECK_TAG = "check";
 
-    private static final String URL = URLBase.CHECK_PHONE_NUMBER_IN_SERVLET_URL;
-
-    private static final String PARSE_RESULT = "Result";
-
-    private static final String PARSE_PARAMS = "params";
-
-    private static final String PARSE_SUCCESS = "success";
+    private static final String URL = UrlBase.CHECK_PHONE_NUMBER_IN_SERVLET_URL;
 
     private static PhoneNumberIsInServerDAO instance;
 
@@ -57,9 +52,9 @@ public class PhoneNumberIsInServerDAO {
                     public void onResponse(JSONObject response) {
                         JSONObject jsonObject;
                         try {
-                            jsonObject = (JSONObject) new JSONObject(response.toString()).get(PARSE_PARAMS);
-                            String result = jsonObject.getString(PARSE_RESULT);
-                            if (result.equals(PARSE_SUCCESS)) {
+                            jsonObject = (JSONObject) new JSONObject(response.toString()).get(DaoConstant.PARAMS);
+                            String result = jsonObject.getString(DaoConstant.RESULT);
+                            if (result.equals(DaoConstant.SUCCESS)) {
                                 //检验成功
                                 callback.onSuccess();
                             } else {

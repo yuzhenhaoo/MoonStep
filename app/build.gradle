@@ -135,5 +135,7 @@ dependencies {
 
     //动态检测权限库 easyPermission
     implementation 'pub.devrel:easypermissions:2.0.0'
+    implementation project(':network')
+    implementation project(':notifacation')
 }
 

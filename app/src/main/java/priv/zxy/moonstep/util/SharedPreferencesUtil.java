@@ -6,33 +6,16 @@ import android.content.SharedPreferences;
 import java.util.HashMap;
 import java.util.Map;
 
+import priv.zxy.moonstep.constant.SharedConstant;
+import priv.zxy.moonstep.framework.user.User;
 import priv.zxy.moonstep.helper.EMHelper;
 import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.wheel.cache.FacadeSharedPreference;
 
+
 public class SharedPreferencesUtil {
 
     private static final String TAG = "SharedPreferencesUtil";
-    private static final String LANDING_LIBRARY = "landing";
-    private static final String PERSONAL_INFO_LIBRARY = "personalInfo";
-    private static final String MESSAGE_TIP_LIBRARY = "tip";
-    private static final String MAP_REFRESH_TIME_CHECK = "map";
-    private static final String DAYS = "days";
-    private static final String IS_SUCCESS = "isSuccess";
-    private static final String PHONE_NUMBER = "phoneNumber";
-    private static final String PASSWORD = "passWord";
-    private static final String INIT_DATA = "dataIsInitialized";
-    private static final String IS_FIRST_LANDING = "firstLand";
-
-    private static final String NICK_NAME = "nickName";
-    private static final String GENDER = "gender";
-    private static final String RACE_CODE = "raceCode";
-    private static final String HEAD_PATH = "headPath";
-    private static final String SIGNATURE = "signature";
-    private static final String ADDRESS = "address";
-    private static final String CURRENT_TITLE_CODE = "currentTitleCode";
-    private static final String LUCKY_VALUE = "luckyValue";
-    private static final String IS_SAVED = "isSaved";
 
     private Context context;
 
@@ -66,7 +49,7 @@ public class SharedPreferencesUtil {
      * 存储第一次登陆的信息
      */
     public void setFirstLogin(){
-        sp.saveElement(LANDING_LIBRARY,IS_FIRST_LANDING, true);
+        sp.saveElement(SharedConstant.LANDING_LIBRARY,SharedConstant.IS_FIRST_LANDING, true);
     }
 
     /**
@@ -75,21 +58,21 @@ public class SharedPreferencesUtil {
      *          非第一次登录的话，返回False
      */
     public Boolean isFirstLogin(){
-        return !sp.checkElement(LANDING_LIBRARY, IS_FIRST_LANDING);
+        return !sp.checkElement(SharedConstant.LANDING_LIBRARY, SharedConstant.IS_FIRST_LANDING);
     }
 
     /**
      * 记录好友信息是否已经被加载过（既第一次检测）
      */
     public void dataInitialized(){
-        sp.saveElement(LANDING_LIBRARY, INIT_DATA, true);
+        sp.saveElement(SharedConstant.LANDING_LIBRARY, SharedConstant.INIT_DATA, true);
     }
 
     /**
      * @return 数据库已经进行过初始化的话，就返回false,不然就返回true
      */
     public boolean isDataInitialized(){
-        return !sp.checkElement(LANDING_LIBRARY, INIT_DATA);
+        return !sp.checkElement(SharedConstant.LANDING_LIBRARY, SharedConstant.INIT_DATA);
     }
 
     /**
@@ -99,17 +82,17 @@ public class SharedPreferencesUtil {
      */
     public void setSuccessLoginInfo(String username, String password){
         Map<String, String> params = new HashMap<>();
-        params.put(PHONE_NUMBER, username);
-        params.put(PASSWORD, password);
-        sp.save(LANDING_LIBRARY, params);
-        sp.saveElement(LANDING_LIBRARY, "IS_SUCCESS", true);
+        params.put(SharedConstant.PHONE_NUMBER, username);
+        params.put(SharedConstant.PASSWORD, password);
+        sp.save(SharedConstant.LANDING_LIBRARY, params);
+        sp.saveElement(SharedConstant.LANDING_LIBRARY, SharedConstant.IS_SUCCESS, true);
     }
 
     /**
      * 当用户登陆失败的时候设置用户的登陆检测字段为false,直到下次登陆成功为止不允许自动登陆
      */
     public void setFailLoginInfo(){
-        sp.saveElement(LANDING_LIBRARY, IS_SUCCESS, false);
+        sp.saveElement(SharedConstant.LANDING_LIBRARY, SharedConstant.IS_SUCCESS, false);
     }
 
     /**
@@ -118,8 +101,8 @@ public class SharedPreferencesUtil {
      */
     public Map<String, String> readLoginInfo(){
         Map<String, String> data = new HashMap<>();
-        data.put(PHONE_NUMBER, sp.read(LANDING_LIBRARY).get(PHONE_NUMBER).toString());
-        data.put(PASSWORD, sp.read(LANDING_LIBRARY).get(PASSWORD).toString());
+        data.put(SharedConstant.PHONE_NUMBER, sp.read(SharedConstant.LANDING_LIBRARY).get(SharedConstant.PHONE_NUMBER).toString());
+        data.put(SharedConstant.PASSWORD, sp.read(SharedConstant.LANDING_LIBRARY).get(SharedConstant.PASSWORD).toString());
         return data;
     }
 
@@ -128,34 +111,26 @@ public class SharedPreferencesUtil {
      * @return 返回上次登陆的结果值
      */
     public boolean isSuccessLogin(){
-        return sp.checkElement(LANDING_LIBRARY, "IS_SUCCESS");
+        return sp.checkElement(SharedConstant.LANDING_LIBRARY, "IS_SUCCESS");
     }
 
     /**
      * 存储用户的个人信息
-     * @param nickName 昵称
-     * @param phoneNumber 电话号码
-     * @param gender 性别
-     * @param raceCode 种族编码
-     * @param headPath 头像路径
-     * @param userSignature 用户签名
-     * @param location 位置信息
-     * @param userCurrentTitle 用户当前称号
-     * @param luckyValue 幸运值
+     * @param moonFriend 用户信息
      */
-    public void saveMySelfInformation(String nickName, String phoneNumber, String gender, int raceCode, String headPath, String userSignature, String location, String userCurrentTitle, int luckyValue){
+    public void saveMySelfInformation(User moonFriend){
         Map<String ,String> params = new HashMap<>();
-        params.put(NICK_NAME, nickName);
-        params.put(PHONE_NUMBER, phoneNumber);
-        params.put(GENDER, gender);
-        params.put(RACE_CODE, String.valueOf(raceCode));
-        params.put(HEAD_PATH, headPath);
-        params.put(SIGNATURE, userSignature);
-        params.put(ADDRESS, location);
-        params.put(CURRENT_TITLE_CODE, userCurrentTitle);
-        params.put(LUCKY_VALUE, String.valueOf(luckyValue));
-        sp.save(PERSONAL_INFO_LIBRARY, params);
-        sp.saveElement(PERSONAL_INFO_LIBRARY, IS_SAVED, true);
+        params.put(SharedConstant.NICK_NAME, moonFriend.getNickName());
+        params.put(SharedConstant.PHONE_NUMBER, moonFriend.getPhoneNumber());
+        params.put(SharedConstant.GENDER, moonFriend.getGender());
+        params.put(SharedConstant.RACE_CODE, String.valueOf(moonFriend.getRaceCode()));
+        params.put(SharedConstant.HEAD_PATH, moonFriend.getHeadPath());
+        params.put(SharedConstant.SIGNATURE, moonFriend.getSignature());
+        params.put(SharedConstant.ADDRESS, moonFriend.getLocation());
+        params.put(SharedConstant.CURRENT_TITLE_CODE, moonFriend.getCurrentTitleCode());
+        params.put(SharedConstant.LUCKY_VALUE, String.valueOf(moonFriend.getLuckyValue()));
+        sp.save(SharedConstant.PERSONAL_INFO_LIBRARY, params);
+        sp.saveElement(SharedConstant.PERSONAL_INFO_LIBRARY, SharedConstant.IS_SAVED, true);
     }
 
     /**
@@ -165,15 +140,15 @@ public class SharedPreferencesUtil {
      */
     public Map<String, String> readMySelfInformation(){
         Map<String, String> data = new HashMap<>();
-        data.put(NICK_NAME, sp.read(PERSONAL_INFO_LIBRARY).get(NICK_NAME).toString());
-        data.put(PHONE_NUMBER, sp.read(PERSONAL_INFO_LIBRARY).get(PHONE_NUMBER).toString());
-        data.put(GENDER, sp.read(PERSONAL_INFO_LIBRARY).get(GENDER).toString());
-        data.put(RACE_CODE, sp.read(PERSONAL_INFO_LIBRARY).get(RACE_CODE).toString());
-        data.put(HEAD_PATH, sp.read(PERSONAL_INFO_LIBRARY).get(HEAD_PATH).toString());
-        data.put(SIGNATURE, sp.read(PERSONAL_INFO_LIBRARY).get(SIGNATURE).toString());
-        data.put(ADDRESS, sp.read(PERSONAL_INFO_LIBRARY).get(ADDRESS).toString());
-        data.put(CURRENT_TITLE_CODE, sp.read(PERSONAL_INFO_LIBRARY).get(CURRENT_TITLE_CODE).toString());
-        data.put(LUCKY_VALUE, sp.read(PERSONAL_INFO_LIBRARY).get(LUCKY_VALUE).toString());
+        data.put(SharedConstant.NICK_NAME, sp.read(SharedConstant.PERSONAL_INFO_LIBRARY).get(SharedConstant.NICK_NAME).toString());
+        data.put(SharedConstant.PHONE_NUMBER, sp.read(SharedConstant.PERSONAL_INFO_LIBRARY).get(SharedConstant.PHONE_NUMBER).toString());
+        data.put(SharedConstant.GENDER, sp.read(SharedConstant.PERSONAL_INFO_LIBRARY).get(SharedConstant.GENDER).toString());
+        data.put(SharedConstant.RACE_CODE, sp.read(SharedConstant.PERSONAL_INFO_LIBRARY).get(SharedConstant.RACE_CODE).toString());
+        data.put(SharedConstant.HEAD_PATH, sp.read(SharedConstant.PERSONAL_INFO_LIBRARY).get(SharedConstant.HEAD_PATH).toString());
+        data.put(SharedConstant.SIGNATURE, sp.read(SharedConstant.PERSONAL_INFO_LIBRARY).get(SharedConstant.SIGNATURE).toString());
+        data.put(SharedConstant.ADDRESS, sp.read(SharedConstant.PERSONAL_INFO_LIBRARY).get(SharedConstant.ADDRESS).toString());
+        data.put(SharedConstant.CURRENT_TITLE_CODE, sp.read(SharedConstant.PERSONAL_INFO_LIBRARY).get(SharedConstant.CURRENT_TITLE_CODE).toString());
+        data.put(SharedConstant.LUCKY_VALUE, sp.read(SharedConstant.PERSONAL_INFO_LIBRARY).get(SharedConstant.LUCKY_VALUE).toString());
         return data;
     }
 
@@ -182,7 +157,7 @@ public class SharedPreferencesUtil {
      * @return 返回是否存储了用户个人信息的结果
      */
     public boolean isFirstSaveMySelfInformation(){
-        return !sp.checkElement(PERSONAL_INFO_LIBRARY, "isSaved");
+        return !sp.checkElement(SharedConstant.PERSONAL_INFO_LIBRARY, "isSaved");
     }
 
     /**
@@ -190,7 +165,7 @@ public class SharedPreferencesUtil {
      * 为了让FirstMainPageFragmentParent对缓存进行检测并对用户进行提示
      */
     public void saveIsMessageTip(String phoneNumber){
-        sp.saveNumber(MESSAGE_TIP_LIBRARY, phoneNumber, 1, null);
+        sp.saveNumber(SharedConstant.MESSAGE_TIP_LIBRARY, phoneNumber, 1, null);
     }
 
     /**
@@ -200,7 +175,7 @@ public class SharedPreferencesUtil {
      * @return 返回当前电话号码的未读消息个数
      */
     public int readMessageNumber(String phoneNumber){
-        SharedPreferences sp = context.getSharedPreferences(MESSAGE_TIP_LIBRARY, Context.MODE_PRIVATE);
+        SharedPreferences sp = context.getSharedPreferences(SharedConstant.MESSAGE_TIP_LIBRARY, Context.MODE_PRIVATE);
         return sp.getInt(phoneNumber, 0);
     }
 
@@ -208,7 +183,7 @@ public class SharedPreferencesUtil {
      * 当点击进入一个人的聊天页面，说明他的消息已经被看过来，此时应该将他的消息记录从缓存中清除。
      */
     public void handleMessageTip(String phoneNumber){
-        SharedPreferences sp = context.getSharedPreferences(MESSAGE_TIP_LIBRARY, Context.MODE_PRIVATE);
+        SharedPreferences sp = context.getSharedPreferences(SharedConstant.MESSAGE_TIP_LIBRARY, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.remove(phoneNumber);
         if (sp.contains("message") && sp.getAll().size() == 1){
@@ -223,7 +198,7 @@ public class SharedPreferencesUtil {
      *              若非这种情况，就返回true
      */
     public boolean isMessageTip(){
-        SharedPreferences sp = context.getSharedPreferences(MESSAGE_TIP_LIBRARY, Context.MODE_PRIVATE);
+        SharedPreferences sp = context.getSharedPreferences(SharedConstant.MESSAGE_TIP_LIBRARY, Context.MODE_PRIVATE);
         return sp.getAll().size() > 1;
     }
 
@@ -233,16 +208,16 @@ public class SharedPreferencesUtil {
      * @param days 大于3返回true,否则返回false
      */
     public boolean checkMapTime(int days){
-        LogUtil.d(TAG, DAYS + days);
-        SharedPreferences sps = Application.getContext().getSharedPreferences(MAP_REFRESH_TIME_CHECK, Context.MODE_PRIVATE);
+        LogUtil.d(TAG, SharedConstant.DAYS + days);
+        SharedPreferences sps = Application.getContext().getSharedPreferences(SharedConstant.MAP_REFRESH_TIME_CHECK, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sps.edit();
         // 第一次的时候，只有过三天，才能重新存一次days
         if (days >= readMapTime() + 3){
-            editor.putInt(DAYS, days);
+            editor.putInt(SharedConstant.DAYS, days);
             editor.apply();
             return true;
         }else if (readMapTime() > days){
-            editor.putInt(DAYS, days);
+            editor.putInt(SharedConstant.DAYS, days);
             editor.apply();
             return false;
         }
@@ -250,7 +225,7 @@ public class SharedPreferencesUtil {
     }
 
     private int readMapTime(){
-        SharedPreferences sp = context.getSharedPreferences(MAP_REFRESH_TIME_CHECK, Context.MODE_PRIVATE);
-        return sp.getInt(DAYS, 0);
+        SharedPreferences sp = context.getSharedPreferences(SharedConstant.MAP_REFRESH_TIME_CHECK, Context.MODE_PRIVATE);
+        return sp.getInt(SharedConstant.DAYS, 0);
     }
 }
