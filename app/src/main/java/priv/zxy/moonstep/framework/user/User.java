@@ -93,40 +93,40 @@ public class User extends LitePalSupport implements Parcelable {
         this.isOnline = isOnline;
     }
 
-    //用户id
-//    private String userID;
+    // 用户id
+//     private String userID;
 
-    //用户手机号
+    // 用户手机号
     private String phoneNumber;
 
-    //用户密码
-//    private String passWord;
+    // 用户密码
+//     private String passWord;
 
-    //用户昵称
+    // 用户昵称
     private String nickName;
 
-    //用户性别
+    // 用户性别
     private String gender;
 
-    //种族编码
+    // 种族编码
     private int raceCode;
 
-    //用户头像路径
-    private String headPath;//将头像文件存到本地一个文件夹下构建成为一个文件对象，这里直接存路径
+    // 用户头像路径
+    private String headPath;
 
-    //用户签名
+    // 用户签名
     private String signature;
 
-    //用户位置
+    // 用户位置
     private String address;
 
-    //用户当前称号
+    // 用户当前称号编码
     private String currentTitleCode;
 
-    //幸运值
+    // 幸运值
     private int luckyValue;
 
-    //是否在线
+    // 是否在线
     private int isOnline;
 
     public User(){
@@ -134,9 +134,9 @@ public class User extends LitePalSupport implements Parcelable {
     }
 
     protected User(Parcel in) {
-//        userID = in.readString();
+//         userID = in.readString();
         phoneNumber = in.readString();
-//        passWord = in.readString();
+//         passWord = in.readString();
         nickName = in.readString();
         gender = in.readString();
         raceCode = in.readInt();
@@ -155,9 +155,9 @@ public class User extends LitePalSupport implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-//        dest.writeString(userID);
+//         dest.writeString(userID);
         dest.writeString(phoneNumber);
-//        dest.writeString(passWord);
+//         dest.writeString(passWord);
         dest.writeString(nickName);
         dest.writeString(gender);
         dest.writeInt(raceCode);
@@ -166,7 +166,7 @@ public class User extends LitePalSupport implements Parcelable {
         dest.writeString(address);
         dest.writeString(currentTitleCode);
         dest.writeInt(luckyValue);
-//        dest.writeInt(isOnline);
+//         dest.writeInt(isOnline);
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {

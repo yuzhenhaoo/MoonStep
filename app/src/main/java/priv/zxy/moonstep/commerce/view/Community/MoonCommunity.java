@@ -52,7 +52,7 @@ public class MoonCommunity extends Fragment {
     private void initData(){
         BaseCommunityMessage communityBase = new BaseCommunityMessage();
         communityBase.setAddress("安居客圣诞节");
-        communityBase.setLangtitude("192.123456");
+        communityBase.setLatitude("192.123456");
         communityBase.setLongitude("28.988645");
         communityBase.setMediaPath("https://img.icons8.com/color/2x/hearts.png");
         communityBase.setPraiseNumber("123");
@@ -67,7 +67,7 @@ public class MoonCommunity extends Fragment {
 
     public void initRecyclerView(){
         layoutManager = new LinearLayoutManager(this.getActivity());
-        mAdapter = new MoonCommunityAdapter();
+        mAdapter = new MoonCommunityAdapter(this.getActivity());
         ((MoonCommunityAdapter) mAdapter).clear();//在每次进入好友页面的时候，都需要对当前页面的ViewHolder进行一次刷新
         if(lists != null){
             mAdapter.addAll(lists);

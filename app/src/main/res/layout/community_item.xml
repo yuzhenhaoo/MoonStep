@@ -1,87 +1,156 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="15dp">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="350dp"
-        app:cardBackgroundColor="@color/Black"
-        app:cardCornerRadius="13dp"
-        app:cardElevation="20dp"
-        app:contentPadding="5dp">
-        <android.support.constraint.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="bottom">
-            <ImageView
-                android:id="@+id/mediaOrImage"
-                android:layout_width="match_parent"
-                android:layout_height="250dp"
-                app:layout_constraintTop_toTopOf="parent"
-                android:background="@drawable/ui16"/>
+    <de.hdodenhof.circleimageview.CircleImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/user_image"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_gravity="center"
+        android:src="@drawable/my_photo"
+        android:layout_margin="8dp"
+        app:civ_border_color="#c0c0c0"
+        app:civ_border_width="3dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+    
+    <TextView
+        android:id="@+id/nick_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="张墨尘"
+        android:textColor="@color/community_nick_name_color"
+        android:layout_margin="8dp"
+        android:gravity="center_vertical"
+        android:drawableStart="@mipmap/community_name"
+        app:layout_constraintLeft_toRightOf="@+id/user_image"
+        app:layout_constraintTop_toTopOf="@+id/user_image"/>
 
-            <ImageView
-                android:id="@+id/praise"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:background="@mipmap/praise"
-                app:layout_constraintTop_toBottomOf="@+id/mediaOrImage"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintHorizontal_bias="0.07"/>
+    <TextView
+        android:id="@+id/level"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="一阶"
+        android:textColor="@color/community_nick_name_color"
+        android:layout_margin="8dp"
+        android:gravity="center_vertical"
+        android:drawableStart="@mipmap/community_title"
+        app:layout_constraintLeft_toRightOf="@+id/nick_name"
+        app:layout_constraintTop_toTopOf="@+id/user_image"/>
 
-            <TextView
-                android:id="@+id/praiseNumber"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:fontFamily="@font/fontfamily1"
-                android:gravity="center"
-                android:text="103"
-                android:textColor="@color/white"
-                android:textSize="25sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/praise"
-                app:layout_constraintStart_toStartOf="@+id/praise"
-                app:layout_constraintTop_toBottomOf="@id/praise" />
+    <TextView
+        android:id="@+id/race"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="月神族"
+        android:textColor="@color/community_nick_name_color"
+        android:layout_margin="8dp"
+        android:gravity="center_vertical"
+        android:drawableStart="@mipmap/community_race"
+        app:layout_constraintLeft_toRightOf="@+id/level"
+        app:layout_constraintTop_toTopOf="@+id/user_image"/>
 
-            <TextView
-                android:id="@+id/address"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="中国湖南省长沙市岳麓书院"
-                android:textColor="@color/white"
-                android:fontFamily="@font/fontfamily1"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintRight_toRightOf="parent" />
+    <TextView
+        android:id="@+id/show_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="昨天"
+        android:textColor="@color/community_time_name_color"
+        android:layout_margin="10dp"
+        android:gravity="center_vertical"
+        app:layout_constraintTop_toBottomOf="@id/nick_name"
+        app:layout_constraintLeft_toRightOf="@+id/user_image"/>
 
-            <TextView
-                android:id="@+id/longitude"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="5dp"
-                android:fontFamily="@font/fontfamily1"
-                android:text="119.018928"
-                android:textColor="@color/white"
-                app:layout_constraintBottom_toTopOf="@+id/address"
-                app:layout_constraintEnd_toStartOf="@+id/langtitude" />
+    <Button
+        android:id="@+id/choice"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@mipmap/three_dots"
+        android:layout_margin="8dp"
+        android:onClick="popUp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/user_image" />
 
-            <TextView
-                android:id="@+id/langtitude"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="28.1892809"
-                android:fontFamily="@font/fontfamily1"
-                android:textColor="@color/white"
-                android:layout_marginBottom="5dp"
-                app:layout_constraintBottom_toTopOf="@+id/address"
-                app:layout_constraintRight_toRightOf="parent" />
-        </android.support.constraint.ConstraintLayout>
-    </android.support.v7.widget.CardView>
+    <TextView
+        android:id="@+id/description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="假如我年少有为不自卑，生来自由不憔悴。"
+        android:textColor="@color/community_content_name_color"
+        android:layout_margin="10dp"
+        android:gravity="center_vertical"
+        app:layout_constraintTop_toBottomOf="@id/user_image"
+        app:layout_constraintLeft_toRightOf="@id/user_image"
+        app:layout_constraintRight_toRightOf="parent"/>
 
-</LinearLayout>
+    <ImageView
+        android:id="@+id/show_image"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        android:layout_margin="10dp"
+        android:contentDescription="展示图片"
+        android:background="@drawable/black_rectangle0"
+        app:layout_constraintTop_toBottomOf="@+id/description"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+
+    <Button
+        android:id="@+id/praise_bt"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@mipmap/praise"
+        android:layout_margin="10dp"
+        app:layout_constraintTop_toBottomOf="@id/show_image"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <TextView
+        android:id="@+id/praiseNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:fontFamily="@font/fontfamily1"
+        android:gravity="center"
+        android:text="103"
+        android:textColor="@color/community_praise_color"
+        android:textSize="12sp"
+        app:layout_constraintLeft_toRightOf="@+id/praise_bt"
+        app:layout_constraintTop_toTopOf="@id/praise_bt"
+        app:layout_constraintBottom_toBottomOf="@id/praise_bt"/>
+
+    <TextView
+        android:id="@+id/address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="中国湖南省长沙市岳麓书院"
+        android:textColor="@color/community_address_color"
+        android:layout_marginEnd="10dp"
+        android:fontFamily="@font/fontfamily1"
+        app:layout_constraintBottom_toBottomOf="@id/praise_bt"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <TextView
+        android:id="@+id/longitude"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/fontfamily1"
+        android:text="119.018928"
+        android:textColor="@color/community_address_color"
+        app:layout_constraintBottom_toTopOf="@+id/address"
+        app:layout_constraintEnd_toStartOf="@+id/latitude" />
+
+    <TextView
+        android:id="@+id/latitude"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="28.1892809"
+        android:fontFamily="@font/fontfamily1"
+        android:layout_marginEnd="10dp"
+        android:textColor="@color/community_address_color"
+        app:layout_constraintBottom_toTopOf="@+id/address"
+        app:layout_constraintRight_toRightOf="parent" />
+</android.support.constraint.ConstraintLayout>

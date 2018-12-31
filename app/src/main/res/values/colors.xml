@@ -33,4 +33,11 @@
     <color name="menu_item_background">#f2f2f2</color>
     <color name="divider_color">#b5b5b5</color>
 
+
+
+    <color name="community_nick_name_color">#00a682</color>
+    <color name="community_time_name_color">#8d8f8f</color>
+    <color name="community_content_name_color">#313131</color>
+    <color name="community_praise_color">#d1003f</color>
+    <color name="community_address_color">#007dd1</color>
 </resources>
