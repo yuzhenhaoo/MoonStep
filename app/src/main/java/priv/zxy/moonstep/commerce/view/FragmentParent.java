@@ -95,7 +95,7 @@ public class FragmentParent extends BaseFragment {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                if (SharedPreferencesUtil.getInstance(Application.getContext()).isMessageTip()) {
+                if (SharedPreferencesUtil.isMessageTip()) {
                     mHandler.sendEmptyMessage(0x00);
                 } else {
                     mHandler.sendEmptyMessage(0x01);

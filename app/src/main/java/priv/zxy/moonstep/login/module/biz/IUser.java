@@ -50,7 +50,6 @@ public interface IUser {
 
     /**
      * 修改密码的逻辑函数
-
      * @param phoneNumber 电话号码
      * @param password 密码
      * @param confirmPassword 验证密码

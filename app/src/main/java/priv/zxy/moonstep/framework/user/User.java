@@ -77,6 +77,14 @@ public class User extends LitePalSupport implements Parcelable {
         this.currentTitleCode = currentTitleCode;
     }
 
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
+    }
+
     public int getLuckyValue() {
         return luckyValue;
     }
@@ -123,6 +131,11 @@ public class User extends LitePalSupport implements Parcelable {
     // 用户当前称号编码
     private String currentTitleCode;
 
+    /**
+     * 用户等阶
+     */
+    private String level;
+
     // 幸运值
     private int luckyValue;
 
@@ -144,6 +157,7 @@ public class User extends LitePalSupport implements Parcelable {
         signature = in.readString();
         address = in.readString();
         currentTitleCode = in.readString();
+        level = in.readString();
         luckyValue = in.readInt();
         isOnline = in.readInt();
     }
@@ -165,6 +179,7 @@ public class User extends LitePalSupport implements Parcelable {
         dest.writeString(signature);
         dest.writeString(address);
         dest.writeString(currentTitleCode);
+        dest.writeString(level);
         dest.writeInt(luckyValue);
 //         dest.writeInt(isOnline);
     }

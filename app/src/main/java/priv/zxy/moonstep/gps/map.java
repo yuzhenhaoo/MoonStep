@@ -44,6 +44,7 @@ import priv.zxy.moonstep.algorithm.ChooseMapDots.DotChooseContext;
 import priv.zxy.moonstep.algorithm.ChooseMapDots.MapDot;
 import priv.zxy.moonstep.algorithm.MinimumDISTDectation.MinDistanceDetectionContext;
 import priv.zxy.moonstep.algorithm.MinimumDISTDectation.MinDistanceTypeEnum;
+import priv.zxy.moonstep.constant.SharedConstant;
 import priv.zxy.moonstep.helper.FileHelper;
 import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.util.LogUtil;
@@ -391,7 +392,7 @@ public class map extends Fragment{
             LogUtil.d(TAG, "当前维度为:" + latitude);
             LogUtil.d(TAG, "当前经度为:" + longitude);
 
-            if (SharedPreferencesUtil.getInstance(Application.getContext()).checkMapTime(days)){
+            if (SharedPreferencesUtil.checkMapTime(days)){
                 // 这里对32个宝藏位置坐标进行刷新，如果成功的话，就存入sqlite数据库中，并在地图上显示
                 DotChooseContext context = new DotChooseContext(ChooseTypeEnum.SQUARE_CHOOSE);
                 List<MapDot> dots = context.listMapDots(latitude, longitude, 32);
@@ -399,7 +400,7 @@ public class map extends Fragment{
                 saveMapDots(dots);
             }
 
-            String phoneNumber = SharedPreferencesUtil.getInstance(Application.getContext()).readLoginInfo().get("PhoneNumber");
+            String phoneNumber = SharedPreferencesUtil.readLoginInfo().get(SharedConstant.PHONE_NUMBER);
             SetLocationDAO.getInstance().LocationServlet(phoneNumber, address, String.valueOf(latitude), String.valueOf(longitude));
 
         }else{

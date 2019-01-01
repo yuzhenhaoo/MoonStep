@@ -23,10 +23,6 @@ public interface IUserLoginView {
 
     void toForgetPasswordActivity();
 
-    void initAccount(SharedPreferencesUtil preference);
-
-    void initPassword(SharedPreferencesUtil preference);
-
     void showErrorTip(ErrorCodeEnum errorCode);
 
     void handleSendMessage();

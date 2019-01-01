@@ -24,5 +24,10 @@ public enum LevelEnum {
 
     EIGHTH_LEVEL,
 
-    NINTH_LEVEL
+    NINTH_LEVEL,
+
+    /**
+     * 隐藏的十阶
+     */
+    TENTH_LEVEL
 }

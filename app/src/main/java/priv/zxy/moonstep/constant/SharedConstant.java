@@ -30,8 +30,11 @@ public  class SharedConstant {
     public static final String HEAD_PATH = "headPath";
     public static final String SIGNATURE = "signature";
     public static final String CURRENT_TITLE_CODE = "currentTitleCode";
+    public static final String LEVEL = "level";
     public static final String LUCKY_VALUE = "luckyValue";
     public static final String LATITUDE = "latitude";
     public static final String LONGTITUDE = "longtitude";
     public static final String ADDRESS = "address";
+
+    public static final String MESSAGE = "message";
 }

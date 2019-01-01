@@ -57,19 +57,6 @@ public class UserLoginPresenter {
     }
 
     /**
-     * 初始化用户登陆时候的用户名和密码
-     * 利用Preference的工具类来实现自动填充
-     * @param preference SharedPreferences工具类对象
-     */
-    public void initAccountAndPassword(SharedPreferencesUtil preference){
-        LogUtil.d("UserLoginPresenter", String.valueOf(preference.isSuccessLogin()));
-        if (preference.isSuccessLogin()){
-            userLoginView.initAccount(preference);
-            userLoginView.initPassword(preference);
-        }
-    }
-
-    /**
      * 用来显示刷新页面
      */
     public void showLoading(){

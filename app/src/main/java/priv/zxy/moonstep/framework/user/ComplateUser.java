@@ -14,7 +14,8 @@ import priv.zxy.moonstep.framework.title.AbstractTitle;
 /**
  * 创建人: Administrator
  * 创建时间: 2018/12/3
- * 描述: 继承了User类的具体User类，什么叫做具体呢？就是说，在User的基础上，增加了更多广泛的信息，这是一个庞大的系统，基于User存在而已，是整个frameWork层的核心。
+ * 描述: 继承了User类的具体User类，什么叫做具体呢？就是说，在User的基础上，
+ * 增加了更多广泛的信息，这是一个庞大的系统，基于User存在而已，是整个frameWork层的核心。
  **/
 
 public class ComplateUser extends User {

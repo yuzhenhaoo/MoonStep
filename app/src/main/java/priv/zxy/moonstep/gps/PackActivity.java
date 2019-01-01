@@ -18,6 +18,8 @@ import priv.zxy.moonstep.adapter.AbstractAdapter;
 import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.framework.good.Props;
 import priv.zxy.moonstep.framework.good.bean.Good;
+import priv.zxy.moonstep.framework.user.User;
+import priv.zxy.moonstep.framework.user.UserSelfInfo;
 import priv.zxy.moonstep.util.LogUtil;
 import priv.zxy.moonstep.util.SharedPreferencesUtil;
 
@@ -70,13 +72,13 @@ public class PackActivity extends AppCompatActivity {
 
     public void initData(){
         Props props = new Props();
-        Map<String, String> data = SharedPreferencesUtil.getInstance(Application.getContext()).readMySelfInformation();
+        User user = UserSelfInfo.getInstance().getMySelf();
 
         props.getUserGoods(gs -> {
             goods = gs;
             LogUtil.d(TAG, goods.toString());
             handler.sendEmptyMessage(0x01);
-        }, data.get("phoneNumber"));
+        }, user.getPhoneNumber());
         
         packView.setOnItemClickListener((parent, view, position, id) -> Toast.makeText(PackActivity.this, "你点击了" + position + "个背包" , Toast.LENGTH_SHORT).show());
     }

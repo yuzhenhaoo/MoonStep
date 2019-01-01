@@ -52,7 +52,7 @@ public class MoonFriendService extends Service {
     @Override
     public void onCreate() {
         initMoonFriends();
-        if (SharedPreferencesUtil.getInstance(Application.getContext()).isDataInitialized()) {
+        if (SharedPreferencesUtil.isDataInitialized()) {
             initMoonFriends();
         }
         super.onCreate();
@@ -87,7 +87,7 @@ public class MoonFriendService extends Service {
                     }, username);
                 }
                 LogUtil.d(TAG, "run: EM获取好友列表成功");
-                SharedPreferencesUtil.getInstance(Application.getContext()).dataInitialized();
+                SharedPreferencesUtil.dataInitialized();
             } catch (HyphenateException e) {
                 e.printStackTrace();
                 LogUtil.d(TAG, "run: EM获取好友列表失败：" + e.getMessage());

@@ -28,6 +28,7 @@ import priv.zxy.moonstep.DAO.PullUserInfoDAO;
 import priv.zxy.moonstep.constant.SharedConstant;
 import priv.zxy.moonstep.framework.message.MessageOnline;
 import priv.zxy.moonstep.framework.user.User;
+import priv.zxy.moonstep.framework.user.UserSelfInfo;
 import priv.zxy.moonstep.guide.StartActivity;
 import priv.zxy.moonstep.helper.EMHelper;
 import priv.zxy.moonstep.data.bean.EMBase;
@@ -108,10 +109,16 @@ public class Application extends LitePalApplication {
      */
     @Override
     public void onTerminate() {
+        // 清理所有Application中获得的引用，以免内存泄漏
+        clearLeakProblem();
         super.onTerminate();
         LogUtil.d(TAG, "程序被终止了");
         // 移除所有的网络监听观察者
         NetworkManager.getInstance().unRegisterAllObserver();
+    }
+
+    private void clearLeakProblem() {
+        context = null;
     }
 
     /**
@@ -186,25 +193,20 @@ public class Application extends LitePalApplication {
         isInit = true;
     }
 
-
     /**
-     * 清理数据库SQLite中存储的用户名，用户密码等信息
-     */
-    private void cleanLoginInformation(){
-        SharedPreferencesUtil.getInstance(context).setFailLoginInfo();
-    }
-
-    /**
-     * 获取用户信息
+     * 获取用户个人信息
      */
     private void getUserInformation(){
-        boolean isLoginResult = SharedPreferencesUtil.getInstance(context).isSuccessLogin();
+        boolean isLoginResult = SharedPreferencesUtil.isSuccessLogin();
         if (isLoginResult){
-            String phoneNumber = SharedPreferencesUtil.getInstance(context).readLoginInfo().get(SharedConstant.PHONE_NUMBER);
+            String phoneNumber = SharedPreferencesUtil.readLoginInfo().get(SharedConstant.PHONE_NUMBER);
             PullUserInfoDAO.getInstance().getUserInfo(new PullUserInfoDAO.Callback() {
                 @Override
                 public void onSuccess(User moonFriend) {
-                    SharedPreferencesUtil.getInstance(context).saveMySelfInformation(moonFriend);
+                    // 将用户个人信息存储进入缓存
+                    SharedPreferencesUtil.saveMySelfInformation(moonFriend);
+                    // 将用户个人信息存储进入UserSelfInfo的实例对象中
+                    UserSelfInfo.getInstance().setMySelf(moonFriend);
                 }
 
                 @Override
@@ -310,7 +312,7 @@ public class Application extends LitePalApplication {
                     case VOICE://处理声音消息
                         break;
                 }
-                SharedPreferencesUtil.getInstance(context).saveIsMessageTip(message.getFrom().substring(8, message.getFrom().length()));//当来消息的时候，将消息提示的标记存储到缓存中。
+                SharedPreferencesUtil.saveIsMessageTip(message.getFrom().substring(8, message.getFrom().length()));//当来消息的时候，将消息提示的标记存储到缓存中。
                 localBroadcastManager.sendBroadcast(intent);//发送本地广播
             }
         }
@@ -354,10 +356,6 @@ public class Application extends LitePalApplication {
          */
         @Override
         public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-            /*
-            在UserLoginActivity中清空用户的登陆信息
-                防止用户在第一登陆失败后，第二次回退后登陆可成功登陆
-             */
             if (activity.getClass() == MainActivity.class) {
                 EMClient.getInstance().chatManager().addMessageListener(msgListener);//实施消息的监听
                 new Thread(() -> getUserInformation()).start();

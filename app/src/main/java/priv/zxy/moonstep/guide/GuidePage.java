@@ -49,10 +49,10 @@ public class GuidePage extends BaseActivity {
      * 第二次登陆圆月行，直接进入登录页面
      */
     public void jumpActivity(){
-        if(!SharedPreferencesUtil.getInstance(Application.getContext()).isFirstLogin()){
+        if(!SharedPreferencesUtil.isFirstLogin()){
             jumpLoginActivity();
         }
-        SharedPreferencesUtil.getInstance(Application.getContext()).setFirstLogin();
+        SharedPreferencesUtil.setFirstLogin();
     }
 
     private void initView(){

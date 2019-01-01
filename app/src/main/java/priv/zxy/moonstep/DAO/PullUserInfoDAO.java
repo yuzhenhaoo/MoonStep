@@ -41,6 +41,7 @@ public class PullUserInfoDAO {
         }
         return instance;
     }
+
     public void getUserInfo(final Callback callback, final String userID){
         AndroidNetworking.post(URL)
                 .addBodyParameter(DaoConstant.USER_ID, userID)
@@ -82,8 +83,8 @@ public class PullUserInfoDAO {
         moonFriend.setHeadPath(jsonObject.getString(SharedConstant.HEAD_PATH));
         moonFriend.setSignature(jsonObject.getString(SharedConstant.SIGNATURE));
         moonFriend.setLocation(jsonObject.getString(SharedConstant.ADDRESS));
-        // TODO (张晓翼，2018/12/30， 这里服务器传过来的是当前的称号码，不是称号名称)
         moonFriend.setCurrentTitleCode(jsonObject.getString(SharedConstant.CURRENT_TITLE_CODE));
+        moonFriend.setLevel(jsonObject.getString(SharedConstant.LEVEL));
         moonFriend.setLuckyValue(Integer.parseInt(jsonObject.getString(SharedConstant.LUCKY_VALUE)));
         return moonFriend;
     }

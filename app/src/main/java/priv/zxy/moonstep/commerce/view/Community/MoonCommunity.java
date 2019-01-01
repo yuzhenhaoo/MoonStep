@@ -15,6 +15,8 @@ import java.util.List;
 
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.adapter.MoonCommunityAdapter;
+import priv.zxy.moonstep.framework.user.User;
+import priv.zxy.moonstep.framework.user.UserSelfInfo;
 
 /**
  * 创建人: Administrator
@@ -50,12 +52,14 @@ public class MoonCommunity extends Fragment {
     }
 
     private void initData(){
+        User user = UserSelfInfo.getInstance().getMySelf();
         BaseCommunityMessage communityBase = new BaseCommunityMessage();
         communityBase.setAddress("安居客圣诞节");
         communityBase.setLatitude("192.123456");
         communityBase.setLongitude("28.988645");
         communityBase.setMediaPath("https://img.icons8.com/color/2x/hearts.png");
         communityBase.setPraiseNumber("123");
+        communityBase.setUser(user);
         for (int i=0; i<10; i++){
             lists.add(communityBase);
         }

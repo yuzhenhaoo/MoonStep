@@ -130,11 +130,11 @@ public class LoginDataRequestDAO {
      * @param inputPassword 密码
      */
     private void saveData(final  String phoneNumber, final String inputPassword){
-        SharedPreferencesUtil.getInstance(Application.getContext()).setSuccessLoginInfo(phoneNumber, inputPassword);
+        SharedPreferencesUtil.setSuccessLoginInfo(phoneNumber, inputPassword);
     }
 
     private void setLoginFailTagToCache(){
-        SharedPreferencesUtil.getInstance(Application.getContext()).setFailLoginInfo();
+        SharedPreferencesUtil.setFailLoginInfo();
     }
 
     private void startMessageService(){

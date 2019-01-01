@@ -118,7 +118,10 @@ There are so many beautiful things in the world, but you never know them, as the
 	3. 相应优化
 	4. 内存优化
 		1. 内存泄漏
+			
 		2. 内存溢出
+			1.为了解决可能会发生内存溢出的问题，采用LeakCanary框架进行溢出检测，并针对程序的反馈结果进行修复
+
 	5. 电池使用优化
 	6. 网络优化
 

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -23,7 +24,6 @@ import java.lang.ref.WeakReference;
 
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.constant.SharedConstant;
-import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.data.bean.BaseActivity;
 import priv.zxy.moonstep.login.presenter.UserLoginPresenter;
 import priv.zxy.moonstep.util.LogUtil;
@@ -43,29 +43,18 @@ import priv.zxy.network.utils.Constants;
 public class UserLoginActivity extends BaseActivity implements IUserLoginView {
 
     private Button weiXinBt;
-
     private Button qqBt;
-
     private Button weiBoBt;
-
     private MaterialEditText accountEt;
-
     private MaterialEditText passwordEt;
-
     private Button clickBt;
-
     private Button fgPwdBt;
-
     private Button rgiPhoneBt;
-
     private View deepBackground;
-
     private View plainBackground;
-
     private ContentLoadingProgressBar progressBar;
 
     private Activity mActivity;
-
     private Context mContext;
 
     private UserLoginPresenter userLoginPresenter;
@@ -109,7 +98,7 @@ public class UserLoginActivity extends BaseActivity implements IUserLoginView {
 
         userLoginPresenter = new UserLoginPresenter(this);
 
-        userLoginPresenter.initAccountAndPassword(SharedPreferencesUtil.getInstance(Application.getContext()));
+        initAccountAndPassword();
 
         accountEt.requestFocus();
 
@@ -165,6 +154,11 @@ public class UserLoginActivity extends BaseActivity implements IUserLoginView {
             }
             return true;
         });
+    }
+
+    private void initAccountAndPassword() {
+        accountEt.setText(SharedPreferencesUtil.readLoginInfo().get(SharedConstant.PHONE_NUMBER));
+        passwordEt.setText(SharedPreferencesUtil.readLoginInfo().get(SharedConstant.PASSWORD));
     }
 
     @Network(netType = NetType.AUTO)
@@ -256,16 +250,6 @@ public class UserLoginActivity extends BaseActivity implements IUserLoginView {
     }
 
     @Override
-    public void initAccount(SharedPreferencesUtil preference) {
-        accountEt.setText(SharedPreferencesUtil.getInstance(Application.getContext()).readLoginInfo().get(SharedConstant.PHONE_NUMBER));
-    }
-
-    @Override
-    public void initPassword(SharedPreferencesUtil preference) {
-        passwordEt.setText(SharedPreferencesUtil.getInstance(Application.getContext()).readLoginInfo().get(SharedConstant.PASSWORD));
-    }
-
-    @Override
     public void showErrorTip(ErrorCodeEnum errorCode) {
         ShowErrorReasonUtil.getInstance(mActivity).show(errorCode);
     }
@@ -277,7 +261,7 @@ public class UserLoginActivity extends BaseActivity implements IUserLoginView {
 
     @Override
     public void setLoginPreferences(String username, String password) {
-        SharedPreferencesUtil.getInstance(Application.getContext()).setSuccessLoginInfo(username, password);
+        SharedPreferencesUtil.setSuccessLoginInfo(username, password);
     }
 
     @Override

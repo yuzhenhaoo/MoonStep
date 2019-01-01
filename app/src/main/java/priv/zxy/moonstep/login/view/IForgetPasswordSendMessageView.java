@@ -6,19 +6,19 @@ package priv.zxy.moonstep.login.view;
 
 public interface IForgetPasswordSendMessageView {
 
-    void toChangePasswordActivity();
+  void toChangePasswordActivity();
 
-    void finishActivitySelf();
+  void finishActivitySelf();
 
-    void sendVoiceCode();
+  void sendVoiceCode();
 
-    String getPhoneNumber();
+  String getPhoneNumber();
 
-    void showLoading();
+  void showLoading();
 
-    void hideLoading();
+  void hideLoading();
 
-    void showSuccessTip();
+  void showSuccessTip();
 
-    void showErrorTip();
+  void showErrorTip();
 }

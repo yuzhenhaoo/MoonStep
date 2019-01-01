@@ -63,7 +63,7 @@ public class MessageReceiverService extends Service {
                     case VOICE://处理声音消息
                         break;
                 }
-                SharedPreferencesUtil.getInstance(Application.getContext()).saveIsMessageTip(message.getFrom().substring(8, message.getFrom().length()));//当来消息的时候，将消息提示的标记存储到缓存中。
+                SharedPreferencesUtil.saveIsMessageTip(message.getFrom().substring(8, message.getFrom().length()));//当来消息的时候，将消息提示的标记存储到缓存中。
                 localBroadcastManager.sendBroadcast(intent);//发送本地广播
                 NotificationHelper.getInstance().showNotification(NotificationEnum.MESSAGE_TIP);
             }

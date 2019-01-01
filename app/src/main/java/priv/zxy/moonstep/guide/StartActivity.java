@@ -16,6 +16,7 @@ import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.DAO.constant.UrlBase;
 import priv.zxy.moonstep.data.bean.BaseActivity;
+import priv.zxy.moonstep.framework.user.UserSelfInfo;
 import priv.zxy.moonstep.service.MessageReceiverService;
 import priv.zxy.moonstep.login.view.UserLoginActivity;
 import priv.zxy.moonstep.main.view.MainActivity;
@@ -124,13 +125,15 @@ public class StartActivity extends BaseActivity {
      * 如果上次登录失败，登录成功与否的标记位被修改为false，那么就要进入到登录页面
      */
     public  void toLoginPage(){
-        if ( SharedPreferencesUtil.getInstance(Application.getContext()).isSuccessLogin()){
+        if ( SharedPreferencesUtil.isSuccessLogin()){
             Intent intent = new Intent(this, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
-            //当无需通过LoginActivity登录的时候就要开启MessageReceiverService
+            // 当无需通过LoginActivity登录的时候就要开启MessageReceiverService
             startService(new Intent(this, MessageReceiverService.class));
+            // 同时初始化UserSelfInfo的数据
+            UserSelfInfo.getInstance().setMySelf(SharedPreferencesUtil.readMySelfInformation());
         }else{
             Intent intent = new Intent(this, UserLoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);

@@ -22,6 +22,8 @@ import priv.zxy.moonstep.customview.AnimationButton;
 import priv.zxy.moonstep.customview.WaveViewByBezier;
 import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.data.bean.BaseFragment;
+import priv.zxy.moonstep.framework.user.User;
+import priv.zxy.moonstep.framework.user.UserSelfInfo;
 import priv.zxy.moonstep.util.SharedPreferencesUtil;
 
 public class PersonalSurfaceFragment extends BaseFragment {
@@ -72,8 +74,8 @@ public class PersonalSurfaceFragment extends BaseFragment {
     }
 
     private void initData() {
-        Map<String, String> data = SharedPreferencesUtil.getInstance(Application.getContext()).readMySelfInformation();
-        userNickName.setText(data.get(SharedConstant.NICK_NAME));
+        User user = UserSelfInfo.getInstance().getMySelf();
+        userNickName.setText(user.getNickName());
         // FIXME (张晓翼，2018/12/30， 这里的数据还没有传)
         userLevelName.setText("一阶");
     }
