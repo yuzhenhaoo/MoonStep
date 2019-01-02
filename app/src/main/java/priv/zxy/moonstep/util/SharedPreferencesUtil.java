@@ -6,9 +6,12 @@ import android.content.SharedPreferences;
 import java.util.HashMap;
 import java.util.Map;
 
+import priv.zxy.moonstep.DAO.PullUserInfoDAO;
 import priv.zxy.moonstep.constant.SharedConstant;
+import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
 import priv.zxy.moonstep.framework.user.User;
 import priv.zxy.moonstep.data.application.Application;
+import priv.zxy.moonstep.framework.user.UserSelfInfo;
 import priv.zxy.moonstep.wheel.cache.FacadeSharedPreference;
 
 
@@ -104,6 +107,10 @@ public class SharedPreferencesUtil {
         if (sp == null) {
             init();
         }
+        // 上次登陆不成功，就退出登陆
+        if (!isFirstLogin()) {
+            return null;
+        }
         Map<String, String> data = new HashMap<>();
         data.put(SharedConstant.PHONE_NUMBER, sp.read(SharedConstant.LANDING_LIBRARY).get(SharedConstant.PHONE_NUMBER).toString());
         data.put(SharedConstant.PASSWORD, sp.read(SharedConstant.LANDING_LIBRARY).get(SharedConstant.PASSWORD).toString());
@@ -118,7 +125,7 @@ public class SharedPreferencesUtil {
         if (sp == null) {
             init();
         }
-        return sp.checkElement(SharedConstant.LANDING_LIBRARY, "IS_SUCCESS");
+        return sp.checkElement(SharedConstant.LANDING_LIBRARY, SharedConstant.IS_SUCCESS);
     }
 
     /**
@@ -155,8 +162,9 @@ public class SharedPreferencesUtil {
         if (sp == null) {
             init();
         }
+        // 之前还没有登陆成功的话，那么就从网络上请求数据，存储进磁盘的同时，要写入到UserSelfInfo中方便读取
         if (!isSavedMySelfInformation()) {
-            return null;
+            throw new RuntimeException("磁盘中不存在用户信息，无法进行读取");
         }
         User user = new User();
         user.setNickName(sp.read(SharedConstant.PERSONAL_INFO_LIBRARY).get(SharedConstant.NICK_NAME).toString());
@@ -167,7 +175,7 @@ public class SharedPreferencesUtil {
         user.setSignature(sp.read(SharedConstant.PERSONAL_INFO_LIBRARY).get(SharedConstant.SIGNATURE).toString());
         user.setLocation(sp.read(SharedConstant.PERSONAL_INFO_LIBRARY).get(SharedConstant.ADDRESS).toString());
         user.setCurrentTitleCode(sp.read(SharedConstant.PERSONAL_INFO_LIBRARY).get(SharedConstant.CURRENT_TITLE_CODE).toString());
-        user.setLevel(sp.read(SharedConstant.LEVEL).get(SharedConstant.LEVEL).toString());
+        user.setLevel(sp.read(SharedConstant.PERSONAL_INFO_LIBRARY).get(SharedConstant.LEVEL).toString());
         user.setLuckyValue(Integer.parseInt(sp.read(SharedConstant.PERSONAL_INFO_LIBRARY).get(SharedConstant.LUCKY_VALUE).toString()));
         return user;
     }
@@ -180,7 +188,7 @@ public class SharedPreferencesUtil {
         if (sp == null) {
             init();
         }
-        return !sp.checkElement(SharedConstant.PERSONAL_INFO_LIBRARY, "isSaved");
+        return sp.checkElement(SharedConstant.PERSONAL_INFO_LIBRARY, "isSaved");
     }
 
     /**

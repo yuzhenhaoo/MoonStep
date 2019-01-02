@@ -37,4 +37,5 @@ public  class SharedConstant {
     public static final String ADDRESS = "address";
 
     public static final String MESSAGE = "message";
+    public static final String MOONSTEP = "moonstep";
 }

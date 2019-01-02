@@ -141,7 +141,7 @@ public class MainActivity extends BaseActivity
             LogUtil.d(TAG, user.toString());
             name.setText(user.getNickName());
             // TODO (张晓翼，2018/12/30， 这里服务器传过来的是当前的种族码，不是种族名称)
-            race.setText(user.getRaceCode());
+            race.setText(String.valueOf(user.getRaceCode()));
         } catch (NullPointerException e) {
             LogUtil.d(TAG, e.getMessage());
         }

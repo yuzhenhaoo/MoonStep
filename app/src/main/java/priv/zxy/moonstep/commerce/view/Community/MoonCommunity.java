@@ -17,6 +17,7 @@ import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.adapter.MoonCommunityAdapter;
 import priv.zxy.moonstep.framework.user.User;
 import priv.zxy.moonstep.framework.user.UserSelfInfo;
+import priv.zxy.moonstep.util.LogUtil;
 
 /**
  * 创建人: Administrator
@@ -25,6 +26,8 @@ import priv.zxy.moonstep.framework.user.UserSelfInfo;
  **/
 
 public class MoonCommunity extends Fragment {
+    private static final String TAG = "MoonCommunity";
+
     private RecyclerView recyclerview;
     private RecyclerView.LayoutManager layoutManager;
     private MoonCommunityAdapter mAdapter;
@@ -44,7 +47,6 @@ public class MoonCommunity extends Fragment {
         initView();
         initData();
         initEvent();
-        initRecyclerView();
     }
 
     private void initView() {
@@ -57,12 +59,20 @@ public class MoonCommunity extends Fragment {
         communityBase.setAddress("安居客圣诞节");
         communityBase.setLatitude("192.123456");
         communityBase.setLongitude("28.988645");
+        communityBase.setShowTime("3天前");
+        communityBase.setContent("魔前叩首三千年，回首凡尘不做仙");
         communityBase.setMediaPath("https://img.icons8.com/color/2x/hearts.png");
         communityBase.setPraiseNumber("123");
         communityBase.setUser(user);
-        for (int i=0; i<10; i++){
+        for (int i=0; i<2; i++){
             lists.add(communityBase);
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        initRecyclerView();
     }
 
     private void initEvent(){
@@ -72,11 +82,14 @@ public class MoonCommunity extends Fragment {
     public void initRecyclerView(){
         layoutManager = new LinearLayoutManager(this.getActivity());
         mAdapter = new MoonCommunityAdapter(this.getActivity());
-        ((MoonCommunityAdapter) mAdapter).clear();//在每次进入好友页面的时候，都需要对当前页面的ViewHolder进行一次刷新
+        // 每次需要清空一次mAdapter中的列表书局
+        mAdapter.clear();
         if(lists != null){
             mAdapter.addAll(lists);
         }
         recyclerview.setLayoutManager(layoutManager);
         recyclerview.setAdapter(mAdapter);
+        // 每次进来记得要对lists进行重置
+        lists.clear();
     }
 }

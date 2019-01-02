@@ -24,6 +24,8 @@ import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.commerce.view.Community.BaseCommunityMessage;
 import priv.zxy.moonstep.framework.user.User;
+import priv.zxy.moonstep.framework.user.UserSelfInfo;
+import priv.zxy.moonstep.util.LogUtil;
 
 /**
  * 创建人: Administrator
@@ -72,9 +74,9 @@ public class MoonCommunityAdapter extends RecyclerView.Adapter<MoonCommunityAdap
         User user = cb.getUser();
         Glide.with(Application.getContext()).load(user.getHeadPath()).into(myHolder.userPhoto);
         myHolder.nickName.setText(user.getNickName());
-        // FIXME (张晓翼， 2018/12/31， 下面的两项数据的匹配出现了问题，在User中，我不确定到底是使用编码方式，还是直接存储名称，待定~)
-        myHolder.level.setText("一阶");
-        myHolder.race.setText("月灵族");
+        myHolder.level.setText(user.getLevel());
+        // FIXME (张晓翼， 2018/12/31， 种族编码没有匹配成功
+        myHolder.race.setText(String.valueOf(user.getRaceCode()));
         myHolder.content.setText(cb.getContent());
         myHolder.showTime.setText(cb.getShowTime());
         myHolder.praiseNumber.setText(cb.getPraiseNumber());

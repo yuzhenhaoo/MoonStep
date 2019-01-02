@@ -194,30 +194,6 @@ public class Application extends LitePalApplication {
     }
 
     /**
-     * 获取用户个人信息
-     */
-    private void getUserInformation(){
-        boolean isLoginResult = SharedPreferencesUtil.isSuccessLogin();
-        if (isLoginResult){
-            String phoneNumber = SharedPreferencesUtil.readLoginInfo().get(SharedConstant.PHONE_NUMBER);
-            PullUserInfoDAO.getInstance().getUserInfo(new PullUserInfoDAO.Callback() {
-                @Override
-                public void onSuccess(User moonFriend) {
-                    // 将用户个人信息存储进入缓存
-                    SharedPreferencesUtil.saveMySelfInformation(moonFriend);
-                    // 将用户个人信息存储进入UserSelfInfo的实例对象中
-                    UserSelfInfo.getInstance().setMySelf(moonFriend);
-                }
-
-                @Override
-                public void onFail(ErrorCodeEnum errorCode) {
-                    LogUtil.d(TAG, "获取个人信息失败");
-                }
-            }, MOONSTEP + phoneNumber);
-        }
-    }
-
-    /**
      * SDK初始化的一些配置
      * 关于 EMOptions 可以参考官方的 API 文档
      * http://www.easemob.com/apidoc/android/chat3.0/classcom_1_1hyphenate_1_1chat_1_1_e_m_options.html
@@ -358,7 +334,6 @@ public class Application extends LitePalApplication {
         public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
             if (activity.getClass() == MainActivity.class) {
                 EMClient.getInstance().chatManager().addMessageListener(msgListener);//实施消息的监听
-                new Thread(() -> getUserInformation()).start();
             }
             if (activity.getClass() == ChattingActivity.class){
                 EMClient.getInstance().chatManager().removeMessageListener(msgListener);//移除Listener

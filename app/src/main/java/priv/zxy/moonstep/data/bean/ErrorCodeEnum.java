@@ -101,5 +101,15 @@ public enum ErrorCodeEnum {
     /**
      * 月友账号不存在
      */
-    USER_IS_NOT_EXISTED
+    USER_IS_NOT_EXISTED,
+
+    /**
+     * 用户信息请求失败
+     */
+    USER_DATA_REQUEST_FAIL,
+
+    /**
+     * 注册信息不能为空
+     */
+    REGISTER_DATA_CAN_NOT_NULL
 }

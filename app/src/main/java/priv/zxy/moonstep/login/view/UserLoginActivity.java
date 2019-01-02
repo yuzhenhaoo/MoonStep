@@ -21,10 +21,14 @@ import android.widget.Toast;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import java.lang.ref.WeakReference;
+import java.util.Objects;
 
+import priv.zxy.moonstep.DAO.PullUserInfoDAO;
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.constant.SharedConstant;
 import priv.zxy.moonstep.data.bean.BaseActivity;
+import priv.zxy.moonstep.framework.user.User;
+import priv.zxy.moonstep.framework.user.UserSelfInfo;
 import priv.zxy.moonstep.login.presenter.UserLoginPresenter;
 import priv.zxy.moonstep.util.LogUtil;
 import priv.zxy.moonstep.util.SharedPreferencesUtil;
@@ -56,6 +60,8 @@ public class UserLoginActivity extends BaseActivity implements IUserLoginView {
 
     private Activity mActivity;
     private Context mContext;
+
+    private static final String TAG = "UserLoginActivity";
 
     private UserLoginPresenter userLoginPresenter;
 
@@ -157,6 +163,10 @@ public class UserLoginActivity extends BaseActivity implements IUserLoginView {
     }
 
     private void initAccountAndPassword() {
+        // 之前没有成功登陆过的话，就直接退出
+        if (!SharedPreferencesUtil.isSuccessLogin()) {
+            return ;
+        }
         accountEt.setText(SharedPreferencesUtil.readLoginInfo().get(SharedConstant.PHONE_NUMBER));
         passwordEt.setText(SharedPreferencesUtil.readLoginInfo().get(SharedConstant.PASSWORD));
     }
@@ -235,6 +245,7 @@ public class UserLoginActivity extends BaseActivity implements IUserLoginView {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         this.startActivity(intent);
     }
+
 
     @Override
     public void toConfirmPhoneActivity() {

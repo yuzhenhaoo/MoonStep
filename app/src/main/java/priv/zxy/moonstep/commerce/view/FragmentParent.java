@@ -6,7 +6,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.view.ViewPager;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +16,10 @@ import android.widget.RadioGroup;
 import java.lang.ref.WeakReference;
 
 import priv.zxy.moonstep.R;
-import priv.zxy.moonstep.adapter.MainAdapter;
+import priv.zxy.moonstep.commerce.view.Community.MoonCommunity;
+import priv.zxy.moonstep.commerce.view.Friend.MoonFriendFragment;
+import priv.zxy.moonstep.commerce.view.Me.PersonalSurfaceFragment;
+import priv.zxy.moonstep.commerce.view.Tree.TreeFragment;
 import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.data.bean.BaseFragment;
 import priv.zxy.moonstep.util.SharedPreferencesUtil;
@@ -26,20 +29,22 @@ public class FragmentParent extends BaseFragment {
     private static final String TAG = "FragmentParent";
 
     private View view;
-
-    private ViewPager viewPager;
-
-    private RadioGroup rg_tab_bar;
-
-    private RadioButton rb_tree;
-
-    private RadioButton rb_community;
-
-    private RadioButton rb_heart;
-
-    private RadioButton rb_me;
-
+    private RadioGroup rg;
+    private RadioButton treeBt;
+    private RadioButton communityBt;
+    private RadioButton friendBt;
+    private RadioButton myselfBt;
     private MyHandler mHandler;
+
+    private TreeFragment treeFragment = new TreeFragment();
+    private MoonCommunity communityFragment = new MoonCommunity();
+    private MoonFriendFragment friendFragment = new MoonFriendFragment();
+    private PersonalSurfaceFragment personalInfoFragment = new PersonalSurfaceFragment();
+
+    /**
+     * 一个变量来检测当前friendBt是不是被选中了
+     */
+    private static boolean friendBtIsChecked = false;
 
     private static class MyHandler extends Handler{
         private WeakReference<FragmentParent> weakReference;
@@ -52,13 +57,13 @@ public class FragmentParent extends BaseFragment {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             FragmentParent instance = weakReference.get();
-            if (instance.viewPager.getCurrentItem() != 2){
+            if (!friendBtIsChecked) {
                 switch (msg.what) {
                     case 0x00:
-                        instance.rb_heart.setCompoundDrawables(null, instance.changeBtnTop(R.drawable.tab_menu_heart_tip), null, null);
+                        instance.friendBt.setCompoundDrawables(null, instance.changeBtnTop(R.drawable.tab_menu_heart_tip), null, null);
                         break;
                     case 0x01:
-                        instance.rb_heart.setCompoundDrawables(null, instance.changeBtnTop(R.drawable.tab_menu_heart), null, null);
+                        instance.friendBt.setCompoundDrawables(null, instance.changeBtnTop(R.drawable.tab_menu_heart), null, null);
                         break;
                 }
             }
@@ -80,13 +85,11 @@ public class FragmentParent extends BaseFragment {
     }
 
     public void initView() {
-        viewPager = view.findViewById(R.id.vp);
-        rg_tab_bar = view.findViewById(R.id.rg_tab_bar);
-        rb_tree = view.findViewById(R.id.rb_tree);
-        rb_community = view.findViewById(R.id.rb_community);
-        rb_heart = view.findViewById(R.id.rb_heart);
-        rb_me = view.findViewById(R.id.rb_me);
-        viewPager.setCurrentItem(0);
+        rg = view.findViewById(R.id.rg_tab_bar);
+        treeBt = view.findViewById(R.id.rb_tree);
+        communityBt = view.findViewById(R.id.rb_community);
+        friendBt = view.findViewById(R.id.rb_heart);
+        myselfBt = view.findViewById(R.id.rb_me);
         mHandler = new MyHandler(this);
         new Thread(() -> {
             while (true) {
@@ -105,70 +108,54 @@ public class FragmentParent extends BaseFragment {
     }
 
     public void initDate() {
-        //通过getChildFragment得到子容器的管理器，实现Fragment的嵌套
-        MainAdapter mAdapter = new MainAdapter(getChildFragmentManager());
-        viewPager.setAdapter(mAdapter);
-        setChecked(rb_tree, R.mipmap.moon_pressed);
+        setChecked(treeBt, R.mipmap.moon_pressed);
 
-        rb_tree.setChecked(true);
+        treeBt.setChecked(true);
+        addFragmentToStack(treeFragment);
 
-        rg_tab_bar.setOnCheckedChangeListener((radioGroup, id) -> {
-            switch (id) {
+        rg.setOnCheckedChangeListener((group, checkedId) -> {
+            resetTopDrawable();
+            switch (checkedId) {
                 case R.id.rb_tree:
-                    viewPager.setCurrentItem(0);
+                    friendBtIsChecked = false;
+                    treeBt.setChecked(true);
+                    setChecked(treeBt, R.mipmap.tree_pressed);
+                    addFragmentToStack(treeFragment);
                     break;
                 case R.id.rb_community:
-                    viewPager.setCurrentItem(1);
+                    friendBtIsChecked = false;
+                    communityBt.setChecked(true);
+                    setChecked(communityBt, R.mipmap.community_pressed);
+                    addFragmentToStack(communityFragment);
                     break;
                 case R.id.rb_heart:
-                    viewPager.setCurrentItem(2);
+                    friendBtIsChecked = true;
+                    friendBt.setChecked(true);
+                    setChecked(friendBt, R.mipmap.heart_pressed);
+                    addFragmentToStack(friendFragment);
                     break;
                 case R.id.rb_me:
-                    viewPager.setCurrentItem(3);
+                    friendBtIsChecked = false;
+                    myselfBt.setChecked(true);
+                    setChecked(myselfBt, R.mipmap.me_pressed);
+                    addFragmentToStack(personalInfoFragment);
                     break;
-            }
-        });
-
-        //实现滑动监听
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int i, float v, int i1) {
-
-            }
-
-            @Override
-            public void onPageSelected(int i) {
-                resetTopDrawable();
-                switch (i) {
-                    case 0:
-                        rb_tree.setChecked(true);
-                        setChecked(rb_tree, R.mipmap.tree_pressed);
-                        break;
-                    case 1:
-                        rb_community.setChecked(true);
-                        setChecked(rb_community, R.mipmap.community_pressed);
-                        break;
-                    case 2:
-                        rb_heart.setChecked(true);
-                        setChecked(rb_heart, R.mipmap.heart_pressed);
-                        break;
-                    case 3:
-                        rb_me.setChecked(true);
-                        setChecked(rb_me, R.mipmap.me_pressed);
-                        break;
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int i) {
+                default:
             }
         });
     }
 
+    private void addFragmentToStack(Fragment fragment) {
+        if (getActivity() == null) {
+            return ;
+        }
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragments, fragment).commit();
+    }
+
     private void resetTopDrawable() {
-        rb_tree.setCompoundDrawables(null, changeBtnTop(R.mipmap.moon_normal), null, null);
-        rb_community.setCompoundDrawables(null, changeBtnTop(R.mipmap.pet_normal), null, null);
-        rb_me.setCompoundDrawables(null, changeBtnTop(R.mipmap.me_normal), null, null);
+        treeBt.setCompoundDrawables(null, changeBtnTop(R.mipmap.moon_normal), null, null);
+        communityBt.setCompoundDrawables(null, changeBtnTop(R.mipmap.pet_normal), null, null);
+        myselfBt.setCompoundDrawables(null, changeBtnTop(R.mipmap.me_normal), null, null);
     }
 
     private void setChecked(RadioButton rb, int id) {
@@ -184,6 +171,5 @@ public class FragmentParent extends BaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        viewPager.setAdapter(null);//设置适配器为null，避免内存泄漏
     }
 }

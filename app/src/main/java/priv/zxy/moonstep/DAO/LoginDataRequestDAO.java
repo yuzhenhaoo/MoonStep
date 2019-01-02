@@ -13,11 +13,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import priv.zxy.moonstep.DAO.constant.DaoConstant;
+import priv.zxy.moonstep.constant.SharedConstant;
 import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
 import priv.zxy.moonstep.DAO.constant.UrlBase;
+import priv.zxy.moonstep.framework.user.User;
+import priv.zxy.moonstep.framework.user.UserSelfInfo;
 import priv.zxy.moonstep.helper.EMHelper;
 import priv.zxy.moonstep.login.module.biz.OnLoginListener;
+import priv.zxy.moonstep.login.module.biz.UserBiz;
 import priv.zxy.moonstep.service.MessageReceiverService;
 import priv.zxy.moonstep.util.LogUtil;
 import priv.zxy.moonstep.util.SharedPreferencesUtil;
@@ -106,9 +110,12 @@ public class LoginDataRequestDAO {
                     EMClient.getInstance().groupManager().loadAllGroups();
                     EMClient.getInstance().chatManager().loadAllConversations();
                 }).start();
-                loginListener.LoginSuccess();//只有当环信服务器也登陆成功的时候才触发回调方法
+                /// 注释原因：必须当用户信息也请求成功的时候，才能触发成功的回调
+                // 只有当环信服务器也登陆成功的时候才触发回调方法
+//                loginListener.LoginSuccess();
                 LogUtil.d(TAG, "登录聊天服务器成功！");
                 saveData(phoneNumber, inputPassword);
+                getUserInformation(loginListener, phoneNumber);
                 startMessageService();
             }
 
@@ -123,6 +130,33 @@ public class LoginDataRequestDAO {
             }
         });
     }
+
+    /**
+     * 获取用户个人信息
+     */
+    private void getUserInformation(final OnLoginListener loginListener,String phoneNumber){
+        boolean isLoginResult = SharedPreferencesUtil.isSuccessLogin();
+        if (isLoginResult){
+            PullUserInfoDAO.getInstance().getUserInfo(new PullUserInfoDAO.Callback() {
+                @Override
+                public void onSuccess(User moonFriend) {
+                    // 将用户个人信息存储进入缓存
+                    SharedPreferencesUtil.saveMySelfInformation(moonFriend);
+                    // 将用户个人信息存储进入UserSelfInfo的实例对象中
+                    UserSelfInfo.getInstance().setMySelf(moonFriend);
+                    // 只有到这个地方，才会返回login中的UserBiz的回调，才能跳入MainActivity中
+                    loginListener.LoginSuccess();
+                }
+
+                @Override
+                public void onFail(ErrorCodeEnum errorCode) {
+                    loginListener.LoginFail(ErrorCodeEnum.USER_DATA_REQUEST_FAIL);
+                    LogUtil.d(TAG, "获取个人信息失败");
+                }
+            }, SharedConstant.MOONSTEP + phoneNumber);
+        }
+    }
+
 
     /**
      * 将数据存储到缓存中，方便存取

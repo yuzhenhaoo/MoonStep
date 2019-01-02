@@ -47,7 +47,6 @@ import priv.zxy.moonstep.wheel.animate.RotationAnimateFactory;
 public class MoonFriendFragment extends BaseFragment implements IMoonFriendView {
 
     private static final String TAG = "MoonFriendFragment";
-    private static final long REFRESH_DELAY = 1000;
     private static final String name = "星空漩涡";
 
     private View view = null;
@@ -112,7 +111,7 @@ public class MoonFriendFragment extends BaseFragment implements IMoonFriendView 
         recyclerView = view.findViewById(R.id.recycleview);
 
         initRecyclerView();
-        //自定义recyclerView的分割线
+        // 自定义recyclerView的分割线
         DividerItemDecoration divide_line = new DividerItemDecoration(this.getActivity(), DividerItemDecoration.VERTICAL);
         divide_line.setDrawable(this.getActivity().getDrawable(R.drawable.gradient_rectangle1));
         recyclerView.addItemDecoration(divide_line);
@@ -208,7 +207,8 @@ public class MoonFriendFragment extends BaseFragment implements IMoonFriendView 
     class LocalReceiver extends BroadcastReceiver{
         @Override
         public void onReceive(Context context, Intent intent) {
-            mAdapter.notifyDataSetChanged();//一旦监听到消息就让界面刷新
+            // 一旦监听到消息就让界面刷新
+            mAdapter.notifyDataSetChanged();
         }
     }
 }

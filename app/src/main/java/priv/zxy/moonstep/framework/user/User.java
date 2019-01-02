@@ -136,6 +136,23 @@ public class User extends LitePalSupport implements Parcelable {
      */
     private String level;
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "phoneNumber='" + phoneNumber + '\'' +
+                ", nickName='" + nickName + '\'' +
+                ", gender='" + gender + '\'' +
+                ", raceCode=" + raceCode +
+                ", headPath='" + headPath + '\'' +
+                ", signature='" + signature + '\'' +
+                ", address='" + address + '\'' +
+                ", currentTitleCode='" + currentTitleCode + '\'' +
+                ", level='" + level + '\'' +
+                ", luckyValue=" + luckyValue +
+                ", isOnline=" + isOnline +
+                '}';
+    }
+
     // 幸运值
     private int luckyValue;
 

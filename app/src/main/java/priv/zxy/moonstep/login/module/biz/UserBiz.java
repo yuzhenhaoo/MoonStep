@@ -12,14 +12,20 @@ import com.hyphenate.exceptions.HyphenateException;
 
 //import cn.smssdk.SMSSDK;
 import priv.zxy.moonstep.DAO.LoginDataRequestDAO;
+import priv.zxy.moonstep.DAO.PullUserInfoDAO;
 import priv.zxy.moonstep.DAO.RegisterDataRequestDAO;
+import priv.zxy.moonstep.constant.SharedConstant;
 import priv.zxy.moonstep.framework.user.User;
 import priv.zxy.moonstep.DAO.PhoneNumberIsInServerDAO;
+import priv.zxy.moonstep.framework.user.UserSelfInfo;
+import priv.zxy.moonstep.util.LogUtil;
+import priv.zxy.moonstep.util.SharedPreferencesUtil;
 import priv.zxy.moonstep.util.ToastUtil;
 import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
 
 public class UserBiz implements IUser {
 
+    private static final String TAG = "UserBiz";
     /**
      * 在做doLogin()之前，你必须先开启刷新页面，否则将会影响用户的体验
      * 当doLogin()方法的调用结束以后，你必须关闭刷新页面，否则将会无法使界面对用户进行响应
@@ -30,14 +36,14 @@ public class UserBiz implements IUser {
      */
     @Override
     public void doLogin(String userPhoneNumber, String userPassword, final OnLoginListener onLoginListener) throws InterruptedException {
-        if (userPhoneNumber != null && userPassword != null) {
-            LoginDataRequestDAO.getInstance().login(onLoginListener, userPhoneNumber, userPassword);
-        } else {
+        if (userPhoneNumber == null || userPassword == null) {
             if(userPhoneNumber == null)
                 onLoginListener.LoginFail(ErrorCodeEnum.PHONE_NUMBER_IS_EMPTY);
             else
                 onLoginListener.LoginFail(ErrorCodeEnum.PASSWORD_IS_EMPTY);
+            return;
         }
+        LoginDataRequestDAO.getInstance().login(onLoginListener, userPhoneNumber, userPassword);
     }
 
     /**
@@ -51,22 +57,25 @@ public class UserBiz implements IUser {
      */
     @Override
     public void doRegister(final String phoneNumber, String nickName, final String userPassword, String confirmUserPassword, String gender, final OnRegisterListener registerListener) throws InterruptedException{
-        if (userPassword.equals(confirmUserPassword)) {
-            RegisterDataRequestDAO.getInstance().RegisterRequest(new RegisterDataRequestDAO.CallBack() {
-                @Override
-                public void onSuccess(String raceCode, String raceName, String raceDescription, String raceImage, String raceIcon) throws HyphenateException {
-                    registerListener.registerSuccess(raceName, raceDescription, raceImage, raceIcon);
-                    EMClient.getInstance().createAccount(phoneNumber, userPassword);//同步方法
-                }
-
-                @Override
-                public void onFail(ErrorCodeEnum errorCode) {
-                    registerListener.registerFail(errorCode);
-                }
-            }, phoneNumber, nickName, userPassword, gender);
-        } else {
-            registerListener.registerFail(ErrorCodeEnum.PASSWORD_IS_NOT_EQUALS_CONFIRM_PASSWORD);
+        if (phoneNumber == null || nickName == null || userPassword == null || confirmUserPassword == null) {
+            registerListener.registerFail(ErrorCodeEnum.REGISTER_DATA_CAN_NOT_NULL);
+            return;
         }
+        if (!userPassword.equals(confirmUserPassword)) {
+            registerListener.registerFail(ErrorCodeEnum.PASSWORD_IS_NOT_EQUALS_CONFIRM_PASSWORD);
+            return;
+        }
+        RegisterDataRequestDAO.getInstance().RegisterRequest(new RegisterDataRequestDAO.CallBack() {
+            @Override
+            public void onSuccess(String raceCode, String raceName, String raceDescription, String raceImage, String raceIcon) throws HyphenateException {
+                registerListener.registerSuccess(raceName, raceDescription, raceImage, raceIcon);
+                // 同步方法
+                EMClient.getInstance().createAccount(phoneNumber, userPassword);
+            }
+            @Override
+            public void onFail(ErrorCodeEnum errorCode) {
+                registerListener.registerFail(errorCode);
+            }}, phoneNumber, nickName, userPassword, gender);
     }
 
     /**

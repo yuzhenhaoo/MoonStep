@@ -117,6 +117,9 @@ public class PersonalSurfaceFragment extends BaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if (waveViewByBezier == null) {
+            return;
+        }
         waveViewByBezier.stopAnimation();
     }
 

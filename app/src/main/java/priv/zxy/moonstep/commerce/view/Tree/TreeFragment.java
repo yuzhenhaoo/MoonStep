@@ -14,7 +14,7 @@ import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.commerce.view.Tree.PetActivity;
 import priv.zxy.moonstep.gps.PackActivity;
 
-public class TreeActivity extends Fragment {
+public class TreeFragment extends Fragment {
 
     private Button petBt;
     private Button pack;
