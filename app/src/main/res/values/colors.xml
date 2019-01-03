@@ -40,4 +40,6 @@
     <color name="community_content_name_color">#313131</color>
     <color name="community_praise_color">#d1003f</color>
     <color name="community_address_color">#007dd1</color>
+    <color name="package_background">#414141</color>
+    <color name="package_item_background">#373737</color>
 </resources>

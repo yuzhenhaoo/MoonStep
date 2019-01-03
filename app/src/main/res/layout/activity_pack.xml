@@ -5,26 +5,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.constraint.ConstraintLayout
+    <View
         android:id="@+id/scopeHeader"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/header_background">
+        android:layout_height="40dp"
+        android:background="@color/package_background"/>
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:src="@drawable/pack_background"
-            android:elevation="10dp"
-            android:contentDescription="@string/nothing" />
-    </android.support.constraint.ConstraintLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@drawable/gold_stripe_background"/>
 
     <GridView
         android:id="@+id/GridLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:numColumns="5"
-        android:background="@drawable/background2"
+        android:background="@color/package_item_background"
         android:padding="5dp"
         app:layout_constraintTop_toBottomOf="@+id/scopeHeader"
         app:layout_constraintBottom_toTopOf="@+id/fg_bottom"/>
@@ -34,22 +31,35 @@
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:layout_alignParentBottom="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:background="@drawable/background">
+        android:background="@color/package_background"
+        app:layout_constraintBottom_toBottomOf="parent">
+
         <ImageView
             android:id="@+id/bt_auction"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/moon_auction_house_bg"
+            android:background="@drawable/bt_mall"
+            android:contentDescription="圆月商城"
             tools:ignore="ImageViewStyle" />
+
         <ImageView
             android:id="@+id/bt_mall"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/moon_mall_bg"
+            android:background="@drawable/bt_auction"
+            android:contentDescription="圆月拍卖行"
             tools:ignore="ImageViewStyle" />
     </LinearLayout>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:src="@drawable/pack_word_background"
+        android:layout_margin="3dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
 
 </android.support.constraint.ConstraintLayout>

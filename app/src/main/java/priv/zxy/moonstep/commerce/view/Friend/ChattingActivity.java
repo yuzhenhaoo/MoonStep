@@ -32,6 +32,8 @@ import java.util.Date;
 import java.util.List;
 
 import priv.zxy.moonstep.R;
+import priv.zxy.moonstep.constant.Constant;
+import priv.zxy.moonstep.constant.SharedConstant;
 import priv.zxy.moonstep.data.bean.ActivityCollector;
 import priv.zxy.moonstep.framework.message.Message;
 import priv.zxy.moonstep.framework.message.MessageOnline;
@@ -65,8 +67,14 @@ public class ChattingActivity extends AppCompatActivity implements IChattingView
     private Button sendMessage;
 //    private NestedScrollView scrollView;
     private ConstraintLayout root;
-    private int rootHeight;//根布局原始高度
-    private int keyHeight;//屏幕高度阀值
+    /**
+     * 根布局原始高度
+     */
+    private int rootHeight;
+    /**
+     * 屏幕高度阀值
+     */
+    private int keyHeight;
     private Animation animation;
     private LinearLayout messageBar;
 
@@ -80,58 +88,6 @@ public class ChattingActivity extends AppCompatActivity implements IChattingView
      */
     private List<EMMessage> emMessages = null;
 
-    //通过EM获取好友的消息队列
-    private EMMessageListener msgListener = new EMMessageListener() {
-
-        @Override
-        public void onMessageReceived(List<EMMessage> messages) {
-            LogUtil.d(TAG,"接收到了消息:");
-            emMessages = messages;
-            for(final EMMessage message: emMessages){
-//                LogUtil.d(TAG,"message来源:    " + message.getFrom().substring(8, message.getFrom().length()));
-                final String[] msg = MoonStepHelper.getInstance().getMessageTypeWithBody(message.getBody().toString().trim());
-                switch (MoonStepHelper.getInstance().transformMessageType(msg[0])){
-                    case TEXT://处理文本消息
-                        LogUtil.e("Message","ChattingActivity" + msg[1]);
-                        runOnUiThread(()->savedChattingMessage(msg[1], 0, 1, message.getFrom().substring(8)));
-                        break;
-                    case IMAGE://处理图片消息
-                        break;
-                    case VIDEO://处理视频消息
-                        break;
-                    case LOCATION://处理位置消息
-                        break;
-                    case VOICE://处理声音消息
-                        break;
-                }
-            }
-        }
-
-        @Override
-        public void onCmdMessageReceived(List<EMMessage> messages) {
-            //收到透传消息
-            LogUtil.d(TAG, "收到透传消息");
-        }
-
-        @Override
-        public void onMessageRead(List<EMMessage> messages) {
-            //收到已读回执
-            LogUtil.d(TAG, "收到已读回执");
-        }
-
-        @Override
-        public void onMessageDelivered(List<EMMessage> message) {
-            //收到已送达回执
-            LogUtil.d(TAG, "收到已送达回执");
-        }
-
-        @Override
-        public void onMessageChanged(EMMessage message, Object change) {
-            //消息状态变动
-            LogUtil.d(TAG, "消息状态变动");
-        }
-    };
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         ActivityCollector.addActivity(this);
@@ -140,13 +96,9 @@ public class ChattingActivity extends AppCompatActivity implements IChattingView
         setContentView(R.layout.fg_main_fifth_subpage);
 
         initView();
-
         initData();
-
         initList();
-
         updateData();
-
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -206,33 +158,31 @@ public class ChattingActivity extends AppCompatActivity implements IChattingView
             return true;
         });
 
-        back.setOnClickListener(v->{
-            back.animate()
-                    .rotation(-90)//逆时针旋转90°
-                    .alpha(1)//旋转完成后改变透明度
-                    .setDuration(600)//设置动画时长为600ms
-                    .setListener(new Animator.AnimatorListener() {//设置动画的监听器，在动画完成的时候实现效果
-                        @Override
-                        public void onAnimationStart(Animator animation) {
+        back.setOnClickListener(v-> back.animate()
+                .rotation(-90)
+                .alpha(1)
+                .setDuration(600)
+                .setListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
 
-                        }
+                    }
 
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            finishThisActivity(mActivity);
-                        }
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        finishThisActivity(mActivity);
+                    }
 
-                        @Override
-                        public void onAnimationCancel(Animator animation) {
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
 
-                        }
+                    }
 
-                        @Override
-                        public void onAnimationRepeat(Animator animation) {
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
 
-                        }
-                    });
-        });
+                    }
+                }));
 
         person_info.setOnClickListener(v->person_info.startAnimation(animation));
 
@@ -249,12 +199,12 @@ public class ChattingActivity extends AppCompatActivity implements IChattingView
 
     public void initData(){
 //        HeadPortrait = ?
-        moonFriend = (User) getIntent().getParcelableExtra("moonfriend");
+        moonFriend = (User) getIntent().getParcelableExtra(Constant.MOONFRIEND);
 
-        //设置列表布局管理
+        // 设置列表布局管理
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
-        //设置适配器
+        // 设置适配器
         recyclerView.setAdapter(mAdapter);
     }
 
@@ -265,8 +215,10 @@ public class ChattingActivity extends AppCompatActivity implements IChattingView
      */
     public void initList(){
         messagesQueues = MessageOnline.getInstance().listMessageFromDatabase(moonFriend.getPhoneNumber());
-        //显示的想法：每个用户的历史聊天记录存储上限为1000条，如果上限超过1000，就把最早的一部分进行清除，保留最近的1000条消息记录
-        //一开始最多只显示30条消息记录，如果要显示更多，则需要下拉刷新来控制，需要设置监听器。
+        /*
+         * 显示的想法：每个用户的历史聊天记录存储上限为1000条，如果上限超过1000，就把最早的一部分进行清除，保留最近的1000条消息记录
+         * 一开始最多只显示30条消息记录，如果要显示更多，则需要下拉刷新来控制，需要设置监听器。
+         */
         mAdapter.addAll(messagesQueues);
         mAdapter.notifyDataSetChanged();
     }
@@ -292,7 +244,7 @@ public class ChattingActivity extends AppCompatActivity implements IChattingView
         msg.setContent(content);
         msg.setDirection(direction);
         msg.setType(type);
-        msg.setObject("moonstep " + phoneNumber);
+        msg.setObject(Constant.MOONSTEP + phoneNumber);
         messagesQueues.add(msg);
         mAdapter.add(msg);
         mAdapter.notifyDataSetChanged();
@@ -303,7 +255,7 @@ public class ChattingActivity extends AppCompatActivity implements IChattingView
     public void toPersonInfoPage() {
         Intent intent = new Intent(mActivity, UserInfoActivity.class);
         //        intent.putExtra("headPortrait", item.getHeadPortrait());//暂时还不知道Bitmap怎么通过Activity进行传输
-        intent.putExtra("moonfriend", moonFriend);
+        intent.putExtra(Constant.MOONFRIEND, moonFriend);
         mActivity.startActivity(intent);
     }
 
@@ -316,9 +268,12 @@ public class ChattingActivity extends AppCompatActivity implements IChattingView
         if(message.trim().isEmpty()){
             ToastUtil.getInstance(mContext, this).showToast("发送地消息不能为空哦！");
         }else{
-            new Thread(()->MoonStepHelper.getInstance().EMsendMessage(message, "moonstep" + moonFriend.getPhoneNumber(), EMMessage.ChatType.Chat)).start();//向对方发送消息(异步)
-            inputMessage.getText().clear();//发送后立刻清空输入框
-            inputMessage.requestFocus();//对输入框请求焦点
+            // 向对方发送消息(异步)
+            new Thread(()->MoonStepHelper.getInstance().EMsendMessage(message, SharedConstant.MOONSTEP + moonFriend.getPhoneNumber(), EMMessage.ChatType.Chat)).start();
+            // 发送后立刻清空输入框
+            inputMessage.getText().clear();
+            // 对输入框请求焦点
+            inputMessage.requestFocus();
             savedChattingMessage(message, 1,1, moonFriend.getPhoneNumber());
         }
     }
@@ -344,12 +299,16 @@ public class ChattingActivity extends AppCompatActivity implements IChattingView
         // 现在认为只要控件将Activity向上推的高度超过了1/3屏幕高，就认为软键盘弹起
         if (oldBottom != 0 && bottom != 0
                 && (oldBottom - bottom > keyHeight)) {
-            inputMessage.requestFocus();//请求焦点
-            recyclerView.scrollToPosition(mAdapter.getItemCount() - 1);//将RecyclerView定位到最后一行
+            // 请求焦点
+            inputMessage.requestFocus();
+            // 将RecyclerView定位到最后一行
+            recyclerView.scrollToPosition(mAdapter.getItemCount() - 1);
         } else if (oldBottom != 0 && bottom != 0
                 && (bottom - oldBottom > keyHeight)) {
-            inputMessage.requestFocus();//请求焦点
-            recyclerView.scrollToPosition(mAdapter.getItemCount() - 1);//将RecyclerView定位到最后一行
+            // 请求焦点
+            inputMessage.requestFocus();
+            // 将RecyclerView定位到最后一行
+            recyclerView.scrollToPosition(mAdapter.getItemCount() - 1);
         }
     }
 
@@ -358,14 +317,71 @@ public class ChattingActivity extends AppCompatActivity implements IChattingView
         super.onDestroy();
         EMClient.getInstance().chatManager().removeMessageListener(msgListener);//移除Listener
         ActivityCollector.removeActivity(this);
-        LogUtil.d("ChattingActivity","onDestroy");
     }
 
     @Override
     public String getTime() {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");// HH:mm:ss
-        //获取当前时间
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");// HH:mm:ss
+        // 获取当前时间
         Date date = new Date(System.currentTimeMillis());
         return simpleDateFormat.format(date);
     }
+
+    /**
+     * 通过EM获取好友的消息队列
+     */
+    private EMMessageListener msgListener = new EMMessageListener() {
+
+        @Override
+        public void onMessageReceived(List<EMMessage> messages) {
+            LogUtil.d(TAG,"接收到了消息:");
+            emMessages = messages;
+            for(final EMMessage message: emMessages){
+                final String[] msg = MoonStepHelper.getInstance().getMessageTypeWithBody(message.getBody().toString().trim());
+                switch (MoonStepHelper.getInstance().transformMessageType(msg[0])){
+                    // 处理文本消息
+                    case TEXT:
+                        LogUtil.e("Message","ChattingActivity" + msg[1]);
+                        runOnUiThread(()->savedChattingMessage(msg[1], 0, 1, message.getFrom().substring(8)));
+                        break;
+                    // 处理图片消息
+                    case IMAGE:
+                        break;
+                    // 处理视频消息
+                    case VIDEO:
+                        break;
+                    // 处理位置消息
+                    case LOCATION:
+                        break;
+                    // 处理声音消息
+                    case VOICE:
+                        break;
+                }
+            }
+        }
+
+        @Override
+        public void onCmdMessageReceived(List<EMMessage> messages) {
+            // 收到透传消息
+            LogUtil.d(TAG, "收到透传消息");
+        }
+
+        @Override
+        public void onMessageRead(List<EMMessage> messages) {
+            // 收到已读回执
+            LogUtil.d(TAG, "收到已读回执");
+        }
+
+        @Override
+        public void onMessageDelivered(List<EMMessage> message) {
+            // 收到已送达回执
+            LogUtil.d(TAG, "收到已送达回执");
+        }
+
+        @Override
+        public void onMessageChanged(EMMessage message, Object change) {
+            // 消息状态变动
+            LogUtil.d(TAG, "消息状态变动");
+        }
+    };
 }

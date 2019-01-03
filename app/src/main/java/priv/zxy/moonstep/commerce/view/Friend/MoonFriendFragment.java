@@ -2,13 +2,20 @@ package priv.zxy.moonstep.commerce.view.Friend;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.drawable.Drawable;
+import android.media.Image;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +30,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -34,11 +42,18 @@ import org.litepal.LitePal;
 import java.util.List;
 
 import priv.zxy.moonstep.R;
+import priv.zxy.moonstep.adapter.AbstractAdapter;
 import priv.zxy.moonstep.adapter.MoonFriendAdapter;
 import priv.zxy.moonstep.commerce.presenter.MoonFriendPresenter;
 import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.data.bean.BaseFragment;
+import priv.zxy.moonstep.framework.good.Props;
+import priv.zxy.moonstep.framework.good.bean.Good;
 import priv.zxy.moonstep.framework.user.User;
+import priv.zxy.moonstep.framework.user.UserSelfInfo;
+import priv.zxy.moonstep.gps.PackActivity;
+import priv.zxy.moonstep.util.LogUtil;
+import priv.zxy.moonstep.util.ScreenUtils;
 import priv.zxy.moonstep.wheel.animate.AbstractAnimateEffect;
 import priv.zxy.moonstep.wheel.animate.AbstractAnimateFactory;
 import priv.zxy.moonstep.wheel.animate.ElasticityFactory;
@@ -68,6 +83,29 @@ public class MoonFriendFragment extends BaseFragment implements IMoonFriendView 
     private LocalReceiver localReceiver;
     private LocalBroadcastManager localBroadcastManager;
     private AbstractAnimateEffect rotateEffect;
+    private Activity activity;
+    private GridView packView = null;
+
+    private List<Good> goods = null;
+
+    @SuppressLint("HandlerLeak")
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            /*
+             * dialog展开时的物品数据
+             */
+            AbstractAdapter<Good> mAbstractAdapter = new AbstractAdapter<Good>(goods, R.layout.pack_item) {
+                @Override
+                public void bindView(ViewHolder holder, Good obj) {
+                    holder.setImageResource(R.id.itemSrc, obj.getGoodImagePath());
+                    holder.setText(R.id.itemNumber, String.valueOf(obj.getNumber()));
+                }
+            };
+            packView.setAdapter(mAbstractAdapter);
+        }
+    };
 
     @Override
     public void onAttach(Context context) {
@@ -77,7 +115,7 @@ public class MoonFriendFragment extends BaseFragment implements IMoonFriendView 
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState){
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
@@ -107,13 +145,22 @@ public class MoonFriendFragment extends BaseFragment implements IMoonFriendView 
     }
 
     public void initView() {
+        if (this.getActivity() == null) {
+            throw new RuntimeException(TAG + "Activity获取失败");
+        }
+        Drawable drawable = this.getActivity().getDrawable(R.drawable.gradient_rectangle1);
+        if (drawable == null) {
+            throw new RuntimeException(TAG + "资源获取失败");
+        }
+
+        activity = this.getActivity();
 //        mPullToRefreshView = view.findViewById(R.id.pull_to_refresh);
         recyclerView = view.findViewById(R.id.recycleview);
 
         initRecyclerView();
         // 自定义recyclerView的分割线
         DividerItemDecoration divide_line = new DividerItemDecoration(this.getActivity(), DividerItemDecoration.VERTICAL);
-        divide_line.setDrawable(this.getActivity().getDrawable(R.drawable.gradient_rectangle1));
+        divide_line.setDrawable(drawable);
         recyclerView.addItemDecoration(divide_line);
         Context mContext = this.getContext();
         final Activity mActivity = this.getActivity();
@@ -145,7 +192,7 @@ public class MoonFriendFragment extends BaseFragment implements IMoonFriendView 
         localReceiver = new LocalReceiver();
         localBroadcastManager.registerReceiver(localReceiver, intentFilter);
 
-        Toolbar toolbar = (Toolbar)view.findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         CollapsingToolbarLayout collapsingToolbar = view.findViewById(R.id.collapsing_toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         collapsingToolbar.setTitle(name);
@@ -160,11 +207,11 @@ public class MoonFriendFragment extends BaseFragment implements IMoonFriendView 
         rotateEffect2.show();
     }
 
-    public void initRecyclerView(){
+    public void initRecyclerView() {
         layoutManager = new LinearLayoutManager(this.getActivity());
         mAdapter = new MoonFriendAdapter(this.getActivity());
         mAdapter.clear();//在每次进入好友页面的时候，都需要对当前页面的ViewHolder进行一次刷新
-        if(mList != null){
+        if (mList != null) {
             mAdapter.addAll(mList);
         }
         recyclerView.setLayoutManager(layoutManager);
@@ -172,12 +219,12 @@ public class MoonFriendFragment extends BaseFragment implements IMoonFriendView 
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private void initEvent(){
+    private void initEvent() {
         chooseButton.setOnTouchListener((v, event) -> {
             if (rotateEffect.isRunning()) {
                 rotateEffect.cancelAnimate();
             }
-            switch (event.getAction()){
+            switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     rotateEffect.setAnimate(chooseButton);
                     rotateEffect.show();
@@ -185,12 +232,97 @@ public class MoonFriendFragment extends BaseFragment implements IMoonFriendView 
                 case MotionEvent.ACTION_UP:
                     // TODO 弹出一个背包dialog,用来将已有物品拖拽到黑洞上(张晓翼，2018/12/28)
                     rotateEffect.cancelAnimate();
-                    Toast.makeText(Application.getContext(), "弹出了背包dialog", Toast.LENGTH_SHORT).show();
+                    showDialog();
                     break;
                 default:
             }
             return false;
         });
+    }
+
+    /**
+     * 初始化并弹出背包dialog
+     */
+    private void showDialog() {
+        if (this.getActivity() == null) {
+            throw new RuntimeException(new StringBuffer("Context获取错误，请检查").append(TAG).append("逻辑").toString());
+        }
+        // 初始化背包数据
+        initData();
+
+        View view = LayoutInflater.from(this.getActivity()).inflate(R.layout.dialog_pack, null, false);
+        final AlertDialog packDialog = new AlertDialog.Builder(this.getActivity()).setView(view).create();
+
+        Button cancelBt = view.findViewById(R.id.cancel);
+        Button sureBt = view.findViewById(R.id.sure);
+        ImageView chooseImage = view.findViewById(R.id.be_placed_item);
+        packView = view.findViewById(R.id.pack);
+
+        sureBt.setOnClickListener(v -> {
+            if (!isGoodInChooseFramework(chooseImage)) {
+                Toast.makeText(activity, "您还未选择物品呢！", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            packDialog.dismiss();
+            playChooseAnimation();
+        });
+
+        cancelBt.setOnClickListener(v -> {
+            if (isGoodInChooseFramework(chooseImage)) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    chooseImage.setForeground(null);
+                } else {
+                    Toast.makeText(activity, "您当前的api等级小于23，不能使用该功能，请升级系统版本", Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+            packDialog.dismiss();
+        });
+
+        packDialog.show();
+
+        // 设置窗体大小
+        if (packDialog.getWindow() == null) {
+            throw new RuntimeException(TAG + "获取窗体大小出现异常，请检查代码逻辑");
+        }
+        packDialog.getWindow().setLayout((ScreenUtils.getScreenWidth(this.getActivity())) / 4 * 3, ConstraintLayout.LayoutParams.MATCH_PARENT);
+    }
+
+    /**
+     * 初始化用户的背包中物品的数据
+     */
+    private void initData() {
+        Props props = new Props();
+        User user = UserSelfInfo.getInstance().getMySelf();
+
+        props.getUserGoods(gs -> {
+            goods = gs;
+            LogUtil.d(TAG, goods.toString());
+            handler.sendEmptyMessage(0x01);
+        }, user.getPhoneNumber());
+
+        packView.setOnItemClickListener((parent, view, position, id) -> Toast.makeText(activity, "你点击了第" + position + "个背包", Toast.LENGTH_SHORT).show());
+    }
+
+    /**
+     * 用来判断当前选择框里是否有物品
+     *
+     * @return 是就返回true，不是就返回false
+     */
+    private boolean isGoodInChooseFramework(ImageView imageView) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            Drawable drawable = imageView.getForeground();
+            return drawable != null;
+        }
+        Toast.makeText(activity, "您当前的api等级小于23，不能使用该功能，请升级系统版本", Toast.LENGTH_SHORT).show();
+        return false;
+    }
+
+    /**
+     * 选中并点击确定以后播放动画
+     */
+    private void playChooseAnimation() {
+        // TODO(张晓翼，2019/1/3， 播放选中动画)
     }
 
     @Override
@@ -204,7 +336,7 @@ public class MoonFriendFragment extends BaseFragment implements IMoonFriendView 
         localBroadcastManager.unregisterReceiver(localReceiver);
     }
 
-    class LocalReceiver extends BroadcastReceiver{
+    class LocalReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
             // 一旦监听到消息就让界面刷新
