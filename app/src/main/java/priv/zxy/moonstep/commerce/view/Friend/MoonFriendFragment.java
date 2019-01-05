@@ -45,6 +45,7 @@ import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.adapter.AbstractAdapter;
 import priv.zxy.moonstep.adapter.MoonFriendAdapter;
 import priv.zxy.moonstep.commerce.presenter.MoonFriendPresenter;
+import priv.zxy.moonstep.customview.PackDialog;
 import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.data.bean.BaseFragment;
 import priv.zxy.moonstep.framework.good.Props;
@@ -70,6 +71,7 @@ public class MoonFriendFragment extends BaseFragment implements IMoonFriendView 
     private MoonFriendAdapter mAdapter;
     private Button chooseButton;//选择按钮
 
+    private PackDialog packDialog = null;
     private LinearLayoutManager layoutManager;
 
     /**
@@ -83,29 +85,6 @@ public class MoonFriendFragment extends BaseFragment implements IMoonFriendView 
     private LocalReceiver localReceiver;
     private LocalBroadcastManager localBroadcastManager;
     private AbstractAnimateEffect rotateEffect;
-    private Activity activity;
-    private GridView packView = null;
-
-    private List<Good> goods = null;
-
-    @SuppressLint("HandlerLeak")
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            /*
-             * dialog展开时的物品数据
-             */
-            AbstractAdapter<Good> mAbstractAdapter = new AbstractAdapter<Good>(goods, R.layout.pack_item) {
-                @Override
-                public void bindView(ViewHolder holder, Good obj) {
-                    holder.setImageResource(R.id.itemSrc, obj.getGoodImagePath());
-                    holder.setText(R.id.itemNumber, String.valueOf(obj.getNumber()));
-                }
-            };
-            packView.setAdapter(mAbstractAdapter);
-        }
-    };
 
     @Override
     public void onAttach(Context context) {
@@ -153,7 +132,6 @@ public class MoonFriendFragment extends BaseFragment implements IMoonFriendView 
             throw new RuntimeException(TAG + "资源获取失败");
         }
 
-        activity = this.getActivity();
 //        mPullToRefreshView = view.findViewById(R.id.pull_to_refresh);
         recyclerView = view.findViewById(R.id.recycleview);
 
@@ -164,6 +142,8 @@ public class MoonFriendFragment extends BaseFragment implements IMoonFriendView 
         recyclerView.addItemDecoration(divide_line);
         Context mContext = this.getContext();
         final Activity mActivity = this.getActivity();
+
+        packDialog = new PackDialog(this.getActivity());
 
         moonFriendPresenter = new MoonFriendPresenter(this, mContext, mActivity);
 
@@ -232,90 +212,25 @@ public class MoonFriendFragment extends BaseFragment implements IMoonFriendView 
                 case MotionEvent.ACTION_UP:
                     // TODO 弹出一个背包dialog,用来将已有物品拖拽到黑洞上(张晓翼，2018/12/28)
                     rotateEffect.cancelAnimate();
-                    showDialog();
+                    packDialog.show();
                     break;
                 default:
             }
             return false;
         });
-    }
 
-    /**
-     * 初始化并弹出背包dialog
-     */
-    private void showDialog() {
-        if (this.getActivity() == null) {
-            throw new RuntimeException(new StringBuffer("Context获取错误，请检查").append(TAG).append("逻辑").toString());
-        }
-        // 初始化背包数据
-        initData();
-
-        View view = LayoutInflater.from(this.getActivity()).inflate(R.layout.dialog_pack, null, false);
-        final AlertDialog packDialog = new AlertDialog.Builder(this.getActivity()).setView(view).create();
-
-        Button cancelBt = view.findViewById(R.id.cancel);
-        Button sureBt = view.findViewById(R.id.sure);
-        ImageView chooseImage = view.findViewById(R.id.be_placed_item);
-        packView = view.findViewById(R.id.pack);
-
-        sureBt.setOnClickListener(v -> {
-            if (!isGoodInChooseFramework(chooseImage)) {
-                Toast.makeText(activity, "您还未选择物品呢！", Toast.LENGTH_SHORT).show();
-                return;
+        packDialog.setClickListener(new PackDialog.Callback() {
+            @Override
+            public void onSure() {
+                packDialog.doSure();
+                playChooseAnimation();
             }
-            packDialog.dismiss();
-            playChooseAnimation();
-        });
 
-        cancelBt.setOnClickListener(v -> {
-            if (isGoodInChooseFramework(chooseImage)) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    chooseImage.setForeground(null);
-                } else {
-                    Toast.makeText(activity, "您当前的api等级小于23，不能使用该功能，请升级系统版本", Toast.LENGTH_SHORT).show();
-                }
-                return;
+            @Override
+            public void onCancel() {
+                packDialog.doClear();
             }
-            packDialog.dismiss();
         });
-
-        packDialog.show();
-
-        // 设置窗体大小
-        if (packDialog.getWindow() == null) {
-            throw new RuntimeException(TAG + "获取窗体大小出现异常，请检查代码逻辑");
-        }
-        packDialog.getWindow().setLayout((ScreenUtils.getScreenWidth(this.getActivity())) / 4 * 3, ConstraintLayout.LayoutParams.MATCH_PARENT);
-    }
-
-    /**
-     * 初始化用户的背包中物品的数据
-     */
-    private void initData() {
-        Props props = new Props();
-        User user = UserSelfInfo.getInstance().getMySelf();
-
-        props.getUserGoods(gs -> {
-            goods = gs;
-            LogUtil.d(TAG, goods.toString());
-            handler.sendEmptyMessage(0x01);
-        }, user.getPhoneNumber());
-
-        packView.setOnItemClickListener((parent, view, position, id) -> Toast.makeText(activity, "你点击了第" + position + "个背包", Toast.LENGTH_SHORT).show());
-    }
-
-    /**
-     * 用来判断当前选择框里是否有物品
-     *
-     * @return 是就返回true，不是就返回false
-     */
-    private boolean isGoodInChooseFramework(ImageView imageView) {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-            Drawable drawable = imageView.getForeground();
-            return drawable != null;
-        }
-        Toast.makeText(activity, "您当前的api等级小于23，不能使用该功能，请升级系统版本", Toast.LENGTH_SHORT).show();
-        return false;
     }
 
     /**

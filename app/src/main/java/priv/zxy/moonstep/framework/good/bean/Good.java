@@ -113,4 +113,18 @@ public class Good {
     public void setGoodLevel(LevelEnum goodLevel) {
         this.goodLevel = goodLevel;
     }
+
+    @Override
+    public String toString() {
+        return "Good{" +
+                "goodCode='" + goodCode + '\'' +
+                ", goodName='" + goodName + '\'' +
+                ", goodSubscription='" + goodSubscription + '\'' +
+                ", goodLevel=" + goodLevel +
+                ", goodGameValue='" + goodGameValue + '\'' +
+                ", goodLifeValue='" + goodLifeValue + '\'' +
+                ", goodImagePath='" + goodImagePath + '\'' +
+                ", number='" + number + '\'' +
+                '}';
+    }
 }

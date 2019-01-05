@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/package_background">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="20dp">
 
     <ImageView
         android:id="@+id/be_placed_item"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:background="@drawable/bt6"
         android:contentDescription="背包格子"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -17,17 +17,16 @@
     <GridView
         android:id="@+id/pack"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="100dp"
         android:layout_margin="10dp"
         android:numColumns="5"
-        android:background="@color/package_item_background"
         app:layout_constraintTop_toBottomOf="@id/be_placed_item"
         app:layout_constraintBottom_toTopOf="@id/sure"/>
 
     <Button
         android:id="@+id/sure"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_margin="4dp"
         android:background="@drawable/bt4"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -36,11 +35,13 @@
 
     <Button
         android:id="@+id/cancel"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:background="@drawable/bt5"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_margin="22dp"
-        app:layout_constraintLeft_toRightOf="@+id/sure"
-        app:layout_constraintBottom_toBottomOf="@+id/sure"/>
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/bt5"
+        app:layout_constraintBottom_toBottomOf="@+id/sure"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/sure" />
 
 </android.support.constraint.ConstraintLayout>

@@ -25,7 +25,10 @@ import priv.zxy.moonstep.data.application.Application;
 public abstract class AbstractAdapter<T> extends BaseAdapter {
 
     private List<T> mData;
-    private int mLayoutRes;           //布局id
+    /**
+     * 布局id
+     */
+    private int mLayoutRes;
 
 
     public AbstractAdapter() {
@@ -61,7 +64,9 @@ public abstract class AbstractAdapter<T> extends BaseAdapter {
 
     public abstract void bindView(ViewHolder holder, T obj);
 
-    //添加一个元素
+    /**
+     * 添加一个元素
+     */
     public void add(T data) {
         if (mData == null) {
             mData = new ArrayList<>();
@@ -70,7 +75,11 @@ public abstract class AbstractAdapter<T> extends BaseAdapter {
         notifyDataSetChanged();
     }
 
-    //往特定位置，添加一个元素
+    /**
+     * 往特定位置，添加一个元素
+     * @param position 位置
+     * @param data 数据
+     */
     public void add(int position, T data) {
         if (mData == null) {
             mData = new ArrayList<>();
