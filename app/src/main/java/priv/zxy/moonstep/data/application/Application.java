@@ -34,6 +34,7 @@ import priv.zxy.moonstep.helper.EMHelper;
 import priv.zxy.moonstep.data.bean.EMBase;
 import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
 import priv.zxy.moonstep.login.view.UserLoginActivity;
+import priv.zxy.moonstep.util.DataInitUtil;
 import priv.zxy.moonstep.util.LogUtil;
 import priv.zxy.moonstep.util.SharedPreferencesUtil;
 import priv.zxy.moonstep.helper.MoonStepHelper;
@@ -45,12 +46,11 @@ public class Application extends LitePalApplication {
 
     private static final String TAG = "Application";
     public static int START_IMAGE_MAX_NUMBER = 9;//这里设定的是startPage的数量
-    private static final String MOONSTEP = "moonstep";
 
     /**
      * 记录是否已经初始化
      */
-    private boolean isInit = false;
+    private boolean isInit;
 
     private LocalBroadcastManager localBroadcastManager;
 
@@ -62,18 +62,21 @@ public class Application extends LitePalApplication {
 
     private static Context context;
 
-    private static boolean isBackground = false;
+    private static boolean isBackground;
 
     /**
      * 与EM服务器交互的token值
      */
-    private static String token = null;
+    private static String token;
 
     public static Context getContext(){
         return context;
     }
 
-    public static RefWatcher mRefWatcher;//为了检测Fragment的内存泄漏
+    /**
+     * 为了检测Fragment的内存泄漏
+     */
+    public static RefWatcher mRefWatcher;
 
     @Override
     public void onCreate() {
@@ -211,7 +214,7 @@ public class Application extends LitePalApplication {
              用户的账号被从服务器端删除；
              用户从另一个设备登录，把当前设备上登录的用户踢出。
          */
-//        options.setAutoLogUtilin(true);
+//        options.setAutoLogin(true);
         // 设置是否需要发送已读回执
         options.setRequireAck(true);
         // 设置是否需要发送回执，
@@ -237,6 +240,7 @@ public class Application extends LitePalApplication {
     private String getAppName(int pID) {
         String processName = null;
         ActivityManager am = (ActivityManager) this.getSystemService(ACTIVITY_SERVICE);
+        assert am != null;
         List l = am.getRunningAppProcesses();
         Iterator i = l.iterator();
         PackageManager pm = this.getPackageManager();
@@ -251,7 +255,7 @@ public class Application extends LitePalApplication {
                 // LogUtil.d("Process", "Error>> :"+ e.toString());
             }
         }
-        return processName;
+        return null;
     }
 
     private class LocalReceiver extends BroadcastReceiver{
@@ -265,7 +269,9 @@ public class Application extends LitePalApplication {
         }
     }
 
-    //通过EM获取好友的消息队列
+    /**
+     * 通过EM获取好友的消息队列
+     */
     private EMMessageListener msgListener = new EMMessageListener() {
 
         @Override
@@ -275,50 +281,53 @@ public class Application extends LitePalApplication {
 //                LogUtil.d(TAG,"message来源:    " + message.getFrom().substring(8, message.getFrom().length()));
                 String[] msg = MoonStepHelper.getInstance().getMessageTypeWithBody(message.getBody().toString().trim());
                 switch (MoonStepHelper.getInstance().transformMessageType(msg[0])){
-                    case TEXT://处理文本消息
+                    // 处理文本消息
+                    case TEXT:
                         LogUtil.e("MessageOnline","来自于Application" + msg[1]);
                         savedChattingMessage(msg[1], 0, 1, message.getFrom().substring(8));
                         break;
-                    case IMAGE://处理图片消息
+                    // 处理图片消息
+                    case IMAGE:
                         break;
-                    case VIDEO://处理视频消息
+                    // 处理视频消息
+                    case VIDEO:
                         break;
-                    case LOCATION://处理位置消息
+                    // 处理位置消息
+                    case LOCATION:
                         break;
-                    case VOICE://处理声音消息
+                    // 处理声音消息
+                    case VOICE:
                         break;
                 }
-                SharedPreferencesUtil.saveIsMessageTip(message.getFrom().substring(8, message.getFrom().length()));//当来消息的时候，将消息提示的标记存储到缓存中。
-                localBroadcastManager.sendBroadcast(intent);//发送本地广播
+                // 当来消息的时候，将消息提示的标记存储到缓存中。
+                SharedPreferencesUtil.saveIsMessageTip(message.getFrom().substring(8, message.getFrom().length()));
+                localBroadcastManager.sendBroadcast(intent);
             }
         }
 
         @Override
         public void onCmdMessageReceived(List<EMMessage> messages) {
-            //收到透传消息
             LogUtil.d(TAG, "收到透传消息");
-            localBroadcastManager.sendBroadcast(intent);//发送本地广播
+            localBroadcastManager.sendBroadcast(intent);
         }
 
         @Override
         public void onMessageRead(List<EMMessage> messages) {
-            //收到已读回执
             LogUtil.d(TAG, "收到已读回执");
-            localBroadcastManager.sendBroadcast(intent);//发送本地广播
+            localBroadcastManager.sendBroadcast(intent);
         }
 
         @Override
         public void onMessageDelivered(List<EMMessage> message) {
-            //收到已送达回执
             LogUtil.d(TAG, "收到已送达回执");
-            localBroadcastManager.sendBroadcast(intent);//发送本地广播
+            localBroadcastManager.sendBroadcast(intent);
         }
 
         @Override
         public void onMessageChanged(EMMessage message, Object change) {
             //消息状态变动
             LogUtil.d(TAG, "消息状态变动");
-            localBroadcastManager.sendBroadcast(intent);//发送本地广播
+            localBroadcastManager.sendBroadcast(intent);
         }
     };
 
@@ -333,10 +342,13 @@ public class Application extends LitePalApplication {
         @Override
         public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
             if (activity.getClass() == MainActivity.class) {
-                EMClient.getInstance().chatManager().addMessageListener(msgListener);//实施消息的监听
+                // 实施消息的监听
+                EMClient.getInstance().chatManager().addMessageListener(msgListener);
+                DataInitUtil.initGoodSelfInfo();
             }
             if (activity.getClass() == ChattingActivity.class){
-                EMClient.getInstance().chatManager().removeMessageListener(msgListener);//移除Listener
+                // 移除Listener
+                EMClient.getInstance().chatManager().removeMessageListener(msgListener);
             }
             if (activity.getClass() == StartActivity.class){
                 localBroadcastManager.registerReceiver(localReceiver, intentFilter);

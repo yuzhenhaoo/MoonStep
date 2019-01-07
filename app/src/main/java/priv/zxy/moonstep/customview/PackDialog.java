@@ -21,32 +21,32 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+
 import java.lang.ref.WeakReference;
 import java.util.List;
 
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.adapter.AbstractAdapter;
+import priv.zxy.moonstep.framework.good.GoodSelfInfo;
 import priv.zxy.moonstep.framework.good.Props;
 import priv.zxy.moonstep.framework.good.bean.Good;
 import priv.zxy.moonstep.framework.user.User;
 import priv.zxy.moonstep.framework.user.UserSelfInfo;
+import priv.zxy.moonstep.gps.PackActivity;
 
 /**
  * 创建人: Administrator
  * 创建时间: 2019/1/5
  * 描述:用在月友界面的背包dialog
  **/
-// TODO (GridView不显示的改进措施：我们可以在程序刚加载的时候就采用备忘录模式构建一个物品保存类，用来得到用户的所有物品数据并将其加载到内存中，当我们需要访问内存数据的时候，就直接像UserSelfInfo一样获得其引用即可。)
 public class PackDialog extends Dialog {
 
     private Context mContext;
-    private Callback callback = null;
+    private Callback callback;
 
     private ImageView chooseImage;
     private GridView packView;
-    private List<Good> goods = null;
-    private MyHandler myHandler;
-    private AbstractAdapter<Good> mAbstractAdapter;
 
     public PackDialog(@NonNull Context context) {
         super(context);
@@ -59,7 +59,6 @@ public class PackDialog extends Dialog {
         View view = View.inflate(mContext,R.layout.dialog_pack,null);
         setContentView(view);
         init();
-        initData();
     }
 
     public void setClickListener(Callback callback) {
@@ -67,20 +66,33 @@ public class PackDialog extends Dialog {
     }
 
     private void init() {
-        myHandler = new MyHandler(this);
-
         Button cancelBt = findViewById(R.id.cancel);
         Button sureBt = findViewById(R.id.sure);
         chooseImage = findViewById(R.id.be_placed_item);
         packView = findViewById(R.id.pack);
+        AbstractAdapter<Good> mAbstractAdapter = new AbstractAdapter<Good>(GoodSelfInfo.getInstance().getGoods(), R.layout.pack_item) {
+            @Override
+            public void bindView(ViewHolder holder, Good obj) {
+                holder.setImageResource(R.id.itemSrc, obj.getGoodImagePath());
+                holder.setText(R.id.itemNumber, String.valueOf(obj.getNumber()));
+            }
+        };
+        packView.setAdapter(mAbstractAdapter);
+        packView.setOnItemClickListener((parent, view, position, id) -> {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                String goodPath = GoodSelfInfo.getInstance().getGoods().get(position).getGoodImagePath();
+                Glide.with(mContext).load(goodPath).into(chooseImage);
+                chooseImage.invalidate();
+                return;
+            }
+            Toast.makeText(mContext, "您的API版本低于23，不能使用本功能，请升级版本后重新尝试", Toast.LENGTH_SHORT).show();
+        });
 
         /*
          * 给确认和取消的按钮同时设置监听
          */
         sureBt.setOnClickListener(new ClickListener());
         cancelBt.setOnClickListener(new ClickListener());
-
-        //TODO(你必须在这里就开始用适配器加载数据）
 
         Window dialogWindow = getWindow();
         if (dialogWindow == null) {
@@ -101,7 +113,7 @@ public class PackDialog extends Dialog {
      */
     private boolean isGoodInChooseFramework() {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-            Drawable drawable = chooseImage.getForeground();
+            Drawable drawable = chooseImage.getDrawable();
             return drawable != null;
         }
         Toast.makeText(mContext, "您当前的api等级小于23，不能使用该功能，请升级系统版本", Toast.LENGTH_SHORT).show();
@@ -114,7 +126,7 @@ public class PackDialog extends Dialog {
     public void doClear() {
         if (isGoodInChooseFramework()) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                chooseImage.setForeground(null);
+                chooseImage.setImageDrawable(null);
             } else {
                 Toast.makeText(mContext, "您当前的api等级小于23，不能使用该功能，请升级系统版本", Toast.LENGTH_SHORT).show();
             }
@@ -132,27 +144,6 @@ public class PackDialog extends Dialog {
             return;
         }
         dismiss();
-    }
-
-    /**
-     * 初始化用户的背包中物品的数据
-     */
-    private void initData() {
-        Props props = new Props();
-        User user = UserSelfInfo.getInstance().getMySelf();
-
-        props.getUserGoods(gs -> {
-            goods = gs;
-            mAbstractAdapter = new AbstractAdapter<Good>(goods, R.layout.pack_item) {
-                @Override
-                public void bindView(ViewHolder holder, Good obj) {
-                    holder.setImageResource(R.id.itemSrc, obj.getGoodImagePath());
-                    holder.setText(R.id.itemNumber, String.valueOf(obj.getNumber()));
-                }
-            };
-            myHandler.sendEmptyMessage(0x01);
-        }, user.getPhoneNumber());
-
     }
 
     private class ClickListener implements View.OnClickListener {
@@ -177,29 +168,5 @@ public class PackDialog extends Dialog {
         void onSure();
 
         void onCancel();
-    }
-
-    private static class MyHandler extends Handler{
-
-        /**
-         * 创建弱引用
-         * 拓展一下：
-         * 强引用就是通常new出来的引用
-         * 软引用在GC发现内存不足的时候就会从堆中回收
-         * 而弱引用在GC发现对象不再使用的时候从堆中回收
-         * 而虚引用的话任何时候都有可能会被回收
-         */
-        private WeakReference<PackDialog> weakReference;
-
-        MyHandler(PackDialog dialog) {
-            weakReference = new WeakReference<>(dialog);
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            PackDialog packDialog = weakReference.get();
-            packDialog.packView.setAdapter(packDialog.mAbstractAdapter);
-        }
     }
 }

@@ -16,6 +16,7 @@ import java.util.Map;
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.adapter.AbstractAdapter;
 import priv.zxy.moonstep.data.application.Application;
+import priv.zxy.moonstep.framework.good.GoodSelfInfo;
 import priv.zxy.moonstep.framework.good.Props;
 import priv.zxy.moonstep.framework.good.bean.Good;
 import priv.zxy.moonstep.framework.user.User;
@@ -32,25 +33,7 @@ import priv.zxy.moonstep.util.SharedPreferencesUtil;
 public class PackActivity extends AppCompatActivity {
 
     private static final String TAG = "PackActivity";
-    private AbstractAdapter<Good> mAbstractAdapter = null;
-    private List<Good> goods = null;
-    private GridView packView = null;
-
-    @SuppressLint("HandlerLeak")
-    private Handler handler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            mAbstractAdapter = new AbstractAdapter<Good>(goods, R.layout.pack_item) {
-                @Override
-                public void bindView(ViewHolder holder, Good obj) {
-                    holder.setImageResource(R.id.itemSrc, obj.getGoodImagePath());
-                    holder.setText(R.id.itemNumber, String.valueOf(obj.getNumber()));
-                }
-            };
-            packView.setAdapter(mAbstractAdapter);
-        }
-    };
+    private GridView packView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -66,19 +49,17 @@ public class PackActivity extends AppCompatActivity {
 
     private void initView(){
         packView = findViewById(R.id.GridLayout);
-
-        goods = new ArrayList<>();
     }
 
     public void initData(){
-        Props props = new Props();
-        User user = UserSelfInfo.getInstance().getMySelf();
-
-        props.getUserGoods(gs -> {
-            goods = gs;
-            LogUtil.d(TAG, goods.toString());
-            handler.sendEmptyMessage(0x01);
-        }, user.getPhoneNumber());
+        AbstractAdapter<Good> mAbstractAdapter = new AbstractAdapter<Good>(GoodSelfInfo.getInstance().getGoods(), R.layout.pack_item) {
+            @Override
+            public void bindView(ViewHolder holder, Good obj) {
+                holder.setImageResource(R.id.itemSrc, obj.getGoodImagePath());
+                holder.setText(R.id.itemNumber, String.valueOf(obj.getNumber()));
+            }
+        };
+        packView.setAdapter(mAbstractAdapter);
         
         packView.setOnItemClickListener((parent, view, position, id) -> Toast.makeText(PackActivity.this, "你点击了" + position + "个背包" , Toast.LENGTH_SHORT).show());
     }

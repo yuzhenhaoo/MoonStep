@@ -6,21 +6,31 @@
     android:padding="20dp">
 
     <ImageView
-        android:id="@+id/be_placed_item"
+        android:id="@+id/be_placed_item_background"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:background="@drawable/bt6"
+        android:contentDescription="背包格子背景"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <ImageView
+        android:id="@+id/be_placed_item"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="5dp"
         android:contentDescription="背包格子"
+        app:layout_constraintTop_toTopOf="@id/be_placed_item_background"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"/>
 
     <GridView
         android:id="@+id/pack"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="150dp"
         android:layout_margin="10dp"
-        android:numColumns="5"
-        app:layout_constraintTop_toBottomOf="@id/be_placed_item"
+        android:numColumns="3"
+        app:layout_constraintTop_toBottomOf="@id/be_placed_item_background"
         app:layout_constraintBottom_toTopOf="@id/sure"/>
 
     <Button

@@ -20,6 +20,7 @@ import priv.zxy.moonstep.framework.user.UserSelfInfo;
 import priv.zxy.moonstep.service.MessageReceiverService;
 import priv.zxy.moonstep.login.view.UserLoginActivity;
 import priv.zxy.moonstep.main.view.MainActivity;
+import priv.zxy.moonstep.util.DataInitUtil;
 import priv.zxy.moonstep.util.LogUtil;
 import priv.zxy.moonstep.util.SharedPreferencesUtil;
 
@@ -133,7 +134,7 @@ public class StartActivity extends BaseActivity {
             // 当无需通过LoginActivity登录的时候就要开启MessageReceiverService
             startService(new Intent(this, MessageReceiverService.class));
             // 同时初始化UserSelfInfo的数据
-            UserSelfInfo.getInstance().setMySelf(SharedPreferencesUtil.readMySelfInformation());
+            DataInitUtil.initUserSelfInfo(SharedPreferencesUtil.readMySelfInformation());
         }else{
             Intent intent = new Intent(this, UserLoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
