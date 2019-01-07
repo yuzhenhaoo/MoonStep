@@ -36,7 +36,7 @@ public class ElasticityAnimation extends AbstractAnimateEffect {
 
     @Override
     public void setAnimate(View view, long duration) {
-
+        animatorSet.setDuration(duration);
     }
 
     @Override

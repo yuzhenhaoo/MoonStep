@@ -3,7 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:padding="20dp">
+    android:background="@drawable/pack_dialog_background">
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/purple_border"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/be_placed_item_background"
@@ -11,8 +20,10 @@
         android:layout_height="60dp"
         android:background="@drawable/bt6"
         android:contentDescription="背包格子背景"
+        android:layout_marginTop="20dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <ImageView
         android:id="@+id/be_placed_item"
@@ -24,14 +35,22 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"/>
 
-    <GridView
-        android:id="@+id/pack"
+    <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="200dp"
         android:layout_margin="10dp"
-        android:numColumns="3"
-        app:layout_constraintTop_toBottomOf="@id/be_placed_item_background"
-        app:layout_constraintBottom_toTopOf="@id/sure"/>
+        app:layout_constraintBottom_toTopOf="@id/sure"
+        app:layout_constraintTop_toBottomOf="@id/be_placed_item_background">
+
+        <GridView
+            android:id="@+id/pack"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_margin="10dp"
+            android:gravity="center_horizontal"
+            android:numColumns="3" />
+    </ScrollView>
 
     <Button
         android:id="@+id/sure"
@@ -39,6 +58,7 @@
         android:layout_height="100dp"
         android:layout_margin="4dp"
         android:background="@drawable/bt4"
+        android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"/>

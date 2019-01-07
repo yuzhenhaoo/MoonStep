@@ -2,20 +2,14 @@ package priv.zxy.moonstep.commerce.view.Friend;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
@@ -27,12 +21,8 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.hyphenate.exceptions.HyphenateException;
 import com.yalantis.phoenix.PullToRefreshView;
@@ -42,23 +32,16 @@ import org.litepal.LitePal;
 import java.util.List;
 
 import priv.zxy.moonstep.R;
-import priv.zxy.moonstep.adapter.AbstractAdapter;
 import priv.zxy.moonstep.adapter.MoonFriendAdapter;
 import priv.zxy.moonstep.commerce.presenter.MoonFriendPresenter;
 import priv.zxy.moonstep.customview.PackDialog;
-import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.data.bean.BaseFragment;
-import priv.zxy.moonstep.framework.good.Props;
-import priv.zxy.moonstep.framework.good.bean.Good;
 import priv.zxy.moonstep.framework.user.User;
-import priv.zxy.moonstep.framework.user.UserSelfInfo;
-import priv.zxy.moonstep.gps.PackActivity;
-import priv.zxy.moonstep.util.LogUtil;
-import priv.zxy.moonstep.util.ScreenUtils;
 import priv.zxy.moonstep.wheel.animate.AbstractAnimateEffect;
 import priv.zxy.moonstep.wheel.animate.AbstractAnimateFactory;
-import priv.zxy.moonstep.wheel.animate.ElasticityFactory;
 import priv.zxy.moonstep.wheel.animate.RotationAnimateFactory;
+import priv.zxy.moonstep.wheel.animate.RotationMoveAnimation;
+import priv.zxy.moonstep.wheel.animate.RotationMoveAnimationFactory;
 
 public class MoonFriendFragment extends BaseFragment implements IMoonFriendView {
 
@@ -190,7 +173,8 @@ public class MoonFriendFragment extends BaseFragment implements IMoonFriendView 
     public void initRecyclerView() {
         layoutManager = new LinearLayoutManager(this.getActivity());
         mAdapter = new MoonFriendAdapter(this.getActivity());
-        mAdapter.clear();//在每次进入好友页面的时候，都需要对当前页面的ViewHolder进行一次刷新
+        // 在每次进入好友页面的时候，都需要对当前页面的ViewHolder进行一次刷新
+        mAdapter.clear();
         if (mList != null) {
             mAdapter.addAll(mList);
         }
@@ -222,8 +206,8 @@ public class MoonFriendFragment extends BaseFragment implements IMoonFriendView 
         packDialog.setClickListener(new PackDialog.Callback() {
             @Override
             public void onSure() {
-                packDialog.doSure();
                 playChooseAnimation();
+                packDialog.doSure();
             }
 
             @Override
@@ -237,7 +221,23 @@ public class MoonFriendFragment extends BaseFragment implements IMoonFriendView 
      * 选中并点击确定以后播放动画
      */
     private void playChooseAnimation() {
-        // TODO(张晓翼，2019/1/3， 播放选中动画)
+        RotationMoveAnimation rotationMoveAnimation = new RotationMoveAnimation();
+        rotationMoveAnimation.setAnimate(packDialog.getChooseView(), getRelativeDistanceX(), getRelativeDistanceY());
+        rotationMoveAnimation.show();
+    }
+
+    /**
+     * @return 获得当前选择框物品图片中心到旋转中心的水平相对距离
+     */
+    private int getRelativeDistanceX() {
+        return 0;
+    }
+
+    /**
+     * @return 获得当前选择框物品图片中心到旋转中心的水平相对距离
+     */
+    private int getRelativeDistanceY() {
+        return 0;
     }
 
     @Override

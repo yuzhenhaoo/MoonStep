@@ -1,7 +1,5 @@
 package priv.zxy.moonstep.settings;
 
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,16 +7,21 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.view.animation.DecelerateInterpolator;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.hyphenate.chat.EMClient;
+
+import java.lang.ref.WeakReference;
 
 import priv.zxy.moonstep.BuildConfig;
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.customview.MyDialog;
 import priv.zxy.moonstep.login.view.UserLoginActivity;
 import priv.zxy.moonstep.util.LogUtil;
+import priv.zxy.moonstep.wheel.animate.AbstractAnimateEffect;
+import priv.zxy.moonstep.wheel.animate.AbstractAnimateFactory;
+import priv.zxy.moonstep.wheel.animate.ElasticityFactory;
 
 /**
  * 创建人: Administrator
@@ -30,12 +33,14 @@ public class SettingActivity extends AppCompatActivity implements ISettingView{
 
     private TextView accountSetting;
     private TextView phoneNumber;
-    private TextView help;
+    private TextView about;
     private TextView cleanChatSpace;
     private MyDialog myDialog;
-    private AnimatorSet animatorSet = new AnimatorSet();
-    private TextView exitLogin;
+    private Button exitLogin;
 
+    private AbstractAnimateEffect effect;
+
+    private MyHandler handler;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,23 +56,15 @@ public class SettingActivity extends AppCompatActivity implements ISettingView{
     private void initView() {
         accountSetting = (TextView) findViewById(R.id.accountSetting);
         phoneNumber = (TextView) findViewById(R.id.phoneNumber);
-        help = (TextView) findViewById(R.id.help);
+        about = (TextView) findViewById(R.id.help);
         cleanChatSpace = (TextView) findViewById(R.id.cleanChatSpace);
-        exitLogin = (TextView) findViewById(R.id.exitLogin);
+        exitLogin = (Button) findViewById(R.id.exitLogin);
 
         //设置Setting的动画
-        ObjectAnimator animator1 = ObjectAnimator.ofFloat(exitLogin, "scaleX",1.0f, 1.2f);
-        ObjectAnimator animator2 = ObjectAnimator.ofFloat(exitLogin, "scaleY",1.0f, 1.2f);
-        ObjectAnimator animator3 = ObjectAnimator.ofFloat(exitLogin, "scaleX",1.2f, 1.0f);
-        ObjectAnimator animator4 = ObjectAnimator.ofFloat(exitLogin, "scaleY",1.2f, 1.0f);
-        animator1.setInterpolator(new DecelerateInterpolator());
-        animator2.setInterpolator(new DecelerateInterpolator());
-        animator3.setInterpolator(new DecelerateInterpolator());
-        animator4.setInterpolator(new DecelerateInterpolator());
+        AbstractAnimateFactory factory = new ElasticityFactory();
+        effect = factory.createEffectObject();
 
-        animatorSet.playTogether(animator1, animator2);
-        animatorSet.play(animator2).before(animator3);
-        animatorSet.playTogether(animator3, animator4);
+        handler = new MyHandler(this);
     }
 
     private void initData(){
@@ -83,8 +80,10 @@ public class SettingActivity extends AppCompatActivity implements ISettingView{
     }
 
     private void initEvent(){
+        about.setOnClickListener(v -> toAboutActivity());
+
         exitLogin.setOnClickListener(v -> {
-            animatorSet.start();
+            effect.show();
             new Thread(()->{
                 try {
                     Thread.sleep(500);
@@ -96,7 +95,7 @@ public class SettingActivity extends AppCompatActivity implements ISettingView{
         });
     }
 
-    public void popDiaLogWindow() {
+    public void popDialogWindow() {
         myDialog = new MyDialog(this);
         myDialog.setTitle("退出提示!");
         myDialog.setContent("退出登陆后我们会继续保留您的账户数据，记得常回来看看哦！");
@@ -118,12 +117,23 @@ public class SettingActivity extends AppCompatActivity implements ISettingView{
         startActivity(intent);
     }
 
-    @SuppressLint("HandlerLeak")
-    private Handler handler = new Handler(){
+    private void toAboutActivity() {
+        Intent intent = new Intent(this, AboutPage.class);
+        startActivity(intent);
+    }
+
+    private static class MyHandler extends Handler {
+
+        private WeakReference<SettingActivity> reference;
+
+        MyHandler(SettingActivity activity) {
+            reference = new WeakReference<>(activity);
+        }
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            popDiaLogWindow();
+            SettingActivity activity = reference.get();
+            activity.popDialogWindow();
         }
-    };
+    }
 }

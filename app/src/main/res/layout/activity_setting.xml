@@ -8,6 +8,8 @@
         android:id="@+id/accountSetting"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:clickable="true"
+        android:focusable="true"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:background="#000"
@@ -24,6 +26,8 @@
         android:id="@+id/phoneNumber"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:clickable="true"
+        android:focusable="true"
         android:layout_marginTop="8dp"
         android:background="#6c6c6c"
         android:drawableRight="@mipmap/right_white"
@@ -39,6 +43,8 @@
         android:id="@+id/help"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:clickable="true"
+        android:focusable="true"
         android:layout_marginTop="8dp"
         android:background="#6c6c6c"
         android:drawableRight="@mipmap/right_white"
@@ -54,6 +60,8 @@
         android:id="@+id/cleanChatSpace"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:clickable="true"
+        android:focusable="true"
         android:layout_marginTop="8dp"
         android:background="#6c6c6c"
         android:drawableRight="@mipmap/right_white"
@@ -65,7 +73,7 @@
         android:textSize="22sp"
         app:layout_constraintTop_toBottomOf="@+id/help" />
 
-    <TextView
+    <Button
         android:id="@+id/exitLogin"
         android:layout_width="match_parent"
         android:layout_height="50dp"

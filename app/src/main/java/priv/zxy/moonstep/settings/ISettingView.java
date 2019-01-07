@@ -7,7 +7,7 @@ package priv.zxy.moonstep.settings;
  **/
 public interface ISettingView {
 
-    void popDiaLogWindow();
+    void popDialogWindow();
 
     void toLoginActivity();
 }

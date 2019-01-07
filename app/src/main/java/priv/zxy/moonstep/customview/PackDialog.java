@@ -106,18 +106,8 @@ public class PackDialog extends Dialog {
         dialogWindow.setAttributes(lp);
     }
 
-    /**
-     * 用来判断当前选择框里是否有物品
-     *
-     * @return 是就返回true，不是就返回false
-     */
-    private boolean isGoodInChooseFramework() {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-            Drawable drawable = chooseImage.getDrawable();
-            return drawable != null;
-        }
-        Toast.makeText(mContext, "您当前的api等级小于23，不能使用该功能，请升级系统版本", Toast.LENGTH_SHORT).show();
-        return false;
+    public View getChooseView() {
+        return chooseImage;
     }
 
     /**
@@ -144,6 +134,20 @@ public class PackDialog extends Dialog {
             return;
         }
         dismiss();
+    }
+
+    /**
+     * 用来判断当前选择框里是否有物品
+     *
+     * @return 是就返回true，不是就返回false
+     */
+    private boolean isGoodInChooseFramework() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            Drawable drawable = chooseImage.getDrawable();
+            return drawable != null;
+        }
+        Toast.makeText(mContext, "您当前的api等级小于23，不能使用该功能，请升级系统版本", Toast.LENGTH_SHORT).show();
+        return false;
     }
 
     private class ClickListener implements View.OnClickListener {

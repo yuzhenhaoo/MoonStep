@@ -20,7 +20,7 @@
         android:id="@+id/GridLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:numColumns="5"
+        android:numColumns="4"
         android:background="@color/package_item_background"
         android:padding="5dp"
         app:layout_constraintTop_toBottomOf="@+id/scopeHeader"
@@ -34,7 +34,7 @@
         android:background="@color/package_background"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <ImageView
+        <Button
             android:id="@+id/bt_auction"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -43,7 +43,7 @@
             android:contentDescription="圆月商城"
             tools:ignore="ImageViewStyle" />
 
-        <ImageView
+        <Button
             android:id="@+id/bt_mall"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"

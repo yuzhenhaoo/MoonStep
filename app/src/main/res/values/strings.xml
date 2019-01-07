@@ -61,4 +61,5 @@
     <string name="man">男</string>
     <string name="woman">女</string>
     <string name="todo">TODO</string>
+    <string name="about_us">关于我们</string>
 </resources>

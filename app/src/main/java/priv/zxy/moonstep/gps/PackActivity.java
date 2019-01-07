@@ -1,28 +1,16 @@
 package priv.zxy.moonstep.gps;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.adapter.AbstractAdapter;
-import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.framework.good.GoodSelfInfo;
-import priv.zxy.moonstep.framework.good.Props;
 import priv.zxy.moonstep.framework.good.bean.Good;
-import priv.zxy.moonstep.framework.user.User;
-import priv.zxy.moonstep.framework.user.UserSelfInfo;
-import priv.zxy.moonstep.util.LogUtil;
-import priv.zxy.moonstep.util.SharedPreferencesUtil;
 
 /**
  * 创建人: Administrator
@@ -34,6 +22,7 @@ public class PackActivity extends AppCompatActivity {
 
     private static final String TAG = "PackActivity";
     private GridView packView;
+    private LinearLayout fg;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,6 +38,7 @@ public class PackActivity extends AppCompatActivity {
 
     private void initView(){
         packView = findViewById(R.id.GridLayout);
+        fg = findViewById(R.id.fg_bottom);
     }
 
     public void initData(){
@@ -65,6 +55,6 @@ public class PackActivity extends AppCompatActivity {
     }
 
     public void initEvent(){
-
+        fg.setOnTouchListener((v, event) -> true);
     }
 }
