@@ -1,5 +1,7 @@
 package priv.zxy.moonstep.framework.good.bean;
 
+import org.litepal.crud.LitePalSupport;
+
 import priv.zxy.moonstep.framework.level.LevelEnum;
 
 /**
@@ -8,7 +10,7 @@ import priv.zxy.moonstep.framework.level.LevelEnum;
  * 描述: 物品的数据类
  **/
 
-public class Good {
+public class Good extends LitePalSupport {
 
     /**
      * 物品编码

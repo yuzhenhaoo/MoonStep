@@ -16,8 +16,7 @@ import java.util.List;
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.adapter.MoonCommunityAdapter;
 import priv.zxy.moonstep.framework.user.User;
-import priv.zxy.moonstep.framework.user.UserSelfInfo;
-import priv.zxy.moonstep.util.LogUtil;
+import priv.zxy.moonstep.framework.stroage.UserSelfInfo;
 
 /**
  * 创建人: Administrator

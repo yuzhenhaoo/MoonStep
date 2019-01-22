@@ -14,17 +14,13 @@ import com.yalantis.contextmenu.lib.ContextMenuDialogFragment;
 import com.yalantis.contextmenu.lib.MenuObject;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 import priv.zxy.moonstep.R;
-import priv.zxy.moonstep.constant.SharedConstant;
 import priv.zxy.moonstep.customview.AnimationButton;
 import priv.zxy.moonstep.customview.WaveViewByBezier;
-import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.data.bean.BaseFragment;
 import priv.zxy.moonstep.framework.user.User;
-import priv.zxy.moonstep.framework.user.UserSelfInfo;
-import priv.zxy.moonstep.util.SharedPreferencesUtil;
+import priv.zxy.moonstep.framework.stroage.UserSelfInfo;
 
 public class PersonalSurfaceFragment extends BaseFragment {
 

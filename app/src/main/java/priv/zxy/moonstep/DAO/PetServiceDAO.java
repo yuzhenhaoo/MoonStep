@@ -30,18 +30,14 @@ public class PetServiceDAO {
 
     private static final String URL = UrlBase.GET_PET_INFO_SERVLET_URL;
 
-    public static PetServiceDAO getInstance(){
-        if (instance == null){
-            synchronized (PetServiceDAO.class){
-                if (instance == null){
-                    instance = new PetServiceDAO();
-                }
-            }
+    public static PetServiceDAO getInstance() {
+        if (instance == null) {
+            instance = new PetServiceDAO();
         }
         return instance;
     }
 
-    public void getPetInfo(CallBack callBack, String phoneNumber){
+    public void getPetInfo(CallBack callBack, String phoneNumber) {
 
         //获得请求队列
         RequestQueue requestQueue = Volley.newRequestQueue(Application.getContext());
@@ -54,7 +50,7 @@ public class PetServiceDAO {
                     }
                 }, error -> {
             callBack.onFail(ErrorCodeEnum.NET_NOT_RESPONSE);
-        }){
+        }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
@@ -67,7 +63,7 @@ public class PetServiceDAO {
         requestQueue.add(request);
     }
 
-    public interface CallBack{
+    public interface CallBack {
 
         void onSuccess();
 

@@ -1,5 +1,7 @@
 package priv.zxy.moonstep.framework.good;
 
+import org.litepal.LitePal;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +15,7 @@ import priv.zxy.moonstep.framework.good.bean.Good;
  *           在程序结束的时候，需要清空所有的引用。
  **/
 
-public class GoodSelfInfo {
+public class GoodSelfInfo{
 
     /**
      * 存储当前用户信息的Good对象

@@ -24,8 +24,6 @@ import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.commerce.view.Community.BaseCommunityMessage;
 import priv.zxy.moonstep.framework.user.User;
-import priv.zxy.moonstep.framework.user.UserSelfInfo;
-import priv.zxy.moonstep.util.LogUtil;
 
 /**
  * 创建人: Administrator

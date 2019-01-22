@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -21,14 +20,10 @@ import android.widget.Toast;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import java.lang.ref.WeakReference;
-import java.util.Objects;
 
-import priv.zxy.moonstep.DAO.PullUserInfoDAO;
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.constant.SharedConstant;
 import priv.zxy.moonstep.data.bean.BaseActivity;
-import priv.zxy.moonstep.framework.user.User;
-import priv.zxy.moonstep.framework.user.UserSelfInfo;
 import priv.zxy.moonstep.login.presenter.UserLoginPresenter;
 import priv.zxy.moonstep.util.LogUtil;
 import priv.zxy.moonstep.util.SharedPreferencesUtil;

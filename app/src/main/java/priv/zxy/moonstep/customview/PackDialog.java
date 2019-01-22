@@ -5,15 +5,9 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.util.DisplayMetrics;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -23,17 +17,10 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
-import java.lang.ref.WeakReference;
-import java.util.List;
-
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.adapter.AbstractAdapter;
 import priv.zxy.moonstep.framework.good.GoodSelfInfo;
-import priv.zxy.moonstep.framework.good.Props;
 import priv.zxy.moonstep.framework.good.bean.Good;
-import priv.zxy.moonstep.framework.user.User;
-import priv.zxy.moonstep.framework.user.UserSelfInfo;
-import priv.zxy.moonstep.gps.PackActivity;
 
 /**
  * 创建人: Administrator

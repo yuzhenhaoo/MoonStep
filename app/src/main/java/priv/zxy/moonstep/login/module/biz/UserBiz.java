@@ -12,14 +12,8 @@ import com.hyphenate.exceptions.HyphenateException;
 
 //import cn.smssdk.SMSSDK;
 import priv.zxy.moonstep.DAO.LoginDataRequestDAO;
-import priv.zxy.moonstep.DAO.PullUserInfoDAO;
 import priv.zxy.moonstep.DAO.RegisterDataRequestDAO;
-import priv.zxy.moonstep.constant.SharedConstant;
-import priv.zxy.moonstep.framework.user.User;
 import priv.zxy.moonstep.DAO.PhoneNumberIsInServerDAO;
-import priv.zxy.moonstep.framework.user.UserSelfInfo;
-import priv.zxy.moonstep.util.LogUtil;
-import priv.zxy.moonstep.util.SharedPreferencesUtil;
 import priv.zxy.moonstep.util.ToastUtil;
 import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
 

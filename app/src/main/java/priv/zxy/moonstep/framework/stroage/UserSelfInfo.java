@@ -1,5 +1,6 @@
-package priv.zxy.moonstep.framework.user;
+package priv.zxy.moonstep.framework.stroage;
 
+import priv.zxy.moonstep.framework.user.User;
 import priv.zxy.moonstep.util.SharedPreferencesUtil;
 
 /**
@@ -7,7 +8,7 @@ import priv.zxy.moonstep.util.SharedPreferencesUtil;
  * 创建时间: 2019/1/1
  * 描述: 存储用户信息的一个临时类
  *       在加载用户信息的时候开始初始化数据
- *       在程序结束的时候，需要清空所有的引用。
+ *       在程序结束的时候，需要清空所有的引用
  **/
 
 public class UserSelfInfo {

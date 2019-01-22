@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import priv.zxy.moonstep.DAO.PullUserInfoDAO;
+import priv.zxy.moonstep.constant.SharedConstant;
 import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
 import priv.zxy.moonstep.framework.user.User;
@@ -52,7 +53,7 @@ public class MoonFriendService extends Service {
     @Override
     public void onCreate() {
         initMoonFriends();
-        if (SharedPreferencesUtil.isDataInitialized()) {
+        if (SharedPreferencesUtil.dataIsInited(SharedConstant.MOON_FRIEND)) {
             initMoonFriends();
         }
         super.onCreate();
@@ -87,7 +88,7 @@ public class MoonFriendService extends Service {
                     }, username);
                 }
                 LogUtil.d(TAG, "run: EM获取好友列表成功");
-                SharedPreferencesUtil.dataInitialized();
+                SharedPreferencesUtil.setDataInited(SharedConstant.MOON_FRIEND);
             } catch (HyphenateException e) {
                 e.printStackTrace();
                 LogUtil.d(TAG, "run: EM获取好友列表失败：" + e.getMessage());

@@ -30,6 +30,15 @@ public class MapDot extends LitePalSupport {
         this.longitude = longitude;
     }
 
+    /**
+     * 这个方法需要被重写，但是我现在还不太会
+     * @return hash值
+     */
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
     @Override
     public boolean equals(Object obj) {
         MapDot object = (MapDot) obj;

@@ -1,20 +1,19 @@
 package priv.zxy.moonstep.util;
 
-import java.util.List;
-
-import priv.zxy.moonstep.R;
-import priv.zxy.moonstep.adapter.AbstractAdapter;
 import priv.zxy.moonstep.framework.good.GoodSelfInfo;
 import priv.zxy.moonstep.framework.good.Props;
-import priv.zxy.moonstep.framework.good.bean.Good;
+import priv.zxy.moonstep.framework.stroage.GoodTreasureInfo;
+import priv.zxy.moonstep.framework.stroage.MapDotsInfo;
 import priv.zxy.moonstep.framework.user.User;
-import priv.zxy.moonstep.framework.user.UserSelfInfo;
+import priv.zxy.moonstep.framework.stroage.UserSelfInfo;
 
 /**
  * 创建人: Administrator
  * 创建时间: 2019/1/6
  * 描述:数据初始化类
  *      对当前应用中所有需要进入前申请的数据做一个封装，目的是为了让开发人员便捷的知道到底哪些数据是需要初始化的。
+ *      数据初始化遵从就近原则：如果数据库中没有的话，才从服务器进行获取
+ *      判断数据库中是否有数据，取决于新建一个单独的SharedPreference文件，当相应的数据被初始化过后，就设定相应的标识位
  **/
 
 public class DataInitUtil {
@@ -29,8 +28,50 @@ public class DataInitUtil {
 
     /**
      * 初始化用户的物品数据
+     * 用户物品数据直接从网络上获取
      */
     public static void initGoodSelfInfo() {
         new Props().getUserGoods(gs -> GoodSelfInfo.getInstance().addAll(gs), UserSelfInfo.getInstance().getMySelf().getPhoneNumber());
+    }
+
+    /**
+     * 初始化地图坐标数据
+     */
+    public static void initMapDotData() {
+        MapDotsInfo.getInstance().getDots();
+    }
+    /**
+     * 初始化用户地图界面的宝物信息(如果数据库中没有的话，就从服务器上获取然后存储到数据库中)
+     */
+    public static void initUserMapTreasures() {
+        GoodTreasureInfo.getInstance().initGoodTreasure();
+    }
+
+    /**
+     * 初始化用户的宠物信息
+     */
+    public static void initPetInfo() {
+
+    }
+
+    /**
+     * 初始化用户的好友信息
+     */
+    public static void initUserMoonFriendsInfo() {
+
+    }
+
+    /**
+     * 初始化用户权限信息
+     */
+    public static void initUserAuthority() {
+
+    }
+
+    /**
+     * 初始化离线消息
+     */
+    public static void initOfflineMessage() {
+
     }
 }

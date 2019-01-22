@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 
@@ -24,16 +23,12 @@ import org.litepal.LitePalApplication;
 import java.util.Iterator;
 import java.util.List;
 
-import priv.zxy.moonstep.DAO.PullUserInfoDAO;
-import priv.zxy.moonstep.constant.SharedConstant;
+import javax.xml.crypto.Data;
+
 import priv.zxy.moonstep.framework.message.MessageOnline;
-import priv.zxy.moonstep.framework.user.User;
-import priv.zxy.moonstep.framework.user.UserSelfInfo;
 import priv.zxy.moonstep.guide.StartActivity;
 import priv.zxy.moonstep.helper.EMHelper;
 import priv.zxy.moonstep.data.bean.EMBase;
-import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
-import priv.zxy.moonstep.login.view.UserLoginActivity;
 import priv.zxy.moonstep.util.DataInitUtil;
 import priv.zxy.moonstep.util.LogUtil;
 import priv.zxy.moonstep.util.SharedPreferencesUtil;
@@ -344,7 +339,14 @@ public class Application extends LitePalApplication {
             if (activity.getClass() == MainActivity.class) {
                 // 实施消息的监听
                 EMClient.getInstance().chatManager().addMessageListener(msgListener);
+                // 初始化用户物品信息
                 DataInitUtil.initGoodSelfInfo();
+                // 初始化用户地图坐标信息
+                DataInitUtil.initMapDotData();
+                // 初始化地图宝藏信息
+                DataInitUtil.initUserMapTreasures();
+                // 初始化用户离线消息
+                DataInitUtil.initOfflineMessage();
             }
             if (activity.getClass() == ChattingActivity.class){
                 // 移除Listener

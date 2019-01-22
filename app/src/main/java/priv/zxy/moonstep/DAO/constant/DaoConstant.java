@@ -39,4 +39,8 @@ public class DaoConstant {
     public static final String LONGTITUDE = "longtitude";
 
     public static final String ADDRESS = "address";
+
+    public static final String GOOD_LEVEL = "level";
+
+    public static final String GOOD_NUMBER = "number";
 }

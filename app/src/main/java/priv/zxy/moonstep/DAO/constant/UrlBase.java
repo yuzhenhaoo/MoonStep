@@ -26,4 +26,5 @@ public class UrlBase {
 
     public static final String USER_GOOD_URL = "http://120.79.154.236:8080/MoonStep/GetUserGoodsServlet";
 
+    public static final String GOOD_TREASURE = "http://120.79.154.236:8080/MoonStep/GetTreasureServlet";
 }

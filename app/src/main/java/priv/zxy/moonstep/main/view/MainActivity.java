@@ -31,20 +31,17 @@ import com.hyphenate.util.NetUtils;
 import org.litepal.tablemanager.Connector;
 
 import java.lang.ref.WeakReference;
-import java.util.Map;
 
-import priv.zxy.moonstep.constant.SharedConstant;
 import priv.zxy.moonstep.framework.user.User;
-import priv.zxy.moonstep.framework.user.UserSelfInfo;
+import priv.zxy.moonstep.framework.stroage.UserSelfInfo;
+import priv.zxy.moonstep.gps.MapFragment;
 import priv.zxy.moonstep.service.MoonFriendService;
 import priv.zxy.moonstep.R;
-import priv.zxy.moonstep.gps.map;
 import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.data.bean.BaseActivity;
 import priv.zxy.moonstep.login.view.UserLoginActivity;
 import priv.zxy.moonstep.settings.SettingActivity;
 import priv.zxy.moonstep.util.LogUtil;
-import priv.zxy.moonstep.util.SharedPreferencesUtil;
 import priv.zxy.moonstep.util.ShowErrorReasonUtil;
 import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
 import priv.zxy.moonstep.kefu.KeFuActivity;
@@ -257,7 +254,7 @@ public class MainActivity extends BaseActivity
         if (id == R.id.nav_place) {
             addFragmentToStack(new FragmentParent());
         } else if (id == R.id.nav_real_world) {
-            addFragmentToStack(new map());
+            addFragmentToStack(new MapFragment());
         } else if (id == R.id.nav_wangguan) {
             addFragmentToStack(new ThirdMainPageFragment());
         } else if (id == R.id.nav_task) {

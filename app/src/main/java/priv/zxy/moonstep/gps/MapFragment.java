@@ -45,8 +45,12 @@ import priv.zxy.moonstep.algorithm.ChooseMapDots.MapDot;
 import priv.zxy.moonstep.algorithm.MinimumDISTDectation.MinDistanceDetectionContext;
 import priv.zxy.moonstep.algorithm.MinimumDISTDectation.MinDistanceTypeEnum;
 import priv.zxy.moonstep.constant.SharedConstant;
+import priv.zxy.moonstep.framework.good.bean.Good;
+import priv.zxy.moonstep.framework.stroage.GoodTreasureInfo;
+import priv.zxy.moonstep.framework.stroage.MapDotsInfo;
 import priv.zxy.moonstep.helper.FileHelper;
 import priv.zxy.moonstep.data.application.Application;
+import priv.zxy.moonstep.util.DataInitUtil;
 import priv.zxy.moonstep.util.LogUtil;
 import priv.zxy.moonstep.util.SharedPreferencesUtil;
 import priv.zxy.moonstep.DAO.SetLocationDAO;
@@ -59,9 +63,9 @@ import priv.zxy.moonstep.wheel.animate.ElasticityFactory;
  *     不同的地图可以得到的奖励也有所不同。
  */
 
-public class map extends Fragment{
+public class MapFragment extends Fragment{
 
-    private static final String TAG = "map";
+    private static final String TAG = "MapFragment";
     private static final String TUYA = "tuya.data";
     private static final String NIGHT = "night.data";
     private static final String CUSTOM_MAP_DIR = "customConfigFile";
@@ -85,6 +89,7 @@ public class map extends Fragment{
     private MapDot myDot = new MapDot();// 用户当前位置
     private List<MapDot> allMapDots = null;// 用户地图中的所有“宝藏”地点
     private List<Marker> markers = new LinkedList<>();
+    private ArrayList<Good> treasures;
 
     private AbstractAnimateEffect effect;
 
@@ -180,7 +185,6 @@ public class map extends Fragment{
     private void initView(Bundle savedInstanceState) {
         // 动态的申请权限
         applyForPermissions();
-
         pack = view.findViewById(R.id.pack);
         radar = view.findViewById(R.id.radar);
         map = view.findViewById(R.id.map);
@@ -190,12 +194,20 @@ public class map extends Fragment{
         effect = new ElasticityFactory().createEffectObject();
         effect.setAnimate(pack);
 
+        initGoodTreasure();
         initAmapSetting();
         initMapDots();
         initMarkers();
         initLocationStyle();
         initLocationClient();
         initLocationOption();
+    }
+
+    /**
+     * 初始化宝物信息
+     */
+    private void initGoodTreasure() {
+        treasures = new ArrayList<>(GoodTreasureInfo.getInstance().getTreasures());
     }
 
     private void initAmapSetting(){
@@ -210,7 +222,7 @@ public class map extends Fragment{
     }
 
     private void initMapDots(){
-        allMapDots = LitePal.findAll(MapDot.class);
+        allMapDots = MapDotsInfo.getInstance().getDots();
     }
 
     private void initEvent(){
@@ -249,7 +261,7 @@ public class map extends Fragment{
         while (it.hasNext()){
             MapDot item = it.next();
             if (gaugePoints.contains(item)){
-                Log.d(TAG, "deleteGaugePointInMapDots-->" + item.getLongitude() + item.getLongitude());
+                LogUtil.d(TAG, "eleteGaugePointInMapDots-->" + item.getLongitude() + item.getLongitude());
                 it.remove();
                 // 从数据库中删除标记点
                 item.delete();
@@ -346,28 +358,6 @@ public class map extends Fragment{
         }
     }
 
-    /**
-     * 将32个经纬度坐标存储到LitePal数据库中
-     * @param mapDots 地图上的所有寻宝坐标
-     */
-    private void saveMapDots(List<MapDot> mapDots){
-        clearMapDots();
-        for(MapDot mapDot : mapDots){
-            MapDot dot = new MapDot();
-            dot.setLatitude(mapDot.getLatitude());
-            dot.setLongitude(mapDot.getLongitude());
-            dot.save();
-        }
-    }
-
-    /**
-     * 每次存储之前，需要将当前已有的节点全部清除
-     * 删除所有id值大于0的数据
-     */
-    private void clearMapDots(){
-        LitePal.deleteAll(MapDot.class, "id > ?", "0");
-    }
-
     private AMapLocationListener mLocationListener = location -> {
         if (location != null){
             String address = location.getAddress();//获得地址
@@ -392,12 +382,9 @@ public class map extends Fragment{
             LogUtil.d(TAG, "当前维度为:" + latitude);
             LogUtil.d(TAG, "当前经度为:" + longitude);
 
-            if (SharedPreferencesUtil.checkMapTime(days)){
-                // 这里对32个宝藏位置坐标进行刷新，如果成功的话，就存入sqlite数据库中，并在地图上显示
-                DotChooseContext context = new DotChooseContext(ChooseTypeEnum.SQUARE_CHOOSE);
-                List<MapDot> dots = context.listMapDots(latitude, longitude, 32);
-                LogUtil.d(TAG, dots.toString());
-                saveMapDots(dots);
+            // 初始化地图坐标
+            if (MapDotsInfo.getInstance().initMapDots(latitude, longitude, days)) {
+                allMapDots = MapDotsInfo.getInstance().getDots();
             }
 
             String phoneNumber = SharedPreferencesUtil.readLoginInfo().get(SharedConstant.PHONE_NUMBER);

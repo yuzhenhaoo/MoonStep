@@ -6,12 +6,9 @@ import android.content.SharedPreferences;
 import java.util.HashMap;
 import java.util.Map;
 
-import priv.zxy.moonstep.DAO.PullUserInfoDAO;
 import priv.zxy.moonstep.constant.SharedConstant;
-import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
 import priv.zxy.moonstep.framework.user.User;
 import priv.zxy.moonstep.data.application.Application;
-import priv.zxy.moonstep.framework.user.UserSelfInfo;
 import priv.zxy.moonstep.wheel.cache.FacadeSharedPreference;
 
 
@@ -51,26 +48,6 @@ public class SharedPreferencesUtil {
             init();
         }
         return !sp.checkElement(SharedConstant.LANDING_LIBRARY, SharedConstant.IS_FIRST_LANDING);
-    }
-
-    /**
-     * 记录好友信息是否已经被加载过（既第一次检测）
-     */
-    public static void dataInitialized(){
-        if (sp == null) {
-            init();
-        }
-        sp.saveElement(SharedConstant.LANDING_LIBRARY, SharedConstant.INIT_DATA, true);
-    }
-
-    /**
-     * @return 数据库已经进行过初始化的话，就返回false,不然就返回true
-     */
-    public static boolean isDataInitialized(){
-        if (sp == null) {
-            init();
-        }
-        return !sp.checkElement(SharedConstant.LANDING_LIBRARY, SharedConstant.INIT_DATA);
     }
 
     /**
@@ -243,8 +220,28 @@ public class SharedPreferencesUtil {
     }
 
     /**
+     * 判断数据是否已经被初始化过
+     * @return
+     */
+    public static boolean dataIsInited(String dataName) {
+        if (sp == null) {
+            init();
+        }
+        return sp.checkElement(SharedConstant.DATA_INIT_LIBRARY, dataName);
+    }
+
+    /**
+     * 设置数据被初始化过
+     */
+    public static void setDataInited(String dataName) {
+        if (sp == null) {
+            init();
+        }
+        sp.saveElement(SharedConstant.DATA_INIT_LIBRARY, dataName, true);
+    }
+    /**
      * 用在地图宝藏刷新的API
-     * 用来检索当前时间和数据库中存入的时间（上次存入的时间）是否相差大于3
+     * 用来检索当前时间和数据库中存入的时间（上次存入的时间）是否相差大于3(天)
      * @param days 大于3返回true,否则返回false
      */
     public static boolean checkMapTime(int days){
