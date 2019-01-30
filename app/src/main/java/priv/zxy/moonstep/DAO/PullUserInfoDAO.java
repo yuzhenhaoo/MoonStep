@@ -57,7 +57,7 @@ public class PullUserInfoDAO {
                             String result = jsonObject.getString(DaoConstant.RESULT);
                             LogUtil.d(TAG, result);
                             if (result.equals(DaoConstant.SUCCESS)){
-                                callback.onSuccess(parseUserInfo(jsonObject));
+                                callback.onSuccess(User.createItemfromJson(jsonObject));
                             } else if(result.equals(DaoConstant.FAIL)){
                                 callback.onFail(ErrorCodeEnum.USER_IS_NOT_EXISTED);
                             }
@@ -74,23 +74,8 @@ public class PullUserInfoDAO {
                 });
     }
 
-    private User parseUserInfo(JSONObject jsonObject) throws JSONException{
-        User moonFriend = new User();
-        moonFriend.setNickName(jsonObject.getString(SharedConstant.NICK_NAME));
-        moonFriend.setPhoneNumber(jsonObject.getString(SharedConstant.PHONE_NUMBER));
-        moonFriend.setGender(jsonObject.getString(SharedConstant.GENDER));
-        moonFriend.setRaceCode(Integer.parseInt(jsonObject.getString(SharedConstant.RACE_CODE)));
-        moonFriend.setHeadPath(jsonObject.getString(SharedConstant.HEAD_PATH));
-        moonFriend.setSignature(jsonObject.getString(SharedConstant.SIGNATURE));
-        moonFriend.setLocation(jsonObject.getString(SharedConstant.ADDRESS));
-        moonFriend.setCurrentTitleCode(jsonObject.getString(SharedConstant.CURRENT_TITLE_CODE));
-        moonFriend.setLevel(jsonObject.getString(SharedConstant.LEVEL));
-        moonFriend.setLuckyValue(Integer.parseInt(jsonObject.getString(SharedConstant.LUCKY_VALUE)));
-        return moonFriend;
-    }
-
     public interface Callback{
-        void onSuccess(User moonFriend);
+        void onSuccess(User user);
 
         void onFail(ErrorCodeEnum errorCode);
     }

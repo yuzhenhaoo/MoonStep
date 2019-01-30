@@ -29,6 +29,7 @@ import priv.zxy.moonstep.framework.stroage.UserSelfInfo;
 public class MoonCommunity extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
     private static final String TAG = "MoonCommunity";
 
+    private SwipeRefreshLayout refreshLayout;
     private RecyclerView recyclerview;
     private RecyclerView.LayoutManager layoutManager;
     private MoonCommunityAdapter mAdapter;
@@ -56,6 +57,7 @@ public class MoonCommunity extends Fragment implements SwipeRefreshLayout.OnRefr
 
     private void initView() {
         mContext = getActivity();
+        refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresh);
         recyclerview = (RecyclerView) view.findViewById(R.id.recyclerview);
     }
 

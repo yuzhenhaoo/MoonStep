@@ -10,6 +10,8 @@ import org.json.JSONObject;
 import java.lang.reflect.Type;
 import java.util.LinkedList;
 
+import priv.zxy.moonstep.DAO.PullUserInfoDAO;
+import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
 import priv.zxy.moonstep.framework.user.User;
 
 /**
@@ -60,19 +62,29 @@ public class BaseCommunityMessage {
     /**
      * 消息来源
      */
-    private String user;
+    private User user;
 
     public static BaseCommunityMessage createItemfromJson(JSONObject json) {
         BaseCommunityMessage message = new BaseCommunityMessage();
         try {
-            message.address = json.getString("address");
-            message.content = json.getString("content");
-            message.latitude = json.getString("latitude");
-            message.longitude = json.getString("longitude");
-            message.mediaPath = json.getString("media_path");
-            message.praiseNumber = json.getString("praise_number");
-            message.showTime = json.getString("show_time");
-            message.user = json.getString("user");
+            message.setAddress(json.getString("address"));
+            message.setContent(json.getString("content"));
+            message.setLatitude(json.getString("latitude"));
+            message.setLongitude(json.getString("longitude"));
+            message.setMediaPath(json.getString("media_path"));
+            message.setPraiseNumber(json.getString("praise_number"));
+            message.setShowTime(json.getString("show_time"));
+            PullUserInfoDAO.getInstance().getUserInfo(new PullUserInfoDAO.Callback() {
+                @Override
+                public void onSuccess(User user) {
+                    message.setUser(user);
+                }
+
+                @Override
+                public void onFail(ErrorCodeEnum errorCode) {
+
+                }
+            }, json.getString("user_id"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -145,11 +157,11 @@ public class BaseCommunityMessage {
         this.latitude = latitude;
     }
 
-    public String getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(String user) {
+    public void setUser(User user) {
         this.user = user;
     }
 

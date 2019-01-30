@@ -3,7 +3,11 @@ package priv.zxy.moonstep.framework.user;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.litepal.crud.LitePalSupport;
+
+import priv.zxy.moonstep.constant.SharedConstant;
 
 /**
  * 创建人: Administrator
@@ -12,6 +16,25 @@ import org.litepal.crud.LitePalSupport;
  **/
 
 public class User extends LitePalSupport implements Parcelable {
+
+    public static User createItemfromJson(JSONObject jsonObject) {
+        User user = new User();
+        try {
+            user.setNickName(jsonObject.getString(SharedConstant.NICK_NAME));
+            user.setPhoneNumber(jsonObject.getString(SharedConstant.PHONE_NUMBER));
+            user.setGender(jsonObject.getString(SharedConstant.GENDER));
+            user.setRaceCode(Integer.parseInt(jsonObject.getString(SharedConstant.RACE_CODE)));
+            user.setHeadPath(jsonObject.getString(SharedConstant.HEAD_PATH));
+            user.setSignature(jsonObject.getString(SharedConstant.SIGNATURE));
+            user.setLocation(jsonObject.getString(SharedConstant.ADDRESS));
+            user.setCurrentTitleCode(jsonObject.getString(SharedConstant.CURRENT_TITLE_CODE));
+            user.setLevel(jsonObject.getString(SharedConstant.LEVEL));
+            user.setLuckyValue(Integer.parseInt(jsonObject.getString(SharedConstant.LUCKY_VALUE)));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return user;
+    }
 
     public String getPhoneNumber() {
         return phoneNumber;
