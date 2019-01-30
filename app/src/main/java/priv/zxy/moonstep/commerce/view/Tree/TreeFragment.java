@@ -63,4 +63,10 @@ public class TreeFragment extends Fragment {
             this.getContext().startActivity(intent);
         }
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        view = null;
+    }
 }

@@ -12,10 +12,6 @@ public interface IMainView {
 
     void toLoginActivity();
 
-    void bindService();
-
-    void unBindService();
-
     void exit();
 
 }

@@ -11,6 +11,7 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/network" />
             <option value="$PROJECT_DIR$/notifacation" />
+            <option value="$PROJECT_DIR$/threadpool" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

@@ -149,7 +149,7 @@ public class VerifyPhoneActivity extends BaseActivity implements IVerifyPhoneVie
 
     @Override
     public void toLogUtilinActivity() {
-        Intent intent = new Intent(this, UserLoginActivity.class);
+        Intent intent = new Intent(this, LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);

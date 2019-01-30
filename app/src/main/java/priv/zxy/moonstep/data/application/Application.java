@@ -23,8 +23,6 @@ import org.litepal.LitePalApplication;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.xml.crypto.Data;
-
 import priv.zxy.moonstep.framework.message.MessageOnline;
 import priv.zxy.moonstep.guide.StartActivity;
 import priv.zxy.moonstep.helper.EMHelper;
@@ -347,6 +345,12 @@ public class Application extends LitePalApplication {
                 DataInitUtil.initUserMapTreasures();
                 // 初始化用户离线消息
                 DataInitUtil.initOfflineMessage();
+                // 初始化用户的宠物信息
+                DataInitUtil.initPetInfo();
+                // 初始化用户好友信息
+                DataInitUtil.initUserMoonFriendsInfo();
+                // 初始化用户权限信息
+                DataInitUtil.initUserAuthority();
             }
             if (activity.getClass() == ChattingActivity.class){
                 // 移除Listener

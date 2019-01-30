@@ -1,9 +1,21 @@
 package priv.zxy.moonstep.util;
 
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.exceptions.HyphenateException;
+
+import org.litepal.LitePal;
+
+import java.util.List;
+
+import priv.zxy.moonstep.DAO.PullPetInfoDAO;
+import priv.zxy.moonstep.DAO.PullUserInfoDAO;
+import priv.zxy.moonstep.constant.SharedConstant;
+import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
 import priv.zxy.moonstep.framework.good.GoodSelfInfo;
 import priv.zxy.moonstep.framework.good.Props;
 import priv.zxy.moonstep.framework.stroage.GoodTreasureInfo;
 import priv.zxy.moonstep.framework.stroage.MapDotsInfo;
+import priv.zxy.moonstep.framework.stroage.MoonFriendInfo;
 import priv.zxy.moonstep.framework.user.User;
 import priv.zxy.moonstep.framework.stroage.UserSelfInfo;
 
@@ -17,9 +29,12 @@ import priv.zxy.moonstep.framework.stroage.UserSelfInfo;
  **/
 
 public class DataInitUtil {
+    private static final String TAG = "DataInitUtil";
 
     /**
      * 初始化用户的个人数据
+     * 在start的时候，会进行一次用户曾经是否经过成功登录的记录，如果是的话就会调用此函数，否则就会在发送网络请求(登录)之后进行调用
+     * 也就是说，一定会在MainActivity之前进行调用
      * @param user 用户的信息类
      */
     public static void initUserSelfInfo(User user) {
@@ -51,14 +66,24 @@ public class DataInitUtil {
      * 初始化用户的宠物信息
      */
     public static void initPetInfo() {
+        PullPetInfoDAO.getInstance().getPetInfo(new PullPetInfoDAO.CallBack() {
+            @Override
+            public void onSuccess() {
 
+            }
+
+            @Override
+            public void onFail(ErrorCodeEnum errorCodeEnum) {
+
+            }
+        }, UserSelfInfo.getInstance().getMySelf().getPhoneNumber());
     }
 
     /**
      * 初始化用户的好友信息
      */
     public static void initUserMoonFriendsInfo() {
-
+        MoonFriendInfo.getInstance().initMoonFriends();
     }
 
     /**

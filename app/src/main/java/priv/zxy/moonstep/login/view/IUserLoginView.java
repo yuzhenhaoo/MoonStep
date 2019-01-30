@@ -19,8 +19,6 @@ public interface IUserLoginView {
 
     void toMainActivity();
 
-    void toConfirmPhoneActivity();
-
     void toForgetPasswordActivity();
 
     void showErrorTip(ErrorCodeEnum errorCode);

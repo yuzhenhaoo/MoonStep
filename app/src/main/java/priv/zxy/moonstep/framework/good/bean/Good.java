@@ -1,8 +1,19 @@
 package priv.zxy.moonstep.framework.good.bean;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.litepal.crud.LitePalSupport;
 
+import java.lang.reflect.Type;
+import java.util.LinkedList;
+import java.util.List;
+
 import priv.zxy.moonstep.framework.level.LevelEnum;
+import priv.zxy.moonstep.framework.level.LevelTransformUtil;
 
 /**
  * 创建人: Administrator
@@ -52,6 +63,38 @@ public class Good extends LitePalSupport {
      */
     private String number;
 
+    /**
+     * 根据JsonObject获得Good对象
+     * @param json json数据
+     * @return good对象
+     */
+    public static Good createItemformJson(JSONObject json) {
+        Good good = new Good();
+        try {
+            good.setNumber(json.getString("number"));
+            good.setGoodSubscription(json.getString("good_subscription"));
+            good.setGoodName(json.getString("good_name"));
+            good.setGoodLifeValue(json.getString("good_life_value"));
+            good.setGoodLevel(LevelTransformUtil.toLevelEnum(json.getString("good_level")));
+            good.setGoodImagePath(json.getString("good_image_path"));
+            good.setGoodGameValue(json.getString("good_game_value"));
+            good.setGoodCode(json.getString("good_code"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return good;
+    }
+
+    /**
+     * 由Gson获取到Goods的全部对象
+     * @param jsonArray json数组
+     * @return Good的所有对象的链表
+     */
+    public static List<Good> createItemsformJson(JSONArray jsonArray) {
+        Type listType = new TypeToken<LinkedList<Good>>(){}.getType();
+        Gson gson = new Gson();
+        return gson.<LinkedList<Good>>fromJson(jsonArray.toString(), listType);
+    }
     public String getGoodGameValue() {
         return goodGameValue;
     }

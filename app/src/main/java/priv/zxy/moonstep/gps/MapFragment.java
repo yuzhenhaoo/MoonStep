@@ -31,16 +31,13 @@ import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
 
-import org.litepal.LitePal;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import priv.zxy.moonstep.DAO.PushLocationInfoDAO;
 import priv.zxy.moonstep.R;
-import priv.zxy.moonstep.algorithm.ChooseMapDots.ChooseTypeEnum;
-import priv.zxy.moonstep.algorithm.ChooseMapDots.DotChooseContext;
 import priv.zxy.moonstep.algorithm.ChooseMapDots.MapDot;
 import priv.zxy.moonstep.algorithm.MinimumDISTDectation.MinDistanceDetectionContext;
 import priv.zxy.moonstep.algorithm.MinimumDISTDectation.MinDistanceTypeEnum;
@@ -50,10 +47,8 @@ import priv.zxy.moonstep.framework.stroage.GoodTreasureInfo;
 import priv.zxy.moonstep.framework.stroage.MapDotsInfo;
 import priv.zxy.moonstep.helper.FileHelper;
 import priv.zxy.moonstep.data.application.Application;
-import priv.zxy.moonstep.util.DataInitUtil;
 import priv.zxy.moonstep.util.LogUtil;
 import priv.zxy.moonstep.util.SharedPreferencesUtil;
-import priv.zxy.moonstep.DAO.SetLocationDAO;
 import priv.zxy.moonstep.wheel.animate.AbstractAnimateEffect;
 import priv.zxy.moonstep.wheel.animate.ElasticityFactory;
 
@@ -129,8 +124,9 @@ public class MapFragment extends Fragment{
         // 销毁定位客户端，同时销毁本地定位服务。
         mLocationClient.onDestroy();
         map.onDestroy();
-        // 不然会发生内存泄漏
         allMapDots = null;
+        markers = null;
+        treasures = null;
     }
 
     @Override
@@ -375,20 +371,18 @@ public class MapFragment extends Fragment{
              * 这里出现了一个错误，是由于dots本身不能将context中获得的结果引用过来导致的，但是context.getMapDots的确是获得了结果，只是对于dots而言结果却是not avaliable的
              * 所以只要解决dots=context.getMapDots的问题就好了
              */
-            long millis = System.currentTimeMillis();
-            int days = (int)(millis/1000/60/60);
-            LogUtil.d(TAG, "当前时间为:" + days);
+
             LogUtil.d(TAG, "当前地址为:" + address);
             LogUtil.d(TAG, "当前维度为:" + latitude);
             LogUtil.d(TAG, "当前经度为:" + longitude);
 
             // 初始化地图坐标
-            if (MapDotsInfo.getInstance().initMapDots(latitude, longitude, days)) {
+            if (MapDotsInfo.getInstance().initMapDots(latitude, longitude)) {
                 allMapDots = MapDotsInfo.getInstance().getDots();
             }
 
             String phoneNumber = SharedPreferencesUtil.readLoginInfo().get(SharedConstant.PHONE_NUMBER);
-            SetLocationDAO.getInstance().LocationServlet(phoneNumber, address, String.valueOf(latitude), String.valueOf(longitude));
+            PushLocationInfoDAO.getInstance().LocationServlet(phoneNumber, address, String.valueOf(latitude), String.valueOf(longitude));
 
         }else{
             /*

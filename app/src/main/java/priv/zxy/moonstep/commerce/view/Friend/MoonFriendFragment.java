@@ -41,7 +41,6 @@ import priv.zxy.moonstep.wheel.animate.AbstractAnimateEffect;
 import priv.zxy.moonstep.wheel.animate.AbstractAnimateFactory;
 import priv.zxy.moonstep.wheel.animate.RotationAnimateFactory;
 import priv.zxy.moonstep.wheel.animate.RotationMoveAnimation;
-import priv.zxy.moonstep.wheel.animate.RotationMoveAnimationFactory;
 
 public class MoonFriendFragment extends BaseFragment implements IMoonFriendView {
 
@@ -116,7 +115,7 @@ public class MoonFriendFragment extends BaseFragment implements IMoonFriendView 
         }
 
 //        mPullToRefreshView = view.findViewById(R.id.pull_to_refresh);
-        recyclerView = view.findViewById(R.id.recycleview);
+        recyclerView = view.findViewById(R.id.recyclerview);
 
         initRecyclerView();
         // 自定义recyclerView的分割线
@@ -249,6 +248,7 @@ public class MoonFriendFragment extends BaseFragment implements IMoonFriendView 
     public void onDestroy() {
         super.onDestroy();
         localBroadcastManager.unregisterReceiver(localReceiver);
+        view = null;
     }
 
     class LocalReceiver extends BroadcastReceiver {

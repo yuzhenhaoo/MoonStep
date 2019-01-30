@@ -229,7 +229,7 @@ public class SendMessageActivity extends BaseActivity implements ISendMessageVie
 
     @Override
     public void toRegisterPage() {
-        Intent intent = new Intent(this, UserRegisterActivity.class);
+        Intent intent = new Intent(this, UserSignUpActivity.class);
         intent.putExtra("phoneNumber", phoneNum);
         startActivity(intent);
     }

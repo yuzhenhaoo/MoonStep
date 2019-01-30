@@ -34,6 +34,7 @@ import java.util.List;
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.constant.Constant;
 import priv.zxy.moonstep.constant.SharedConstant;
+import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.data.bean.ActivityCollector;
 import priv.zxy.moonstep.framework.message.Message;
 import priv.zxy.moonstep.framework.message.MessageOnline;
@@ -104,7 +105,7 @@ public class ChattingActivity extends AppCompatActivity implements IChattingView
     @SuppressLint("ClickableViewAccessibility")
     public void initView(){
         mActivity = this;
-        mContext = this.getApplicationContext();
+        mContext = Application.getContext();
         back = this.findViewById(R.id.back);
         person_info = this.findViewById(R.id.person_info);
         moreFuctions = this.findViewById(R.id.moreFunctions);
@@ -112,7 +113,7 @@ public class ChattingActivity extends AppCompatActivity implements IChattingView
         sendMessage = this.findViewById(R.id.sendMessage);
         userName = this.findViewById(R.id.userName);
         time = this.findViewById(R.id.time);
-        recyclerView = this.findViewById(R.id.recycleview);
+        recyclerView = this.findViewById(R.id.recyclerview);
 
         messageBar = findViewById(R.id.message_bar);
 

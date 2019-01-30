@@ -36,6 +36,9 @@ public class FragmentParent extends BaseFragment {
     private RadioButton myselfBt;
     private MyHandler mHandler;
 
+    /**
+     * 下面四个Fragment都持有了对应Fragment的强引用，要记得清楚引用
+     */
     private TreeFragment treeFragment = new TreeFragment();
     private MoonCommunity communityFragment = new MoonCommunity();
     private MoonFriendFragment friendFragment = new MoonFriendFragment();
@@ -45,30 +48,6 @@ public class FragmentParent extends BaseFragment {
      * 一个变量来检测当前friendBt是不是被选中了
      */
     private static boolean friendBtIsChecked = false;
-
-    private static class MyHandler extends Handler{
-        private WeakReference<FragmentParent> weakReference;
-
-        MyHandler(FragmentParent fragmentParent){
-            weakReference = new WeakReference<>(fragmentParent);
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            FragmentParent instance = weakReference.get();
-            if (!friendBtIsChecked) {
-                switch (msg.what) {
-                    case 0x00:
-                        instance.friendBt.setCompoundDrawables(null, instance.changeBtnTop(R.drawable.tab_menu_heart_tip), null, null);
-                        break;
-                    case 0x01:
-                        instance.friendBt.setCompoundDrawables(null, instance.changeBtnTop(R.drawable.tab_menu_heart), null, null);
-                        break;
-                }
-            }
-        }
-    }
 
     @Nullable
     @Override
@@ -91,20 +70,9 @@ public class FragmentParent extends BaseFragment {
         friendBt = view.findViewById(R.id.rb_heart);
         myselfBt = view.findViewById(R.id.rb_me);
         mHandler = new MyHandler(this);
-        new Thread(() -> {
-            while (true) {
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                if (SharedPreferencesUtil.isMessageTip()) {
-                    mHandler.sendEmptyMessage(0x00);
-                } else {
-                    mHandler.sendEmptyMessage(0x01);
-                }
-            }
-        }).start();
+        MyRunnable runnable = new MyRunnable();
+        Thread thread = new Thread(runnable);
+        thread.start();
     }
 
     public void initDate() {
@@ -147,7 +115,7 @@ public class FragmentParent extends BaseFragment {
 
     private void addFragmentToStack(Fragment fragment) {
         if (getActivity() == null) {
-            return ;
+            return;
         }
         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragments, fragment).commit();
     }
@@ -171,5 +139,54 @@ public class FragmentParent extends BaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        view = null;
+        treeFragment = null;
+        communityFragment = null;
+        friendFragment = null;
+        personalInfoFragment = null;
+
+        communityBt = null;
+    }
+
+    private class MyRunnable implements Runnable {
+        @Override
+        public void run() {
+            while (true) {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if (SharedPreferencesUtil.isMessageTip()) {
+                    mHandler.sendEmptyMessage(0x00);
+                } else {
+                    mHandler.sendEmptyMessage(0x01);
+                }
+            }
+        }
+    }
+
+    private static class MyHandler extends Handler {
+        private WeakReference<FragmentParent> weakReference;
+
+        MyHandler(FragmentParent fragmentParent) {
+            weakReference = new WeakReference<>(fragmentParent);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            FragmentParent instance = weakReference.get();
+            if (!friendBtIsChecked) {
+                switch (msg.what) {
+                    case 0x00:
+                        instance.friendBt.setCompoundDrawables(null, instance.changeBtnTop(R.drawable.tab_menu_heart_tip), null, null);
+                        break;
+                    case 0x01:
+                        instance.friendBt.setCompoundDrawables(null, instance.changeBtnTop(R.drawable.tab_menu_heart), null, null);
+                        break;
+                }
+            }
+        }
     }
 }

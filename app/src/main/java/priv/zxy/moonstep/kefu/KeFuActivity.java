@@ -9,7 +9,6 @@ import android.widget.Button;
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.adapter.ChattingMessageAdapter;
 import priv.zxy.moonstep.framework.message.Message;
-import priv.zxy.moonstep.framework.message.MessageOnline;
 import priv.zxy.moonstep.data.bean.BaseActivity;
 
 import java.util.ArrayList;
@@ -36,7 +35,7 @@ public class KeFuActivity extends BaseActivity {
         back = this.findViewById(R.id.back);
         person_info = this.findViewById(R.id.person_info);
 
-        recyclerView = this.findViewById(R.id.recycleview);
+        recyclerView = this.findViewById(R.id.recyclerview);
         mAdapter = new ChattingMessageAdapter(getApplicationContext());
     }
 

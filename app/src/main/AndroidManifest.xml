@@ -69,15 +69,11 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
-            android:name=".login.view.UserLoginActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
-        <activity
             android:name=".login.view.SendMessageActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
-            android:name=".login.view.UserRegisterActivity"
+            android:name=".login.view.UserSignUpActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
@@ -107,6 +103,8 @@
         <activity android:name=".settings.AboutPage"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
+        <activity android:name=".login.view.LoginActivity" />
+        <activity android:name=".login.view.LoginActivity1" />
 
         <!-- 设置环信应用的AppKey -->
         <meta-data
@@ -122,9 +120,6 @@
             android:name="com.hyphenate.chat.EMJobService"
             android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE" />
-        <service
-            android:name=".service.MoonFriendService"
-            android:exported="false" />
         <service
             android:name=".service.MessageReceiverService"
             android:exported="false"/>

@@ -53,4 +53,10 @@ public class FourthMainPageFragment extends BaseFragment {
         layoutManager.setPostLayoutListener(new CarouselZoomPostLayoutListener());
         recyclerView.setAdapter(mAdapter);
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        view = null;
+    }
 }

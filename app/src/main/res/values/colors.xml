@@ -42,4 +42,5 @@
     <color name="community_address_color">#007dd1</color>
     <color name="package_background">#414141</color>
     <color name="package_item_background">#373737</color>
+    <color name="loging_backgroung">#5b01ed</color>
 </resources>

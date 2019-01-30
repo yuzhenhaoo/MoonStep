@@ -1,11 +1,8 @@
 package priv.zxy.moonstep.login.presenter;
 
 import android.os.Looper;
-import android.widget.Toast;
 
 import priv.zxy.moonstep.login.module.biz.OnLoginListener;
-import priv.zxy.moonstep.util.LogUtil;
-import priv.zxy.moonstep.util.SharedPreferencesUtil;
 import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
 import priv.zxy.moonstep.login.module.biz.IUser;
 import priv.zxy.moonstep.login.module.biz.UserBiz;
@@ -26,7 +23,7 @@ import priv.zxy.moonstep.login.view.IUserLoginView;
 
 public class UserLoginPresenter {
     private IUser userBiz;
-    private IUserLoginView userLoginView;//创建与LogUtilinView交互的View对象
+    private IUserLoginView userLoginView;//创建与LoginView交互的View对象
 
     public UserLoginPresenter(IUserLoginView userLoginView){
         this.userLoginView = userLoginView;
@@ -69,13 +66,6 @@ public class UserLoginPresenter {
      */
     public void hideLoading(){
         userLoginView.hideLoading();
-    }
-
-    /**
-     * 进入ConfrimPhoneActivity
-     */
-    public void toConfirmPhoneActivity(){
-        userLoginView.toConfirmPhoneActivity();
     }
 
     /**

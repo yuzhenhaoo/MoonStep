@@ -42,7 +42,6 @@ public class PullUserInfoDAO {
         return instance;
     }
 
-    // FIXME (张晓翼，2019/1/2， 已经经过测试，可以正常回调，下面的参数解析函数也没有问题，User可以被成功传递)
     public void getUserInfo(final Callback callback, final String userID){
         AndroidNetworking.post(URL)
                 .addBodyParameter(DaoConstant.USER_ID, userID)

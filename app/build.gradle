@@ -40,9 +40,9 @@ android {
         setSourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
     //use legacy for android 6.0
     useLibrary 'org.apache.http.legacy'
+    buildToolsVersion '28.0.3'
 }
 
 dependencies {

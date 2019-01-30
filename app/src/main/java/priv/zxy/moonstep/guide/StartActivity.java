@@ -16,8 +16,8 @@ import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.DAO.constant.UrlBase;
 import priv.zxy.moonstep.data.bean.BaseActivity;
+import priv.zxy.moonstep.login.view.LoginActivity;
 import priv.zxy.moonstep.service.MessageReceiverService;
-import priv.zxy.moonstep.login.view.UserLoginActivity;
 import priv.zxy.moonstep.main.view.MainActivity;
 import priv.zxy.moonstep.util.DataInitUtil;
 import priv.zxy.moonstep.util.LogUtil;
@@ -60,7 +60,7 @@ public class StartActivity extends BaseActivity {
     private void initStartImageUrl(){
         int number = (int)(1 + Math.random()*(Application.START_IMAGE_MAX_NUMBER - 1 + 1));
         Log.d(TAG,"打印的数字是:" + String.valueOf(number));
-        url = UrlBase.START_PAGE_URL + String.valueOf(number)+".png";
+        url = UrlBase.START_PAGE_URL + String.valueOf(number)+"shield.png";
     }
 
     private void initView(){
@@ -135,7 +135,7 @@ public class StartActivity extends BaseActivity {
             // 同时初始化UserSelfInfo的数据
             DataInitUtil.initUserSelfInfo(SharedPreferencesUtil.readMySelfInformation());
         }else{
-            Intent intent = new Intent(this, UserLoginActivity.class);
+            Intent intent = new Intent(this, LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);

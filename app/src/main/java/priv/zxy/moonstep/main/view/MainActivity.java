@@ -2,14 +2,10 @@ package priv.zxy.moonstep.main.view;
 
 import android.animation.Animator;
 import android.app.Activity;
-import android.app.Service;
-import android.content.ComponentName;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.IBinder;
 import android.os.Message;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -35,11 +31,10 @@ import java.lang.ref.WeakReference;
 import priv.zxy.moonstep.framework.user.User;
 import priv.zxy.moonstep.framework.stroage.UserSelfInfo;
 import priv.zxy.moonstep.gps.MapFragment;
-import priv.zxy.moonstep.service.MoonFriendService;
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.data.bean.BaseActivity;
-import priv.zxy.moonstep.login.view.UserLoginActivity;
+import priv.zxy.moonstep.login.view.LoginActivity;
 import priv.zxy.moonstep.settings.SettingActivity;
 import priv.zxy.moonstep.util.LogUtil;
 import priv.zxy.moonstep.util.ShowErrorReasonUtil;
@@ -63,21 +58,12 @@ public class MainActivity extends BaseActivity
     private static final String TAG = "MainActivity";
 
     private NavigationView navigationView;
-
     private View nav_header_main;
-
     private TextView name;
-
     private TextView race;
-
     private Button setting;
-
     private Button mode;
-
     private Activity mActivity;
-
-    private Intent service;
-
     private AbstractAnimateEffect effect;
 
     private static boolean isNight = true;
@@ -97,13 +83,10 @@ public class MainActivity extends BaseActivity
         initView(savedInstanceState);
 
         initData();
-
         initEvent();
-
     }
 
     private void initView(Bundle savedInstanceState){
-        bindService();
 
         getSupportFragmentManager().beginTransaction().replace(R.id.main_content, new FragmentParent()).commit();
 
@@ -145,7 +128,7 @@ public class MainActivity extends BaseActivity
     }
 
     private void initEvent(){
-        //注册一个监听连接状态的listener
+        // 注册一个监听连接状态的listener
         EMClient.getInstance().addConnectionListener(new MyConnectionListener());
 
         mode.setOnClickListener(v -> mode.animate()
@@ -239,7 +222,7 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void toLoginActivity() {
-        Intent intent = new Intent(this, UserLoginActivity.class);
+        Intent intent = new Intent(this, LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
@@ -276,23 +259,7 @@ public class MainActivity extends BaseActivity
      */
     @Override
     protected void onDestroy() {
-        unBindService();
         super.onDestroy();
-    }
-
-    @Override
-    public void bindService() {
-        //绑定LoadingMoonFriendsService
-        service = new Intent(this, MoonFriendService.class);
-        bindService(service, connection, Service.BIND_AUTO_CREATE);
-        startService(service);
-    }
-
-    @Override
-    public void unBindService() {
-        //解除绑定LoadingMoonFriendsService
-        stopService(service);
-        unbindService(connection);
     }
 
     @Override
@@ -331,18 +298,6 @@ public class MainActivity extends BaseActivity
             activity.toSettingActivity();
         }
     }
-
-    private ServiceConnection connection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            LogUtil.d(TAG, "MoonFriendService Connected");
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            LogUtil.d(TAG, "MoonFriendService DisConnected");
-        }
-    };
 
     private class MyConnectionListener implements EMConnectionListener {
         @Override

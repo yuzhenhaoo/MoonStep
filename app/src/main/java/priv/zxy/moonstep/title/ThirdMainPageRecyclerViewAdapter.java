@@ -52,7 +52,6 @@ public class ThirdMainPageRecyclerViewAdapter extends RecyclerView.Adapter<Third
     @Override
     public MyHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.fg_main_third_recyclerview_item, viewGroup, false);
-        //是自定义ViewHolder持有我们的item
         return new MyHolder(view);
     }
 
@@ -69,19 +68,14 @@ public class ThirdMainPageRecyclerViewAdapter extends RecyclerView.Adapter<Third
         holder.titleLevel.setText(item.getTitleLevel());
         holder.iv.setImageResource(item.getImageResId());
 
-        (holder.itemView).setBackgroundColor(ContextCompat.getColor(mContext, item.getBackgroundColorResId()));
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
             holder.iv.setTransitionName("Shared" + String.valueOf(position));
         }
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                LogUtil.i("TAG","调用了Adapter中的itemView.setOnClickListener");
-                if (mOnItemClickListener != null) {
-                    mOnItemClickListener.onItemClicked(holder.getAdapterPosition(), holder.iv);
-                }
+        holder.itemView.setOnClickListener(view -> {
+            LogUtil.i("TAG","调用了Adapter中的itemView.setOnClickListener");
+            if (mOnItemClickListener != null) {
+                mOnItemClickListener.onItemClicked(holder.getAdapterPosition(), holder.iv);
             }
         });
     }
@@ -118,8 +112,8 @@ public class ThirdMainPageRecyclerViewAdapter extends RecyclerView.Adapter<Third
         final ImageView iv;
         MyHolder(View itemView){
             super(itemView);
-            titleName = itemView.findViewById(R.id.titleName);
-            titleLevel = itemView.findViewById(R.id.titleLevel);
+            titleName = itemView.findViewById(R.id.title_name);
+            titleLevel = itemView.findViewById(R.id.title_level);
             iv = itemView.findViewById(R.id.iv);
         }
     }

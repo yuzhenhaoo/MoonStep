@@ -1,9 +1,11 @@
 package priv.zxy.moonstep.commerce.view.Community;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -24,12 +26,16 @@ import priv.zxy.moonstep.framework.stroage.UserSelfInfo;
  * 描述: 月友社区的Fragment(第二个子页面)
  **/
 
-public class MoonCommunity extends Fragment {
+public class MoonCommunity extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
     private static final String TAG = "MoonCommunity";
 
     private RecyclerView recyclerview;
     private RecyclerView.LayoutManager layoutManager;
     private MoonCommunityAdapter mAdapter;
+    /**
+     * mContext会持有Activity的引用，记得退出的时候要清除
+     */
+    private Context mContext;
     private List<BaseCommunityMessage> lists = new ArrayList<>();//初始化一部分信息列表
     private View view;
 
@@ -49,11 +55,11 @@ public class MoonCommunity extends Fragment {
     }
 
     private void initView() {
+        mContext = getActivity();
         recyclerview = (RecyclerView) view.findViewById(R.id.recyclerview);
     }
 
     private void initData(){
-        User user = UserSelfInfo.getInstance().getMySelf();
         BaseCommunityMessage communityBase = new BaseCommunityMessage();
         communityBase.setAddress("安居客圣诞节");
         communityBase.setLatitude("192.123456");
@@ -62,7 +68,7 @@ public class MoonCommunity extends Fragment {
         communityBase.setContent("魔前叩首三千年，回首凡尘不做仙");
         communityBase.setMediaPath("https://img.icons8.com/color/2x/hearts.png");
         communityBase.setPraiseNumber("123");
-        communityBase.setUser(user);
+        communityBase.setUser("张晓翼");
         for (int i=0; i<2; i++){
             lists.add(communityBase);
         }
@@ -79,8 +85,8 @@ public class MoonCommunity extends Fragment {
     }
 
     public void initRecyclerView(){
-        layoutManager = new LinearLayoutManager(this.getActivity());
-        mAdapter = new MoonCommunityAdapter(this.getActivity());
+        layoutManager = new LinearLayoutManager(mContext);
+        mAdapter = new MoonCommunityAdapter(mContext);
         // 每次需要清空一次mAdapter中的列表书局
         mAdapter.clear();
         if(lists != null){
@@ -90,5 +96,20 @@ public class MoonCommunity extends Fragment {
         recyclerview.setAdapter(mAdapter);
         // 每次进来记得要对lists进行重置
         lists.clear();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mContext = null;
+        view = null;
+    }
+
+    /**
+     * SwipeRefreshLayout下拉刷新的回调接口
+     */
+    @Override
+    public void onRefresh() {
+
     }
 }

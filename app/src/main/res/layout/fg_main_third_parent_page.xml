@@ -6,16 +6,41 @@
     android:background="@color/white"
     android:orientation="vertical">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:text="选择您的称号"
+        android:gravity="center"
+        android:textSize="38sp"
+        android:textColor="#00bbff"
+        android:fontFamily="@font/fontfamily4"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:text="称号彰显您的身份和地位"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:textColor="#005a7b"
+        android:fontFamily="@font/fontfamily4"/>
+
     <ImageView
         android:id="@+id/click_collpase"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/collapse_logo"
-        android:layout_marginTop="160dp"
+        android:layout_marginTop="30dp"
         android:layout_gravity="center"/>
+
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycleview"
+        android:id="@+id/recyclerview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="350dp"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/action_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
 
 </LinearLayout>

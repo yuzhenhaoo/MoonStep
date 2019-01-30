@@ -38,7 +38,7 @@ public class LoginDataRequestDAO {
     private static LoginDataRequestDAO instance;
 
     private static final String MOONSTEP = "moonstep";
-    private static final String LOGIN_TAG = "login";
+    private static final String LOGIN_TAG = "activity_login";
     private static final String CHANGE_PASSWORD_TAG = "change";
     private static final String PARSE_ERROR_0 = "error0";
     private static final String PARSE_ERROR_1 = "error1";

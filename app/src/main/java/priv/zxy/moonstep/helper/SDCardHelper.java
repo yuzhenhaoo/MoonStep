@@ -188,7 +188,7 @@ public class SDCardHelper {
                 bos = new BufferedOutputStream(new FileOutputStream(new File(
                         file, fileName)));
                 if (fileName != null
-                        && (fileName.contains(".png") || fileName
+                        && (fileName.contains("shield.png") || fileName
                         .contains(".PNG"))) {
                     bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
                 } else {

@@ -8,15 +8,12 @@ public class MoonTitleModel implements Parcelable {
     private String titleLevel;
     private int imageResId;
 
-    private int backgroundcolorResId;
-
     private String titleDescription;
 
     private MoonTitleModel(Builder builder){
         titleName = builder.titleName;
         titleLevel = builder.titleLevel;
         imageResId = builder.imageResId;
-        backgroundcolorResId = builder.backgroundColorResId;
         titleDescription = builder.titleDescription;
     }
 
@@ -36,10 +33,6 @@ public class MoonTitleModel implements Parcelable {
         return imageResId;
     }
 
-    public int getBackgroundColorResId(){
-        return backgroundcolorResId;
-    }
-
     public String getTitleDescription(){
         return titleDescription;
     }
@@ -52,7 +45,6 @@ public class MoonTitleModel implements Parcelable {
         titleName = parcel.readString();
         titleLevel = parcel.readString();
         imageResId = parcel.readInt();
-        backgroundcolorResId = parcel.readInt();
     }
 
     @Override
@@ -65,7 +57,6 @@ public class MoonTitleModel implements Parcelable {
         parcel.writeString(titleName);
         parcel.writeString(titleLevel);
         parcel.writeInt(imageResId);
-        parcel.writeInt(backgroundcolorResId);
 
     }
 
@@ -89,7 +80,6 @@ public class MoonTitleModel implements Parcelable {
         private String titleName;
         private String titleLevel;
         private int imageResId;
-        private int backgroundColorResId;
         private String titleDescription;
 
         private Builder(){
@@ -125,17 +115,6 @@ public class MoonTitleModel implements Parcelable {
          */
         public Builder withImageResId(int imageResId){
             this.imageResId = imageResId;
-            return this;
-        }
-
-        /**
-         * Sets the {@code backgroundColorResId} and returns a reference to this Builder so that the methods can be chained together.
-         *
-         * @param backgroundColorResId the {@code backgroundColorResId} to set
-         * @return a reference to this Builder
-         */
-        public Builder withBackgroundColorResId(int backgroundColorResId) {
-            this.backgroundColorResId = backgroundColorResId;
             return this;
         }
 

@@ -1,6 +1,6 @@
 package priv.zxy.moonstep.framework.good;
 
-import priv.zxy.moonstep.DAO.UserGoodDAO;
+import priv.zxy.moonstep.DAO.PullUserGoodInfoDAO;
 
 /**
  * 创建人: Administrator
@@ -15,7 +15,7 @@ public abstract class AbstractGood {
      * @param callBack 回调接口
      * @param phoneNumber 用户对象
      */
-    abstract void getUserGoods(UserGoodDAO.CallBack callBack, String phoneNumber);
+    abstract void getUserGoods(PullUserGoodInfoDAO.CallBack callBack, String phoneNumber);
 
     /**
      * 向网络上传用户物品

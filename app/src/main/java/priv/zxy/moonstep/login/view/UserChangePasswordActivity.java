@@ -127,7 +127,7 @@ public class UserChangePasswordActivity extends BaseActivity implements IChangeP
 
     @Override
     public void toLoginActivity() {
-        Intent intent = new Intent(this, UserLoginActivity.class);
+        Intent intent = new Intent(this, LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);

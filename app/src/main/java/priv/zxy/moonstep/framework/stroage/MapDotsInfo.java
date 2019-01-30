@@ -26,7 +26,9 @@ public class MapDotsInfo {
     /**
      * 检测并初始化地图坐标
      */
-    public boolean initMapDots(double latitude, double longitude, int days) {
+    public boolean initMapDots(double latitude, double longitude) {
+        long millis = System.currentTimeMillis();
+        int days = (int)(millis/1000/60/60);
         if (SharedPreferencesUtil.checkMapTime(days)){
             // 这里对32个宝藏位置坐标进行刷新，如果成功的话，就存入sqlite数据库中，并在地图上显示
             DotChooseContext context = new DotChooseContext(ChooseTypeEnum.SQUARE_CHOOSE);

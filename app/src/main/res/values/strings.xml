@@ -2,7 +2,6 @@
     <string name="app_name">圆月行</string>
     <string name="nav_header_title">Android Studio</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="action_settings">Settings</string>
     <string name="guide_page1_text1">繁华里残星点点</string>
     <string name="guide_page1_text2">盖不住莹莹月光</string>
     <string name="guide_page2_text1">只见那月影摇曳</string>
@@ -46,9 +45,6 @@
     <string name="tab_menu_community">社区</string>
     <string name="tab_menu_heart">月友</string>
     <string name="tab_menu_me">我</string>
-    <string name="tab_menu_map">月图</string>
-    <string name="tab_menu_radar">雷达</string>
-    <string name="tab_menu_package">背包</string>
     <string name="wear">佩戴</string>
     <string name="title_name">称号名称</string>
     <string name="title_level">称号级别</string>
@@ -62,4 +58,9 @@
     <string name="woman">女</string>
     <string name="todo">TODO</string>
     <string name="about_us">关于我们</string>
+    <string name="log_in">LOG IN</string>
+    <string name="sign_up">SIGN UP</string>
+    <string name="landing">LANDING</string>
+    <string name="did_you_forget_your_password">Did you forget your password?</string>
+    <string name="join_us">Join Us</string>
 </resources>

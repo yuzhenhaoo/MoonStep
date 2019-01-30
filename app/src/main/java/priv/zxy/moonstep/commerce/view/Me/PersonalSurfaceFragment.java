@@ -117,6 +117,7 @@ public class PersonalSurfaceFragment extends BaseFragment {
             return;
         }
         waveViewByBezier.stopAnimation();
+        view = null;
     }
 
 }

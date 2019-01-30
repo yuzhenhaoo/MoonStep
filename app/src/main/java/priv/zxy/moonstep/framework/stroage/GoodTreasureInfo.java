@@ -5,7 +5,7 @@ import org.litepal.LitePal;
 import java.util.LinkedList;
 import java.util.List;
 
-import priv.zxy.moonstep.DAO.GetGoodTreasureDAO;
+import priv.zxy.moonstep.DAO.PullGoodTreasureInfoDAO;
 import priv.zxy.moonstep.constant.SharedConstant;
 import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
 import priv.zxy.moonstep.framework.good.bean.Good;
@@ -20,7 +20,7 @@ import priv.zxy.moonstep.util.SharedPreferencesUtil;
 public class GoodTreasureInfo {
 
     private static final String TAG = "GoodTreasureInfo";
-    private static GoodTreasureInfo instance;
+    private static GoodTreasureInfo instance = new GoodTreasureInfo();
     private LinkedList<Good> treasures = new LinkedList<>();
     /**
      * 宝物个数
@@ -30,10 +30,12 @@ public class GoodTreasureInfo {
     public static GoodTreasureInfo getInstance() {
         return instance;
     }
-
+    // FIXME(张晓翼， 2019/1/25， 这里数据请求报了JSON_EXCEPTION)
     public void initGoodTreasure() {
-        if (SharedPreferencesUtil.dataIsInited(SharedConstant.GOOD_TREASURE) || 距离上次刷新的时间大于了3天) {
-            GetGoodTreasureDAO.getInstance().getTreasures(new GetGoodTreasureDAO.Callback() {
+        long millis = System.currentTimeMillis();
+        int days = (int)(millis/1000/60/60);
+        if (SharedPreferencesUtil.dataIsInited(SharedConstant.GOOD_TREASURE) || SharedPreferencesUtil.checkMapTime(days)) {
+            PullGoodTreasureInfoDAO.getInstance().getTreasures(new PullGoodTreasureInfoDAO.Callback() {
                 @Override
                 public void onSuccess(List<Good> goods) {
                     saveGoodTreasures((LinkedList<Good>) goods);

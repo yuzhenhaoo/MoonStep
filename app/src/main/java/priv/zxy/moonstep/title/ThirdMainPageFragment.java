@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.transition.Fade;
@@ -21,7 +22,6 @@ import java.util.ArrayList;
 
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.data.bean.BaseFragment;
-import priv.zxy.moonstep.util.LogUtil;
 import priv.zxy.moonstep.util.TitleNamesUtils;
 
 public class ThirdMainPageFragment extends BaseFragment {
@@ -31,6 +31,7 @@ public class ThirdMainPageFragment extends BaseFragment {
     private ArrayList<Integer> list = new ArrayList<Integer>();
     private FanLayoutManager fanLayoutManager;
     private Boolean is_collapse = false;
+    private FloatingActionButton actionButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,7 +52,8 @@ public class ThirdMainPageFragment extends BaseFragment {
     }
 
     public void initView(){
-        recyclerView = view.findViewById(R.id.recycleview);
+        recyclerView = view.findViewById(R.id.recyclerview);
+        actionButton = view.findViewById(R.id.action_bar);
         mAdapter = new ThirdMainPageRecyclerViewAdapter(this.getActivity());
         //RecycleView的花样全在这个地方，纵向，横向，各种花式布局，
         //这里使用风扇LayoutManager
@@ -121,7 +123,6 @@ public class ThirdMainPageFragment extends BaseFragment {
 
     @android.support.annotation.RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void onClick(View view, int pos) {
-        LogUtil.i("TAG","onClick被点击了");
         FullInfoTabFragment fragment = FullInfoTabFragment.newInstance(mAdapter.getModelByPos(pos));
         Toast.makeText(this.getContext(), "pos:" + pos, Toast.LENGTH_SHORT).show();
 
@@ -130,7 +131,6 @@ public class ThirdMainPageFragment extends BaseFragment {
         setExitTransition(new Fade());
         fragment.setSharedElementReturnTransition(new SharedTransitionSet());
 
-        LogUtil.i("TAG","fragment配置完成了，开始进行跳转");
         //进行fragment的跳转
         getActivity().getSupportFragmentManager()
                 .beginTransaction()
@@ -138,7 +138,6 @@ public class ThirdMainPageFragment extends BaseFragment {
                 .replace(R.id.main_content, fragment)
                 .addToBackStack(null)
                 .commit();
-        LogUtil.i("TAG","跳转完成");
     }
 
     public void onClick(int pos) {
@@ -157,5 +156,11 @@ public class ThirdMainPageFragment extends BaseFragment {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        view = null;
     }
 }

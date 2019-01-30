@@ -5,9 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
+    android:background="@drawable/purple_border"
     android:orientation="vertical">
     <TextView
-        android:id="@+id/titleName"
+        android:id="@+id/title_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -19,8 +20,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:contentDescription="@string/title_name"/>
+
     <TextView
-        android:id="@+id/titleLevel"
+        android:id="@+id/title_level"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"

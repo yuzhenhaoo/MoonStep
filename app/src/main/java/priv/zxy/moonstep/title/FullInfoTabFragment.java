@@ -6,10 +6,8 @@ import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +23,6 @@ public class FullInfoTabFragment extends BaseFragment {
     private static final String EXTRA_SRORT_CARD_MODEL = "EXTRA_SRORT_CARD_MODEL";
     //    String transitionTag;
     private MoonTitleModel moon_title_model;
-    private Toolbar toolbar;
     private ImageView ivPhoto;
     private TextView tvDescription;
     private TextView titleName;
@@ -54,27 +51,16 @@ public class FullInfoTabFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_full_thirdpage_item_info, container, false);
-        toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         ivPhoto = (ImageView) view.findViewById(R.id.ivPhoto);
         tvDescription = view.findViewById(R.id.title_description);
-        titleName = view.findViewById(R.id.titleName);
-        titleLevel = view.findViewById(R.id.titleLevel);
+        titleName = view.findViewById(R.id.title_name);
+        titleLevel = view.findViewById(R.id.title_level);
         return view;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        toolbar.setTitle(moon_title_model.getTitleName());
-        toolbar.setNavigationIcon(R.drawable.white_back_key_round);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getActivity().onBackPressed();
-            }
-        });
-        toolbar.setBackgroundColor(ContextCompat.getColor(getContext(), moon_title_model.getBackgroundColorResId()));
         ivPhoto.setImageResource(moon_title_model.getImageResId());
         ivPhoto.setBackgroundResource(R.drawable.full_into_fragment_background);
         tvDescription.setText(moon_title_model.getTitleDescription());

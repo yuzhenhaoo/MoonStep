@@ -1,6 +1,5 @@
 package priv.zxy.moonstep.settings;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,7 +16,7 @@ import java.lang.ref.WeakReference;
 import priv.zxy.moonstep.BuildConfig;
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.customview.MyDialog;
-import priv.zxy.moonstep.login.view.UserLoginActivity;
+import priv.zxy.moonstep.login.view.LoginActivity;
 import priv.zxy.moonstep.util.LogUtil;
 import priv.zxy.moonstep.wheel.animate.AbstractAnimateEffect;
 import priv.zxy.moonstep.wheel.animate.AbstractAnimateFactory;
@@ -111,7 +110,7 @@ public class SettingActivity extends AppCompatActivity implements ISettingView{
     }
 
     public void toLoginActivity() {
-        Intent intent = new Intent(this, UserLoginActivity.class);
+        Intent intent = new Intent(this, LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);

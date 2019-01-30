@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="350dp"
-    android:layout_height="600dp">
+    android:layout_height="600dp"
+    android:background="@color/transparent">
 
     <ImageView
         android:id="@+id/background"
@@ -31,6 +32,7 @@
         android:layout_marginTop="90dp"
         android:scaleType="fitXY"
         android:src="@drawable/ui8"
+        android:background="@color/Gray"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -44,9 +46,11 @@
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
         android:ems="1"
+        android:fontFamily="@font/fontfamily6"
         android:gravity="center"
         android:text="月灵族"
-        android:textColor="#000"
+        android:textStyle="bold"
+        android:textColor="@color/white"
         android:textSize="50sp"
         app:layout_constraintVertical_bias="0.22"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -65,12 +69,9 @@
 
     <ImageView
         android:id="@+id/luckyIcon"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:background="#000"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:background="@mipmap/shield"
         app:layout_constraintBottom_toBottomOf="@+id/raceHeadImage"
         app:layout_constraintEnd_toEndOf="@+id/raceHeadImage" />
 
@@ -81,8 +82,9 @@
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
         android:text="每日月灵石+1"
-        android:textColor="#000"
+        android:textColor="@color/white"
         android:textSize="16sp"
+        android:fontFamily="@font/fontfamily6"
         app:layout_constraintBottom_toBottomOf="@+id/raceHeadImage"
         app:layout_constraintStart_toEndOf="@+id/raceHeadImage" />
 
@@ -97,9 +99,10 @@
         android:layout_marginTop="30dp"
         android:background="@drawable/ui10"
         android:padding="7dp"
-        android:textColor="#000"
+        android:textColor="#005c78"
         android:text="圆月时间五族之一，智障圆月时间五族之一，智障圆月时间五族之一，智障圆月时间五族之一，智障圆月时间五族之一，智障圆月时间五族之一，智障"
         android:textStyle="bold"
+        android:fontFamily="@font/fontfamily6"
         app:layout_constraintEnd_toEndOf="@+id/background"
         app:layout_constraintStart_toStartOf="@+id/background"
         app:layout_constraintTop_toBottomOf="@id/raceHeadImage" />
@@ -115,7 +118,7 @@
         android:layout_marginTop="20dp"
         android:background="@drawable/ui10"
         android:textColor="#000"
-        android:text="click"
+        android:text="@string/join_us"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/raceDescription" />
