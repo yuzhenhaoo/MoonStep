@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,6 +63,11 @@ public class MoonCommunity extends Fragment implements SwipeRefreshLayout.OnRefr
     }
 
     private void initData(){
+        // 设置下拉刷新
+        refreshLayout.setOnRefreshListener(this);
+        //  进行联网请求数据
+        getMessageData();
+
         BaseCommunityMessage communityBase = new BaseCommunityMessage();
         communityBase.setAddress("安居客圣诞节");
         communityBase.setLatitude("192.123456");
@@ -70,10 +76,20 @@ public class MoonCommunity extends Fragment implements SwipeRefreshLayout.OnRefr
         communityBase.setContent("魔前叩首三千年，回首凡尘不做仙");
         communityBase.setMediaPath("https://img.icons8.com/color/2x/hearts.png");
         communityBase.setPraiseNumber("123");
-        communityBase.setUser("张晓翼");
-        for (int i=0; i<2; i++){
+        communityBase.setUser(UserSelfInfo.getInstance().getMySelf());
+        for (int i = 0; i < 10; i++){
             lists.add(communityBase);
         }
+    }
+
+    private void initEvent(){
+
+    }
+
+    /**
+     * 从加载好信息的类中获取消息数据
+     */
+    private void getMessageData() {
     }
 
     @Override
@@ -82,12 +98,8 @@ public class MoonCommunity extends Fragment implements SwipeRefreshLayout.OnRefr
         initRecyclerView();
     }
 
-    private void initEvent(){
-
-    }
-
     public void initRecyclerView(){
-        layoutManager = new LinearLayoutManager(mContext);
+        layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         mAdapter = new MoonCommunityAdapter(mContext);
         // 每次需要清空一次mAdapter中的列表书局
         mAdapter.clear();
@@ -112,6 +124,8 @@ public class MoonCommunity extends Fragment implements SwipeRefreshLayout.OnRefr
      */
     @Override
     public void onRefresh() {
-
+        /*
+         重新获取数据，然后从数据库端获取30条按照最近时间加载的消息，重新设置RecyclerView的数据，并进行页面的刷新
+         */
     }
 }

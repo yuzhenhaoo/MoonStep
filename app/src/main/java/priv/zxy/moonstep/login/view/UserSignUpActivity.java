@@ -86,7 +86,7 @@ public class UserSignUpActivity extends BaseActivity implements IUserRegisterVie
         radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
         password = (MaterialEditText) findViewById(R.id.password);
         passwordCheck = (MaterialEditText) findViewById(R.id.passwordCheck);
-        clickRegister = (Button) findViewById(R.id.clickRegister);
+        clickRegister = (Button) findViewById(R.id.click_register);
         returnLoginPage = (Button) findViewById(R.id.returnLoginpage);
         backButton = (ImageView) findViewById(R.id.back_button);
         deepBackground = (View) findViewById(R.id.deepBackground);

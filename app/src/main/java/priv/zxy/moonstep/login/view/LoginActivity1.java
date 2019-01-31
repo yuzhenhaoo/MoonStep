@@ -51,8 +51,8 @@ public class LoginActivity1 extends BaseActivity implements IUserLoginView{
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login1);
-        initView();
-        initEvent();
+//        initView();
+//        initEvent();
     }
 
     private void initView() {
@@ -105,7 +105,6 @@ public class LoginActivity1 extends BaseActivity implements IUserLoginView{
             }
             return true;
         });
-
 
         forgetPassword.setOnTouchListener((v, event) -> {
             switch(event.getAction()){

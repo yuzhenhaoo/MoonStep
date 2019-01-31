@@ -9,7 +9,7 @@
     </item>
     <item android:state_pressed="true">
         <shape>
-            <solid android:color="@color/loging_backgroung"/>
+            <solid android:color="@color/white"/>
             <corners android:radius="180dp"/>
         </shape>
     </item>

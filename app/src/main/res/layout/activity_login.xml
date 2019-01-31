@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/loging_backgroung">
+    android:background="@color/logging_background">
 
     <ImageView
         android:id="@+id/moon_image"

@@ -17,6 +17,7 @@ import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.DAO.constant.UrlBase;
 import priv.zxy.moonstep.data.bean.BaseActivity;
 import priv.zxy.moonstep.login.view.LoginActivity;
+import priv.zxy.moonstep.login.view.LoginActivity1;
 import priv.zxy.moonstep.service.MessageReceiverService;
 import priv.zxy.moonstep.main.view.MainActivity;
 import priv.zxy.moonstep.util.DataInitUtil;

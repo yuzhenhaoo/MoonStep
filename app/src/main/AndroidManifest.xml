@@ -103,8 +103,13 @@
         <activity android:name=".settings.AboutPage"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
-        <activity android:name=".login.view.LoginActivity" />
-        <activity android:name=".login.view.LoginActivity1" />
+        <activity android:name=".login.view.LoginActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
+        <activity android:name=".login.view.LoginActivity1"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
+        </activity>
 
         <!-- 设置环信应用的AppKey -->
         <meta-data
