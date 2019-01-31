@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import java.lang.ref.WeakReference;
+import java.util.Map;
 
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.constant.SharedConstant;
@@ -51,8 +52,8 @@ public class LoginActivity1 extends BaseActivity implements IUserLoginView{
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login1);
-//        initView();
-//        initEvent();
+        initView();
+        initEvent();
     }
 
     private void initView() {
@@ -71,6 +72,7 @@ public class LoginActivity1 extends BaseActivity implements IUserLoginView{
         initAccountAndPassword();
         account.requestFocus();
         userLoginPresenter.hideLoading();
+        mHandler = new MyHandler(this);
 
         /*
          * 我们需要注册监听，相当于让观察者(NetStateReceiver接收网络请求)
@@ -120,12 +122,13 @@ public class LoginActivity1 extends BaseActivity implements IUserLoginView{
 
 
     private void initAccountAndPassword() {
-        // 之前没有成功登陆过的话，就直接退出
-        if (!SharedPreferencesUtil.isSuccessLogin()) {
-            return ;
+        Map<String, String> data = SharedPreferencesUtil.readLoginInfo();
+        // 如果之前登录失败了，这里就会返回null
+        if (data == null) {
+            return;
         }
-        account.setText(SharedPreferencesUtil.readLoginInfo().get(SharedConstant.PHONE_NUMBER));
-        password.setText(SharedPreferencesUtil.readLoginInfo().get(SharedConstant.PASSWORD));
+        account.setText(data.get(SharedConstant.PHONE_NUMBER));
+        password.setText(data.get(SharedConstant.PASSWORD));
     }
 
     @Network(netType = NetType.AUTO)

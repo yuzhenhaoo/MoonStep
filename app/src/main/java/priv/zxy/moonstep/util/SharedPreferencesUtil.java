@@ -85,7 +85,7 @@ public class SharedPreferencesUtil {
             init();
         }
         // 上次登陆不成功，就退出登陆
-        if (!isFirstLogin()) {
+        if (!isSuccessLogin()) {
             return null;
         }
         Map<String, String> data = new HashMap<>();

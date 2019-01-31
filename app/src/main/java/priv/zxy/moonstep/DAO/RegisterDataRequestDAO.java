@@ -57,16 +57,14 @@ public class RegisterDataRequestDAO {
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        JSONObject jsonObject = null;
                         try {
-                            jsonObject = (JSONObject) new JSONObject(response.toString()).get(DaoConstant.PARAMS);
-                            String result = jsonObject.getString(DaoConstant.RESULT);
+                            String result = response.getString(DaoConstant.RESULT);
                             if (result.equals(DaoConstant.SUCCESS)){
-                                final String raceCode = jsonObject.getString(DaoConstant.RACE_CODE);
-                                final String raceName = jsonObject.getString(DaoConstant.RACE_NAME);
-                                final String raceDescription = jsonObject.getString(DaoConstant.RACE_DESCRIPTION);
-                                final String raceImage = jsonObject.getString(DaoConstant.HEAD_PATH);
-                                final String raceIcon = jsonObject.getString(DaoConstant.RACE_ICON);
+                                final String raceCode = response.getString(DaoConstant.RACE_CODE);
+                                final String raceName = response.getString(DaoConstant.RACE_NAME);
+                                final String raceDescription = response.getString(DaoConstant.RACE_DESCRIPTION);
+                                final String raceImage = response.getString(DaoConstant.HEAD_PATH);
+                                final String raceIcon = response.getString(DaoConstant.RACE_ICON);
                                 registerEMAccount(callBack, raceCode, raceName, raceDescription, raceImage, raceIcon, phoneNumber,
                                         nickName, password);
                             } else if (result.equals(DaoConstant.FAIL)){
