@@ -19,6 +19,16 @@ public  class SharedConstant {
     public static final String IS_SAVED = "isSaved";
 
     /**
+     *  记录宠物信息是否缓存
+     */
+    public static final String PET_INFO_IS_SAVED = "pet_info_is_saved";
+
+    /**
+     *  宠物信息缓存库
+     */
+    public static final String PET_INFO_LIBRARY = "petInfo";
+
+    /**
      * 记录数据是否被初始化的库
      */
     public static final String DATA_INIT_LIBRARY = "data_init";
@@ -47,6 +57,21 @@ public  class SharedConstant {
     public static final String LATITUDE = "latitude";
     public static final String LONGTITUDE = "longtitude";
     public static final String ADDRESS = "address";
+
+    /**
+     *  宠物信息字段
+     */
+    public static final String PET_CODE = "petCode";
+    public static final String PET_NICK_NAME = "petNickName";
+    public static final String PET_CB_PW = "petCbPw";
+    public static final String PET_RACE = "petRace";
+    public static final String PET_LEVEL = "petLevel";
+    public static final String PET_PROBABILITY = "petProbability";
+    public static final String PET_DESCRIPTION = "petDescription";
+    public static final String SKILL_NAME = "skillName";
+    public static final String SKILL_DESCRIPTION = "skillDescription";
+    public static final String PET_IMAGE_PATH = "petImagePath";
+    public static final String GROWTH_DEGREE = "growthDegree";
 
     public static final String MESSAGE = "message";
     public static final String MOONSTEP = "moonstep";

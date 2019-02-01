@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import priv.zxy.moonstep.constant.SharedConstant;
+import priv.zxy.moonstep.framework.pet.Pet;
 import priv.zxy.moonstep.framework.user.User;
 import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.wheel.cache.FacadeSharedPreference;
@@ -166,6 +167,69 @@ public class SharedPreferencesUtil {
             init();
         }
         return sp.checkElement(SharedConstant.PERSONAL_INFO_LIBRARY, "isSaved");
+    }
+
+    /**
+     * 判断是否为第一次读取用户的宠物信息
+     * @return 返回是否存储了用户宠物信息的结果
+     */
+    private static boolean isSavedMyPetInformation(){
+        if (sp == null) {
+            init();
+        }
+        return sp.checkElement(SharedConstant.PET_INFO_LIBRARY, "pet_info_is_saved");
+    }
+
+    /**
+     * 存储用户的宠物信息
+     * @param pet 用户的宠物信息
+     */
+    public static void saveMyPetInformation(Pet pet){
+        if (sp == null) {
+            init();
+        }
+        Map<String ,String> params = new HashMap<>();
+        params.put(SharedConstant.PET_CODE, String.valueOf(pet.getPetCode()));
+        params.put(SharedConstant.PET_NICK_NAME, pet.getPetNickName());
+        params.put(SharedConstant.PET_CB_PW, String.valueOf(pet.getPetCbPw()));
+        params.put(SharedConstant.PET_RACE, String.valueOf(pet.getPetRace()));
+        params.put(SharedConstant.PET_LEVEL, String.valueOf(pet.getPetLevel()));
+        params.put(SharedConstant.PET_PROBABILITY, String.valueOf(pet.getPetProbability()));
+        params.put(SharedConstant.PET_DESCRIPTION, pet.getPetDescription());
+        params.put(SharedConstant.SKILL_NAME, pet.getSkillName());
+        params.put(SharedConstant.SKILL_DESCRIPTION, pet.getSkillDescription());
+        params.put(SharedConstant.PET_IMAGE_PATH, pet.getPetImagePath());
+        params.put(SharedConstant.GROWTH_DEGREE, pet.getGrowthDegree());
+        sp.save(SharedConstant.PET_INFO_LIBRARY, params);
+        sp.saveElement(SharedConstant.PET_INFO_LIBRARY, SharedConstant.PET_INFO_IS_SAVED, true);
+    }
+
+    /**
+     * 读取用户的宠物信息
+     * @return 返回宠物信息的集合
+     */
+    @SuppressWarnings("not recommended")
+    public static Pet readMyPetInformation(){
+        if (sp == null) {
+            init();
+        }
+        // 之前还没有登陆成功的话，那么就从网络上请求数据，存储进磁盘的同时，要写入到UserSelfInfo中方便读取
+        if (!isSavedMyPetInformation()) {
+            throw new RuntimeException("磁盘中不存在宠物信息，无法进行读取");
+        }
+        Pet pet = new Pet();
+        pet.setPetCode(Integer.parseInt(sp.read(SharedConstant.PET_INFO_LIBRARY).get(SharedConstant.PET_CODE).toString()));
+        pet.setPetNickName(sp.read(SharedConstant.PET_INFO_LIBRARY).get(SharedConstant.PET_NICK_NAME).toString());
+        pet.setPetCbPw(Integer.parseInt(sp.read(SharedConstant.PET_INFO_LIBRARY).get(SharedConstant.PET_CB_PW).toString()));
+        pet.setPetRace(sp.read(SharedConstant.PET_INFO_LIBRARY).get(SharedConstant.PET_RACE).toString());
+        pet.setPetLevel(Integer.parseInt(sp.read(SharedConstant.PET_INFO_LIBRARY).get(SharedConstant.PET_LEVEL).toString()));
+        pet.setPetProbability(Float.parseFloat(sp.read(SharedConstant.PET_INFO_LIBRARY).get(SharedConstant.PET_PROBABILITY).toString()));
+        pet.setPetDescription(sp.read(SharedConstant.PET_INFO_LIBRARY).get(SharedConstant.PET_DESCRIPTION).toString());
+        pet.setSkillName(sp.read(SharedConstant.PET_INFO_LIBRARY).get(SharedConstant.SKILL_NAME).toString());
+        pet.setSkillDescription(sp.read(SharedConstant.PET_INFO_LIBRARY).get(SharedConstant.SKILL_DESCRIPTION).toString());
+        pet.setPetImagePath(sp.read(SharedConstant.PET_INFO_LIBRARY).get(SharedConstant.PET_IMAGE_PATH).toString());
+        pet.setGrowthDegree(sp.read(SharedConstant.PET_INFO_LIBRARY).get(SharedConstant.GROWTH_DEGREE).toString());
+        return pet;
     }
 
     /**
