@@ -10,7 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="350dp"
         android:foreground="@drawable/border1"
-        android:background="@color/Black"/>
+        android:background="@color/Black"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <ImageView
         android:id="@+id/propertyFaceIV"
