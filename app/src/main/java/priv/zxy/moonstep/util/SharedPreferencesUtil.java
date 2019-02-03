@@ -173,7 +173,7 @@ public class SharedPreferencesUtil {
      * 判断是否为第一次读取用户的宠物信息
      * @return 返回是否存储了用户宠物信息的结果
      */
-    private static boolean isSavedMyPetInformation(){
+    public static boolean isSavedMyPetInformation(){
         if (sp == null) {
             init();
         }
