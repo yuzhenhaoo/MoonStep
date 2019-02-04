@@ -6,9 +6,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,6 +13,9 @@ import priv.zxy.moonstep.DAO.constant.DaoConstant;
 import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
 import priv.zxy.moonstep.DAO.constant.UrlBase;
+import priv.zxy.moonstep.framework.pet.Pet;
+import priv.zxy.moonstep.util.JSONUtil;
+import priv.zxy.moonstep.util.SharedPreferencesUtil;
 
 /**
  * 创建人: Administrator
@@ -43,9 +43,9 @@ public class PullPetInfoDAO {
         StringRequest request = new StringRequest(Request.Method.POST, URL,
                 response -> {
                     try {
-                        JSONObject jsonObject = (JSONObject) new JSONObject(response).get(DaoConstant.RESULT);
-                        //
-                    } catch (JSONException e) {
+                        Pet pet = JSONUtil.handlePetResponse(response);
+                        callBack.onSuccess(pet);
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }, error -> {
@@ -65,7 +65,7 @@ public class PullPetInfoDAO {
 
     public interface CallBack {
 
-        void onSuccess();
+        void onSuccess(Pet pet);
 
         void onFail(ErrorCodeEnum errorCodeEnum);
     }

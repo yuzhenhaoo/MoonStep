@@ -5,9 +5,11 @@ import priv.zxy.moonstep.DAO.PullPetInfoDAO;
 import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
 import priv.zxy.moonstep.framework.good.GoodSelfInfo;
 import priv.zxy.moonstep.framework.good.Props;
+import priv.zxy.moonstep.framework.pet.Pet;
 import priv.zxy.moonstep.framework.stroage.GoodTreasureInfo;
 import priv.zxy.moonstep.framework.stroage.MapDotsInfo;
 import priv.zxy.moonstep.framework.stroage.MoonFriendInfo;
+import priv.zxy.moonstep.framework.stroage.PetInfo;
 import priv.zxy.moonstep.framework.user.User;
 import priv.zxy.moonstep.framework.stroage.UserSelfInfo;
 
@@ -58,17 +60,26 @@ public class DataInitUtil {
      * 初始化用户的宠物信息
      */
     public static void initPetInfo() {
-        PullPetInfoDAO.getInstance().getPetInfo(new PullPetInfoDAO.CallBack() {
-            @Override
-            public void onSuccess() {
+        // 宠物信息已从服务器缓存到本地，直接读取到PetInfo
+        if(SharedPreferencesUtil.isSavedMyPetInformation()){
+            PetInfo.getInstance().setPet(SharedPreferencesUtil.readMyPetInformation());
+        }
+        // 宠物信息未缓存，则向服务器请求数据
+        else{
+            PullPetInfoDAO.getInstance().getPetInfo(new PullPetInfoDAO.CallBack() {
+                @Override
+                public void onSuccess(Pet pet) {
+                    LogUtil.d(TAG, "宠物信息缓存成功");
+                    SharedPreferencesUtil.saveMyPetInformation(pet);
+                    PetInfo.getInstance().setPet(SharedPreferencesUtil.readMyPetInformation());
+                }
 
-            }
-
-            @Override
-            public void onFail(ErrorCodeEnum errorCodeEnum) {
-
-            }
-        }, UserSelfInfo.getInstance().getMySelf().getPhoneNumber());
+                @Override
+                public void onFail(ErrorCodeEnum errorCodeEnum) {
+                    LogUtil.d(TAG, "宠物信息缓存失败");
+                }
+            }, UserSelfInfo.getInstance().getMySelf().getPhoneNumber());
+        }
     }
 
     /**
