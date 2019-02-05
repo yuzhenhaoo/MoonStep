@@ -15,6 +15,7 @@ import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMOptions;
+import com.mob.MobSDK;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 
@@ -95,7 +96,12 @@ public class Application extends LitePalApplication {
         intent = new Intent("priv.zxy.moonstep.commerce.view.LOCAL_BROADCAST");
 
         registerActivityLifecycleCallbacks(activityLifecycleCallbacks);
+        initMobSDK();
         initEaseMob();
+    }
+
+    private void initMobSDK() {
+        MobSDK.init(this);
     }
 
     /**
@@ -272,8 +278,8 @@ public class Application extends LitePalApplication {
             LogUtil.d(TAG,"接收到了消息:");
             for(EMMessage message: messages){
 //                LogUtil.d(TAG,"message来源:    " + message.getFrom().substring(8, message.getFrom().length()));
-                String[] msg = MoonStepHelper.getInstance().getMessageTypeWithBody(message.getBody().toString().trim());
-                switch (MoonStepHelper.getInstance().transformMessageType(msg[0])){
+                String[] msg = MoonStepHelper.getMessageTypeWithBody(message.getBody().toString().trim());
+                switch (MoonStepHelper.transformMessageType(msg[0])){
                     // 处理文本消息
                     case TEXT:
                         LogUtil.e("MessageOnline","来自于Application" + msg[1]);

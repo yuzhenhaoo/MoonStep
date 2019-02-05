@@ -17,7 +17,7 @@ public class FunctionFactory extends AbstractFactory {
      * 保证多次调用工厂的时候不会产生太多的对象占用资源
      * @return 返回该工厂的实例
      */
-    public FunctionFactory getInstance() {
+    public static FunctionFactory getInstance() {
         if (instance == null){
             synchronized (FunctionFactory.class){
                 if (instance == null){

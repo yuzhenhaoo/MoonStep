@@ -48,8 +48,8 @@ public class MessageReceiverService extends Service {
             emMessages = messages;
             for(EMMessage message: emMessages){
 //                LogUtil.d(TAG,"message来源:    " + message.getFrom().substring(8, message.getFrom().length()));
-                String[] msg = MoonStepHelper.getInstance().getMessageTypeWithBody(message.getBody().toString().trim());
-                switch (MoonStepHelper.getInstance().transformMessageType(msg[0])){
+                String[] msg = MoonStepHelper.getMessageTypeWithBody(message.getBody().toString().trim());
+                switch (MoonStepHelper.transformMessageType(msg[0])){
                     case TEXT://处理文本消息
                         LogUtil.e(TAG,"来自于MessageReceiverService" + msg[1]);
                         savedChattingMessage(msg[1], 0, 1, message.getFrom().substring(8));

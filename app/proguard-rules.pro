@@ -19,3 +19,15 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file community_name.
 #-renamesourcefileattribute SourceFile
+
+# ShareMobSDK的混淆设置
+-keep class cn.sharesdk.**{*;}
+-keep class com.sina.**{*;}
+-keep class **.R$* {*;}
+-keep class **.R{*;}
+-keep class com.mob.**{*;}
+-keep class m.framework.**{*;}
+-dontwarn cn.sharesdk.**
+-dontwarn com.sina.**
+-dontwarn com.mob.**
+-dontwarn **.R$*
