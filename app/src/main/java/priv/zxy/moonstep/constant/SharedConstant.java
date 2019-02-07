@@ -29,6 +29,16 @@ public  class SharedConstant {
     public static final String PET_INFO_LIBRARY = "petInfo";
 
     /**
+     *  记录种族信息是否缓存
+     */
+    public static final String RACE_INFO_IS_SAVED = "race_info_is_saved";
+
+    /**
+     *  种族信息缓存库
+     */
+    public static final String RACE_INFO_LIBRARY = "raceInfo";
+
+    /**
      * 记录数据是否被初始化的库
      */
     public static final String DATA_INIT_LIBRARY = "data_init";
@@ -45,10 +55,15 @@ public  class SharedConstant {
     public static final String PASSWORD = "passWord";
     public static final String NICK_NAME = "nickName";
     public static final String GENDER = "gender";
+
     public static final String RACE_CODE = "raceCode";
     public static final String RACE_NAME = "raceName";
     public static final String RACE_ICON = "raceIcon";
     public static final String RACE_DESCRIPTION = "raceDescription";
+    public static final String RACE_PATH_MAN = "racePathMan";
+    public static final String RACE_PATH_WOMAN = "racePathWoMan";
+    public static final String RACE_POSSIBILITY = "racePossibility";
+
     public static final String HEAD_PATH = "headPath";
     public static final String SIGNATURE = "signature";
     public static final String CURRENT_TITLE_CODE = "currentTitleCode";

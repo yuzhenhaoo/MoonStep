@@ -137,5 +137,9 @@ dependencies {
     implementation 'pub.devrel:easypermissions:2.0.0'
     implementation project(':network')
     implementation project(':notifacation')
+
+    // 网络请求库Retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.0.2'
 }
 

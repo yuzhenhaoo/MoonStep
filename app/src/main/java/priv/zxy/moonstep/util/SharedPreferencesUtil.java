@@ -8,6 +8,7 @@ import java.util.Map;
 
 import priv.zxy.moonstep.constant.SharedConstant;
 import priv.zxy.moonstep.framework.pet.Pet;
+import priv.zxy.moonstep.framework.race.Race;
 import priv.zxy.moonstep.framework.user.User;
 import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.wheel.cache.FacadeSharedPreference;
@@ -230,6 +231,60 @@ public class SharedPreferencesUtil {
         pet.setPetImagePath(sp.read(SharedConstant.PET_INFO_LIBRARY).get(SharedConstant.PET_IMAGE_PATH).toString());
         pet.setGrowthDegree(sp.read(SharedConstant.PET_INFO_LIBRARY).get(SharedConstant.GROWTH_DEGREE).toString());
         return pet;
+    }
+
+    /**
+     * 判断是否为第一次读取用户的种族信息
+     * @return 返回是否存储了用户种族信息的结果
+     */
+    public static boolean isSavedRaceInformation(){
+        if (sp == null) {
+            init();
+        }
+        return sp.checkElement(SharedConstant.RACE_INFO_LIBRARY, "race_info_is_saved");
+    }
+
+    /**
+     * 存储用户的种族信息
+     * @param race 用户的种族信息
+     */
+    public static void saveRaceInformation(Race race){
+        if (sp == null) {
+            init();
+        }
+        Map<String ,String> params = new HashMap<>();
+        params.put(SharedConstant.RACE_NAME, race.getRaceName());
+        params.put(SharedConstant.RACE_ICON, race.getRaceIcon());
+        params.put(SharedConstant.RACE_DESCRIPTION, race.getRaceDescription());
+        params.put(SharedConstant.RACE_PATH_MAN, race.getRacePathMan());
+        params.put(SharedConstant.RACE_PATH_WOMAN, race.getRacePathWoMan());
+        params.put(SharedConstant.RACE_POSSIBILITY, String.valueOf(race.getRacePossibility()));
+        params.put(SharedConstant.RACE_CODE, String.valueOf(race.getRaceCode()));
+        sp.save(SharedConstant.RACE_INFO_LIBRARY, params);
+        sp.saveElement(SharedConstant.RACE_INFO_LIBRARY, SharedConstant.RACE_INFO_IS_SAVED, true);
+    }
+
+    /**
+     * 读取用户的种族信息
+     * @return 返回种族信息的集合
+     */
+    @SuppressWarnings("not recommended")
+    public static Race readRaceInformation(){
+        if (sp == null) {
+            init();
+        }
+        if (!isSavedRaceInformation()) {
+            throw new RuntimeException("磁盘中不存在种族信息，无法进行读取");
+        }
+        Race race = new Race();
+        race.setRaceCode(Integer.parseInt(sp.read(SharedConstant.RACE_INFO_LIBRARY).get(SharedConstant.RACE_CODE).toString()));
+        race.setRaceName(sp.read(SharedConstant.RACE_INFO_LIBRARY).get(SharedConstant.RACE_NAME).toString());
+        race.setRaceDescription(sp.read(SharedConstant.RACE_INFO_LIBRARY).get(SharedConstant.RACE_DESCRIPTION).toString());
+        race.setRacePathMan(sp.read(SharedConstant.RACE_INFO_LIBRARY).get(SharedConstant.RACE_PATH_MAN).toString());
+        race.setRacePathWoMan(sp.read(SharedConstant.RACE_INFO_LIBRARY).get(SharedConstant.RACE_PATH_WOMAN).toString());
+        race.setRaceIcon(sp.read(SharedConstant.RACE_INFO_LIBRARY).get(SharedConstant.RACE_ICON).toString());
+        race.setRacePossibility(Integer.parseInt(sp.read(SharedConstant.RACE_INFO_LIBRARY).get(SharedConstant.RACE_POSSIBILITY).toString()));
+        return race;
     }
 
     /**

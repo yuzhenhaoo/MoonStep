@@ -351,6 +351,8 @@ public class Application extends LitePalApplication {
                 DataInitUtil.initUserMoonFriendsInfo();
                 // 初始化用户权限信息
                 DataInitUtil.initUserAuthority();
+                // 初始化用户种族信息
+                DataInitUtil.initRaceInfo();
             }
             if (activity.getClass() == ChattingActivity.class){
                 // 移除Listener
