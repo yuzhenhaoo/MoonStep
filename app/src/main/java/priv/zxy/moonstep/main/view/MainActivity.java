@@ -248,7 +248,7 @@ public class MainActivity extends BaseActivity
         } else if (id == R.id.nav_kefu) {
             toFifthPage();
         } else if (id == R.id.nav_share) {
-            MoonStepHelper.showShare(this);
+//            MoonStepHelper.showShare(this);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

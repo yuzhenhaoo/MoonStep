@@ -15,7 +15,7 @@ import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMOptions;
-import com.mob.MobSDK;
+//import com.mob.MobSDK;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 
@@ -96,13 +96,13 @@ public class Application extends LitePalApplication {
         intent = new Intent("priv.zxy.moonstep.commerce.view.LOCAL_BROADCAST");
 
         registerActivityLifecycleCallbacks(activityLifecycleCallbacks);
-        initMobSDK();
+//        initMobSDK();
         initEaseMob();
     }
 
-    private void initMobSDK() {
-        MobSDK.init(this);
-    }
+//    private void initMobSDK() {
+//        MobSDK.init(this);
+//    }
 
     /**
      * 程序终止的时候执行
@@ -357,6 +357,8 @@ public class Application extends LitePalApplication {
                 DataInitUtil.initUserMoonFriendsInfo();
                 // 初始化用户权限信息
                 DataInitUtil.initUserAuthority();
+                // 初始化用户种族信息
+                DataInitUtil.initRaceInfo();
             }
             if (activity.getClass() == ChattingActivity.class){
                 // 移除Listener

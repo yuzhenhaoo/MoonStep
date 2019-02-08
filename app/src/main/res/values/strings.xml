@@ -64,4 +64,6 @@
     <string name="landing">LANDING</string>
     <string name="did_you_forget_your_password">Did you forget your password?</string>
     <string name="join_us">Join Us</string>
+    <string name="User_Race">种族：</string>
+    <string name="Race_Description">种族描述：</string>
 </resources>

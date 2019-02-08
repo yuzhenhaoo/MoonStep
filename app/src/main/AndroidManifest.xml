@@ -39,7 +39,7 @@
         android:resizeableActivity="false"
         android:usesCleartextTraffic="true">
 
-        // 指定Apache HTTP Legacy库的要求（应用定位到API级别28（Android 9.0）或更高级别）
+        <!-- 指定Apache HTTP Legacy库的要求（应用定位到API级别28（Android 9.0）或更高级别）-->
         <uses-library android:name="org.apache.http.legacy" android:required="false" />
 
         <meta-data

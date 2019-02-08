@@ -15,7 +15,6 @@ import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
 import priv.zxy.moonstep.DAO.constant.UrlBase;
 import priv.zxy.moonstep.framework.pet.Pet;
 import priv.zxy.moonstep.util.JSONUtil;
-import priv.zxy.moonstep.util.SharedPreferencesUtil;
 
 /**
  * 创建人: Administrator

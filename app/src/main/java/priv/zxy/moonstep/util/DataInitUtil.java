@@ -1,17 +1,28 @@
 package priv.zxy.moonstep.util;
 
+import priv.zxy.moonstep.DAO.PullPetInfoDAO;
+
+import android.support.annotation.NonNull;
 
 import priv.zxy.moonstep.DAO.PullPetInfoDAO;
+import priv.zxy.moonstep.DAO.Retrofit.PullUserRaceInfoDAO;
+
 import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
 import priv.zxy.moonstep.framework.good.GoodSelfInfo;
 import priv.zxy.moonstep.framework.good.Props;
 import priv.zxy.moonstep.framework.pet.Pet;
+import priv.zxy.moonstep.framework.race.Race;
+import priv.zxy.moonstep.framework.race.RaceData;
 import priv.zxy.moonstep.framework.stroage.GoodTreasureInfo;
 import priv.zxy.moonstep.framework.stroage.MapDotsInfo;
 import priv.zxy.moonstep.framework.stroage.MoonFriendInfo;
 import priv.zxy.moonstep.framework.stroage.PetInfo;
+import priv.zxy.moonstep.framework.stroage.UserRaceInfo;
 import priv.zxy.moonstep.framework.user.User;
 import priv.zxy.moonstep.framework.stroage.UserSelfInfo;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * 创建人: Administrator
@@ -79,6 +90,35 @@ public class DataInitUtil {
                     LogUtil.d(TAG, "宠物信息缓存失败");
                 }
             }, UserSelfInfo.getInstance().getMySelf().getPhoneNumber());
+        }
+    }
+
+    /**
+     * 初始化用户的种族信息
+     */
+    public static void initRaceInfo() {
+        // 种族信息已从服务器缓存到本地，直接读取到RaceInfo
+        if(SharedPreferencesUtil.isSavedRaceInformation()){
+            UserRaceInfo.getInstance().setRace(SharedPreferencesUtil.readRaceInformation());
+        }
+        // 种族信息未缓存，则向服务器请求数据
+        else{
+            PullUserRaceInfoDAO.getInstance().GetRaceInfo(new Callback<RaceData>() {
+                @Override
+                public void onResponse(@NonNull Call<RaceData> call, @NonNull Response<RaceData> response) {
+                    assert response.body() != null;
+                    Race race = response.body().race;
+                    SharedPreferencesUtil.saveRaceInformation(race);
+                    UserRaceInfo.getInstance().setRace(race);
+                    LogUtil.d(TAG, "用户种族信息缓存成功");
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<RaceData> call, @NonNull Throwable t) {
+                    LogUtil.d(TAG, "用户种族信息缓存失败");
+                }
+
+            }, String.valueOf(UserSelfInfo.getInstance().getMySelf().getRaceCode()));
         }
     }
 
