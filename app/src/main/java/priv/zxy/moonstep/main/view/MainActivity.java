@@ -24,11 +24,11 @@ import com.hyphenate.EMError;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.util.NetUtils;
 
+import org.greenrobot.eventbus.EventBus;
 import org.litepal.tablemanager.Connector;
 
 import java.lang.ref.WeakReference;
 
-import priv.zxy.moonstep.framework.authority.factory.FunctionFactory;
 import priv.zxy.moonstep.framework.user.User;
 import priv.zxy.moonstep.framework.stroage.UserSelfInfo;
 import priv.zxy.moonstep.gps.MapFragment;
@@ -116,6 +116,7 @@ public class MainActivity extends BaseActivity
         if (savedInstanceState == null) {
             navigationView.getMenu().getItem(0).setChecked(true);
         }
+        EventBus.getDefault().register(this);
     }
 
     private void initData(){

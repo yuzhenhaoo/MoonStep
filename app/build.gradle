@@ -540,5 +540,8 @@ dependencies {
     // 网络请求库Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.0.2'
+
+    // EventBus事件总线jar包导入
+    implementation files('libs/eventbus-3.1.1.jar')
 }
 
