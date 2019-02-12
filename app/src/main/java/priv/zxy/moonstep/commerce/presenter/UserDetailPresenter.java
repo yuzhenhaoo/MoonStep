@@ -3,6 +3,7 @@ package priv.zxy.moonstep.commerce.presenter;
 import priv.zxy.moonstep.commerce.module.biz.IUserDetailBiz;
 import priv.zxy.moonstep.commerce.module.biz.UserDetailBiz;
 import priv.zxy.moonstep.commerce.view.Me.IUserDetailView;
+import priv.zxy.moonstep.framework.stroage.UserSelfInfo;
 
 /**
  * 创建人: LYJ
@@ -25,5 +26,7 @@ public class UserDetailPresenter {
      */
     public void setRaceData(){
         mIUserDetailView.initRaceData(mIUserDetailBiz.readRaceData());
+        mIUserDetailView.setRaceImage(mIUserDetailBiz.readRaceImage());
+        mIUserDetailView.setRaceIcon(mIUserDetailBiz.readRaceIcon());
     }
 }

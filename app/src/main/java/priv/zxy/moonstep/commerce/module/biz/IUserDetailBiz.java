@@ -1,5 +1,7 @@
 package priv.zxy.moonstep.commerce.module.biz;
 
+import android.graphics.Bitmap;
+
 import priv.zxy.moonstep.framework.race.Race;
 
 /**
@@ -13,4 +15,8 @@ public interface IUserDetailBiz {
      *  用户种族信息处理
      */
     Race readRaceData();
+
+    Bitmap readRaceImage();
+
+    Bitmap readRaceIcon();
 }

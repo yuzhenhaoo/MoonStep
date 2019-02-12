@@ -1,5 +1,6 @@
 package priv.zxy.moonstep.commerce.view.Me;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.widget.Button;
@@ -30,6 +31,8 @@ public class UserDetailActivity extends BaseActivity implements IUserDetailView{
 
     private ImageView raceHeadPortrait;
 
+    private ImageView raceIcon;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +51,7 @@ public class UserDetailActivity extends BaseActivity implements IUserDetailView{
         raceNameTV = findViewById(R.id.raceNameTV);
         raceDescriptionTV = findViewById(R.id.raceDescriptionTV);
         raceHeadPortrait = findViewById(R.id.raceHeadPortrait);
+        raceIcon = findViewById(R.id.raceIcon);
     }
 
     private void initData(){
@@ -64,6 +68,16 @@ public class UserDetailActivity extends BaseActivity implements IUserDetailView{
     public void initRaceData(Race race){
         raceNameTV.setText(race.getRaceName());
         raceDescriptionTV.setText(race.getRaceDescription());
+    }
+
+    @Override
+    public void setRaceIcon(Bitmap bitmap) {
+        raceIcon.setImageBitmap(bitmap);
+    }
+
+    @Override
+    public void setRaceImage(Bitmap bitmap) {
+        raceHeadPortrait.setImageBitmap(bitmap);
     }
 
     @Override

@@ -41,10 +41,10 @@ public class PullUserRaceInfoDAO {
                 .build();
 
         // 创建 网络请求接口 的实例
-        RaceInfoAPI raceInfoAPI = retrofit.create(RaceInfoAPI.class);
+        ProjectAPI projectAPI = retrofit.create(ProjectAPI.class);
 
         // 对 发送请求 进行封装(设置请求的种族ID)
-        Call<RaceData> call = raceInfoAPI.postMethod(URL, raceCode);
+        Call<RaceData> call = projectAPI.postRaceDataMethod(URL, raceCode);
 
         // 发送网络请求(异步)
         call.enqueue(new Callback<RaceData>() {

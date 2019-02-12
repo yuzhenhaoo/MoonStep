@@ -1,7 +1,12 @@
 package priv.zxy.moonstep.util;
 
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import priv.zxy.moonstep.DAO.PullImagesDAO;
 import priv.zxy.moonstep.DAO.PullPetInfoDAO;
 import priv.zxy.moonstep.DAO.Retrofit.PullUserRaceInfoDAO;
 import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
@@ -17,6 +22,8 @@ import priv.zxy.moonstep.framework.stroage.PetInfo;
 import priv.zxy.moonstep.framework.stroage.UserRaceInfo;
 import priv.zxy.moonstep.framework.user.User;
 import priv.zxy.moonstep.framework.stroage.UserSelfInfo;
+import priv.zxy.moonstep.util.ImageCacheUtil.LocalCacheUtil;
+import priv.zxy.moonstep.util.ImageCacheUtil.MemoryCacheUtil;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -137,6 +144,41 @@ public class DataInitUtil {
      * 初始化离线消息
      */
     public static void initOfflineMessage() {
+
+    }
+
+    /**
+     * 初始化图片
+     */
+    public static void initImages(){
+        // 初始化请求的图片URL列表
+        List<String> urlList = new ArrayList<>();
+        urlList.add(UserRaceInfo.getInstance().getRace().getRacePathMan());
+        urlList.add(UserRaceInfo.getInstance().getRace().getRacePathWoMan());
+        urlList.add(UserRaceInfo.getInstance().getRace().getRaceIcon());
+
+        for(String url : urlList){
+            // 读取本地图片文件返回为空，则向服务器请求图片
+            if(LocalCacheUtil.getInstance().getBitmapFromLocal(url) == null){
+                PullImagesDAO.getInstance().getImages(new PullImagesDAO.CallBack() {
+                    @Override
+                    public void onSuccess(Bitmap bitmap) {
+                        LogUtil.d(TAG, "图片" + url + "缓存成功");
+                        LocalCacheUtil.getInstance().setBitmapToLocal(url, bitmap);
+                        MemoryCacheUtil.getInstance().setBitmapToMemory(url, bitmap);
+                    }
+
+                    @Override
+                    public void onFail(ErrorCodeEnum errorCodeEnum) {
+                        LogUtil.d(TAG, "图片" + url + "缓存失败");
+                    }
+                }, url);
+            }
+            // 将读取的本地图片直接加载到内存
+            else{
+                MemoryCacheUtil.getInstance().setBitmapToMemory(url, LocalCacheUtil.getInstance().getBitmapFromLocal(url));
+            }
+        }
 
     }
 }
