@@ -359,6 +359,8 @@ public class Application extends LitePalApplication {
                 DataInitUtil.initUserAuthority();
                 // 初始化用户种族信息
                 DataInitUtil.initRaceInfo();
+                // 初始化图片
+                DataInitUtil.initImages();
             }
             if (activity.getClass() == ChattingActivity.class){
                 // 移除Listener

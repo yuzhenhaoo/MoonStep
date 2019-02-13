@@ -1,12 +1,14 @@
 package priv.zxy.moonstep.util;
 
-import priv.zxy.moonstep.DAO.PullPetInfoDAO;
-
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import priv.zxy.moonstep.DAO.PullImagesDAO;
 import priv.zxy.moonstep.DAO.PullPetInfoDAO;
 import priv.zxy.moonstep.DAO.Retrofit.PullUserRaceInfoDAO;
-
 import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
 import priv.zxy.moonstep.framework.good.GoodSelfInfo;
 import priv.zxy.moonstep.framework.good.Props;
@@ -20,6 +22,8 @@ import priv.zxy.moonstep.framework.stroage.PetInfo;
 import priv.zxy.moonstep.framework.stroage.UserRaceInfo;
 import priv.zxy.moonstep.framework.user.User;
 import priv.zxy.moonstep.framework.stroage.UserSelfInfo;
+import priv.zxy.moonstep.util.ImageCacheUtil.LocalCacheUtil;
+import priv.zxy.moonstep.util.ImageCacheUtil.MemoryCacheUtil;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -141,5 +145,7 @@ public class DataInitUtil {
      */
     public static void initOfflineMessage() {
 
+    }
+}
     }
 }

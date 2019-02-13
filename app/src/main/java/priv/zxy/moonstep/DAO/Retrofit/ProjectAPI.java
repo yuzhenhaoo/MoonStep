@@ -12,9 +12,9 @@ import retrofit2.http.Url;
  * 创建时间: 2019/2/7
  * 描述:Retrofit请求网络接口
  **/
-public interface RaceInfoAPI {
+public interface ProjectAPI {
 
     @FormUrlEncoded
     @POST
-    Call<RaceData> postMethod(@Url String url, @Field("RaceCode") String raceCode);
+    Call<RaceData> postRaceDataMethod(@Url String url, @Field("RaceCode") String raceCode);
 }

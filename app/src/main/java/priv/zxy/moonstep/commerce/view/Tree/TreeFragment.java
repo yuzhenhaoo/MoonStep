@@ -68,5 +68,7 @@ public class TreeFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         view = null;
+        petBt = null;
+        pack = null;
     }
 }

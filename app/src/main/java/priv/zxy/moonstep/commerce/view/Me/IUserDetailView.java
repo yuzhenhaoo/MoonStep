@@ -1,5 +1,7 @@
 package priv.zxy.moonstep.commerce.view.Me;
 
+import android.graphics.Bitmap;
+
 import priv.zxy.moonstep.framework.race.Race;
 
 /**
@@ -13,6 +15,16 @@ public interface IUserDetailView {
      *  种族数据设置
      */
     void initRaceData(Race race);
+
+    /**
+     * 设置种族图片
+     */
+    void setRaceImage(Bitmap bitmap);
+
+    /**
+     * 设置种族小图片
+     */
+    void setRaceIcon(Bitmap bitmap);
 
     /**
      *  错误提示
