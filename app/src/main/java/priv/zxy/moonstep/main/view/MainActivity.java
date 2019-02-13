@@ -116,7 +116,6 @@ public class MainActivity extends BaseActivity
         if (savedInstanceState == null) {
             navigationView.getMenu().getItem(0).setChecked(true);
         }
-        EventBus.getDefault().register(this);
     }
 
     private void initData(){

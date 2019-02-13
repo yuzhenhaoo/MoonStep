@@ -502,8 +502,9 @@ dependencies {
 
     //动态加载库-ENViews
     implementation 'com.github.codeestX:ENViews:v1.0.3'
-    implementation files('libs/glide-3.6.0.jar')
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    /// Glide在PictureSelector中已经得到了导入
+//    implementation files('libs/glide-3.6.0.jar')
+//    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     //高德地图
 
@@ -543,5 +544,8 @@ dependencies {
 
     // EventBus事件总线jar包导入
     implementation files('libs/eventbus-3.1.1.jar')
+
+    // 基于Glide的PictureSelector（图片选择框架）
+    implementation 'com.github.LuckSiege.PictureSelector:picture_library:v2.2.3'
 }
 
