@@ -24,7 +24,6 @@ import com.hyphenate.EMError;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.util.NetUtils;
 
-import org.greenrobot.eventbus.EventBus;
 import org.litepal.tablemanager.Connector;
 
 import java.lang.ref.WeakReference;
@@ -35,8 +34,6 @@ import priv.zxy.moonstep.gps.MapFragment;
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.data.bean.BaseActivity;
-import priv.zxy.moonstep.helper.EMHelper;
-import priv.zxy.moonstep.helper.MoonStepHelper;
 import priv.zxy.moonstep.login.view.LoginActivity;
 import priv.zxy.moonstep.settings.SettingActivity;
 import priv.zxy.moonstep.util.LogUtil;
@@ -248,7 +245,7 @@ public class MainActivity extends BaseActivity
         } else if (id == R.id.nav_kefu) {
             toFifthPage();
         } else if (id == R.id.nav_share) {
-//            MoonStepHelper.showShare(this);
+
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

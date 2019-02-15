@@ -21,7 +21,6 @@ abstract class AbstractFactory {
         maps = new HashMap<>();
         maps.put("600001", "ForceAddingFriendFunction");
         maps.put("600002", "SendFriendRequestFunction");
-        maps.put("601000", "ShareFunction");
     }
 
     abstract AbstractAuthority createAuthority(String code);

@@ -4,7 +4,7 @@ package priv.zxy.moonstep.commerce.module.biz;
 import android.graphics.Bitmap;
 
 import priv.zxy.moonstep.framework.race.Race;
-import priv.zxy.moonstep.framework.stroage.UserRaceInfo;
+import priv.zxy.moonstep.framework.stroage.RaceInfo;
 import priv.zxy.moonstep.framework.stroage.UserSelfInfo;
 import priv.zxy.moonstep.util.ImageCacheUtil.MemoryCacheUtil;
 
@@ -23,7 +23,7 @@ public class UserDetailBiz implements IUserDetailBiz{
      */
     @Override
     public Race readRaceData(){
-        return UserRaceInfo.getInstance().getRace();
+        return RaceInfo.getInstance().getRace();
     }
 
     /**
@@ -33,10 +33,10 @@ public class UserDetailBiz implements IUserDetailBiz{
     public Bitmap readRaceImage() {
         Bitmap bitmap;
         if(UserSelfInfo.getInstance().getMySelf().getGender().equals("男")){
-            bitmap = MemoryCacheUtil.getInstance().getBitmapFromMemory(UserRaceInfo.getInstance().getRace().getRacePathMan());
+            bitmap = MemoryCacheUtil.getInstance().getBitmapFromMemory(RaceInfo.getInstance().getRace().getRacePathMan());
         }
         else{
-            bitmap = MemoryCacheUtil.getInstance().getBitmapFromMemory(UserRaceInfo.getInstance().getRace().getRacePathWoMan());
+            bitmap = MemoryCacheUtil.getInstance().getBitmapFromMemory(RaceInfo.getInstance().getRace().getRacePathWoMan());
         }
         return bitmap;
     }
@@ -46,6 +46,6 @@ public class UserDetailBiz implements IUserDetailBiz{
      */
     @Override
     public Bitmap readRaceIcon() {
-        return MemoryCacheUtil.getInstance().getBitmapFromMemory(UserRaceInfo.getInstance().getRace().getRaceIcon());
+        return MemoryCacheUtil.getInstance().getBitmapFromMemory(RaceInfo.getInstance().getRace().getRaceIcon());
     }
 }

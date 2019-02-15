@@ -25,7 +25,9 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <!-- 加入省电白名单权限-->
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
 
     <uses-sdk tools:overrideLibrary="priv.zxy.moonstep" />
     <application
@@ -34,7 +36,6 @@
         android:icon="@mipmap/icon"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/icon_round"
-        tools:replace="android:name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:resizeableActivity="false"
