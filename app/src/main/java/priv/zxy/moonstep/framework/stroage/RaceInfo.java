@@ -8,16 +8,16 @@ import priv.zxy.moonstep.util.SharedPreferencesUtil;
  * 创建时间: 2019/2/7
  * 描述:存储用户种族信息的一个类
  **/
-public class UserRaceInfo {
+public class RaceInfo {
 
     private Race mRace = null;
 
     /**
      * 使用饿汉式是为了提高效率
      */
-    private static UserRaceInfo instance = new UserRaceInfo();
+    private static RaceInfo instance = new RaceInfo();
 
-    public static UserRaceInfo getInstance() {
+    public static RaceInfo getInstance() {
         return instance;
     }
 

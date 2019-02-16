@@ -1,24 +1,28 @@
 package priv.zxy.moonstep.guide;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.PowerManager;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
-
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.DAO.constant.UrlBase;
 import priv.zxy.moonstep.data.bean.BaseActivity;
+import priv.zxy.moonstep.helper.PermissionHelper;
 import priv.zxy.moonstep.login.view.LoginActivity;
-import priv.zxy.moonstep.login.view.LoginActivity1;
 import priv.zxy.moonstep.service.MessageReceiverService;
 import priv.zxy.moonstep.main.view.MainActivity;
 import priv.zxy.moonstep.util.DataInitUtil;
@@ -30,6 +34,8 @@ import priv.zxy.moonstep.util.SharedPreferencesUtil;
  * 这里有个问题就是如果单单使用上面的写法，那么Handler只会被调用一次，想要实现定时器，就用递归的方法，反复调用自身就好了。
  */
 public class StartActivity extends BaseActivity {
+
+    private static final int REQUEST_IGNORE_BATTERY_CODE = 1;
 
     private static final String TAG = "StartActivity";
 
@@ -57,6 +63,16 @@ public class StartActivity extends BaseActivity {
         initStartImageUrl();
 
         initView();
+
+        // 请求加入白名单权限
+        if(!isIgnoringBatteryOptimizations()){
+            gotoSettingIgnoringBatteryOptimizations();
+        }
+        // 请求其他运行时权限
+        String[] params = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        if(!PermissionHelper.checkPermission(this, params)){
+            PermissionHelper.requestPermission(this, "需要本地权限", 1, params);
+        }
     }
 
     private void initStartImageUrl(){
@@ -70,9 +86,8 @@ public class StartActivity extends BaseActivity {
         textView = findViewById(R.id.hTextView);
         imageView = findViewById(R.id.imageView);
 
-        RequestOptions options = new RequestOptions();
-        options.placeholder(R.drawable.background7);
-        Glide.with(this).load(url).apply(options).into(imageView);
+        Glide.with(this).load(url).placeholder(R.drawable.background7).dontAnimate().into(imageView);
+
         LogUtil.d(TAG, "url:" + url);
         imageView.animate().scaleX(1.2f).scaleY(1.2f).setDuration(8000).start();
 
@@ -150,5 +165,52 @@ public class StartActivity extends BaseActivity {
         super.onDestroy();
         //移除mHandler的所有消息和回调，防止当StartActivity结束以后，mHandler还持有StartActivity的引用，造成内存泄漏
         mHandler.removeCallbacksAndMessages(null);
+    }
+
+    /**
+     * 判断App是否已加入省电白名单
+     */
+    private boolean isIgnoringBatteryOptimizations(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            String packageName = getPackageName();
+            PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+            return pm.isIgnoringBatteryOptimizations(packageName);
+        }
+        return false;
+    }
+
+    /**
+     * 请求加入省电白名单
+     */
+    @SuppressLint("BatteryLife")
+    private void gotoSettingIgnoringBatteryOptimizations() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            try {
+                Intent intent = new Intent();
+                String packageName = getPackageName();
+                intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+                intent.setData(Uri.parse("package:" + packageName));
+                startActivityForResult(intent, REQUEST_IGNORE_BATTERY_CODE);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * 请求结果处理
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK){
+            if (requestCode == REQUEST_IGNORE_BATTERY_CODE) {
+                LogUtil.d(TAG,"加入省电白名单成功");
+            }
+        }else if (resultCode == RESULT_CANCELED) {
+            if (requestCode == REQUEST_IGNORE_BATTERY_CODE) {
+                LogUtil.d(TAG,"加入省电白名单失败");
+            }
+        }
     }
 }

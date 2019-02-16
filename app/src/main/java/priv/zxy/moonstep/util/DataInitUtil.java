@@ -19,7 +19,7 @@ import priv.zxy.moonstep.framework.stroage.GoodTreasureInfo;
 import priv.zxy.moonstep.framework.stroage.MapDotsInfo;
 import priv.zxy.moonstep.framework.stroage.MoonFriendInfo;
 import priv.zxy.moonstep.framework.stroage.PetInfo;
-import priv.zxy.moonstep.framework.stroage.UserRaceInfo;
+import priv.zxy.moonstep.framework.stroage.RaceInfo;
 import priv.zxy.moonstep.framework.user.User;
 import priv.zxy.moonstep.framework.stroage.UserSelfInfo;
 import priv.zxy.moonstep.util.ImageCacheUtil.LocalCacheUtil;
@@ -38,7 +38,11 @@ import retrofit2.Response;
  **/
 
 public class DataInitUtil {
+
     private static final String TAG = "DataInitUtil";
+
+    // 缓存图片线程
+    private static Thread imageThread;
 
     /**
      * 初始化用户的个人数据
@@ -103,7 +107,7 @@ public class DataInitUtil {
     public static void initRaceInfo() {
         // 种族信息已从服务器缓存到本地，直接读取到RaceInfo
         if(SharedPreferencesUtil.isSavedRaceInformation()){
-            UserRaceInfo.getInstance().setRace(SharedPreferencesUtil.readRaceInformation());
+            RaceInfo.getInstance().setRace(SharedPreferencesUtil.readRaceInformation());
         }
         // 种族信息未缓存，则向服务器请求数据
         else{
@@ -113,7 +117,7 @@ public class DataInitUtil {
                     assert response.body() != null;
                     Race race = response.body().race;
                     SharedPreferencesUtil.saveRaceInformation(race);
-                    UserRaceInfo.getInstance().setRace(race);
+                    RaceInfo.getInstance().setRace(race);
                     imageThread.notify();
                     LogUtil.d(TAG, "用户种族信息缓存成功");
                 }
@@ -147,12 +151,12 @@ public class DataInitUtil {
     public static void initOfflineMessage() {
 
     }
-    private static Thread imageThread;
+
     /**
-     * 初始化图片
+     * 新开线程,初始化图片
      */
     public static void initImages(){
-        imageThread = new Thread(()->{
+        imageThread = new Thread(()-> {
             try {
                 imageThread.wait();
             } catch (InterruptedException e) {
@@ -160,13 +164,12 @@ public class DataInitUtil {
             }
             // 初始化请求的图片URL列表
             List<String> urlList = new ArrayList<>();
-            urlList.add(UserRaceInfo.getInstance().getRace().getRacePathMan());
-            urlList.add(UserRaceInfo.getInstance().getRace().getRacePathWoMan());
-            urlList.add(UserRaceInfo.getInstance().getRace().getRaceIcon());
-
-            for(String url : urlList){
+            urlList.add(RaceInfo.getInstance().getRace().getRacePathMan());
+            urlList.add(RaceInfo.getInstance().getRace().getRacePathWoMan());
+            urlList.add(RaceInfo.getInstance().getRace().getRaceIcon());
+            for (String url : urlList) {
                 // 读取本地图片文件返回为空，则向服务器请求图片
-                if(LocalCacheUtil.getInstance().getBitmapFromLocal(url) == null){
+                if (LocalCacheUtil.getInstance().getBitmapFromLocal(url) == null) {
                     PullImagesDAO.getInstance().getImages(new PullImagesDAO.CallBack() {
                         @Override
                         public void onSuccess(Bitmap bitmap) {
@@ -182,7 +185,7 @@ public class DataInitUtil {
                     }, url);
                 }
                 // 将读取的本地图片直接加载到内存
-                else{
+                else {
                     MemoryCacheUtil.getInstance().setBitmapToMemory(url, LocalCacheUtil.getInstance().getBitmapFromLocal(url));
                 }
             }

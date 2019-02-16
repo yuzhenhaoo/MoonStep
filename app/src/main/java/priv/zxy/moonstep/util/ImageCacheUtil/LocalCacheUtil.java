@@ -3,9 +3,12 @@ package priv.zxy.moonstep.util.ImageCacheUtil;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
+
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 
 /**
  * 创建人: LYJ
@@ -49,6 +52,7 @@ public class LocalCacheUtil {
      * @param bitmap 图片文件
      */
     public void setBitmapToLocal(String url, Bitmap bitmap){
+        BufferedOutputStream bos = null;
         try {
             String fileName = MD5Encoder.encode(url);
             File file = new File(CACHE_PATH, fileName);
@@ -56,9 +60,26 @@ public class LocalCacheUtil {
             if (!parentFile.exists()){
                 parentFile.mkdirs();
             }
-            bitmap.compress(Bitmap.CompressFormat.JPEG,100,new FileOutputStream(file));
-        } catch (Exception e) {
+            bos = new BufferedOutputStream(new FileOutputStream(file));
+            if ((fileName.contains("shield.png") || fileName.contains(".PNG"))) {
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
+            }
+            else {
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+            }
+        }
+        catch (Exception e) {
             e.printStackTrace();
+        }
+        finally {
+            if (bos != null) {
+                try {
+                    bos.close();
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 }

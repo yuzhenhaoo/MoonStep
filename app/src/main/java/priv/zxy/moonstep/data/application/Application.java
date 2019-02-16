@@ -9,21 +9,16 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
-
 import com.androidnetworking.AndroidNetworking;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMOptions;
-//import com.mob.MobSDK;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
-
 import org.litepal.LitePalApplication;
-
 import java.util.Iterator;
 import java.util.List;
-
 import priv.zxy.moonstep.framework.message.MessageOnline;
 import priv.zxy.moonstep.guide.StartActivity;
 import priv.zxy.moonstep.helper.EMHelper;
@@ -96,13 +91,8 @@ public class Application extends LitePalApplication {
         intent = new Intent("priv.zxy.moonstep.commerce.view.LOCAL_BROADCAST");
 
         registerActivityLifecycleCallbacks(activityLifecycleCallbacks);
-//        initMobSDK();
         initEaseMob();
     }
-
-//    private void initMobSDK() {
-//        MobSDK.init(this);
-//    }
 
     /**
      * 程序终止的时候执行
@@ -278,8 +268,8 @@ public class Application extends LitePalApplication {
             LogUtil.d(TAG,"接收到了消息:");
             for(EMMessage message: messages){
 //                LogUtil.d(TAG,"message来源:    " + message.getFrom().substring(8, message.getFrom().length()));
-                String[] msg = MoonStepHelper.getMessageTypeWithBody(message.getBody().toString().trim());
-                switch (MoonStepHelper.transformMessageType(msg[0])){
+                String[] msg = MoonStepHelper.getInstance().getMessageTypeWithBody(message.getBody().toString().trim());
+                switch (MoonStepHelper.getInstance().transformMessageType(msg[0])){
                     // 处理文本消息
                     case TEXT:
                         LogUtil.e("MessageOnline","来自于Application" + msg[1]);

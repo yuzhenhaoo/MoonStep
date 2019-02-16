@@ -25,8 +25,9 @@ public class PullImagesDAO {
 
     public void getImages(CallBack callBack, String imageUrl) {
         new Thread(() -> {
-            if(NetCacheUtil.getInstance().downLoadBitmap(imageUrl) == null){
-                callBack.onSuccess(NetCacheUtil.getInstance().downLoadBitmap(imageUrl));
+            Bitmap bitmap = NetCacheUtil.getInstance().downLoadBitmap(imageUrl);
+            if(bitmap != null){
+                callBack.onSuccess(bitmap);
             }
             else {
                 callBack.onFail(ErrorCodeEnum.NET_NOT_RESPONSE);

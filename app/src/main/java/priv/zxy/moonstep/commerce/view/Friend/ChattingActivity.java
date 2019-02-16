@@ -270,7 +270,7 @@ public class ChattingActivity extends AppCompatActivity implements IChattingView
             ToastUtil.getInstance(mContext, this).showToast("发送地消息不能为空哦！");
         }else{
             // 向对方发送消息(异步)
-            new Thread(()->MoonStepHelper.EMsendMessage(message, SharedConstant.MOONSTEP + moonFriend.getPhoneNumber(), EMMessage.ChatType.Chat)).start();
+            new Thread(()->MoonStepHelper.getInstance().EMsendMessage(message, SharedConstant.MOONSTEP + moonFriend.getPhoneNumber(), EMMessage.ChatType.Chat)).start();
             // 发送后立刻清空输入框
             inputMessage.getText().clear();
             // 对输入框请求焦点
@@ -338,8 +338,8 @@ public class ChattingActivity extends AppCompatActivity implements IChattingView
             LogUtil.d(TAG,"接收到了消息:");
             emMessages = messages;
             for(final EMMessage message: emMessages){
-                final String[] msg = MoonStepHelper.getMessageTypeWithBody(message.getBody().toString().trim());
-                switch (MoonStepHelper.transformMessageType(msg[0])){
+                final String[] msg = MoonStepHelper.getInstance().getMessageTypeWithBody(message.getBody().toString().trim());
+                switch (MoonStepHelper.getInstance().transformMessageType(msg[0])){
                     // 处理文本消息
                     case TEXT:
                         LogUtil.e("Message","ChattingActivity" + msg[1]);
