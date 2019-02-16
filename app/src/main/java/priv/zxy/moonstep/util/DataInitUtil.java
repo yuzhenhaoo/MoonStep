@@ -42,14 +42,15 @@ public class DataInitUtil {
     private static final String TAG = "DataInitUtil";
 
     /**
-     * 缓存图片线程
+     *  缓存图片线程
      */
     private static Thread imageThread;
 
     /**
-     * Image线程是否休眠的标记位
-     */
+    * Image线程是否休眠的标记位
+    */
     private static boolean isImageWait = false;
+
 
     /**
      * 初始化用户的个人数据
@@ -115,6 +116,12 @@ public class DataInitUtil {
         // 种族信息已从服务器缓存到本地，直接读取到RaceInfo
         if(SharedPreferencesUtil.isSavedRaceInformation()){
             RaceInfo.getInstance().setRace(SharedPreferencesUtil.readRaceInformation());
+            // 如果Image线程被休眠的话，就进行唤醒
+            if (isImageWait) {
+                synchronized (imageThread) {
+                    imageThread.notify();
+                }
+            }
         }
         // 种族信息未缓存，则向服务器请求数据
         else{
@@ -127,7 +134,9 @@ public class DataInitUtil {
                     RaceInfo.getInstance().setRace(race);
                     // 如果Image线程被休眠的话，就进行唤醒
                     if (isImageWait) {
-                        imageThread.notify();
+                        synchronized (imageThread) {
+                            imageThread.notify();
+                        }
                     }
                     LogUtil.d(TAG, "用户种族信息缓存成功");
                 }
@@ -167,12 +176,15 @@ public class DataInitUtil {
      */
     public static void initImages(){
         imageThread = new Thread(()-> {
-            try {
-                isImageWait = true;
-                imageThread.wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            synchronized (imageThread){
+                try {
+                    isImageWait = true;
+                    imageThread.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
+
             // 初始化请求的图片URL列表
             List<String> urlList = new ArrayList<>();
             urlList.add(RaceInfo.getInstance().getRace().getRacePathMan());
@@ -201,5 +213,6 @@ public class DataInitUtil {
                 }
             }
         });
+        imageThread.start();
     }
 }

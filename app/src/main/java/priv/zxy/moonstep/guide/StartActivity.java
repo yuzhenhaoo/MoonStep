@@ -68,8 +68,12 @@ public class StartActivity extends BaseActivity {
         if(!isIgnoringBatteryOptimizations()){
             gotoSettingIgnoringBatteryOptimizations();
         }
+
         // 请求其他运行时权限
-        String[] params = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        String[] params = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            params = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS};
+        }
         if(!PermissionHelper.checkPermission(this, params)){
             PermissionHelper.requestPermission(this, "需要本地权限", 1, params);
         }
@@ -197,9 +201,11 @@ public class StartActivity extends BaseActivity {
         }
     }
 
+
     /**
      * 请求结果处理
      */
+    /*
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -213,4 +219,5 @@ public class StartActivity extends BaseActivity {
             }
         }
     }
+    */
 }
