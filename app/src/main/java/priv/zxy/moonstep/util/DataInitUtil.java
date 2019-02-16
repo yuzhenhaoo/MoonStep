@@ -41,8 +41,15 @@ public class DataInitUtil {
 
     private static final String TAG = "DataInitUtil";
 
-    // 缓存图片线程
+    /**
+     * 缓存图片线程
+     */
     private static Thread imageThread;
+
+    /**
+     * Image线程是否休眠的标记位
+     */
+    private static boolean isImageWait = false;
 
     /**
      * 初始化用户的个人数据
@@ -118,7 +125,10 @@ public class DataInitUtil {
                     Race race = response.body().race;
                     SharedPreferencesUtil.saveRaceInformation(race);
                     RaceInfo.getInstance().setRace(race);
-                    imageThread.notify();
+                    // 如果Image线程被休眠的话，就进行唤醒
+                    if (isImageWait) {
+                        imageThread.notify();
+                    }
                     LogUtil.d(TAG, "用户种族信息缓存成功");
                 }
 
@@ -158,6 +168,7 @@ public class DataInitUtil {
     public static void initImages(){
         imageThread = new Thread(()-> {
             try {
+                isImageWait = true;
                 imageThread.wait();
             } catch (InterruptedException e) {
                 e.printStackTrace();

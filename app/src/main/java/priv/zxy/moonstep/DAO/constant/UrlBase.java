@@ -12,7 +12,7 @@ public class UrlBase {
 
     public static final String CHANGE_PASSWORD_SERVLET_URL = "http://120.79.154.236:8080/MoonStep/ChangePasswordServlet";
 
-    public static final String CHECK_USER_ID_SERVLET_URL = "http://120.79.154.236:8080/MoonStep/CheckUserID";
+    public static final String CHECK_USER_ID_SERVLET_URL = "http://120.79.154.236:8080/MoonStep/CheckUserIDServlet";
 
     public static final String CHECK_PHONE_NUMBER_IN_SERVLET_URL = "http://120.79.154.236:8080/MoonStep/CheckPhoneServlet";
 

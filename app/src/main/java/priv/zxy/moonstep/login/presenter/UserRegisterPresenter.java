@@ -33,7 +33,7 @@ public class UserRegisterPresenter {
         userBiz.doRegister(phoneNumber, nickName, userPassword, confirmUserPassword, gender, new UserBiz.OnRegisterListener() {
             @Override
             public void registerSuccess(String raceName, String raceDescription, String raceImage, String raceIcon) {
-                Log.d(TAG, "执行到了这里");
+                Log.d(TAG, "注册成功");
             }
 
             @Override

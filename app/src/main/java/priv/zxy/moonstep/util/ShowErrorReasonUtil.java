@@ -89,7 +89,8 @@ public class ShowErrorReasonUtil {
                 ToastUtil.getInstance(mContext, mActivity).showToast("密码错误");
                 break;
             case USER_DATA_REQUEST_FAIL:
-                ToastUtil.getInstance(mContext, mActivity).showToast("用户信息请求失败");
+                ToastUtil.getInstance(mContext, mActivity).showToast("用户信息请求失败，请重新尝试");
+                break;
             case REGISTER_DATA_CAN_NOT_NULL:
                 ToastUtil.getInstance(mContext, mActivity).showToast("注册信息不能为空");
                 break;
