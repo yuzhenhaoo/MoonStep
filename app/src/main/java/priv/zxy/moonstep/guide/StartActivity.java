@@ -16,7 +16,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.bumptech.glide.Glide;
+
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.DAO.constant.UrlBase;
@@ -86,7 +88,7 @@ public class StartActivity extends BaseActivity {
         textView = findViewById(R.id.hTextView);
         imageView = findViewById(R.id.imageView);
 
-        Glide.with(this).load(url).placeholder(R.drawable.background7).dontAnimate().into(imageView);
+        Glide.with(this).load(url).placeholder(R.drawable.background7).into(imageView);
 
         LogUtil.d(TAG, "url:" + url);
         imageView.animate().scaleX(1.2f).scaleY(1.2f).setDuration(8000).start();

@@ -65,4 +65,5 @@
     <string name="join_us">Join Us</string>
     <string name="User_Race">种族：</string>
     <string name="Race_Description">种族描述：</string>
+    <string name="picture_cancel">取消</string>
 </resources>

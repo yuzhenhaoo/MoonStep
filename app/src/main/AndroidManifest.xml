@@ -48,6 +48,7 @@
             android:name="com.amap.api.v2.apikey"
             android:value="75f4c284d481bfa6556f8774b2c37d66"/>
         <service android:name="com.amap.api.location.APSService"/>
+        <activity android:name=".data.bean.BaseActivity"/>
         <activity
             android:name=".guide.GuidePage"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
@@ -118,6 +119,11 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
         </activity>
+        <!--uCrop的Activity-->
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
 
         <!-- 设置环信应用的AppKey -->
         <meta-data

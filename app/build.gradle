@@ -103,8 +103,8 @@ dependencies {
 
     //动态加载库-ENViews
     implementation 'com.github.codeestX:ENViews:v1.0.3'
-    implementation files('libs/glide-3.6.0.jar')
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    //    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     //高德地图
 
@@ -141,5 +141,9 @@ dependencies {
     // 网络请求库Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.0.2'
+
+    // 裁剪框架UCrop
+    implementation 'com.github.yalantis:ucrop:2.2.2-native'
+    implementation files('libs/glide-3.6.0.jar')
 }
 
