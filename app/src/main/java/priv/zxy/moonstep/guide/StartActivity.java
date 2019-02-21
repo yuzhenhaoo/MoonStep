@@ -43,15 +43,11 @@ public class StartActivity extends BaseActivity {
 
     private boolean isStarted = false;
 
-    private String[] words = {"晚霞淌了千年", "", "历经多少云雾", "" ,"飞跃多少天河"," ", "只为与你相见！"};
+    private String[] words = {"看遍阴晴圆缺", "", "踏过无尽星空", "" ,"穿梭繁星之间"," ", "只为寻找那个身影"};
 
     private static int seconds = 0;
 
     private TextView textView;
-
-    private ImageView imageView;
-
-    private String url = "";
 
     private final Handler mHandler = new Handler();
 
@@ -59,9 +55,6 @@ public class StartActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
-
-        initStartImageUrl();
-
         initView();
 
         // 请求加入白名单权限
@@ -71,30 +64,14 @@ public class StartActivity extends BaseActivity {
 
         // 请求其他运行时权限
         String[] params = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-            params = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS};
-        }
         if(!PermissionHelper.checkPermission(this, params)){
             PermissionHelper.requestPermission(this, "需要本地权限", 1, params);
         }
     }
 
-    private void initStartImageUrl(){
-        int number = (int)(1 + Math.random()*(Application.START_IMAGE_MAX_NUMBER - 1 + 1));
-        Log.d(TAG,"打印的数字是:" + String.valueOf(number));
-        url = UrlBase.START_PAGE_URL + String.valueOf(number)+"shield.png";
-    }
-
     private void initView(){
         bt = findViewById(R.id.clickJump);
         textView = findViewById(R.id.hTextView);
-        imageView = findViewById(R.id.imageView);
-
-        Glide.with(this).load(url).placeholder(R.drawable.background7).dontAnimate().into(imageView);
-
-        LogUtil.d(TAG, "url:" + url);
-        imageView.animate().scaleX(1.2f).scaleY(1.2f).setDuration(8000).start();
-
         bt.setOnClickListener(v->{
             toLoginPage();
             isStarted = true;
@@ -205,7 +182,6 @@ public class StartActivity extends BaseActivity {
     /**
      * 请求结果处理
      */
-    /*
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -219,5 +195,4 @@ public class StartActivity extends BaseActivity {
             }
         }
     }
-    */
 }

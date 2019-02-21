@@ -1,22 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/Black">
-
-    <TextView
-        android:id="@+id/hTextView"
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:text=""
-        android:textColor="@color/white"
-        android:gravity="center"
-        android:translationZ="3dp"
-        android:textSize="40sp"
-        android:fontFamily="@font/fontfamily1"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
 
     <Button
         android:id="@+id/clickJump"
@@ -30,11 +18,32 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:visibility="gone"/>
-
+    <!--
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitXY"
         android:contentDescription="TODO" />
+     -->
+    <priv.zxy.moonstep.customview.MoonView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/bgView"/>
+
+    <TextView
+        android:id="@+id/hTextView"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:fontFamily="@font/fontfamily1"
+        android:gravity="center"
+        android:text=""
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        android:translationZ="3dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0"
+        />
+
 </android.support.constraint.ConstraintLayout>

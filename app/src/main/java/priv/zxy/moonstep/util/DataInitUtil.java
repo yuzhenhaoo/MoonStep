@@ -47,6 +47,11 @@ public class DataInitUtil {
     private static Thread imageThread;
 
     /**
+     * 图片线程是否需要等待标志
+     */
+    private static boolean isImageNeedWait = true;
+
+    /**
     * Image线程是否休眠的标记位
     */
     private static boolean isImageWait = false;
@@ -122,6 +127,9 @@ public class DataInitUtil {
                     imageThread.notify();
                 }
             }
+            else{
+                isImageNeedWait = false;
+            }
         }
         // 种族信息未缓存，则向服务器请求数据
         else{
@@ -137,6 +145,9 @@ public class DataInitUtil {
                         synchronized (imageThread) {
                             imageThread.notify();
                         }
+                    }
+                    else{
+                        isImageNeedWait = false;
                     }
                     LogUtil.d(TAG, "用户种族信息缓存成功");
                 }
@@ -178,8 +189,10 @@ public class DataInitUtil {
         imageThread = new Thread(()-> {
             synchronized (imageThread){
                 try {
-                    isImageWait = true;
-                    imageThread.wait();
+                    if(isImageNeedWait){
+                        isImageWait = true;
+                        imageThread.wait();
+                    }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
