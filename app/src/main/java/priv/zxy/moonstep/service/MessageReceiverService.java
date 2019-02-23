@@ -109,9 +109,7 @@ public class MessageReceiverService extends Service {
     public void onCreate() {
         super.onCreate();
         localBroadcastManager = LocalBroadcastManager.getInstance(Application.getContext());
-
         intent = new Intent("priv.zxy.moonstep.commerce.view.LOCAL_BROADCAST");
-
         LogUtil.d(TAG, TAG+"已经启动");
     }
 
@@ -120,9 +118,10 @@ public class MessageReceiverService extends Service {
         LogUtil.d(TAG, "Thread is running!");
         new Thread(() -> {
             LogUtil.d(TAG, ActivityCollector.activities.toString());
-            if ( ActivityCollector.isEmpty()){//如果当前没有activity在栈中，也就是说，程序没有显示在页面上，我们对消息实施监听。
-                //设置监听器
-                EMClient.getInstance().chatManager().addMessageListener(msgListener);//实施消息的监听
+            // 如果当前没有activity在栈中，也就是说，程序没有显示在页面上，我们对消息实施监听
+            if ( ActivityCollector.isEmpty()){
+                // 设置监听器,实施消息的监听
+                EMClient.getInstance().chatManager().addMessageListener(msgListener);
             }
         }).start();
         return super.onStartCommand(intent, flags, startId);
