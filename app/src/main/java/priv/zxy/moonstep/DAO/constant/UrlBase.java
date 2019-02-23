@@ -28,9 +28,19 @@ public class UrlBase {
 
     public static final String GOOD_TREASURE = "http://120.79.154.236:8080/MoonStep/GetTreasureServlet";
 
-    // 服务器URL路径
-    public static final String GET_PROJECT_SERVLET_URL = "http://120.79.154.236:8080/";
+    // 服务器URL路径（配合Retrofit使用）
+    public static final String BASE_URL = "http://120.79.154.236:8080/";
 
     // 用户种族信息相对URL路径
     public static final String GET_RACE_INFO_SERVLET_URL = "MoonStep/GetRaceInfoServlet";
+
+    /**
+     * 图片上传路径
+     */
+    public static final String PULL_IMAGE_TO_SERVER_URL = "http://120.79.154.236:8080/MoonStep/PullUserImageServlet";
+
+    /**
+     * 用户网络头像路径
+     */
+    public static final String USER_HEAD_BASE_PATH = "http://120.79.154.236:8080/MoonStep/head/";
 }

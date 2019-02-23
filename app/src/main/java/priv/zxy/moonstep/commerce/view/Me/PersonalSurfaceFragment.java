@@ -16,23 +16,34 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.yalantis.contextmenu.lib.ContextMenuDialogFragment;
 import com.yalantis.contextmenu.lib.MenuObject;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
+import java.net.URISyntaxException;
+import java.nio.file.attribute.UserPrincipalLookupService;
 import java.util.ArrayList;
 
+import cz.msebera.android.httpclient.Header;
+import priv.zxy.moonstep.DAO.ImageInfo.PullImage2Server;
+import priv.zxy.moonstep.DAO.constant.UrlBase;
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.customview.AnimationButton;
 import priv.zxy.moonstep.customview.WaveViewByBezier;
 import priv.zxy.moonstep.data.bean.BaseFragment;
 import priv.zxy.moonstep.framework.user.User;
 import priv.zxy.moonstep.framework.stroage.UserSelfInfo;
+import priv.zxy.moonstep.util.FileUtil;
+import priv.zxy.moonstep.util.ImageCacheUtil.GlideCacheUtil;
 import priv.zxy.moonstep.util.LogUtil;
+import priv.zxy.moonstep.util.SharedPreferencesUtil;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -48,7 +59,8 @@ public class PersonalSurfaceFragment extends BaseFragment {
     private TextView userNickName;
     private TextView userLevelName;
     private PopupWindow pop;
-    private Button head;
+    private ImageView head;
+    private String headPath;
 
     private static final String CAMERA_IMAGE_NAME = "moonstep" + UserSelfInfo.getInstance().getMySelf().getPhoneNumber() + ".png";
     private static final String CACHE_HEAD_NAME = "head_portrait.png";
@@ -93,6 +105,7 @@ public class PersonalSurfaceFragment extends BaseFragment {
         User user = UserSelfInfo.getInstance().getMySelf();
         userNickName.setText(user.getNickName());
         userLevelName.setText(UserSelfInfo.getInstance().getMySelf().getLevel());
+        Glide.with(this).load(user.getHeadPath()).placeholder(R.drawable.default_man_head).into(head);
     }
 
     private void initEvent() {
@@ -170,6 +183,7 @@ public class PersonalSurfaceFragment extends BaseFragment {
             pop = null;
         }
     }
+
     private final static int ALBUM_RESULT_CODE = 0;
     private final static int CAMERA_RESULT_CODE = 1;
 
@@ -195,60 +209,85 @@ public class PersonalSurfaceFragment extends BaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        LogUtil.d(TAG, "请求码" + requestCode);
         Uri mDestinationUri = Uri.fromFile(new File(mActivity.getCacheDir(), CACHE_HEAD_NAME));
-        switch (resultCode) {
+        switch (requestCode) {
             case ALBUM_RESULT_CODE:
                 Uri uri = data.getData();
                 assert uri != null;
-                UCrop.of(uri, mDestinationUri)
-                        .withAspectRatio(1, 1) // 设置裁剪框宽高比1:1
-                        .start(mActivity);
+                startCropActivity(uri, mDestinationUri);
                 break;
-            case CAMERA_RESULT_CODE:
-                File cameraResult = new File(Environment.getExternalStorageDirectory(), CAMERA_IMAGE_NAME);
-                Uri cameraUri = Uri.fromFile(cameraResult);
-                UCrop.of(cameraUri, mDestinationUri)
-                        .withAspectRatio(1, 1) // 设置裁剪框宽高比1:1
-                        .start(mActivity);
-                break;
-            case RESULT_OK:
-                final Uri resultUri = UCrop.getOutput(data);
-                updateCropImageToCurrentPage();
-                updateCropImageToCache();
-                updateCropImageToDisk();
-                updateCropImageToRemoteService();
+            case UCrop.REQUEST_CROP:
+                if (resultCode == RESULT_OK) {
+                    final Uri resultUri = UCrop.getOutput(data);
+                    assert  resultUri != null;
+                    updateCropImageToCache();
+                    updateCropImageToDisk(resultUri);
+                    updateCropImageToCurrentPage(headPath);
+                    updateCropImageToRemoteService(headPath);
+                    LogUtil.d(TAG, "userHeadPath" + UrlBase.USER_HEAD_BASE_PATH + UserSelfInfo.getInstance().getMySelf().getPhoneNumber() + ".png");
+                }
                 break;
             case UCrop.RESULT_ERROR:
                 LogUtil.e(TAG, "裁剪URI获取错误");
         }
     }
 
-    /**
-     * 将裁剪后图片更新到当前页面
-     */
-    private void updateCropImageToCurrentPage() {
-
+    private void startCropActivity(Uri sourceUri, Uri resultUri) {
+        UCrop.of(sourceUri, resultUri)
+                .withAspectRatio(1, 1) // 设置裁剪框宽高比1:1
+                .start(this.getContext(), this);
     }
 
     /**
-     * 将裁剪后图片更新到当前缓存
+     * 将裁剪后图片更新到当前页面
      */
-    private void updateCropImageToCache() {
-
+    private void updateCropImageToCurrentPage(String imagePath) {
+        assert imagePath != null;
+        LogUtil.d(TAG, "updateCropImageToCurrentPage" + imagePath);
+        Glide.with(this).load(imagePath).into(head);
     }
 
     /**
      * 将裁剪后图片更新到磁盘
+     * 1. 将原始图片复制一份到本地空间的cache文件夹下并进行改名
+     * 2. 对cache下的图片进行上传
      */
-    private void updateCropImageToDisk() {
+    private void updateCropImageToDisk(Uri uri) {
+        String oldPath = uri.getPath();
+        LogUtil.d(TAG, "oldPath" + oldPath);
+        String newPath = mActivity.getCacheDir().getPath() + "/" + UserSelfInfo.getInstance().getMySelf().getPhoneNumber() + ".png";
+        headPath = newPath;
+        FileUtil.copyFile(oldPath, newPath);
+        // 将已经从缓存中更新的用户数据更新到xml文件中
+        SharedPreferencesUtil.saveMySelfInformation(UserSelfInfo.getInstance().getMySelf());
+    }
 
+    /**
+     * 将裁剪后图片更新到当前缓存（UserSelfInfo）
+     */
+    private void updateCropImageToCache() {
+        User user = UserSelfInfo.getInstance().getMySelf();
+        user.setHeadPath(UrlBase.USER_HEAD_BASE_PATH + UserSelfInfo.getInstance().getMySelf().getPhoneNumber() + ".png");
+        UserSelfInfo.getInstance().setMySelf(user);
     }
 
     /**
      * 将裁剪后图片更新到远程服务器
      */
-    private void updateCropImageToRemoteService() {
-
+    private void updateCropImageToRemoteService(String imagePath) {
+        assert imagePath != null;
+        LogUtil.d(TAG, "updateCropImageToRemoteService" + imagePath);
+        PullImage2Server.upLoad2Server(imagePath,  new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                LogUtil.d(TAG, "上传成功" + responseBody.toString());
+            }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                LogUtil.d(TAG, "上传失败");
+                LogUtil.e(TAG, error.getMessage()); }
+        });
     }
 
     @Override
@@ -274,5 +313,4 @@ public class PersonalSurfaceFragment extends BaseFragment {
         view = null;
         bt = null;
     }
-
 }

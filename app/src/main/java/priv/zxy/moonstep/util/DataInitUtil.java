@@ -4,11 +4,12 @@ import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import priv.zxy.moonstep.DAO.PullImagesDAO;
 import priv.zxy.moonstep.DAO.PullPetInfoDAO;
-import priv.zxy.moonstep.DAO.Retrofit.PullUserRaceInfoDAO;
+import priv.zxy.moonstep.DAO.RaceInfo.PullUserRaceInfoDAO;
 import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
 import priv.zxy.moonstep.framework.good.GoodSelfInfo;
 import priv.zxy.moonstep.framework.good.Props;
@@ -163,9 +164,15 @@ public class DataInitUtil {
     }
 
     /**
-     * 新开线程,初始化图片
+     * 新开线程，初始化图片
      */
-    public static void initImages(){
+    public static void initImages() {
+        initImages(RaceInfo.getInstance().getRace().getRacePathMan(),
+                RaceInfo.getInstance().getRace().getRacePathWoMan(),
+                RaceInfo.getInstance().getRace().getRaceIcon());
+    }
+
+    private static void initImages(String... imagePaths){
         imageThread = new Thread(()-> {
             try {
                 isImageWait = true;
@@ -174,10 +181,7 @@ public class DataInitUtil {
                 e.printStackTrace();
             }
             // 初始化请求的图片URL列表
-            List<String> urlList = new ArrayList<>();
-            urlList.add(RaceInfo.getInstance().getRace().getRacePathMan());
-            urlList.add(RaceInfo.getInstance().getRace().getRacePathWoMan());
-            urlList.add(RaceInfo.getInstance().getRace().getRaceIcon());
+            List<String> urlList = new ArrayList<>(Arrays.asList(imagePaths));
             for (String url : urlList) {
                 // 读取本地图片文件返回为空，则向服务器请求图片
                 if (LocalCacheUtil.getInstance().getBitmapFromLocal(url) == null) {

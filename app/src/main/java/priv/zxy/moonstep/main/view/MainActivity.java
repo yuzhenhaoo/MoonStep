@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMError;
 import com.hyphenate.chat.EMClient;
@@ -28,6 +29,8 @@ import org.litepal.tablemanager.Connector;
 
 import java.lang.ref.WeakReference;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+import priv.zxy.moonstep.framework.stroage.RaceInfo;
 import priv.zxy.moonstep.framework.user.User;
 import priv.zxy.moonstep.framework.stroage.UserSelfInfo;
 import priv.zxy.moonstep.gps.MapFragment;
@@ -36,6 +39,7 @@ import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.data.bean.BaseActivity;
 import priv.zxy.moonstep.login.view.LoginActivity;
 import priv.zxy.moonstep.settings.SettingActivity;
+import priv.zxy.moonstep.util.ImageCacheUtil.GlideCacheUtil;
 import priv.zxy.moonstep.util.LogUtil;
 import priv.zxy.moonstep.util.ShowErrorReasonUtil;
 import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
@@ -59,6 +63,7 @@ public class MainActivity extends BaseActivity
 
     private NavigationView navigationView;
     private View nav_header_main;
+    private CircleImageView head;
     private TextView name;
     private TextView race;
     private Button setting;
@@ -75,13 +80,12 @@ public class MainActivity extends BaseActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        SQLiteDatabase db = Connector.getDatabase();//实现数据库的创建
+        // 实现数据库的创建
+        Connector.getDatabase();
 
         setContentView(R.layout.activity_main);
 
         initView(savedInstanceState);
-
         initData();
         initEvent();
     }
@@ -96,6 +100,7 @@ public class MainActivity extends BaseActivity
         navigationView = findViewById(R.id.nav_view);
         nav_header_main = navigationView.getHeaderView(0);
 
+        head = nav_header_main.findViewById(R.id.user_head_image);
         name = (TextView) nav_header_main.findViewById(R.id.name);
         race = (TextView) nav_header_main.findViewById(R.id.race);
         setting = (Button) nav_header_main.findViewById(R.id.settingBt);
@@ -109,22 +114,21 @@ public class MainActivity extends BaseActivity
 
         animatorHandler = new AnimatorHandler(this);
 
-        //在程序打开的时候设置点击第一个按钮
+        // 在程序打开的时候设置点击第一个按钮
         if (savedInstanceState == null) {
             navigationView.getMenu().getItem(0).setChecked(true);
         }
     }
 
+    /**
+     * 初始化侧滑栏的展示数据
+     */
     private void initData(){
-        try {
-            User user = UserSelfInfo.getInstance().getMySelf();
-            LogUtil.d(TAG, user.toString());
-            name.setText(user.getNickName());
-            // TODO (张晓翼，2018/12/30， 这里服务器传过来的是当前的种族码，不是种族名称)
-            race.setText(String.valueOf(user.getRaceCode()));
-        } catch (NullPointerException e) {
-            LogUtil.d(TAG, e.getMessage());
-        }
+        User user = UserSelfInfo.getInstance().getMySelf();
+        LogUtil.d(TAG, user.toString());
+        name.setText(user.getNickName());
+        race.setText(String.valueOf(RaceInfo.getInstance().getRace().getRaceName()));
+        Glide.with(this).load(UserSelfInfo.getInstance().getMySelf().getHeadPath()).into(head);
     }
 
     private void initEvent(){
@@ -199,7 +203,8 @@ public class MainActivity extends BaseActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.main, menu);
+
+        // getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
@@ -253,9 +258,18 @@ public class MainActivity extends BaseActivity
         return true;
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initData();
+    }
+
     /**
-     * 在ChattingActivity中对为了监听EMClient而设立的SharedPreferences文件而进行销毁，保证每次进入ChattingActivity只让EMClient的SharedPreferences初始化一次
-     * 但是需要检测只通过Edit清除缓存的话是不是会改变到文件本身的内容，如果可以改变，那么我们不需要删除文件，如果不能改变，那么我们不但必须清除缓存，也必须删除文件
+     * 在ChattingActivity中对为了监听EMClient而设立的SharedPreferences文件而进行销毁，
+     * 保证每次进入ChattingActivity只让EMClient的SharedPreferences初始化一次,
+     * 但是需要检测只通过Edit清除缓存的话是不是会改变到文件本身的内容，
+     * 如果可以改变，那么我们不需要删除文件，如果不能改变，
+     * 那么我们不但必须清除缓存，也必须删除文件
      */
     @Override
     protected void onDestroy() {
@@ -316,7 +330,8 @@ public class MainActivity extends BaseActivity
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    toLoginActivity();//强制退出到登陆页面
+                    // 强制退出到登陆页面
+                    toLoginActivity();
                 } else if (error == EMError.USER_LOGIN_ANOTHER_DEVICE) {
                     // 显示帐号在其他设备登录
                     ShowErrorReasonUtil.getInstance(mActivity).show(ErrorCodeEnum.ACCOUNT_IS_LOGGING_IN_OTHER_DEVICE);
@@ -326,27 +341,30 @@ public class MainActivity extends BaseActivity
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    toLoginActivity();//强制退出到登陆页面
+                    // 强制退出到登陆页面
+                    toLoginActivity();
                 } else {
                     if (NetUtils.hasNetwork(MainActivity.this)){
-                        //连接不到聊天服务器
+                        // 连接不到聊天服务器
                         ShowErrorReasonUtil.getInstance(mActivity).show(ErrorCodeEnum.CONNECT_CHAT_SERVICE_FAIL);
                         try {
                             Thread.sleep(1000);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        toLoginActivity();//强制退出到登陆页面
+                        // 强制退出到登陆页面
+                        toLoginActivity();
                     }
                     else{
-                        //当前网络不可用，请检查网络设置
+                        // 当前网络不可用，请检查网络设置
                         ShowErrorReasonUtil.getInstance(mActivity).show(ErrorCodeEnum.NET_NOT_RESPONSE);
                         try {
                             Thread.sleep(1000);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        toLoginActivity();//强制退出到登陆页面
+                        // 强制退出到登陆页面
+                        toLoginActivity();
                     }
                 }
             });

@@ -111,21 +111,21 @@ public class SharedPreferencesUtil {
      * 存储用户的个人信息
      * @param moonFriend 用户信息
      */
-    public static void saveMySelfInformation(User moonFriend){
+    public static void saveMySelfInformation(User user){
         if (sp == null) {
             init();
         }
         Map<String ,String> params = new HashMap<>();
-        params.put(SharedConstant.NICK_NAME, moonFriend.getNickName());
-        params.put(SharedConstant.PHONE_NUMBER, moonFriend.getPhoneNumber());
-        params.put(SharedConstant.GENDER, moonFriend.getGender());
-        params.put(SharedConstant.RACE_CODE, String.valueOf(moonFriend.getRaceCode()));
-        params.put(SharedConstant.HEAD_PATH, moonFriend.getHeadPath());
-        params.put(SharedConstant.SIGNATURE, moonFriend.getSignature());
-        params.put(SharedConstant.ADDRESS, moonFriend.getLocation());
-        params.put(SharedConstant.CURRENT_TITLE_CODE, moonFriend.getCurrentTitleCode());
-        params.put(SharedConstant.LEVEL, moonFriend.getLevel());
-        params.put(SharedConstant.LUCKY_VALUE, String.valueOf(moonFriend.getLuckyValue()));
+        params.put(SharedConstant.NICK_NAME, user.getNickName());
+        params.put(SharedConstant.PHONE_NUMBER, user.getPhoneNumber());
+        params.put(SharedConstant.GENDER, user.getGender());
+        params.put(SharedConstant.RACE_CODE, String.valueOf(user.getRaceCode()));
+        params.put(SharedConstant.HEAD_PATH, user.getHeadPath());
+        params.put(SharedConstant.SIGNATURE, user.getSignature());
+        params.put(SharedConstant.ADDRESS, user.getLocation());
+        params.put(SharedConstant.CURRENT_TITLE_CODE, user.getCurrentTitleCode());
+        params.put(SharedConstant.LEVEL, user.getLevel());
+        params.put(SharedConstant.LUCKY_VALUE, String.valueOf(user.getLuckyValue()));
         sp.save(SharedConstant.PERSONAL_INFO_LIBRARY, params);
         sp.saveElement(SharedConstant.PERSONAL_INFO_LIBRARY, SharedConstant.IS_SAVED, true);
     }

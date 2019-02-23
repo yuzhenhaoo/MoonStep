@@ -1,4 +1,4 @@
-package priv.zxy.moonstep.DAO.Retrofit;
+package priv.zxy.moonstep.DAO.RaceInfo;
 
 import android.support.annotation.NonNull;
 import priv.zxy.moonstep.DAO.constant.UrlBase;
@@ -21,7 +21,7 @@ public class PullUserRaceInfoDAO {
 
     private static final String RACE_TAG = "race";
 
-    private static final String BaseURL = UrlBase.GET_PROJECT_SERVLET_URL;
+    private static final String BaseURL = UrlBase.BASE_URL;
 
     private static final String URL = UrlBase.GET_RACE_INFO_SERVLET_URL;
 
@@ -41,10 +41,10 @@ public class PullUserRaceInfoDAO {
                 .build();
 
         // 创建 网络请求接口 的实例
-        ProjectAPI projectAPI = retrofit.create(ProjectAPI.class);
+        IRaceRequest IRaceRequest = retrofit.create(IRaceRequest.class);
 
         // 对 发送请求 进行封装(设置请求的种族ID)
-        Call<RaceData> call = projectAPI.postRaceDataMethod(URL, raceCode);
+        Call<RaceData> call = IRaceRequest.postRaceDataMethod(URL, raceCode);
 
         // 发送网络请求(异步)
         call.enqueue(new Callback<RaceData>() {

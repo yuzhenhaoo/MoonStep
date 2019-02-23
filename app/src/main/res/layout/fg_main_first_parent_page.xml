@@ -16,8 +16,8 @@
         android:id="@+id/div_tab_bar"
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:layout_above="@id/rg_tab_bar"
-        android:background="@color/div_white"/>
+        android:background="@color/div_white"
+        app:layout_constraintBottom_toTopOf="@id/rg_tab_bar"/>
 
     <RadioGroup
         android:id="@+id/rg_tab_bar"

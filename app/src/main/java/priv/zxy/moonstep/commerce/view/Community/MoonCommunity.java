@@ -99,7 +99,8 @@ public class MoonCommunity extends Fragment implements SwipeRefreshLayout.OnRefr
     }
 
     public void initRecyclerView(){
-        layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        // 网格式流动布局管理器
+        layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
         mAdapter = new MoonCommunityAdapter(mContext);
         // 每次需要清空一次mAdapter中的列表书局
         mAdapter.clear();

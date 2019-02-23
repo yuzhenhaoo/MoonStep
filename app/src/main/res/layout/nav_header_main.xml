@@ -15,7 +15,7 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/user_image"
+        android:id="@+id/user_head_image"
         android:layout_width="96dp"
         android:layout_height="96dp"
         android:layout_gravity="center"

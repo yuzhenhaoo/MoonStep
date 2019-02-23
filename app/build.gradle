@@ -106,20 +106,6 @@ dependencies {
 
     //    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    //高德地图
-
-    //3D
-    implementation 'com.amap.api:3dmap:latest.integration'
-
-    //2D
-    implementation 'com.amap.api:map2d:latest.integration'
-
-    //定位
-    implementation 'com.amap.api:location:latest.integration'
-
-    //搜索
-    implementation 'com.amap.api:search:latest.integration'
-
     //Fast Android Networking
     implementation 'com.amitshekhar.android:android-networking:1.0.2'
 
@@ -129,7 +115,6 @@ dependencies {
     //LeakCanary内存泄漏检测工具
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.2'
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.2'
-
     // Optional, if you use support library fragments:
     debugImplementation 'com.squareup.leakcanary:leakcanary-support-fragment:1.6.2'
 
@@ -138,12 +123,24 @@ dependencies {
     implementation project(':network')
     implementation project(':notifacation')
 
-    // 网络请求库Retrofit
-    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.0.2'
-
     // 裁剪框架UCrop
     implementation 'com.github.yalantis:ucrop:2.2.2-native'
-    implementation files('libs/glide-3.6.0.jar')
-}
 
+    // Glide图片框架
+    implementation files('libs/glide-3.6.0.jar')
+
+    // 高德地图jar包
+    implementation files('libs/AMap3DMap_6.7.0_AMapSearch_6.5.0_AMapLocation_4.4.0_20190213.jar')
+
+    // rxjava异步框架
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.6'
+
+    // 用Gson解析json的转换器
+    implementation 'com.squareup.retrofit2:converter-gson:2.0.2'
+    implementation 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
+    implementation 'com.squareup.retrofit2:converter-scalars:2.1.0'
+    // rxAndroid
+    implementation 'io.reactivex:rxandroid:1.2.1'
+    // 网络请求框架AsynHttp
+    implementation 'com.loopj.android:android-async-http:1.4.9'
+}
