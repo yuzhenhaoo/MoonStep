@@ -127,7 +127,7 @@ public class MainActivity extends BaseActivity
         User user = UserSelfInfo.getInstance().getMySelf();
         LogUtil.d(TAG, user.toString());
         name.setText(user.getNickName());
-        race.setText(String.valueOf(RaceInfo.getInstance().getRace().getRaceName()));
+        //race.setText(String.valueOf(RaceInfo.getInstance().getRace().getRaceName()));
         Glide.with(this).load(UserSelfInfo.getInstance().getMySelf().getHeadPath()).into(head);
     }
 
