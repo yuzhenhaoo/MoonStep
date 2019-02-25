@@ -187,16 +187,10 @@ public class DataInitUtil {
      * 新开线程，初始化图片
      */
     public static void initImages() {
-        initImages(RaceInfo.getInstance().getRace().getRacePathMan(),
-                RaceInfo.getInstance().getRace().getRacePathWoMan(),
-                RaceInfo.getInstance().getRace().getRaceIcon());
-    }
-
-    private static void initImages(String... imagePaths){
         imageThread = new Thread(()-> {
-            synchronized (imageThread){
+            synchronized (imageThread) {
                 try {
-                    if(isImageNeedWait){
+                    if (isImageNeedWait) {
                         isImageWait = true;
                         imageThread.wait();
                     }
@@ -204,32 +198,37 @@ public class DataInitUtil {
                     e.printStackTrace();
                 }
             }
+            initImages(RaceInfo.getInstance().getRace().getRacePathMan(),
+                    RaceInfo.getInstance().getRace().getRacePathWoMan(),
+                    RaceInfo.getInstance().getRace().getRaceIcon());
+        });
+        imageThread.start();
+    }
 
-            // 初始化请求的图片URL列表
-            List<String> urlList = new ArrayList<>(Arrays.asList(imagePaths));
-            for (String url : urlList) {
-                // 读取本地图片文件返回为空，则向服务器请求图片
-                if (LocalCacheUtil.getInstance().getBitmapFromLocal(url) == null) {
-                    PullImagesDAO.getInstance().getImages(new PullImagesDAO.CallBack() {
-                        @Override
-                        public void onSuccess(Bitmap bitmap) {
+    private static void initImages(String... imagePaths){
+        // 初始化请求的图片URL列表
+        List<String> urlList = new ArrayList<>(Arrays.asList(imagePaths));
+        for (String url : urlList) {
+            // 读取本地图片文件返回为空，则向服务器请求图片
+            if (LocalCacheUtil.getInstance().getBitmapFromLocal(url) == null) {
+                PullImagesDAO.getInstance().getImages(new PullImagesDAO.CallBack() {
+                    @Override
+                    public void onSuccess(Bitmap bitmap) {
                             LogUtil.d(TAG, "图片" + url + "缓存成功");
                             LocalCacheUtil.getInstance().setBitmapToLocal(url, bitmap);
                             MemoryCacheUtil.getInstance().setBitmapToMemory(url, bitmap);
                         }
 
-                        @Override
-                        public void onFail(ErrorCodeEnum errorCodeEnum) {
+                    @Override
+                    public void onFail(ErrorCodeEnum errorCodeEnum) {
                             LogUtil.d(TAG, "图片" + url + "缓存失败");
                         }
-                    }, url);
-                }
-                // 将读取的本地图片直接加载到内存
-                else {
-                    MemoryCacheUtil.getInstance().setBitmapToMemory(url, LocalCacheUtil.getInstance().getBitmapFromLocal(url));
-                }
+                }, url);
             }
-        });
-        imageThread.start();
+            // 将读取的本地图片直接加载到内存
+            else {
+                MemoryCacheUtil.getInstance().setBitmapToMemory(url, LocalCacheUtil.getInstance().getBitmapFromLocal(url));
+            }
+        }
     }
 }

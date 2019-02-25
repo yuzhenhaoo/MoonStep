@@ -13,15 +13,18 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/user_head_image"
         android:layout_width="96dp"
         android:layout_height="96dp"
         android:layout_gravity="center"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:src="@drawable/my_photo"
         app:civ_border_color="#c0c0c0"
-        app:civ_border_width="3dp" />
+        app:civ_border_width="3dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/name"
