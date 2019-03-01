@@ -1,1 +1,1 @@
-include ':app', ':network', ':notifacation', ':threadpool'
+include ':app', ':network', ':notifacation', ':threadpool', ':moonimagehandler'

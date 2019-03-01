@@ -27,7 +27,7 @@
         android:theme="@style/MyEditText"
         android:gravity="center|start"
         android:textSize="20sp"
-        app:layout_constraintTop_toBottomOf="@+id/moonstep_LogUtilo"/>
+        app:layout_constraintTop_toBottomOf="@+id/moonstep_Logo"/>
 
     <View
         android:id="@+id/whiteLine"
@@ -93,13 +93,17 @@
         app:layout_constraintTop_toBottomOf="@+id/password_check"
         app:layout_constraintBottom_toBottomOf="parent"
         android:translationZ="8dp" />
+
     <ImageView
         android:id="@+id/back_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@mipmap/back0"
         android:layout_margin="5dp"
-        android:contentDescription="@string/nothing"/>
+        android:contentDescription="@string/nothing"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
     <View
         android:id="@+id/deepBackground"
         android:layout_width="match_parent"

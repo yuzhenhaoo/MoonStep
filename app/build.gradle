@@ -43,6 +43,10 @@ android {
     //use legacy for android 6.0
     useLibrary 'org.apache.http.legacy'
     buildToolsVersion '28.0.3'
+
+
+    aaptOptions.cruncherEnabled = false
+    aaptOptions.useNewCruncher = false
 }
 
 dependencies {
@@ -73,21 +77,10 @@ dependencies {
     //导入传送带风格的LayoutManager的包
     implementation 'com.azoft.carousellayoutmanager:carousel:1.2.4'
 
-    //导入流体形式的button包
-    implementation 'com.nightonke:jellytogglebutton:1.0.2'
-    implementation 'com.yalantis:phoenix:1.2.3'
-
-    //黄油刀
-    implementation 'com.jakewharton:butterknife:8.8.1'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
-
-    //ContextMenuDialogFragment
-    implementation 'com.github.Yalantis:Context-Menu.Android:1.0.8'
-
     //NiftyDialogEffects
     implementation 'com.github.sd6352051:NiftyDialogEffects:v1.0.3'
 
-    //volley
+    //Volley
     implementation 'com.mcxiaoke.volley:library:1.0.19'
 
     //material-dialog
@@ -118,8 +111,6 @@ dependencies {
     // Optional, if you use support library fragments:
     debugImplementation 'com.squareup.leakcanary:leakcanary-support-fragment:1.6.2'
 
-    //动态检测权限库 easyPermission
-    implementation 'pub.devrel:easypermissions:2.0.0'
     implementation project(':network')
     implementation project(':notifacation')
 
@@ -143,4 +134,6 @@ dependencies {
     implementation 'io.reactivex:rxandroid:1.2.1'
     // 网络请求框架AsynHttp
     implementation 'com.loopj.android:android-async-http:1.4.9'
+
+    implementation 'pub.devrel:easypermissions:1.0.1'
 }

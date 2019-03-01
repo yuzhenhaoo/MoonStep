@@ -22,13 +22,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.yalantis.contextmenu.lib.ContextMenuDialogFragment;
-import com.yalantis.contextmenu.lib.MenuObject;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
-import java.net.URISyntaxException;
-import java.nio.file.attribute.UserPrincipalLookupService;
 import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
@@ -51,8 +47,6 @@ public class PersonalSurfaceFragment extends BaseFragment {
 
     private static final String TAG = "PersonalSurfaceFragment";
     private View view;
-    private ContextMenuDialogFragment mMenuDiaLogFragment;
-    private ArrayList<MenuObject> menuObjects = new ArrayList<>();
     private Activity mActivity;
     private WaveViewByBezier waveViewByBezier;
     private AnimationButton bt;

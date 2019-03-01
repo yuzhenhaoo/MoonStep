@@ -25,7 +25,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import com.hyphenate.exceptions.HyphenateException;
-import com.yalantis.phoenix.PullToRefreshView;
 
 import org.litepal.LitePal;
 
@@ -55,11 +54,6 @@ public class MoonFriendFragment extends BaseFragment implements IMoonFriendView 
 
     private PackDialog packDialog = null;
     private LinearLayoutManager layoutManager;
-
-    /**
-     * 刷新View和下拉菜单会发生冲突，两者不能兼顾，选择性抛弃下拉刷新菜单
-     */
-    private PullToRefreshView mPullToRefreshView;
 
     private MoonFriendPresenter moonFriendPresenter;
 
