@@ -34,7 +34,7 @@ import priv.zxy.moonstep.login.presenter.UserVerifyPhoneNumberPresenter;
  * 描述: 手机验证页面
  **/
 
-public class VerifyPhoneActivity extends BaseActivity implements IVerifyPhoneView {
+public class VerifyPhoneActivity extends BaseActivity implements IVerifyPhoneView, View.OnClickListener, View.OnTouchListener {
 
     private TextView inputText;
     private LinearLayout content1;
@@ -64,11 +64,15 @@ public class VerifyPhoneActivity extends BaseActivity implements IVerifyPhoneVie
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.verify_phonenumber_activity);
-        initView();
+    }
+
+    @Override
+    protected void initData() {
+
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private void initView() {
+    protected void initView() {
         inputText = (TextView) findViewById(R.id.input_text);
         content1 = (LinearLayout) findViewById(R.id.content1);
         countryChoice = (TextView) findViewById(R.id.countryChoice);
@@ -92,15 +96,25 @@ public class VerifyPhoneActivity extends BaseActivity implements IVerifyPhoneVie
 
         userVerifyPhoneNumberPresenter = new UserVerifyPhoneNumberPresenter(this, mActivity, mContext);
 
-        // 回退到LogUtilinActivity
+        // 回退到LoginActivity
         backButton.setOnClickListener(v -> finishActivitySelf());
 
-        countryChoice.setOnClickListener(v -> {
+        countryChoice.setOnClickListener(this);
+
+        submit.setOnTouchListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.equals(countryChoice)) {
             //这里使用左滑动画效果的一个包含国家列表的Activity
             userVerifyPhoneNumberPresenter.toCountrySelectedActivity();
-        });
+        }
+    }
 
-        submit.setOnTouchListener((v, event) -> {
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        if (v.equals(submit)) {
             switch (event.getAction()){
                 case MotionEvent.ACTION_DOWN:
                     submit.setAnimation(shake);
@@ -120,7 +134,13 @@ public class VerifyPhoneActivity extends BaseActivity implements IVerifyPhoneVie
                     break;
             }
             return true;
-        });
+        }
+        return false;
+    }
+
+    @Override
+    protected void initEvent() {
+
     }
 
     @Override
@@ -149,7 +169,7 @@ public class VerifyPhoneActivity extends BaseActivity implements IVerifyPhoneVie
 
     @Override
     public void toLogUtilinActivity() {
-        Intent intent = new Intent(this, LoginActivity.class);
+        Intent intent = new Intent(this, LoginSurface.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);

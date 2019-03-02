@@ -30,27 +30,27 @@
         android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:fontFamily="@font/fontfamily4"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:text="@string/nav_header_title"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        app:layout_constraintBottom_toTopOf="@+id/race"
-        app:layout_constraintStart_toEndOf="@+id/user_image"
+        app:layout_constraintStart_toEndOf="@+id/user_head_image"
         app:layout_constraintTop_toTopOf="@+id/user_image" />
 
     <TextView
         android:id="@+id/race"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:fontFamily="@font/fontfamily4"
         android:text="@string/nav_header_subtitle"
         app:layout_constraintBottom_toBottomOf="@+id/user_image"
-        app:layout_constraintStart_toEndOf="@+id/user_image" />
+        app:layout_constraintStart_toEndOf="@+id/user_head_image"
+        app:layout_constraintTop_toBottomOf="@+id/name" />
 
     <Button
         android:id="@+id/settingBt"

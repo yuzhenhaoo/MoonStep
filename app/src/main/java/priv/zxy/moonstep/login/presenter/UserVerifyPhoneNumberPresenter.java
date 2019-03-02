@@ -5,9 +5,9 @@ import android.content.Context;
 import android.widget.Toast;
 
 import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
-import priv.zxy.moonstep.login.module.biz.IUser;
+import priv.zxy.moonstep.login.module.biz.ILogin;
+import priv.zxy.moonstep.login.module.biz.LoginBiz;
 import priv.zxy.moonstep.login.module.biz.OnVerifyPhoneNumber;
-import priv.zxy.moonstep.login.module.biz.UserBiz;
 import priv.zxy.moonstep.login.view.IVerifyPhoneView;
 
 /**
@@ -15,14 +15,14 @@ import priv.zxy.moonstep.login.view.IVerifyPhoneView;
  */
 
 public class UserVerifyPhoneNumberPresenter {
-    private IUser userBiz;
+    private ILogin userBiz;
     private IVerifyPhoneView verifyPhoneView;//创建与ConfrirmView交互的View对象
     private Activity mActivity;
     private Context mContext;
 
     public UserVerifyPhoneNumberPresenter(IVerifyPhoneView confirmPhoneView, Activity mActivity, Context mContext){
         this.verifyPhoneView = confirmPhoneView;
-        this.userBiz = new UserBiz();
+        this.userBiz = new LoginBiz();
         this.mActivity = mActivity;
         this.mContext = mContext;
     }

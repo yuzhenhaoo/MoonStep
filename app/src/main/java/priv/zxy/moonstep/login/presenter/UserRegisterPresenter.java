@@ -8,8 +8,8 @@ import android.util.Log;
 import com.hyphenate.exceptions.HyphenateException;
 
 import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
-import priv.zxy.moonstep.login.module.biz.IUser;
-import priv.zxy.moonstep.login.module.biz.UserBiz;
+import priv.zxy.moonstep.login.module.biz.ILogin;
+import priv.zxy.moonstep.login.module.biz.LoginBiz;
 import priv.zxy.moonstep.login.view.IUserRegisterView;
 
 /**
@@ -20,17 +20,17 @@ public class UserRegisterPresenter {
 
     private static final String TAG = "UserRegisterPresenter";
 
-    private IUser userBiz;
+    private ILogin userBiz;
 
     private IUserRegisterView userRegisterView;//创建与LoginView交互的View对象
 
     public UserRegisterPresenter(IUserRegisterView userRegisterView, Activity mActivity, Context mContext){
         this.userRegisterView = userRegisterView;
-        this.userBiz = new UserBiz();
+        this.userBiz = new LoginBiz();
     }
 
     public void doRegister(String phoneNumber, String nickName, String userPassword, String confirmUserPassword, String gender) throws InterruptedException, HyphenateException {
-        userBiz.doRegister(phoneNumber, nickName, userPassword, confirmUserPassword, gender, new UserBiz.OnRegisterListener() {
+        userBiz.doRegister(phoneNumber, nickName, userPassword, confirmUserPassword, gender, new LoginBiz.OnRegisterListener() {
             @Override
             public void registerSuccess(String raceName, String raceDescription, String raceImage, String raceIcon) {
                 Log.d(TAG, "注册成功");

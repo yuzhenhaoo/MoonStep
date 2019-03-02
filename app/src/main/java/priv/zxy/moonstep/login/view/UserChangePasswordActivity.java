@@ -30,7 +30,7 @@ import priv.zxy.moonstep.login.presenter.UserChangePasswordPresenter;
  *  Created by Zxy on 2018/9/23
  */
 
-public class UserChangePasswordActivity extends BaseActivity implements IChangePasswordView{
+public class UserChangePasswordActivity extends BaseActivity implements IChangePasswordView, View.OnTouchListener{
     private TextView phone;
     private MaterialEditText password;
     private MaterialEditText confirmPassword;
@@ -57,11 +57,15 @@ public class UserChangePasswordActivity extends BaseActivity implements IChangeP
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_pwd);
-        initView();
+    }
+
+    @Override
+    protected void initData() {
+
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private void initView() {
+    protected void initView() {
         phone = (TextView) findViewById(R.id.phone);
         password = (MaterialEditText) findViewById(R.id.password);
         confirmPassword = (MaterialEditText) findViewById(R.id.password_check);
@@ -78,7 +82,12 @@ public class UserChangePasswordActivity extends BaseActivity implements IChangeP
 
         hideLoading();
         userChangePasswordPresenter = new UserChangePasswordPresenter(this, mContext, mActivity);
-        submit.setOnTouchListener((v, event) -> {
+        submit.setOnTouchListener(this);
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        if (v.equals(submit)) {
             switch(event.getAction()){
                 case MotionEvent.ACTION_UP:
                     submit.setAnimation(shake);
@@ -91,7 +100,13 @@ public class UserChangePasswordActivity extends BaseActivity implements IChangeP
                     break;
             }
             return true;
-        });
+        }
+        return false;
+    }
+
+    @Override
+    protected void initEvent() {
+
     }
 
     private void showLoading() {
@@ -127,7 +142,7 @@ public class UserChangePasswordActivity extends BaseActivity implements IChangeP
 
     @Override
     public void toLoginActivity() {
-        Intent intent = new Intent(this, LoginActivity.class);
+        Intent intent = new Intent(this, LoginSurface.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);

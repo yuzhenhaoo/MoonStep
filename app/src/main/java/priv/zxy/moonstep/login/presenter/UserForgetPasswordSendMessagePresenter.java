@@ -5,9 +5,9 @@ import android.content.Context;
 import android.os.Looper;
 
 import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
-import priv.zxy.moonstep.login.module.biz.IUser;
+import priv.zxy.moonstep.login.module.biz.ILogin;
+import priv.zxy.moonstep.login.module.biz.LoginBiz;
 import priv.zxy.moonstep.login.module.biz.OnPhoneCheckListener;
-import priv.zxy.moonstep.login.module.biz.UserBiz;
 import priv.zxy.moonstep.login.view.IForgetPasswordSendMessageView;
 
 /**
@@ -16,14 +16,14 @@ import priv.zxy.moonstep.login.view.IForgetPasswordSendMessageView;
 
 public class UserForgetPasswordSendMessagePresenter {
 
-    private IUser userBiz;
+    private ILogin userBiz;
     private IForgetPasswordSendMessageView forgetPasswordSendMessageView;//创建与LogUtilinView交互的View对象
     private Activity mActivity;
     private Context mContext;
 
     public UserForgetPasswordSendMessagePresenter(IForgetPasswordSendMessageView forgetPasswordSendMessageView, Activity mActivity, Context mContext){
         this.forgetPasswordSendMessageView = forgetPasswordSendMessageView;
-        this.userBiz = new UserBiz();
+        this.userBiz = new LoginBiz();
         this.mActivity = mActivity;
         this.mContext = mContext;
     }

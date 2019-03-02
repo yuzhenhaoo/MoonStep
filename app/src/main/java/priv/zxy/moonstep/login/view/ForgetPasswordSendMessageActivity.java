@@ -37,7 +37,7 @@ import priv.zxy.moonstep.login.presenter.UserForgetPasswordSendMessagePresenter;
  * Created by Zxy on 2018/9/20
  */
 
-public class ForgetPasswordSendMessageActivity extends BaseActivity implements IForgetPasswordSendMessageView{
+public class ForgetPasswordSendMessageActivity extends BaseActivity implements IForgetPasswordSendMessageView, View.OnTouchListener, View.OnClickListener{
     private TextView header;
     private LinearLayout content1;
     private EditText phoneNumber;
@@ -126,8 +126,13 @@ public class ForgetPasswordSendMessageActivity extends BaseActivity implements I
         initView();
     }
 
+    @Override
+    protected void initData() {
+
+    }
+
     @SuppressLint("ClickableViewAccessibility")
-    private void initView() {
+    protected void initView() {
         //对SMSSDK进行注册，与unregisterEventHandler配套使用
 //        SMSSDK.registerEventHandler(eventHandler);
         header = (TextView) findViewById(R.id.header);
@@ -156,17 +161,38 @@ public class ForgetPasswordSendMessageActivity extends BaseActivity implements I
 
         hideLoading();
 
-        sendCode.setOnClickListener(view -> {
+        sendCode.setOnClickListener(this);
+        //必须要在满足条件的情况下才能做跳转(验证码发送正确)
+        submit.setOnTouchListener(this);
+        backButton.setOnClickListener(this);
+        //对于语音验证的事件监听
+        voiceCode.setOnTouchListener(this);
+    }
+
+    @Override
+    protected void initEvent() {
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.equals(sendCode)) {
             if(getPhoneNumber().equals("")) toastUtil.showToast("您的手机号不能为空");
             else{
 //                    SMSSDK.getVerificationCode(country, getPhoneNumber());//发送短信验证码到手机号
                 sendCode.setEnabled(false);
                 timer.start();//使用计时器 设置验证码的时间限制
             }
-        });
+        }
+        if (v.equals(backButton)) {
+            sendCode.setAnimation(shake);
+            finishActivitySelf();
+        }
+    }
 
-        //必须要在满足条件的情况下才能做跳转(验证码发送正确)
-        submit.setOnTouchListener((v, event) -> {
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        if (v.equals(submit)) {
             switch(event.getAction()){
                 case MotionEvent.ACTION_DOWN:
                     submit.setAnimation(shake);
@@ -190,15 +216,8 @@ public class ForgetPasswordSendMessageActivity extends BaseActivity implements I
                     break;
             }
             return true;
-        });
-
-        backButton.setOnClickListener(view -> {
-            sendCode.setAnimation(shake);
-            finishActivitySelf();
-        });
-
-        //对于语音验证的事件监听
-        voiceCode.setOnTouchListener((v, event) -> {
+        }
+        if (v.equals(voiceCode)) {
             switch(event.getAction()){
                 case MotionEvent.ACTION_DOWN:
                     submit.setAnimation(shake);
@@ -210,7 +229,8 @@ public class ForgetPasswordSendMessageActivity extends BaseActivity implements I
                     break;
             }
             return true;
-        });
+        }
+        return false;
     }
 
     /**

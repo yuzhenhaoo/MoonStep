@@ -5,9 +5,9 @@ import android.content.Context;
 import android.os.Looper;
 
 import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
-import priv.zxy.moonstep.login.module.biz.IUser;
+import priv.zxy.moonstep.login.module.biz.ILogin;
 import priv.zxy.moonstep.login.module.biz.OnChangePasswordListener;
-import priv.zxy.moonstep.login.module.biz.UserBiz;
+import priv.zxy.moonstep.login.module.biz.LoginBiz;
 import priv.zxy.moonstep.login.view.IChangePasswordView;
 
 /**
@@ -15,12 +15,12 @@ import priv.zxy.moonstep.login.view.IChangePasswordView;
  */
 
 public class UserChangePasswordPresenter {
-    private IUser userBiz;
+    private ILogin userBiz;
     private IChangePasswordView changePasswordView;
 
     public UserChangePasswordPresenter(IChangePasswordView changePasswordView, Context mContext, Activity mActivity){
         this.changePasswordView = changePasswordView;
-        this.userBiz = new UserBiz();
+        this.userBiz = new LoginBiz();
     }
 
 

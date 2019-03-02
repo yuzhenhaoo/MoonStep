@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.Button;
 
 import priv.zxy.moonstep.R;
@@ -14,7 +15,7 @@ import priv.zxy.moonstep.data.bean.BaseActivity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class KeFuActivity extends BaseActivity {
+public class KeFuActivity extends BaseActivity implements View.OnClickListener {
 
     private RecyclerView recyclerView;
     private List<Message> lists = new ArrayList<Message>();
@@ -26,12 +27,10 @@ public class KeFuActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fg_main_fifth_subpage);
-
-        initView();
-        initData();
     }
 
-    public void initView(){
+    @Override
+    protected void initView(){
         back = this.findViewById(R.id.back);
         person_info = this.findViewById(R.id.person_info);
 
@@ -39,21 +38,34 @@ public class KeFuActivity extends BaseActivity {
         mAdapter = new ChattingMessageAdapter(getApplicationContext());
     }
 
-    public void initData(){
+    @Override
+    protected void initEvent() {
+
+    }
+
+    @Override
+    protected void initData(){
         mAdapter.addAll(lists);
-        //设置列表布局管理
+        // 设置列表布局管理
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         //设置适配器
         recyclerView.setAdapter(mAdapter);
 
-        //对两个按钮设立监听事件
-        back.setOnClickListener(view -> {
-            //这里直接调用了返回按键，没有对数据进行保存，设立客服系统的时候，要增加一个函数，对当前activity的状态进行保存。
+        // 对两个按钮设立监听事件
+        back.setOnClickListener(this);
+        person_info.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.equals(back)) {
+            // 这里直接调用了返回按键，没有对数据进行保存，设立客服系统的时候，要增加一个函数，对当前activity的状态进行保存
             savedThisState();
             FinishesThisActivity();
-        });
-
-        person_info.setOnClickListener(view -> jumpToPersonInfoPage());
+        }
+        if (v.equals(person_info)) {
+            jumpToPersonInfoPage();
+        }
     }
 
     public void FinishesThisActivity(){

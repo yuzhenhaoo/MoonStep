@@ -1,7 +1,4 @@
 package priv.zxy.moonstep.wheel.animate;
-
-import android.view.View;
-
 /**
  * 创建人: Administrator
  * 创建时间: 2018/11/24
@@ -12,16 +9,17 @@ public abstract class AbstractAnimateEffect {
 
     /**
      * 设置动画效果
-     * @param view 加载view
      */
-    public abstract void setAnimate(View view);
+    void setAnimate(){}
 
-    public abstract void setAnimate(View view, long duration);
+    void setAnimateWithDuration(long duration){}
 
     /**
      * 取消动画
      */
     public abstract void cancelAnimate();
+
+    public abstract void show(long duration);
 
     /**
      * 展示动画

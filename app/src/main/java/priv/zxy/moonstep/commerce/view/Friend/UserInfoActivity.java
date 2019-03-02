@@ -36,13 +36,6 @@ public class UserInfoActivity extends BaseActivity implements IUserInfoView {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_info);
-
-        initView();
-
-        initData();
-
-        updateData();
-
         setListener();
     }
 
@@ -58,6 +51,11 @@ public class UserInfoActivity extends BaseActivity implements IUserInfoView {
         addFriend = (Button) findViewById(R.id.addFriend);
         sendMessage = (Button) findViewById(R.id.sendMessage);
         signature = (TextView) findViewById(R.id.signature);
+    }
+
+    @Override
+    protected void initEvent() {
+
     }
 
     public void initData() {

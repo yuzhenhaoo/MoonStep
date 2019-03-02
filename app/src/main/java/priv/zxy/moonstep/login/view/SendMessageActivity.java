@@ -36,7 +36,7 @@ import priv.zxy.moonstep.login.presenter.UserSendMessagePresenter;
  *  Created by Zxy on 2018/9/23
  */
 
-public class SendMessageActivity extends BaseActivity implements ISendMessageView {
+public class SendMessageActivity extends BaseActivity implements ISendMessageView, View.OnClickListener, View.OnTouchListener {
     private TextView header;
     private LinearLayout content1;
     private TextView phoneNumber;
@@ -121,8 +121,13 @@ public class SendMessageActivity extends BaseActivity implements ISendMessageVie
         initView();
     }
 
+    @Override
+    protected void initData() {
+
+    }
+
     @SuppressLint("ClickableViewAccessibility")
-    private void initView() {
+    protected void initView() {
         //对SMSSDK进行注册，与unregisterEventHandler配套使用
 //        SMSSDK.registerEventHandler(eventHandler);
         header = (TextView) findViewById(R.id.header);
@@ -154,16 +159,51 @@ public class SendMessageActivity extends BaseActivity implements ISendMessageVie
 
         hideLoading();
 
-        sendCode.setOnClickListener(view -> {
-//                SMSSDK.getVerificationCode(country, phoneNum);//发送短信验证码到手机号
-            sendCode.setEnabled(false);
-            timer.start();//使用计时器 设置验证码的时间限制
-        });
+        sendCode.setOnClickListener(this);
 
         sendCode.performClick();//模拟点击
 
         //必须要在满足条件的情况下才能做跳转(验证码发送正确)
-        submit.setOnTouchListener((v, event) -> {
+        submit.setOnTouchListener(this);
+        backButton.setOnClickListener(this);
+        //对于语音验证的事件监听
+        voiceCode.setOnTouchListener(this);
+    }
+
+    @Override
+    protected void initEvent() {
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.equals(backButton)) {
+            sendCode.setAnimation(shake);
+            finishActivitySelf();
+        }
+        if (v.equals(sendCode)) {
+            //                SMSSDK.getVerificationCode(country, phoneNum);//发送短信验证码到手机号
+            sendCode.setEnabled(false);
+            timer.start();//使用计时器 设置验证码的时间限制
+        }
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        if (v.equals(voiceCode)) {
+            switch(event.getAction()){
+                case MotionEvent.ACTION_DOWN:
+                    submit.setAnimation(shake);
+                    break;
+                case MotionEvent.ACTION_UP:
+                    sendVoiceCode();
+                    break;
+                default:
+                    break;
+            }
+            return true;
+        }
+        if (v.equals(submit)) {
             switch(event.getAction()){
                 case MotionEvent.ACTION_DOWN:
                     submit.setAnimation(shake);
@@ -186,27 +226,8 @@ public class SendMessageActivity extends BaseActivity implements ISendMessageVie
                     break;
             }
             return true;
-        });
-
-        backButton.setOnClickListener(view -> {
-            sendCode.setAnimation(shake);
-            finishActivitySelf();
-        });
-
-        //对于语音验证的事件监听
-        voiceCode.setOnTouchListener((v, event) -> {
-            switch(event.getAction()){
-                case MotionEvent.ACTION_DOWN:
-                    submit.setAnimation(shake);
-                    break;
-                case MotionEvent.ACTION_UP:
-                    sendVoiceCode();
-                    break;
-                default:
-                    break;
-            }
-            return true;
-        });
+        }
+        return false;
     }
 
     /**

@@ -97,36 +97,60 @@ public class Pet extends LitePalSupport{
         this.growthDegree = growthDegree;
     }
 
-    //宠物编码
+    /**
+     * 宠物编码
+     */
     private int petCode;
 
-    //宠物昵称
+    /**
+     * 宠物昵称
+     */
     private String petNickName;
 
-    //宠物战斗力
+    /**
+     * 宠物战斗力
+     */
     private int petCbPw;
 
-    //宠物种族
+    /**
+     * 宠物种族
+     */
     private String petRace;
 
-    //宠物等阶
+    /**
+     * 宠物等阶
+     */
+
     private int petLevel;
 
-    //宠物获得概率
+    /**
+     * 宠物获得概率
+     */
     private float petProbability;
 
-    //宠物描述
+    /**
+     * 宠物描述
+     */
     private String petDescription;
 
-    //技能名称
+    /**
+     * 技能名称
+     */
     private String skillName;
 
-    //技能描述
+    /**
+     * 技能描述
+     */
+
     private String skillDescription;
 
-    //宠物图片
+    /**
+     * 宠物图片
+     */
     private String petImagePath;
 
-    //宠物成长度
+    /**
+     * 宠物成长度
+     */
     private String growthDegree;
 }

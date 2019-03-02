@@ -35,7 +35,7 @@ import priv.zxy.moonstep.main.view.MainActivity;
  *  Created by Zxy on 2018/9/23
  */
 
-public class UserSignUpActivity extends BaseActivity implements IUserRegisterView {
+public class UserSignUpActivity extends BaseActivity implements IUserRegisterView, View.OnTouchListener, View.OnClickListener, RadioGroup.OnCheckedChangeListener {
 
     private static final String TAG = "UserSignUpActivity";
     private MaterialEditText accountName;
@@ -75,13 +75,10 @@ public class UserSignUpActivity extends BaseActivity implements IUserRegisterVie
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register_activity);
-        initView();
-        initData();
-        initEvent();
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private void initView() {
+    protected void initView() {
         accountName = (MaterialEditText) findViewById(R.id.accountName);
         radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
         password = (MaterialEditText) findViewById(R.id.password);
@@ -101,28 +98,24 @@ public class UserSignUpActivity extends BaseActivity implements IUserRegisterVie
 
     }
 
-    private void initData(){
+    protected void initData(){
         phoneNumber = getPhoneNumber();
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private void initEvent(){
+    protected void initEvent(){
+        backButton.setOnTouchListener(this);
+        clickRegister.setOnClickListener(this);
+        returnLoginPage.setOnTouchListener(this);
+        radioGroup.setOnCheckedChangeListener(this);
 
-        backButton.setOnTouchListener((v, event) -> {
-            switch(event.getAction()){
-                case MotionEvent.ACTION_DOWN:
-                    backButton.setAnimation(shake);
-                    break;
-                case MotionEvent.ACTION_UP:
-                    finishActivitySelf();
-                    break;
-                default:
-                    break;
-            }
-            return true;
-        });
+        hideLoading();
+    }
 
-        clickRegister.setOnClickListener(view-> {
+
+    @Override
+    public void onClick(View v) {
+        if (v.equals(clickRegister)) {
             getData();
             if (userPassword.equals(confirmPassword)){
                 RegisterDataRequestDAO.getInstance().RegisterRequest(new RegisterDataRequestDAO.CallBack() {
@@ -141,9 +134,12 @@ public class UserSignUpActivity extends BaseActivity implements IUserRegisterVie
             }else{
                 ShowErrorReasonUtil.getInstance(UserSignUpActivity.this).show(ErrorCodeEnum.PASSWORD_IS_NOT_EQUALS_CONFIRM_PASSWORD);
             }
-        });
+        }
+    }
 
-        returnLoginPage.setOnTouchListener((v, event) -> {
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        if (v.equals(returnLoginPage)) {
             switch (event.getAction()){
                 case MotionEvent.ACTION_DOWN:
                     returnLoginPage.setAnimation(shake);
@@ -155,9 +151,27 @@ public class UserSignUpActivity extends BaseActivity implements IUserRegisterVie
                     break;
             }
             return true;
-        });
+        }
 
-        radioGroup.setOnCheckedChangeListener((radioGroup, checkedId) -> {
+        if (v.equals(backButton)) {
+            switch(event.getAction()){
+                case MotionEvent.ACTION_DOWN:
+                    backButton.setAnimation(shake);
+                    break;
+                case MotionEvent.ACTION_UP:
+                    finishActivitySelf();
+                    break;
+                default:
+                    break;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void onCheckedChanged(RadioGroup group, int checkedId) {
+        if (group.equals(radioGroup)) {
             switch (checkedId) {
                 case R.id.man:
                     userGender = "男";
@@ -168,9 +182,7 @@ public class UserSignUpActivity extends BaseActivity implements IUserRegisterVie
                 default:
                     throw new RuntimeException("性別輸入格式錯誤");
             }
-        });
-
-        hideLoading();
+        }
     }
 
     private void showDialog(String raceName, String raceDescription, String raceImage, String raceIcon){
@@ -209,7 +221,7 @@ public class UserSignUpActivity extends BaseActivity implements IUserRegisterVie
 
     @Override
     public void toLoginActivity() {
-        Intent intent = new Intent(this, LoginActivity.class);
+        Intent intent = new Intent(this, LoginSurface.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
@@ -245,5 +257,4 @@ public class UserSignUpActivity extends BaseActivity implements IUserRegisterVie
     public void showErrorTip(ErrorCodeEnum errorCode) {
         ShowErrorReasonUtil.getInstance(this).show(errorCode);
     }
-
 }

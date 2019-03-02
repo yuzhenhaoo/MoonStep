@@ -3,8 +3,8 @@ package priv.zxy.moonstep.login.presenter;
 import android.app.Activity;
 import android.content.Context;
 
-import priv.zxy.moonstep.login.module.biz.IUser;
-import priv.zxy.moonstep.login.module.biz.UserBiz;
+import priv.zxy.moonstep.login.module.biz.ILogin;
+import priv.zxy.moonstep.login.module.biz.LoginBiz;
 import priv.zxy.moonstep.login.view.ISendMessageView;
 
 /**
@@ -12,7 +12,7 @@ import priv.zxy.moonstep.login.view.ISendMessageView;
  */
 
 public class UserSendMessagePresenter {
-    private IUser userBiz;
+    private ILogin userBiz;
     private ISendMessageView sendMessageView;//创建与ConfrirmView交互的View对象
     private Activity mActivity;
     private Context mContext;
@@ -20,7 +20,7 @@ public class UserSendMessagePresenter {
     public UserSendMessagePresenter(ISendMessageView iSendMessageView, Context mContext, Activity mActivity){
         this.sendMessageView = iSendMessageView;
         this.mContext = mContext;
-        this.userBiz = new UserBiz();
+        this.userBiz = new LoginBiz();
         this.mActivity = mActivity;
     }
 

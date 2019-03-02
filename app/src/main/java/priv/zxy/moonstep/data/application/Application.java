@@ -20,7 +20,7 @@ import org.litepal.LitePalApplication;
 import java.util.Iterator;
 import java.util.List;
 import priv.zxy.moonstep.framework.message.MessageOnline;
-import priv.zxy.moonstep.guide.StartActivity;
+import priv.zxy.moonstep.login.view.StartActivity;
 import priv.zxy.moonstep.helper.EMHelper;
 import priv.zxy.moonstep.data.bean.EMBase;
 import priv.zxy.moonstep.util.DataInitUtil;

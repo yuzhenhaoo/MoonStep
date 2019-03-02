@@ -37,15 +37,9 @@ public class UserDetailActivity extends BaseActivity implements IUserDetailView{
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_peronal_info);
-
-        initView();
-
-        initData();
-
-        initEvent();
     }
 
-    private void initView(){
+    protected void initView(){
         mUserDetailPresenter = new UserDetailPresenter(this);
         back = findViewById(R.id.backBt);
         raceNameTV = findViewById(R.id.raceNameTV);
@@ -54,11 +48,11 @@ public class UserDetailActivity extends BaseActivity implements IUserDetailView{
         raceIcon = findViewById(R.id.raceIcon);
     }
 
-    private void initData(){
+    protected void initData(){
         mUserDetailPresenter.setRaceData();
     }
 
-    private void initEvent(){
+    protected void initEvent(){
         back.setOnClickListener(v->{
             UserDetailActivity.this.finish();
         });

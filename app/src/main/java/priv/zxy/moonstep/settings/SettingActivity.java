@@ -16,11 +16,10 @@ import java.lang.ref.WeakReference;
 import priv.zxy.moonstep.BuildConfig;
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.customview.MyDialog;
-import priv.zxy.moonstep.login.view.LoginActivity;
+import priv.zxy.moonstep.login.view.LoginSurface;
 import priv.zxy.moonstep.util.LogUtil;
 import priv.zxy.moonstep.wheel.animate.AbstractAnimateEffect;
-import priv.zxy.moonstep.wheel.animate.AbstractAnimateFactory;
-import priv.zxy.moonstep.wheel.animate.ElasticityFactory;
+import priv.zxy.moonstep.wheel.animate.ElasticityAnimation;
 
 /**
  * 创建人: Administrator
@@ -36,8 +35,6 @@ public class SettingActivity extends AppCompatActivity implements ISettingView{
     private TextView cleanChatSpace;
     private MyDialog myDialog;
     private Button exitLogin;
-
-    private AbstractAnimateEffect effect;
 
     private MyHandler handler;
     @Override
@@ -59,10 +56,6 @@ public class SettingActivity extends AppCompatActivity implements ISettingView{
         cleanChatSpace = (TextView) findViewById(R.id.cleanChatSpace);
         exitLogin = (Button) findViewById(R.id.exitLogin);
 
-        //设置Setting的动画
-        AbstractAnimateFactory factory = new ElasticityFactory();
-        effect = factory.createEffectObject();
-
         handler = new MyHandler(this);
     }
 
@@ -82,7 +75,7 @@ public class SettingActivity extends AppCompatActivity implements ISettingView{
         about.setOnClickListener(v -> toAboutActivity());
 
         exitLogin.setOnClickListener(v -> {
-            effect.show();
+            ElasticityAnimation.getInstance(exitLogin).show();
             new Thread(()->{
                 try {
                     Thread.sleep(500);
@@ -110,7 +103,7 @@ public class SettingActivity extends AppCompatActivity implements ISettingView{
     }
 
     public void toLoginActivity() {
-        Intent intent = new Intent(this, LoginActivity.class);
+        Intent intent = new Intent(this, LoginSurface.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);

@@ -15,19 +15,33 @@ public class RotationMoveAnimation extends AbstractAnimateEffect {
 
     private AnimatorSet animatorSet = new AnimatorSet();
 
-    @Override
-    public void setAnimate(View view) {
+    private static ObjectAnimator rotation = null;
+    private static ObjectAnimator moveX = null;
+    private static ObjectAnimator moveY = null;
+
+    private static ElasticityAnimation instance = new ElasticityAnimation();
+    public static ElasticityAnimation getInstance(View view, int translationX, int translationY) {
+        if (instance == null) {
+            synchronized (ElasticityAnimation.class) {
+                if (instance == null) {
+                    instance = new ElasticityAnimation();
+                    rotation = ObjectAnimator.ofFloat(view, "rotation",0, 360);
+                    moveX = ObjectAnimator.ofFloat(view, "translationX",0, translationX);
+                    moveY = ObjectAnimator.ofFloat(view, "translationY", 0, translationY);
+                }
+            }
+        }
+        return instance;
     }
 
-    public void setAnimate(View view, int translationX, int translationY) {
-        ObjectAnimator rotation = ObjectAnimator.ofFloat(view, "rotation",0, 360);
-        ObjectAnimator moveX = ObjectAnimator.ofFloat(view, "translationX",0, translationX);
-        ObjectAnimator moveY = ObjectAnimator.ofFloat(view, "translationY", 0, translationY);
+    @Override
+    void setAnimate() {
         animatorSet.setInterpolator(new DecelerateInterpolator());
         animatorSet.playTogether(rotation, moveX, moveY);
     }
+
     @Override
-    public void setAnimate(View view, long duration) {
+    void setAnimateWithDuration(long duration) {
         animatorSet.setDuration(duration);
     }
 
@@ -37,7 +51,13 @@ public class RotationMoveAnimation extends AbstractAnimateEffect {
     }
 
     @Override
+    public void show(long duration) {
+        setAnimateWithDuration(duration);
+        animatorSet.start();
+    }
+
     public void show() {
+        setAnimate();
         animatorSet.start();
     }
 

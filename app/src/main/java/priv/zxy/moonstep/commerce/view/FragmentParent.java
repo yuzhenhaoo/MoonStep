@@ -18,12 +18,16 @@ import java.lang.ref.WeakReference;
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.commerce.view.Community.MoonCommunity;
 import priv.zxy.moonstep.commerce.view.Friend.MoonFriendFragment;
+import priv.zxy.moonstep.commerce.view.Me.MeFragment;
 import priv.zxy.moonstep.commerce.view.Me.PersonalSurfaceFragment;
-import priv.zxy.moonstep.commerce.view.Tree.TreeFragment;
+import priv.zxy.moonstep.commerce.view.Tree.MapFragment;
 import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.data.bean.BaseFragment;
 import priv.zxy.moonstep.util.SharedPreferencesUtil;
 
+/**
+ * 其中对于Fragment按钮提示的处理在FragmentParent中实现逻辑，这里不再针对设计方面对代码进行拆分，会增加开发的时间成本。
+ */
 public class FragmentParent extends BaseFragment {
 
     private static final String TAG = "FragmentParent";
@@ -39,10 +43,10 @@ public class FragmentParent extends BaseFragment {
     /**
      * 下面四个Fragment都持有了对应Fragment的强引用，要记得清楚引用
      */
-    private TreeFragment treeFragment = new TreeFragment();
+    private MapFragment treeFragment = new MapFragment();
     private MoonCommunity communityFragment = new MoonCommunity();
     private MoonFriendFragment friendFragment = new MoonFriendFragment();
-    private PersonalSurfaceFragment personalInfoFragment = new PersonalSurfaceFragment();
+    private MeFragment meFragment = new MeFragment();
 
     /**
      * 一个变量来检测当前friendBt是不是被选中了
@@ -106,7 +110,7 @@ public class FragmentParent extends BaseFragment {
                     friendBtIsChecked = false;
                     myselfBt.setChecked(true);
                     setChecked(myselfBt, R.mipmap.me_pressed);
-                    addFragmentToStack(personalInfoFragment);
+                    addFragmentToStack(meFragment);
                     break;
                 default:
             }
@@ -143,9 +147,7 @@ public class FragmentParent extends BaseFragment {
         treeFragment = null;
         communityFragment = null;
         friendFragment = null;
-        personalInfoFragment = null;
-
-        communityBt = null;
+        meFragment = null;
     }
 
     private class MyRunnable implements Runnable {

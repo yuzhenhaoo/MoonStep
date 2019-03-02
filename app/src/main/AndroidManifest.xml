@@ -48,16 +48,6 @@
             android:name="com.amap.api.v2.apikey"
             android:value="75f4c284d481bfa6556f8774b2c37d66"/>
         <service android:name="com.amap.api.location.APSService"/>
-        <activity android:name=".data.bean.BaseActivity"/>
-        <activity
-            android:name=".guide.GuidePage"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
         <activity
             android:name=".main.view.MainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -66,9 +56,14 @@
             android:name=".kefu.KeFuActivity"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
-            android:name=".guide.StartActivity"
+            android:name=".login.view.StartActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
         <activity
             android:name=".commerce.view.Friend.ChattingActivity"
             android:windowSoftInputMode="stateHidden|adjustResize"
@@ -112,10 +107,10 @@
         <activity android:name=".settings.AboutPage"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
-        <activity android:name=".login.view.LoginActivity"
+        <activity android:name=".login.view.LoginSurface"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
-        <activity android:name=".login.view.LoginActivity1"
+        <activity android:name=".login.view.LoginActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
         </activity>

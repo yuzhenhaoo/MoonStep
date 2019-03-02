@@ -1,5 +1,7 @@
 package priv.zxy.moonstep.commerce.view.Friend;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -37,8 +39,7 @@ import priv.zxy.moonstep.customview.PackDialog;
 import priv.zxy.moonstep.data.bean.BaseFragment;
 import priv.zxy.moonstep.framework.user.User;
 import priv.zxy.moonstep.wheel.animate.AbstractAnimateEffect;
-import priv.zxy.moonstep.wheel.animate.AbstractAnimateFactory;
-import priv.zxy.moonstep.wheel.animate.RotationAnimateFactory;
+import priv.zxy.moonstep.wheel.animate.RotateAnimation;
 import priv.zxy.moonstep.wheel.animate.RotationMoveAnimation;
 
 public class MoonFriendFragment extends BaseFragment implements IMoonFriendView {
@@ -48,9 +49,12 @@ public class MoonFriendFragment extends BaseFragment implements IMoonFriendView 
 
     private View view = null;
     private RecyclerView recyclerView;
-    private List<User> mList = null;//月友结果集
+    /**
+     * 月友集合
+     */
+    private List<User> mList = null;
     private MoonFriendAdapter mAdapter;
-    private Button chooseButton;//选择按钮
+    private Button chooseButton;
 
     private PackDialog packDialog = null;
     private LinearLayoutManager layoutManager;
@@ -61,6 +65,7 @@ public class MoonFriendFragment extends BaseFragment implements IMoonFriendView 
     private LocalReceiver localReceiver;
     private LocalBroadcastManager localBroadcastManager;
     private AbstractAnimateEffect rotateEffect;
+    private ImageView rotateVortex;
 
     @Override
     public void onAttach(Context context) {
@@ -152,15 +157,11 @@ public class MoonFriendFragment extends BaseFragment implements IMoonFriendView 
         CollapsingToolbarLayout collapsingToolbar = view.findViewById(R.id.collapsing_toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         collapsingToolbar.setTitle(name);
-        ImageView rotateVortex = (ImageView) view.findViewById(R.id.rotateVortex);
+        rotateVortex = (ImageView) view.findViewById(R.id.rotateVortex);
         chooseButton = (Button) view.findViewById(R.id.choose_button);
 
-        // TODO (张晓翼，2018/12/28, 说老实话，我不知道这里是不是会发生内存泄漏)
-        AbstractAnimateFactory factory = new RotationAnimateFactory();
-        rotateEffect = factory.createEffectObject();
-        AbstractAnimateEffect rotateEffect2 = factory.createEffectObject();
-        rotateEffect2.setAnimate(rotateVortex, 800L);
-        rotateEffect2.show();
+        RotateAnimation.getInstance(rotateVortex).show(800L);
+        rotateEffect = RotateAnimation.getInstance(rotateVortex);
     }
 
     public void initRecyclerView() {
@@ -183,7 +184,7 @@ public class MoonFriendFragment extends BaseFragment implements IMoonFriendView 
             }
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    rotateEffect.setAnimate(chooseButton);
+//                    rotateEffect.setAnimate(chooseButton);
                     rotateEffect.show();
                     break;
                 case MotionEvent.ACTION_UP:
@@ -214,9 +215,7 @@ public class MoonFriendFragment extends BaseFragment implements IMoonFriendView 
      * 选中并点击确定以后播放动画
      */
     private void playChooseAnimation() {
-        RotationMoveAnimation rotationMoveAnimation = new RotationMoveAnimation();
-        rotationMoveAnimation.setAnimate(packDialog.getChooseView(), getRelativeDistanceX(), getRelativeDistanceY());
-        rotationMoveAnimation.show();
+        RotationMoveAnimation.getInstance(packDialog.getChooseView(), getRelativeDistanceX(), getRelativeDistanceY()).show();
     }
 
     /**
@@ -242,6 +241,7 @@ public class MoonFriendFragment extends BaseFragment implements IMoonFriendView 
     public void onDestroy() {
         super.onDestroy();
         localBroadcastManager.unregisterReceiver(localReceiver);
+        RotateAnimation.getInstance(rotateVortex).cancelAnimate();
         view = null;
     }
 

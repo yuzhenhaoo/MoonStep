@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="221dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/activity_me_resource1">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/circleImageView"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
+        android:src="@drawable/my_photo"
+        app:civ_border_color="#6018FFFF"
+        app:civ_border_width="3dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/settingBt"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_gravity="right"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/activity_me_resource2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="张小祎"
+        android:background="@drawable/white_rectangle1"
+        android:layout_marginStart="10dp"
+        android:paddingHorizontal="4dp"
+        android:drawableLeft="@mipmap/community_name"
+        android:textStyle="bold"
+        android:textSize="21dp"
+        android:fontFamily="@font/fontfamily7"
+        android:textColor="@color/Black"
+        app:layout_constraintBottom_toBottomOf="@+id/circleImageView"
+        app:layout_constraintStart_toEndOf="@+id/circleImageView"
+        app:layout_constraintTop_toTopOf="@+id/circleImageView" />
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/white_rectangle1"
+        android:fontFamily="@font/fontfamily7"
+        android:paddingHorizontal="3dp"
+        android:drawableLeft="@mipmap/community_title"
+        android:text="月老的红人"
+        android:textColor="@color/Black"
+        android:textSize="14dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/name"
+        app:layout_constraintStart_toEndOf="@+id/name"
+        app:layout_constraintTop_toTopOf="@+id/name" />
+
+    <TextView
+        android:id="@+id/raceName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/white_rectangle1"
+        android:drawableLeft="@mipmap/community_race"
+        android:fontFamily="@font/fontfamily7"
+        android:paddingHorizontal="5dp"
+        android:text="月阳族"
+        android:textColor="@color/Black"
+        android:textSize="14dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/circleImageView"
+        app:layout_constraintStart_toStartOf="@+id/name"
+        app:layout_constraintTop_toBottomOf="@+id/name" />
+
+    <TextView
+        android:id="@+id/level"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/white_rectangle1"
+        android:fontFamily="@font/fontfamily7"
+        android:drawableLeft="@mipmap/community_level"
+        android:paddingHorizontal="5dp"
+        android:text="一阶"
+        android:textColor="@color/Black"
+        android:textSize="14dp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/raceName"
+        app:layout_constraintTop_toBottomOf="@+id/name" />
+
+    <TextView
+        android:id="@+id/coin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/white_rectangle1"
+        android:fontFamily="@font/fontfamily7"
+        android:paddingHorizontal="5dp"
+        android:drawableLeft="@mipmap/coin"
+        android:text="10万"
+        android:textColor="@color/Black"
+        android:textSize="14dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/circleImageView"
+        app:layout_constraintStart_toStartOf="@+id/circleImageView"
+        app:layout_constraintTop_toBottomOf="@+id/circleImageView" />
+</android.support.constraint.ConstraintLayout>

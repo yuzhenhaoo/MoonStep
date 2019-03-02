@@ -34,7 +34,6 @@ public class PetActivity extends BaseActivity implements IPetView{
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pet);
-        initData();
         mPetPresenter.setData();
     }
 
@@ -48,6 +47,16 @@ public class PetActivity extends BaseActivity implements IPetView{
         petIntroduceTVText = findViewById(R.id.petIntroduceTV);
         skillTVText = findViewById(R.id.skillTV);
         uiIV3Text = findViewById(R.id.uiIV3);
+    }
+
+    @Override
+    protected void initView() {
+
+    }
+
+    @Override
+    protected void initEvent() {
+
     }
 
     /**

@@ -15,31 +15,38 @@ import static android.view.animation.Animation.INFINITE;
 
 public class RotateAnimation extends AbstractAnimateEffect {
 
-    private ObjectAnimator animator;
+    private static ObjectAnimator animator = null;
+
+    private static RotateAnimation instance = null;
+    public static RotateAnimation getInstance(View view) {
+        if (instance == null) {
+            synchronized (RotateAnimation.class) {
+                if (instance == null) {
+                    instance = new RotateAnimation();
+                    animator = ObjectAnimator.ofFloat(view, "rotation",0, 360);
+                }
+            }
+        }
+        return instance;
+    }
+
     @Override
-    public void setAnimate(View view) {
-        animator = ObjectAnimator.ofFloat(view, "rotation",0, 360);
+    void setAnimate() {
         // 采用均值插值器
         animator.setInterpolator(new LinearInterpolator());
-        /* INFINIFE 是ValueAnimator中的字段，setRepeatCount()也是来自ValueAnimator中的方法，
-           用来设置动画循环的次数
-         */
+        /*
+         INFINIFE 是ValueAnimator中的字段，setRepeatCount()也是来自ValueAnimator中的方法，
+         用来设置动画循环的次数
+        */
         animator.setRepeatCount(INFINITE);
         animator.setDuration(300);
     }
 
     @Override
-    public void setAnimate(View view, long duration) {
-        animator = ObjectAnimator.ofFloat(view, "rotation",0, 360);
-        // 采用均值插值器
-        animator.setInterpolator(new LinearInterpolator());
-        /* INFINIFE 是ValueAnimator中的字段，setRepeatCount()也是来自ValueAnimator中的方法，
-           用来设置动画循环的次数
-         */
-        animator.setRepeatCount(INFINITE);
+    void setAnimateWithDuration(long duration) {
+        setAnimate();
         animator.setDuration(duration);
     }
-
 
     @Override
     public void cancelAnimate() {
@@ -47,6 +54,12 @@ public class RotateAnimation extends AbstractAnimateEffect {
             return;
         }
         animator.cancel();
+    }
+
+    @Override
+    public void show(long duration) {
+        setAnimateWithDuration(duration);
+        animator.start();
     }
 
     @Override
