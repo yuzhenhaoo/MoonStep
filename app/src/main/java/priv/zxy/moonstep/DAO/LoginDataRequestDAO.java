@@ -21,7 +21,7 @@ import priv.zxy.moonstep.framework.user.User;
 import priv.zxy.moonstep.helper.EMHelper;
 import priv.zxy.moonstep.login.module.biz.OnLoginListener;
 import priv.zxy.moonstep.service.MessageReceiverService;
-import priv.zxy.moonstep.util.DataInitUtil;
+import priv.zxy.moonstep.util.DataInitManager;
 import priv.zxy.moonstep.util.LogUtil;
 import priv.zxy.moonstep.util.SharedPreferencesUtil;
 
@@ -142,7 +142,7 @@ public class LoginDataRequestDAO {
                     // 将用户个人信息存储进入缓存
                     SharedPreferencesUtil.saveMySelfInformation(moonFriend);
                     // 将用户个人信息存储进入UserSelfInfo的实例对象中
-                    DataInitUtil.initUserSelfInfo(moonFriend);
+                    DataInitManager.initUserSelfInfo(moonFriend);
                     // 只有到这个地方，才会返回login中的UserBiz的回调，才能跳入MainActivity中
                     loginListener.LoginSuccess();
                 }

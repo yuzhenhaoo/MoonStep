@@ -7,6 +7,8 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,8 +21,7 @@ import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.commerce.view.Community.MoonCommunity;
 import priv.zxy.moonstep.commerce.view.Friend.MoonFriendFragment;
 import priv.zxy.moonstep.commerce.view.Me.MeFragment;
-import priv.zxy.moonstep.commerce.view.Me.PersonalSurfaceFragment;
-import priv.zxy.moonstep.commerce.view.Tree.MapFragment;
+import priv.zxy.moonstep.commerce.view.Map.MapFragment;
 import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.data.bean.BaseFragment;
 import priv.zxy.moonstep.util.SharedPreferencesUtil;
@@ -40,18 +41,19 @@ public class FragmentParent extends BaseFragment {
     private RadioButton myselfBt;
     private MyHandler mHandler;
 
+    private FragmentManager manager;
     /**
-     * 下面四个Fragment都持有了对应Fragment的强引用，要记得清楚引用
-     */
-    private MapFragment treeFragment = new MapFragment();
-    private MoonCommunity communityFragment = new MoonCommunity();
-    private MoonFriendFragment friendFragment = new MoonFriendFragment();
-    private MeFragment meFragment = new MeFragment();
-
-    /**
-     * 一个变量来检测当前friendBt是不是被选中了
+     * 检测当前friendBt是否为选中状态
      */
     private static boolean friendBtIsChecked = false;
+
+    private final static String MAP = "map";
+    private final static String COMMUNITY = "community";
+    private final static String MOON_FRIEND = "moon_friend";
+    private final static String ME = "me";
+
+    private Fragment currentFragment;
+
 
     @Nullable
     @Override
@@ -69,7 +71,7 @@ public class FragmentParent extends BaseFragment {
 
     public void initView() {
         rg = view.findViewById(R.id.rg_tab_bar);
-        treeBt = view.findViewById(R.id.rb_tree);
+        treeBt = view.findViewById(R.id.rb_map);
         communityBt = view.findViewById(R.id.rb_community);
         friendBt = view.findViewById(R.id.rb_heart);
         myselfBt = view.findViewById(R.id.rb_me);
@@ -77,56 +79,107 @@ public class FragmentParent extends BaseFragment {
         MyRunnable runnable = new MyRunnable();
         Thread thread = new Thread(runnable);
         thread.start();
+
+        assert getActivity() != null;
+        manager = getActivity().getSupportFragmentManager();
     }
 
     public void initDate() {
         setChecked(treeBt, R.mipmap.moon_pressed);
 
         treeBt.setChecked(true);
-        addFragmentToStack(treeFragment);
+        addFragment(MAP);
 
         rg.setOnCheckedChangeListener((group, checkedId) -> {
             resetTopDrawable();
             switch (checkedId) {
-                case R.id.rb_tree:
+                case R.id.rb_map:
                     friendBtIsChecked = false;
                     treeBt.setChecked(true);
                     setChecked(treeBt, R.mipmap.tree_pressed);
-                    addFragmentToStack(treeFragment);
+                    addFragment(MAP);
                     break;
                 case R.id.rb_community:
                     friendBtIsChecked = false;
                     communityBt.setChecked(true);
                     setChecked(communityBt, R.mipmap.community_pressed);
-                    addFragmentToStack(communityFragment);
+                    addFragment(COMMUNITY);
                     break;
                 case R.id.rb_heart:
                     friendBtIsChecked = true;
                     friendBt.setChecked(true);
                     setChecked(friendBt, R.mipmap.heart_pressed);
-                    addFragmentToStack(friendFragment);
+                    addFragment(MOON_FRIEND);
                     break;
                 case R.id.rb_me:
                     friendBtIsChecked = false;
                     myselfBt.setChecked(true);
                     setChecked(myselfBt, R.mipmap.me_pressed);
-                    addFragmentToStack(meFragment);
+                    addFragment(ME);
                     break;
                 default:
             }
         });
     }
 
-    private void addFragmentToStack(Fragment fragment) {
-        if (getActivity() == null) {
-            return;
+//    private void addFragmentToStack(Fragment fragment) {
+//        if (getActivity() == null) {
+//            return;
+//        }
+////        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragments, fragment).commit();
+//        getActivity().getSupportFragmentManager().beginTransaction().add(R.id.fragments, fragment).commit();
+//    }
+
+    /**
+     * 将Fragment添加到Fragment栈中
+     * 需要在添加的时候判断两件事情：
+     *  1.栈中是否已经存在该Fragment的实例了，如果存在，则隐藏当前显示的Fragment，并显示指定的Fragment
+     *  2.栈中不存在该Fragment的实例，所以，若当前显示的currentFragment不为空的话，那我们直接对它进行显示
+     * @param fTag 传入的标记位
+     */
+    private void addFragment(String fTag) {
+        // 判断这个标签是否存在Fragment对象，如果存在就返回true，不存在就返回null
+        Fragment fragment = manager.findFragmentByTag(fTag);
+        // 如果这个fragment不存在于栈中
+        FragmentTransaction transaction;
+        if (fragment == null) {
+            // 初始化FragmentTransaction
+            transaction = manager.beginTransaction();
+            // 根据RadioButton点击穿融入的tag，实例化，添加显示不同的Fragment
+            if (fTag.equals(MAP)) {
+                fragment = new MapFragment();
+            }
+            if (fTag.equals(COMMUNITY)) {
+                fragment = new MoonCommunity();
+            }
+            if (fTag.equals(MOON_FRIEND)) {
+                fragment = new MoonFriendFragment();
+            }
+            if (fTag.equals(ME)) {
+                fragment = new MeFragment();
+            }
+            // 添加之前先将上一个Fragment隐藏掉
+            if (currentFragment != null) {
+                transaction.hide(currentFragment);
+            }
+            transaction.add(R.id.fragments, fragment, fTag);
+            transaction.commit();
+            // 更新可见
+            currentFragment = fragment;
+        } else {
+            transaction = manager.beginTransaction();
+            transaction.show(fragment);
+            transaction.hide(currentFragment);
+
+            // 更新可见
+            currentFragment = fragment;
+            transaction.commit();
         }
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragments, fragment).commit();
     }
 
     private void resetTopDrawable() {
         treeBt.setCompoundDrawables(null, changeBtnTop(R.mipmap.moon_normal), null, null);
-        communityBt.setCompoundDrawables(null, changeBtnTop(R.mipmap.pet_normal), null, null);
+        communityBt.setCompoundDrawables(null, changeBtnTop(R.mipmap.community_normal), null, null);
         myselfBt.setCompoundDrawables(null, changeBtnTop(R.mipmap.me_normal), null, null);
     }
 
@@ -144,10 +197,6 @@ public class FragmentParent extends BaseFragment {
     public void onDestroy() {
         super.onDestroy();
         view = null;
-        treeFragment = null;
-        communityFragment = null;
-        friendFragment = null;
-        meFragment = null;
     }
 
     private class MyRunnable implements Runnable {

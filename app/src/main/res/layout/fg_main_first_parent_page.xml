@@ -28,10 +28,10 @@
         app:layout_constraintBottom_toBottomOf="parent">
 
         <RadioButton
-            android:id="@+id/rb_tree"
+            android:id="@+id/rb_map"
             style="@style/tab_menu_item"
-            android:drawableTop="@mipmap/tree_normal"
-            android:text="@string/tab_menu_tree" />
+            android:drawableTop="@mipmap/moon_normal"
+            android:text="@string/map" />
 
         <RadioButton
             android:id="@+id/rb_community"

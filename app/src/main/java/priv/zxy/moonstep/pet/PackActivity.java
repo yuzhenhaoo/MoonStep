@@ -1,4 +1,4 @@
-package priv.zxy.moonstep.gps;
+package priv.zxy.moonstep.pet;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,7 +9,7 @@ import android.widget.Toast;
 
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.adapter.AbstractAdapter;
-import priv.zxy.moonstep.framework.good.GoodSelfInfo;
+import priv.zxy.moonstep.framework.good.GoodInfoManager;
 import priv.zxy.moonstep.framework.good.bean.Good;
 
 /**
@@ -42,7 +42,7 @@ public class PackActivity extends AppCompatActivity {
     }
 
     public void initData(){
-        AbstractAdapter<Good> mAbstractAdapter = new AbstractAdapter<Good>(GoodSelfInfo.getInstance().getGoods(), R.layout.pack_item) {
+        AbstractAdapter<Good> mAbstractAdapter = new AbstractAdapter<Good>(GoodInfoManager.getInstance().getGoods(), R.layout.pack_item) {
             @Override
             public void bindView(ViewHolder holder, Good obj) {
                 holder.setImageResource(R.id.itemSrc, obj.getGoodImagePath());

@@ -23,7 +23,7 @@ import priv.zxy.moonstep.framework.message.MessageOnline;
 import priv.zxy.moonstep.login.view.StartActivity;
 import priv.zxy.moonstep.helper.EMHelper;
 import priv.zxy.moonstep.data.bean.EMBase;
-import priv.zxy.moonstep.util.DataInitUtil;
+import priv.zxy.moonstep.util.DataInitManager;
 import priv.zxy.moonstep.util.LogUtil;
 import priv.zxy.moonstep.util.SharedPreferencesUtil;
 import priv.zxy.moonstep.helper.MoonStepHelper;
@@ -34,7 +34,6 @@ import priv.zxy.network.NetworkManager;
 public class Application extends LitePalApplication {
 
     private static final String TAG = "Application";
-    public static int START_IMAGE_MAX_NUMBER = 9;//这里设定的是startPage的数量
 
     /**
      * 记录是否已经初始化
@@ -334,23 +333,23 @@ public class Application extends LitePalApplication {
                 // 实施消息的监听
                 EMClient.getInstance().chatManager().addMessageListener(msgListener);
                 // 初始化用户物品信息
-                DataInitUtil.initGoodSelfInfo();
+                DataInitManager.initGoodSelfInfo();
                 // 初始化用户地图坐标信息
-                DataInitUtil.initMapDotData();
+                DataInitManager.initMapDotData();
                 // 初始化地图宝藏信息
-                DataInitUtil.initUserMapTreasures();
+                DataInitManager.initUserMapTreasures();
                 // 初始化用户离线消息
-                DataInitUtil.initOfflineMessage();
+                DataInitManager.initOfflineMessage();
                 // 初始化用户的宠物信息
-                DataInitUtil.initPetInfo();
+                DataInitManager.initPetInfo();
                 // 初始化用户好友信息
-                DataInitUtil.initUserMoonFriendsInfo();
+                DataInitManager.initUserMoonFriendsInfo();
                 // 初始化用户权限信息
-                DataInitUtil.initUserAuthority();
+                DataInitManager.initUserAuthority();
                 // 初始化用户种族信息
-                DataInitUtil.initRaceInfo();
+                DataInitManager.initRaceInfo();
                 // 初始化图片
-                DataInitUtil.initImages();
+                DataInitManager.initImages();
             }
             if (activity.getClass() == ChattingActivity.class){
                 // 移除Listener

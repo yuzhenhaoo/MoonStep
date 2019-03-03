@@ -160,7 +160,7 @@ public class MoonFriendFragment extends BaseFragment implements IMoonFriendView 
         rotateVortex = (ImageView) view.findViewById(R.id.rotateVortex);
         chooseButton = (Button) view.findViewById(R.id.choose_button);
 
-        RotateAnimation.getInstance(rotateVortex).show(800L);
+        RotateAnimation.getInstance(rotateVortex).show(80000L);
         rotateEffect = RotateAnimation.getInstance(rotateVortex);
     }
 
@@ -184,12 +184,13 @@ public class MoonFriendFragment extends BaseFragment implements IMoonFriendView 
             }
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-//                    rotateEffect.setAnimate(chooseButton);
+                    RotateAnimation.getInstance(chooseButton).show();
                     rotateEffect.show();
                     break;
                 case MotionEvent.ACTION_UP:
                     // TODO 弹出一个背包dialog,用来将已有物品拖拽到黑洞上(张晓翼，2018/12/28)
                     rotateEffect.cancelAnimate();
+                    RotateAnimation.getInstance(chooseButton).cancelAnimate();
                     packDialog.show();
                     break;
                 default:

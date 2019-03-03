@@ -13,14 +13,12 @@ import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.widget.ImageView;
 
-import java.util.concurrent.Semaphore;
-
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.data.bean.BaseActivity;
 import priv.zxy.moonstep.helper.PermissionHelper;
 import priv.zxy.moonstep.service.MessageReceiverService;
 import priv.zxy.moonstep.main.view.MainActivity;
-import priv.zxy.moonstep.util.DataInitUtil;
+import priv.zxy.moonstep.util.DataInitManager;
 import priv.zxy.moonstep.util.LogUtil;
 import priv.zxy.moonstep.util.SharedPreferencesUtil;
 import priv.zxy.moonstep.wheel.animate.ElastcityDecorAnimate;
@@ -106,7 +104,7 @@ public class StartActivity extends BaseActivity {
             // 当无需通过LoginActivity登录的时候就要开启MessageReceiverService
             startService(new Intent(this, MessageReceiverService.class));
             // 同时初始化UserSelfInfo的数据
-            DataInitUtil.initUserSelfInfo(SharedPreferencesUtil.readMySelfInformation());
+            DataInitManager.initUserSelfInfo(SharedPreferencesUtil.readMySelfInformation());
         }else{
             Intent intent = new Intent(this, LoginSurface.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);

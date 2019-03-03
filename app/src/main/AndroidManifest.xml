@@ -98,10 +98,10 @@
         <activity android:name=".settings.SettingActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
-        <activity android:name=".gps.PackActivity"
+        <activity android:name=".pet.PackActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
-        <activity android:name=".commerce.view.Tree.PetActivity"
+        <activity android:name=".commerce.view.Map.PetActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
         <activity android:name=".settings.AboutPage"

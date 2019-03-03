@@ -70,6 +70,4 @@ public class ComplateUser extends User {
      */
     private AbstractGood good;
 
-
-
 }

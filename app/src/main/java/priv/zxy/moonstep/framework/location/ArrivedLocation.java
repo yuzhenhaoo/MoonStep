@@ -31,7 +31,7 @@ public class ArrivedLocation extends AbstractLocation {
      */
     @Override
     void setMapDots() {
-        /**
+        /*
          * 这里做相应的网络操作
          */
     }

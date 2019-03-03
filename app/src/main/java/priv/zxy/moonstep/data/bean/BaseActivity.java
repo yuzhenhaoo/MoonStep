@@ -1,7 +1,10 @@
 package priv.zxy.moonstep.data.bean;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
@@ -84,6 +87,24 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     abstract protected void initEvent();
 
+    /**
+     * 跳转到某个Activity中
+     * @param activity 当前Activity
+     * @param className 要跳转的Activity类名
+     */
+    protected void toTargetActivity(Activity activity, Class className) {
+        Intent intent = new Intent(activity, className);
+        startActivity(intent);
+    }
+
+    /**
+     * 获取某个基于该Activity的Fragment实例
+     * @param fragmentId 对应Fragment的id，如:R.id.fragment
+     * @return 返回该Fragment的实例（使用时需要强制类型转换）
+     */
+    protected Fragment findSubFragment(int fragmentId) {
+        return getSupportFragmentManager().findFragmentById(fragmentId);
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();

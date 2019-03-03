@@ -43,7 +43,7 @@ public class CurrentMapLocation extends AbstractLocation{
 
     @Override
     public void setMapDots(){
-        /**
+        /*
          * 这里应该做相应的网络操作
          */
     }

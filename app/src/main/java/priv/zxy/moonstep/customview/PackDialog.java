@@ -19,7 +19,7 @@ import com.bumptech.glide.Glide;
 
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.adapter.AbstractAdapter;
-import priv.zxy.moonstep.framework.good.GoodSelfInfo;
+import priv.zxy.moonstep.framework.good.GoodInfoManager;
 import priv.zxy.moonstep.framework.good.bean.Good;
 
 /**
@@ -57,7 +57,7 @@ public class PackDialog extends Dialog {
         Button sureBt = findViewById(R.id.sure);
         chooseImage = findViewById(R.id.be_placed_item);
         packView = findViewById(R.id.pack);
-        AbstractAdapter<Good> mAbstractAdapter = new AbstractAdapter<Good>(GoodSelfInfo.getInstance().getGoods(), R.layout.pack_item) {
+        AbstractAdapter<Good> mAbstractAdapter = new AbstractAdapter<Good>(GoodInfoManager.getInstance().getGoods(), R.layout.pack_item) {
             @Override
             public void bindView(ViewHolder holder, Good obj) {
                 holder.setImageResource(R.id.itemSrc, obj.getGoodImagePath());
@@ -67,7 +67,7 @@ public class PackDialog extends Dialog {
         packView.setAdapter(mAbstractAdapter);
         packView.setOnItemClickListener((parent, view, position, id) -> {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                String goodPath = GoodSelfInfo.getInstance().getGoods().get(position).getGoodImagePath();
+                String goodPath = GoodInfoManager.getInstance().getGoods().get(position).getGoodImagePath();
                 Glide.with(mContext).load(goodPath).into(chooseImage);
                 chooseImage.invalidate();
                 return;

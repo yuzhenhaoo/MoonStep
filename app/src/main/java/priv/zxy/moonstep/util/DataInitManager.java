@@ -11,8 +11,8 @@ import priv.zxy.moonstep.DAO.PullImagesDAO;
 import priv.zxy.moonstep.DAO.PullPetInfoDAO;
 import priv.zxy.moonstep.DAO.RaceInfo.PullUserRaceInfoDAO;
 import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
-import priv.zxy.moonstep.framework.good.GoodSelfInfo;
-import priv.zxy.moonstep.framework.good.Props;
+import priv.zxy.moonstep.framework.good.GoodInfoManager;
+import priv.zxy.moonstep.framework.good.PropsInfoManager;
 import priv.zxy.moonstep.framework.pet.Pet;
 import priv.zxy.moonstep.framework.race.Race;
 import priv.zxy.moonstep.framework.race.RaceData;
@@ -38,9 +38,9 @@ import retrofit2.Response;
  *      判断数据库中是否有数据，取决于新建一个单独的SharedPreference文件，当相应的数据被初始化过后，就设定相应的标识位
  **/
 
-public class DataInitUtil {
+public class DataInitManager {
 
-    private static final String TAG = "DataInitUtil";
+    private static final String TAG = "DataInitManager";
 
     /**
      *  缓存图片线程
@@ -73,7 +73,7 @@ public class DataInitUtil {
      * 用户物品数据直接从网络上获取
      */
     public static void initGoodSelfInfo() {
-        new Props().getUserGoods(gs -> GoodSelfInfo.getInstance().addAll(gs), UserSelfInfo.getInstance().getMySelf().getPhoneNumber());
+        new PropsInfoManager().getUserGoods(gs -> GoodInfoManager.getInstance().addAll(gs), UserSelfInfo.getInstance().getMySelf().getPhoneNumber());
     }
 
     /**

@@ -1,4 +1,4 @@
-package priv.zxy.moonstep.commerce.view.Tree;
+package priv.zxy.moonstep.commerce.view.Map;
 
 import android.Manifest;
 import android.content.Intent;
@@ -14,7 +14,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -47,11 +46,10 @@ import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.framework.good.bean.Good;
 import priv.zxy.moonstep.framework.stroage.GoodTreasureInfo;
 import priv.zxy.moonstep.framework.stroage.MapDotsInfo;
-import priv.zxy.moonstep.gps.PackActivity;
+import priv.zxy.moonstep.pet.PackActivity;
 import priv.zxy.moonstep.helper.FileHelper;
 import priv.zxy.moonstep.util.LogUtil;
 import priv.zxy.moonstep.util.SharedPreferencesUtil;
-import priv.zxy.moonstep.wheel.animate.AbstractAnimateEffect;
 import priv.zxy.moonstep.wheel.animate.ElasticityAnimation;
 
 /**
@@ -105,8 +103,6 @@ public class MapFragment extends Fragment implements View.OnClickListener{
     private List<Marker> markers = new LinkedList<>();
     private ArrayList<Good> treasures;
 
-    private AbstractAnimateEffect effect;
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -118,7 +114,6 @@ public class MapFragment extends Fragment implements View.OnClickListener{
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView(savedInstanceState);
-        initEvent();
     }
 
     @Override

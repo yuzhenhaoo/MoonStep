@@ -1,10 +1,8 @@
 package priv.zxy.moonstep.framework.good;
 
-import org.litepal.LitePal;
-
-import java.util.ArrayList;
 import java.util.List;
 
+import priv.zxy.moonstep.DAO.PullUserGoodInfoDAO;
 import priv.zxy.moonstep.framework.good.bean.Good;
 
 /**
@@ -15,7 +13,7 @@ import priv.zxy.moonstep.framework.good.bean.Good;
  *           在程序结束的时候，需要清空所有的引用。
  **/
 
-public class GoodSelfInfo{
+public class GoodInfoManager extends AbstractGood{
 
     /**
      * 存储当前用户信息的Good对象
@@ -26,9 +24,9 @@ public class GoodSelfInfo{
     /**
      * 使用饿汉式是为了提高效率
      */
-    private static GoodSelfInfo instance = new GoodSelfInfo();
+    private static GoodInfoManager instance = new GoodInfoManager();
 
-    public static GoodSelfInfo getInstance() {
+    public static GoodInfoManager getInstance() {
         return instance;
     }
 
@@ -52,5 +50,15 @@ public class GoodSelfInfo{
      */
     public void clear() {
         goods = null;
+    }
+
+    @Override
+    public void getUserGoods(PullUserGoodInfoDAO.CallBack callBack, String phoneNumber) {
+        PullUserGoodInfoDAO.getInstance().getUserGood(callBack, phoneNumber);
+    }
+
+    @Override
+    public void setUserGood(String phoneNumber, String goodCode, int number) {
+
     }
 }

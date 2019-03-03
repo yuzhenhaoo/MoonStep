@@ -8,7 +8,7 @@ import priv.zxy.moonstep.DAO.PullUserGoodInfoDAO;
  * 描述: 道具类
  **/
 
-public class Props extends AbstractGood {
+public class PropsInfoManager extends AbstractGood {
 
     @Override
     public void getUserGoods(PullUserGoodInfoDAO.CallBack callBack, String phoneNumber) {
