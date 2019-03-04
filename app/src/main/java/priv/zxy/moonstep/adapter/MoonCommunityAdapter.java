@@ -23,6 +23,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.commerce.view.Community.BaseCommunityMessage;
+import priv.zxy.moonstep.framework.stroage.RaceInfo;
 import priv.zxy.moonstep.framework.user.User;
 
 /**
@@ -73,8 +74,7 @@ public class MoonCommunityAdapter extends RecyclerView.Adapter<MoonCommunityAdap
         Glide.with(Application.getContext()).load(user.getHeadPath()).into(myHolder.userPhoto);
         myHolder.nickName.setText(user.getNickName());
         myHolder.level.setText(user.getLevel());
-        // FIXME (张晓翼， 2018/12/31， 种族编码没有匹配成功
-        myHolder.race.setText(String.valueOf(user.getRaceCode()));
+        myHolder.race.setText(String.valueOf(RaceInfo.getInstance().getRace().getRaceName()));
         myHolder.content.setText(cb.getContent());
         myHolder.showTime.setText(cb.getShowTime());
         myHolder.praiseNumber.setText(cb.getPraiseNumber());

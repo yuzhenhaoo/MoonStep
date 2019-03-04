@@ -19,7 +19,7 @@ import priv.zxy.moonstep.framework.race.Race;
  * 描述: 用来展示用户详情页面的Activity
  **/
 
-public class UserDetailActivity extends BaseActivity implements IUserDetailView{
+public class RaceActivity extends BaseActivity implements IUserDetailView{
 
     private UserDetailPresenter mUserDetailPresenter;
 
@@ -54,7 +54,7 @@ public class UserDetailActivity extends BaseActivity implements IUserDetailView{
 
     protected void initEvent(){
         back.setOnClickListener(v->{
-            UserDetailActivity.this.finish();
+            RaceActivity.this.finish();
         });
     }
 

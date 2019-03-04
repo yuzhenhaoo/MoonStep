@@ -46,7 +46,7 @@ import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.framework.good.bean.Good;
 import priv.zxy.moonstep.framework.stroage.GoodTreasureInfo;
 import priv.zxy.moonstep.framework.stroage.MapDotsInfo;
-import priv.zxy.moonstep.pet.PackActivity;
+import priv.zxy.moonstep.commerce.view.Me.PackActivity;
 import priv.zxy.moonstep.helper.FileHelper;
 import priv.zxy.moonstep.util.LogUtil;
 import priv.zxy.moonstep.util.SharedPreferencesUtil;
@@ -245,7 +245,6 @@ public class MapFragment extends Fragment implements View.OnClickListener{
         }
 
         if (v.equals(radar)) {
-            // TODO : (标记人:张晓翼，标记时间，2018/12/27)
             /*
              * 一件事就是找到精度半径范围内的寻宝地点
              * 第二件事就是把探索过的地点去除。
@@ -253,7 +252,6 @@ public class MapFragment extends Fragment implements View.OnClickListener{
             new Thread(() -> {
                 List<MapDot> results = new MinDistanceDetectionContext(myDot, allMapDots, RADIUS, MinDistanceTypeEnum.MIN_DIST_TYPE).listResult();
                 for (MapDot result : results) {
-                    // TODO : (标记人:张晓翼，标记时间，2018/12/27)
                     LogUtil.d(TAG, "result:" + result.getLatitude() + result.getLongitude());
                 }
                 Log.d(TAG, String.valueOf(allMapDots.size()));

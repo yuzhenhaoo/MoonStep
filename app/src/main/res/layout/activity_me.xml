@@ -84,7 +84,7 @@
 
                 <Button
                     android:id="@+id/titleBt"
-                    android:text="称号"
+                    android:text="种族"
                     android:layout_margin="2dp"
                     android:drawableTop="@drawable/activity_me_item_4"
                     android:padding="15dp"

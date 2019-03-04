@@ -23,12 +23,6 @@ public class PullImage2Server {
 
     public static void upLoad2Server(String path, AsyncHttpResponseHandler handler){
         // 手机端要上传的文件，首先要保存你手机上存在该文件
-        // String filePath = Environment.getExternalStorageDirectory() +
-        // "/1delete/1.jpg";
-        // String filePath ="/sdcard/1delete/1.jpg"; ///可以
-        // String filePath ="/sdcard/11/软工大作业.ppt";///可以
-        // String filePath ="/sdcard/音乐/许嵩-千古.mp3";////别忘了/sdcard开头，，可以
-        // /String filePath ="/sdcard/相机/22222.mp4"; ///30M 不可以
         File file = new File(path);
         AsyncHttpClient httpClient = new AsyncHttpClient();
         httpClient.setTimeout(60 * 60 * 1000);

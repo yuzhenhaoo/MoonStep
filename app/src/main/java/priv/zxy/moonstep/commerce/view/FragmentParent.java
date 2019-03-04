@@ -96,7 +96,7 @@ public class FragmentParent extends BaseFragment {
                 case R.id.rb_map:
                     friendBtIsChecked = false;
                     treeBt.setChecked(true);
-                    setChecked(treeBt, R.mipmap.tree_pressed);
+                    setChecked(treeBt, R.mipmap.moon_pressed);
                     addFragment(MAP);
                     break;
                 case R.id.rb_community:

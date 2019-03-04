@@ -1,4 +1,4 @@
-package priv.zxy.moonstep.commerce.view.Map;
+package priv.zxy.moonstep.commerce.view.Me;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.commerce.presenter.PetPresenter;
+import priv.zxy.moonstep.commerce.view.Map.IPetView;
 import priv.zxy.moonstep.data.bean.BaseActivity;
 import priv.zxy.moonstep.framework.pet.Pet;
 
@@ -15,7 +16,7 @@ import priv.zxy.moonstep.framework.pet.Pet;
  * 创建时间: 2018/11/28
  * 描述:宠物UI界面
  **/
-public class PetActivity extends BaseActivity implements IPetView{
+public class PetActivity extends BaseActivity implements IPetView {
 
     private PetPresenter mPetPresenter;
 

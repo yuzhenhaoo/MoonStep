@@ -69,17 +69,39 @@ public class MoonCommunity extends Fragment implements SwipeRefreshLayout.OnRefr
         getMessageData();
 
         BaseCommunityMessage communityBase = new BaseCommunityMessage();
-        communityBase.setAddress("安居客圣诞节");
+        communityBase.setAddress("湖南省长沙市岳麓区");
         communityBase.setLatitude("192.123456");
         communityBase.setLongitude("28.988645");
-        communityBase.setShowTime("3天前");
-        communityBase.setContent("魔前叩首三千年，回首凡尘不做仙");
-        communityBase.setMediaPath("https://img.icons8.com/color/2x/hearts.png");
-        communityBase.setPraiseNumber("123");
+        communityBase.setShowTime("刚才");
+        communityBase.setContent("岳麓区还有这样的地方~");
+        communityBase.setMediaPath("https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=1425116775,3834826108&fm=27&gp=0.jpg");
+        communityBase.setPraiseNumber("7");
         communityBase.setUser(UserSelfInfo.getInstance().getMySelf());
-        for (int i = 0; i < 10; i++){
-            lists.add(communityBase);
-        }
+
+        BaseCommunityMessage communityBase1 = new BaseCommunityMessage();
+        communityBase.setAddress("湖南省长沙市岳麓区");
+        communityBase.setLatitude("191.213123");
+        communityBase.setLongitude("28.421311");
+        communityBase.setShowTime("五分钟前");
+        communityBase.setContent("停车坐爱枫林晚，霜叶红于二夜花");
+        communityBase.setMediaPath("https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=1009672364,1746307723&fm=26&gp=0.jpg");
+        communityBase.setPraiseNumber("21");
+        communityBase.setUser(UserSelfInfo.getInstance().getMySelf());
+
+
+        BaseCommunityMessage communityBase2 = new BaseCommunityMessage();
+        communityBase.setAddress("山东青岛黄湾");
+        communityBase.setLatitude("186.123421");
+        communityBase.setLongitude("27.532412");
+        communityBase.setShowTime("三十分钟前");
+        communityBase.setContent("海边的景色令人欣喜");
+        communityBase.setMediaPath("https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1071814984,478996050&fm=26&gp=0.jpg");
+        communityBase.setPraiseNumber("21");
+        communityBase.setUser(UserSelfInfo.getInstance().getMySelf());
+
+        lists.add(communityBase);
+        lists.add(communityBase1);
+        lists.add(communityBase2);
     }
 
     private void initEvent(){

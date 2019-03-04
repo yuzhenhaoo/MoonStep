@@ -1,7 +1,5 @@
 package priv.zxy.moonstep.commerce.view.Friend;
 
-import android.animation.Animator;
-import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
