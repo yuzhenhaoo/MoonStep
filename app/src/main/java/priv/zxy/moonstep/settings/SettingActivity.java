@@ -18,8 +18,7 @@ import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.customview.MyDialog;
 import priv.zxy.moonstep.login.view.LoginSurface;
 import priv.zxy.moonstep.util.LogUtil;
-import priv.zxy.moonstep.wheel.animate.AbstractAnimateEffect;
-import priv.zxy.moonstep.wheel.animate.ElasticityAnimation;
+import priv.zxy.moonstep.library.animate.ElasticityAnimation;
 
 /**
  * 创建人: Administrator

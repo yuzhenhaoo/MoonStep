@@ -14,7 +14,7 @@ import com.azoft.carousellayoutmanager.CenterScrollListener;
 
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.data.bean.BaseFragment;
-import priv.zxy.moonstep.util.TaskInfoUtils;
+import priv.zxy.moonstep.util.TaskInfo;
 
 public class FourthMainPageFragment extends BaseFragment {
 
@@ -44,7 +44,7 @@ public class FourthMainPageFragment extends BaseFragment {
         recyclerView = view.findViewById(R.id.task_recyclerView);
         layoutManager.setPostLayoutListener(new CarouselZoomPostLayoutListener());
         mAdapter = new FourthMainPageAdapter(this.getActivity());
-        mAdapter.addAll(TaskInfoUtils.generateTaskInfos());
+        mAdapter.addAll(TaskInfo.generateTaskInfos());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
         //中心滚动效果

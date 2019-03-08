@@ -50,7 +50,7 @@ import priv.zxy.moonstep.commerce.view.Me.PackActivity;
 import priv.zxy.moonstep.helper.FileHelper;
 import priv.zxy.moonstep.util.LogUtil;
 import priv.zxy.moonstep.util.SharedPreferencesUtil;
-import priv.zxy.moonstep.wheel.animate.ElasticityAnimation;
+import priv.zxy.moonstep.library.animate.ElasticityAnimation;
 
 /**
  * 地图这里可以加上权限功能：

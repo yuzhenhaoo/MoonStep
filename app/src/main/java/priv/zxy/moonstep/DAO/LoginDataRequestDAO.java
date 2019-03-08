@@ -21,7 +21,7 @@ import priv.zxy.moonstep.framework.user.User;
 import priv.zxy.moonstep.helper.EMHelper;
 import priv.zxy.moonstep.login.module.biz.OnLoginListener;
 import priv.zxy.moonstep.service.MessageReceiverService;
-import priv.zxy.moonstep.util.DataInitManager;
+import priv.zxy.moonstep.manager.DataInitManager;
 import priv.zxy.moonstep.util.LogUtil;
 import priv.zxy.moonstep.util.SharedPreferencesUtil;
 

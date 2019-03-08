@@ -18,10 +18,10 @@ import priv.zxy.moonstep.data.bean.BaseActivity;
 import priv.zxy.moonstep.helper.PermissionHelper;
 import priv.zxy.moonstep.service.MessageReceiverService;
 import priv.zxy.moonstep.main.view.MainActivity;
-import priv.zxy.moonstep.util.DataInitManager;
+import priv.zxy.moonstep.manager.DataInitManager;
 import priv.zxy.moonstep.util.LogUtil;
 import priv.zxy.moonstep.util.SharedPreferencesUtil;
-import priv.zxy.moonstep.wheel.animate.ElastcityDecorAnimate;
+import priv.zxy.moonstep.library.animate.ElastcityDecorAnimate;
 
 /**
  * 这里的关键点是使用定时器Handler.postDelayed(new Runnable, int millions);

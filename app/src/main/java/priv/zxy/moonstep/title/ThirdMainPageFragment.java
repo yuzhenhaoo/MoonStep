@@ -22,7 +22,7 @@ import java.util.ArrayList;
 
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.data.bean.BaseFragment;
-import priv.zxy.moonstep.util.TitleNamesUtils;
+import priv.zxy.moonstep.util.TitleNames;
 
 public class ThirdMainPageFragment extends BaseFragment {
     private RecyclerView recyclerView;
@@ -71,7 +71,7 @@ public class ThirdMainPageFragment extends BaseFragment {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         mAdapter = new ThirdMainPageRecyclerViewAdapter(getContext());
-        mAdapter.addAll(TitleNamesUtils.generateTitleNames());
+        mAdapter.addAll(TitleNames.generateTitleNames());
 
         mAdapter.setOnItemClickListener((itemPosition, view) -> {
             if (fanLayoutManager.getSelectedItemPosition() != itemPosition){

@@ -23,7 +23,7 @@ import priv.zxy.moonstep.framework.message.MessageOnline;
 import priv.zxy.moonstep.login.view.StartActivity;
 import priv.zxy.moonstep.helper.EMHelper;
 import priv.zxy.moonstep.data.bean.EMBase;
-import priv.zxy.moonstep.util.DataInitManager;
+import priv.zxy.moonstep.manager.DataInitManager;
 import priv.zxy.moonstep.util.LogUtil;
 import priv.zxy.moonstep.util.SharedPreferencesUtil;
 import priv.zxy.moonstep.helper.MoonStepHelper;

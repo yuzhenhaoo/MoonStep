@@ -11,7 +11,7 @@ import priv.zxy.moonstep.framework.pet.Pet;
 import priv.zxy.moonstep.framework.race.Race;
 import priv.zxy.moonstep.framework.user.User;
 import priv.zxy.moonstep.data.application.Application;
-import priv.zxy.moonstep.wheel.cache.FacadeSharedPreference;
+import priv.zxy.moonstep.library.cache.FacadeSharedPreference;
 
 
 public class SharedPreferencesUtil {

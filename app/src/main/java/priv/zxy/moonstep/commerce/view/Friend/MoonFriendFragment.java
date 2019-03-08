@@ -36,9 +36,9 @@ import priv.zxy.moonstep.commerce.presenter.MoonFriendPresenter;
 import priv.zxy.moonstep.customview.PackDialog;
 import priv.zxy.moonstep.data.bean.BaseFragment;
 import priv.zxy.moonstep.framework.user.User;
-import priv.zxy.moonstep.wheel.animate.AbstractAnimateEffect;
-import priv.zxy.moonstep.wheel.animate.RotateAnimation;
-import priv.zxy.moonstep.wheel.animate.RotationMoveAnimation;
+import priv.zxy.moonstep.library.animate.AbstractAnimateEffect;
+import priv.zxy.moonstep.library.animate.RotateAnimation;
+import priv.zxy.moonstep.library.animate.RotationMoveAnimation;
 
 public class MoonFriendFragment extends BaseFragment implements IMoonFriendView {
 

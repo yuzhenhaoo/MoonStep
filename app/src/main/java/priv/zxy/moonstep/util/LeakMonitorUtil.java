@@ -12,7 +12,10 @@ import priv.zxy.moonstep.data.application.Application;
 
 public class LeakMonitorUtil {
 
-    private static LeakMonitorUtil instance = null;
+    /**
+     * 不加volatile会有DCL失效问题
+     */
+    private static volatile LeakMonitorUtil instance = null;
     private static RefWatcher refWatcher = null;
 
     public static LeakMonitorUtil getInstance() {

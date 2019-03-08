@@ -13,10 +13,8 @@ import priv.zxy.moonstep.R;
 
 public class ToastUtil {
 
+    private static volatile ToastUtil instance;
     private Context mContext;
-
-    private static ToastUtil instance;
-
     private Activity mActivity;
 
     private ToastUtil(Context context, Activity activity){
@@ -46,5 +44,10 @@ public class ToastUtil {
         toast.setDuration(Toast.LENGTH_SHORT);
         toast.setView(layout);
         toast.show();
+    }
+
+    public void clear() {
+        mContext = null;
+        mActivity = null;
     }
 }
