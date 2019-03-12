@@ -80,8 +80,6 @@ public class MoonCommunityAdapter extends RecyclerView.Adapter<MoonCommunityAdap
         myHolder.praiseNumber.setText(cb.getPraiseNumber());
         Glide.with(Application.getContext()).load(cb.getMediaPath()).into(myHolder.mediaOrImage);
         myHolder.address.setText(cb.getAddress());
-        myHolder.latitude.setText(cb.getLatitude());
-        myHolder.longitude.setText(cb.getLongitude());
 
         myHolder.choice.setOnClickListener(v -> {
             // 创建弹出式菜单对象
@@ -134,8 +132,6 @@ public class MoonCommunityAdapter extends RecyclerView.Adapter<MoonCommunityAdap
         final Button praise;
         final TextView praiseNumber;
         final TextView address;
-        final TextView longitude;
-        final TextView latitude;
         final Button choice;
 
         MyHolder(View itemView) {
@@ -151,8 +147,6 @@ public class MoonCommunityAdapter extends RecyclerView.Adapter<MoonCommunityAdap
             praise = (Button) itemView.findViewById(R.id.praise_bt);
             praiseNumber = (TextView) itemView.findViewById(R.id.praiseNumber);
             address = (TextView) itemView.findViewById(R.id.address);
-            longitude = (TextView) itemView.findViewById(R.id.longitude);
-            latitude = (TextView) itemView.findViewById(R.id.latitude);
         }
     }
 }

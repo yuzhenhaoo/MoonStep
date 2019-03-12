@@ -18,6 +18,7 @@ import java.util.List;
 
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.adapter.MoonCommunityAdapter;
+import priv.zxy.moonstep.executor.ExecutorManager;
 import priv.zxy.moonstep.framework.user.User;
 import priv.zxy.moonstep.framework.stroage.UserSelfInfo;
 
@@ -62,11 +63,12 @@ public class MoonCommunity extends Fragment implements SwipeRefreshLayout.OnRefr
         recyclerview = (RecyclerView) view.findViewById(R.id.recyclerview);
     }
 
+
     private void initData(){
         // 设置下拉刷新
         refreshLayout.setOnRefreshListener(this);
-        //  进行联网请求数据
-        getMessageData();
+        //  线程池中请求数据
+        ExecutorManager.getInstance().execute(() -> getMessageData());
 
         BaseCommunityMessage communityBase = new BaseCommunityMessage();
         communityBase.setAddress("湖南省长沙市岳麓区");
@@ -79,29 +81,31 @@ public class MoonCommunity extends Fragment implements SwipeRefreshLayout.OnRefr
         communityBase.setUser(UserSelfInfo.getInstance().getMySelf());
 
         BaseCommunityMessage communityBase1 = new BaseCommunityMessage();
-        communityBase.setAddress("湖南省长沙市岳麓区");
-        communityBase.setLatitude("191.213123");
-        communityBase.setLongitude("28.421311");
-        communityBase.setShowTime("五分钟前");
-        communityBase.setContent("停车坐爱枫林晚，霜叶红于二夜花");
-        communityBase.setMediaPath("https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=1009672364,1746307723&fm=26&gp=0.jpg");
-        communityBase.setPraiseNumber("21");
-        communityBase.setUser(UserSelfInfo.getInstance().getMySelf());
+        communityBase1.setAddress("湖南省长沙市岳麓区");
+        communityBase1.setLatitude("191.213123");
+        communityBase1.setLongitude("28.421311");
+        communityBase1.setShowTime("五分钟前");
+        communityBase1.setContent("停车坐爱枫林晚，霜叶红于二夜花");
+        communityBase1.setMediaPath("https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=1009672364,1746307723&fm=26&gp=0.jpg");
+        communityBase1.setPraiseNumber("21");
+        communityBase1.setUser(UserSelfInfo.getInstance().getMySelf());
 
 
         BaseCommunityMessage communityBase2 = new BaseCommunityMessage();
-        communityBase.setAddress("山东青岛黄湾");
-        communityBase.setLatitude("186.123421");
-        communityBase.setLongitude("27.532412");
-        communityBase.setShowTime("三十分钟前");
-        communityBase.setContent("海边的景色令人欣喜");
-        communityBase.setMediaPath("https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1071814984,478996050&fm=26&gp=0.jpg");
-        communityBase.setPraiseNumber("21");
-        communityBase.setUser(UserSelfInfo.getInstance().getMySelf());
+        communityBase2.setAddress("山东青岛黄湾");
+        communityBase2.setLatitude("186.123421");
+        communityBase2.setLongitude("27.532412");
+        communityBase2.setShowTime("三十分钟前");
+        communityBase2.setContent("海边的景色令人欣喜");
+        communityBase2.setMediaPath("https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1071814984,478996050&fm=26&gp=0.jpg");
+        communityBase2.setPraiseNumber("21");
+        communityBase2.setUser(UserSelfInfo.getInstance().getMySelf());
 
-        lists.add(communityBase);
-        lists.add(communityBase1);
-        lists.add(communityBase2);
+        for (int i = 0; i < 10; i++) {
+            lists.add(communityBase);
+            lists.add(communityBase1);
+            lists.add(communityBase2);
+        }
     }
 
     private void initEvent(){

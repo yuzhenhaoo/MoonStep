@@ -19,13 +19,8 @@ public class UserSelfInfo {
      */
     private User mySelf = null;
 
-    /**
-     * 使用饿汉式是为了提高效率
-     */
-    private static UserSelfInfo instance = new UserSelfInfo();
-
     public static UserSelfInfo getInstance() {
-        return instance;
+        return UserSelfHolder.instance;
     }
 
     public void setMySelf(User user) {
@@ -33,19 +28,16 @@ public class UserSelfInfo {
     }
 
     public User getMySelf() {
-        if (mySelf == null) {
-            // 如果没有从网络端获取到数据，就从xml文件中获取数据
-            mySelf = SharedPreferencesUtil.readMySelfInformation();
-            // 清理内部的引用
-            SharedPreferencesUtil.clear();
-        }
         return mySelf;
     }
-
     /**
      * 清理引用，以便JVM调用GC
      */
     public void clear() {
         mySelf = null;
+    }
+
+    private static class UserSelfHolder {
+        private static final UserSelfInfo instance = new UserSelfInfo();
     }
 }

@@ -34,6 +34,7 @@ import priv.zxy.moonstep.DAO.ImageInfo.PullImage2Server;
 import priv.zxy.moonstep.DAO.constant.UrlBase;
 import priv.zxy.moonstep.R;
 import priv.zxy.moonstep.data.bean.BaseFragment;
+import priv.zxy.moonstep.framework.stroage.RaceInfo;
 import priv.zxy.moonstep.framework.stroage.UserSelfInfo;
 import priv.zxy.moonstep.framework.user.User;
 import priv.zxy.moonstep.kefu.KeFuActivity;
@@ -45,11 +46,11 @@ import priv.zxy.moonstep.util.SharedPreferencesUtil;
 import static android.app.Activity.RESULT_OK;
 
 /**
- * 创建人: zhang376358913
+ * 创建人: 张晓翼
  * 创建时间: 2019/3/2 18:32
  * 类描述: 我的信息的Fragment
- * 修改人: zhang376358913
- * 修改时间: zhang376358913
+ * 修改人: 张晓翼
+ * 修改时间: 张晓翼
  * 修改备注:
  */
 
@@ -96,7 +97,6 @@ public class MeFragment extends BaseFragment implements View.OnClickListener{
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         initView();
         initData();
         initEvent();
@@ -117,7 +117,13 @@ public class MeFragment extends BaseFragment implements View.OnClickListener{
     }
 
     private void initData() {
+        // 加载头像
+        Glide.with(this).load(UserSelfInfo.getInstance().getMySelf().getHeadPath()).into(mCircleImageView);
 
+        mName.setText(UserSelfInfo.getInstance().getMySelf().getNickName());
+        mTitle.setText(UserSelfInfo.getInstance().getMySelf().getCurrentTitleCode());
+        mRaceName.setText(RaceInfo.getInstance().getRace().getRaceName());
+        mLevel.setText(UserSelfInfo.getInstance().getMySelf().getLevel());
     }
 
     private void initView() {
@@ -143,6 +149,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener{
         cacheClearBt = view.findViewById(R.id.cacheClearBt);
         updateLevel = view.findViewById(R.id.updateLevel);
         feedBack = view.findViewById(R.id.feedBack);
+
     }
 
     @Override

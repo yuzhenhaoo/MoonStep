@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import priv.zxy.moonstep.task.TaskInfo;
-
 public class TaskInfo {
     public static Collection<priv.zxy.moonstep.task.TaskInfo> generateTaskInfos() {
         List<priv.zxy.moonstep.task.TaskInfo> taskInfos = new ArrayList<>(25);
