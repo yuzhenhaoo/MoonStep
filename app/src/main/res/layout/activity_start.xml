@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/Crimson">
+    android:background="#6D4CE2">
 
     <ImageView
         android:id="@+id/moon_logo"

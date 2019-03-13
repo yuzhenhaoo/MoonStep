@@ -21,6 +21,7 @@ import priv.zxy.moonstep.adapter.MoonCommunityAdapter;
 import priv.zxy.moonstep.executor.ExecutorManager;
 import priv.zxy.moonstep.framework.user.User;
 import priv.zxy.moonstep.framework.stroage.UserSelfInfo;
+import priv.zxy.moonstep.util.LogUtil;
 
 /**
  * 创建人: Administrator
@@ -118,9 +119,14 @@ public class MoonCommunity extends Fragment implements SwipeRefreshLayout.OnRefr
     private void getMessageData() {
     }
 
+    /**
+     * onResume中必须重新初始化一次数据，不然会出现数据丢失的情况
+     */
     @Override
     public void onResume() {
         super.onResume();
+        LogUtil.d(TAG, "onResume");
+        initData();
         initRecyclerView();
     }
 

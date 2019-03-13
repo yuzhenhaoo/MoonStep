@@ -33,10 +33,9 @@ import priv.zxy.moonstep.commerce.view.FragmentParent;
  * 给不同好友的消息在没有打开ChattingActivity的时候应该存储在哪里？是本地的数据库吗？直到打开ChattingActivity的时候再重新加载？)
  */
 
-public class MainActivity extends BaseActivity implements View.OnClickListener{
+public class MainActivity extends BaseActivity{
 
     private Activity mActivity;
-    private Button share;
     /**
      * 定义一个变量，来标识是否退出
      */
@@ -61,21 +60,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
         mActivity = this;
 
         View bottomBar = findViewById(R.id.appBar);
-        share = bottomBar.findViewById(R.id.share);
     }
 
     protected void initEvent(){
         // 注册一个监听连接状态的listener
         EMClient.getInstance().addConnectionListener(new MyConnectionListener());
 
-        share.setOnClickListener(this);
-    }
-
-    @Override
-    public void onClick(View v) {
-        if(v.equals(share)) {
-            Toast.makeText(mActivity, "ShareSDK被注释", Toast.LENGTH_SHORT).show();
-        }
     }
 
     /**

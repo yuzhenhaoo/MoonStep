@@ -75,7 +75,7 @@ public class DataInitManager {
      * 用户物品数据直接从网络上获取
      */
     public static void initGoodSelfInfo() {
-        new PropsInfoManager().getUserGoods(gs -> GoodInfoManager.getInstance().addAll(gs), UserSelfInfo.getInstance().getMySelf().getPhoneNumber());
+//        new PropsInfoManager().getUserGoods(gs -> GoodInfoManager.getInstance().addAll(gs), UserSelfInfo.getInstance().getMySelf().getPhoneNumber());
     }
 
     /**

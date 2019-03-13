@@ -17,6 +17,7 @@ import priv.zxy.moonstep.constant.SharedConstant;
 import priv.zxy.moonstep.data.application.Application;
 import priv.zxy.moonstep.data.bean.ErrorCodeEnum;
 import priv.zxy.moonstep.DAO.constant.UrlBase;
+import priv.zxy.moonstep.executor.ExecutorManager;
 import priv.zxy.moonstep.framework.user.User;
 import priv.zxy.moonstep.helper.EMHelper;
 import priv.zxy.moonstep.login.module.biz.OnLoginListener;
@@ -72,6 +73,7 @@ public class LoginDataRequestDAO {
                             JSONObject jsonObject = (JSONObject) new JSONObject(response.toString()).get(DaoConstant.PARAMS);
                             String result = jsonObject.getString(DaoConstant.RESULT);
                             if (result.equals(DaoConstant.SUCCESS)) {
+                                loginListener.LoginSuccess();
                                 /*
                                  * 登录环信服务器
                                  */
@@ -105,13 +107,14 @@ public class LoginDataRequestDAO {
             @Override
             public void onSuccess() {
                 //保证进入主页面后本地会话和群组都 load 完毕。
-                new Thread(() -> {
+                ExecutorManager.getInstance().execute(() -> {
                     EMClient.getInstance().groupManager().loadAllGroups();
                     EMClient.getInstance().chatManager().loadAllConversations();
-                }).start();
+                });
+
                 /// 注释原因：必须当用户信息也请求成功的时候，才能触发成功的回调
                 // 只有当环信服务器也登陆成功的时候才触发回调方法
-//                loginListener.LoginSuccess();
+                loginListener.LoginSuccess();
                 LogUtil.d(TAG, "登录聊天服务器成功！");
                 saveData(phoneNumber, inputPassword);
                 getUserInformation(loginListener, phoneNumber);

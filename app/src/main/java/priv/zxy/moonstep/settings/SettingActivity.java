@@ -74,7 +74,7 @@ public class SettingActivity extends AppCompatActivity implements ISettingView{
         about.setOnClickListener(v -> toAboutActivity());
 
         exitLogin.setOnClickListener(v -> {
-            ElasticityAnimation.getInstance(exitLogin).show();
+//            ElasticityAnimation.getInstance(exitLogin).show();
             new Thread(()->{
                 try {
                     Thread.sleep(500);

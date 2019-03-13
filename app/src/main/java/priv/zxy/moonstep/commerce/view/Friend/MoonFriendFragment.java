@@ -1,5 +1,6 @@
 package priv.zxy.moonstep.commerce.view.Friend;
 
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -21,6 +22,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 
@@ -39,6 +41,8 @@ import priv.zxy.moonstep.framework.user.User;
 import priv.zxy.moonstep.library.animate.AbstractAnimateEffect;
 import priv.zxy.moonstep.library.animate.RotateAnimation;
 import priv.zxy.moonstep.library.animate.RotationMoveAnimation;
+
+import static android.view.animation.Animation.INFINITE;
 
 public class MoonFriendFragment extends BaseFragment implements IMoonFriendView {
 
@@ -62,8 +66,9 @@ public class MoonFriendFragment extends BaseFragment implements IMoonFriendView 
     private IntentFilter intentFilter;
     private LocalReceiver localReceiver;
     private LocalBroadcastManager localBroadcastManager;
-    private AbstractAnimateEffect rotateEffect;
     private ImageView rotateVortex;
+    private static ObjectAnimator animator1;
+    private static ObjectAnimator animator2;
 
     @Override
     public void onAttach(Context context) {
@@ -103,13 +108,9 @@ public class MoonFriendFragment extends BaseFragment implements IMoonFriendView 
     }
 
     public void initView() {
-        if (this.getActivity() == null) {
-            throw new RuntimeException(TAG + "Activity获取失败");
-        }
+        assert getActivity() != null;
         Drawable drawable = this.getActivity().getDrawable(R.drawable.gradient_rectangle1);
-        if (drawable == null) {
-            throw new RuntimeException(TAG + "资源获取失败");
-        }
+        assert drawable != null;
 
 //        mPullToRefreshView = view.findViewById(R.id.pull_to_refresh);
         recyclerView = view.findViewById(R.id.recyclerview);
@@ -158,8 +159,14 @@ public class MoonFriendFragment extends BaseFragment implements IMoonFriendView 
         rotateVortex = (ImageView) view.findViewById(R.id.rotateVortex);
         chooseButton = (Button) view.findViewById(R.id.choose_button);
 
-        RotateAnimation.getInstance(rotateVortex).show(80000L);
-        rotateEffect = RotateAnimation.getInstance(rotateVortex);
+        animator1 = ObjectAnimator.ofFloat(rotateVortex, "rotation",0, 360);
+        animator2 = ObjectAnimator.ofFloat(chooseButton, "rotation",0, 360);
+        animator1.setInterpolator(new LinearInterpolator());
+        animator1.setRepeatCount(INFINITE);
+        animator1.setDuration(300);
+        animator2.setInterpolator(new LinearInterpolator());
+        animator2.setDuration(300);
+        animator1.start();
     }
 
     public void initRecyclerView() {
@@ -177,18 +184,15 @@ public class MoonFriendFragment extends BaseFragment implements IMoonFriendView 
     @SuppressLint("ClickableViewAccessibility")
     private void initEvent() {
         chooseButton.setOnTouchListener((v, event) -> {
-            if (rotateEffect.isRunning()) {
-                rotateEffect.cancelAnimate();
+            if (animator1.isRunning()) {
+                animator1.cancel();
             }
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    RotateAnimation.getInstance(chooseButton).show();
-                    rotateEffect.show();
+                    animator2.start();
                     break;
                 case MotionEvent.ACTION_UP:
-                    // TODO 弹出一个背包dialog,用来将已有物品拖拽到黑洞上(张晓翼，2018/12/28)
-                    rotateEffect.cancelAnimate();
-                    RotateAnimation.getInstance(chooseButton).cancelAnimate();
+                    animator2.cancel();
                     packDialog.show();
                     break;
                 default:
@@ -206,6 +210,7 @@ public class MoonFriendFragment extends BaseFragment implements IMoonFriendView 
             @Override
             public void onCancel() {
                 packDialog.doClear();
+                animator1.start();
             }
         });
     }
@@ -221,14 +226,14 @@ public class MoonFriendFragment extends BaseFragment implements IMoonFriendView 
      * @return 获得当前选择框物品图片中心到旋转中心的水平相对距离
      */
     private int getRelativeDistanceX() {
-        return 0;
+        return -100;
     }
 
     /**
      * @return 获得当前选择框物品图片中心到旋转中心的水平相对距离
      */
     private int getRelativeDistanceY() {
-        return 0;
+        return -100;
     }
 
     @Override
@@ -240,7 +245,8 @@ public class MoonFriendFragment extends BaseFragment implements IMoonFriendView 
     public void onDestroy() {
         super.onDestroy();
         localBroadcastManager.unregisterReceiver(localReceiver);
-        RotateAnimation.getInstance(rotateVortex).cancelAnimate();
+        animator1.cancel();
+        animator2.cancel();
         view = null;
     }
 
