@@ -33,7 +33,7 @@ public class PackDialog extends Dialog {
     private Callback callback;
 
     private ImageView chooseImage;
-    private GridView packView;
+    private DialogGridView packView;
 
     public PackDialog(@NonNull Context context) {
         super(context);

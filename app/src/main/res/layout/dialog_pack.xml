@@ -38,15 +38,15 @@
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="380dp"
         android:layout_margin="10dp"
         app:layout_constraintBottom_toTopOf="@id/sure"
         app:layout_constraintTop_toBottomOf="@id/be_placed_item_background">
 
-        <GridView
+        <priv.zxy.moonstep.customview.DialogGridView
             android:id="@+id/pack"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="360dp"
             android:layout_margin="10dp"
             android:gravity="center_horizontal"
             android:numColumns="3" />

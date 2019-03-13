@@ -105,6 +105,7 @@ public class MoonFriendFragment extends BaseFragment implements IMoonFriendView 
     public void onResume() {
         super.onResume();
         mAdapter.notifyDataSetChanged();
+        animator1.start();
     }
 
     public void initView() {
@@ -165,6 +166,7 @@ public class MoonFriendFragment extends BaseFragment implements IMoonFriendView 
         animator1.setRepeatCount(INFINITE);
         animator1.setDuration(300);
         animator2.setInterpolator(new LinearInterpolator());
+        animator2.setRepeatCount(INFINITE);
         animator2.setDuration(300);
         animator1.start();
     }
@@ -203,7 +205,6 @@ public class MoonFriendFragment extends BaseFragment implements IMoonFriendView 
         packDialog.setClickListener(new PackDialog.Callback() {
             @Override
             public void onSure() {
-                playChooseAnimation();
                 packDialog.doSure();
             }
 
@@ -213,13 +214,6 @@ public class MoonFriendFragment extends BaseFragment implements IMoonFriendView 
                 animator1.start();
             }
         });
-    }
-
-    /**
-     * 选中并点击确定以后播放动画
-     */
-    private void playChooseAnimation() {
-        RotationMoveAnimation.getInstance(packDialog.getChooseView(), getRelativeDistanceX(), getRelativeDistanceY()).show();
     }
 
     /**

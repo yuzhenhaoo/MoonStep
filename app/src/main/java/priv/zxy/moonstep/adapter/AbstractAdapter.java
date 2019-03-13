@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import priv.zxy.moonstep.data.application.Application;
+import priv.zxy.moonstep.util.LogUtil;
 
 /**
  * 创建人: Administrator
@@ -23,7 +24,7 @@ import priv.zxy.moonstep.data.application.Application;
  **/
 
 public abstract class AbstractAdapter<T> extends BaseAdapter {
-
+    private static final String TAG = "AbstractAdapter";
     private List<T> mData;
     /**
      * 布局id
@@ -36,6 +37,7 @@ public abstract class AbstractAdapter<T> extends BaseAdapter {
 
     public AbstractAdapter(List<T> mData, int mLayoutRes) {
         this.mData = mData;
+        LogUtil.d(TAG, mData.toString());
         this.mLayoutRes = mLayoutRes;
     }
 
