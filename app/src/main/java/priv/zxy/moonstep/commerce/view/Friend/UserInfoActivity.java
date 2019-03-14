@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -14,7 +15,7 @@ import priv.zxy.moonstep.commerce.view.Me.IUserInfoView;
 import priv.zxy.moonstep.data.bean.BaseActivity;
 import priv.zxy.moonstep.framework.user.User;
 
-public class UserInfoActivity extends BaseActivity implements IUserInfoView {
+public class UserInfoActivity extends BaseActivity implements View.OnClickListener{
 
     private Button backBt;
     private CircleImageView userPhoto;
@@ -36,7 +37,6 @@ public class UserInfoActivity extends BaseActivity implements IUserInfoView {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_info);
-        setListener();
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -55,71 +55,34 @@ public class UserInfoActivity extends BaseActivity implements IUserInfoView {
 
     @Override
     protected void initEvent() {
-
+        backBt.setOnClickListener(this);
     }
 
     public void initData() {
         personInfo = (User) getIntent().getParcelableExtra("moonfriend");
-    }
-
-    /**
-     * 这里设置更新对方信息
-     */
-    @Override
-    public void updateData() {
         nickName.setText(personInfo.getNickName());
-//        userLevel.setText(personInfo.getLevelName());
+        userLevel.setText(personInfo.getLevel());
         userPet.setText("还没有写好");
-//        userRace.setText(personInfo.getRaceName());
+        userRace.setText(personInfo.getRaceCode());
         signature.setText(personInfo.getSignature());
     }
 
-    public void setListener(){
-        backBt.setOnClickListener(v -> backBt.animate()
-                .rotation(-90)//逆时针旋转90°
-                .alpha(1)//旋转完成后改变透明度
-                .setDuration(600)//设置动画时长为600ms
-                .setListener(new Animator.AnimatorListener() {//设置动画的监听器，在动画完成的时候实现效果
-                    @Override
-                    public void onAnimationStart(Animator animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        finishThisOne();//结束当前页面
-                    }
-
-                    @Override
-                    public void onAnimationCancel(Animator animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animator animation) {
-
-                    }
-                }));
-
-        //道具使用按钮
-        magicWend.setOnClickListener(v -> {
-
-        });
-
-        //添加好友按钮，点击的时候在本地数据库中检索是不是已经添加了该好友，如果本地数据库没有，则从网络上去检索是不是添加了该好友
-        addFriend.setOnClickListener(v -> {
-
-        });
-
-        //发送消息按钮,只有身为好友的时候才能向对方发送消息，不是好友的话弹出添加好友的提示框，如果是好友的话，就直接进入聊天页面
-        sendMessage.setOnClickListener(v -> {
-
-        });
-    }
-
     @Override
-    public void finishThisOne() {
-        this.finish();
-    }
+    public void onClick(View v) {
+        if (v == backBt) {
+            finish();
+        }
+        // 道具使用按钮
+        if (v == magicWend) {
 
+        }
+        // 添加好友按钮，点击的时候在本地数据库中检索是不是已经添加了该好友，如果本地数据库没有，则从网络上去检索是不是添加了该好友
+        if (v == addFriend) {
+
+        }
+        // 发送消息按钮,只有身为好友的时候才能向对方发送消息，不是好友的话弹出添加好友的提示框，如果是好友的话，就直接进入聊天页面
+        if (v == sendMessage) {
+
+        }
+    }
 }

@@ -86,7 +86,6 @@ public class SharedPreferencesUtil {
         if (sp == null) {
             init();
         }
-        // 上次登陆不成功，就退出登陆
         if (!isSuccessLogin()) {
             return null;
         }
@@ -98,7 +97,7 @@ public class SharedPreferencesUtil {
 
     /**
      * 判断上次登陆是否成功
-     * @return 返回上次登陆的结果值
+     * @return 登陆成功返回true，登陆失败返回false
      */
     public static boolean isSuccessLogin(){
         if (sp == null) {
@@ -109,7 +108,6 @@ public class SharedPreferencesUtil {
 
     /**
      * 存储用户的个人信息
-     * @param moonFriend 用户信息
      */
     public static void saveMySelfInformation(User user){
         if (sp == null) {
@@ -140,10 +138,6 @@ public class SharedPreferencesUtil {
     public static User readMySelfInformation(){
         if (sp == null) {
             init();
-        }
-        // 之前还没有登陆成功的话，那么就从网络上请求数据，存储进磁盘的同时，要写入到UserSelfInfo中方便读取
-        if (!isSavedMySelfInformation()) {
-            throw new RuntimeException("磁盘中不存在用户信息，无法进行读取");
         }
         User user = new User();
         user.setNickName(sp.read(SharedConstant.PERSONAL_INFO_LIBRARY).get(SharedConstant.NICK_NAME).toString());

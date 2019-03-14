@@ -68,33 +68,41 @@ public class DataInitManager {
      */
     public static void initUserSelfInfo(User user) {
         UserSelfInfo.getInstance().setMySelf(user);
+        initGoodSelfInfo();
+        initMapDotData();
+        initUserMapTreasures();
+        initPetInfo();
+        initRaceInfo();
+        initUserMoonFriendsInfo();
+        initUserAuthority();
+        initOfflineMessage();
     }
 
     /**
      * 初始化用户的物品数据
      * 用户物品数据直接从网络上获取
      */
-    public static void initGoodSelfInfo() {
+    private static void initGoodSelfInfo() {
         new PropsInfoManager().getUserGoods(gs -> GoodInfoManager.getInstance().addAll(gs), UserSelfInfo.getInstance().getMySelf().getPhoneNumber());
     }
 
     /**
      * 初始化地图坐标数据
      */
-    public static void initMapDotData() {
+    private static void initMapDotData() {
         MapDotsInfo.getInstance().getDots();
     }
     /**
      * 初始化用户地图界面的宝物信息(如果数据库中没有的话，就从服务器上获取然后存储到数据库中)
      */
-    public static void initUserMapTreasures() {
+    private static void initUserMapTreasures() {
         GoodTreasureInfo.getInstance().initGoodTreasure();
     }
 
     /**
      * 初始化用户的宠物信息
      */
-    public static void initPetInfo() {
+    private static void initPetInfo() {
         // 宠物信息已从服务器缓存到本地，直接读取到PetInfo
         if(SharedPreferencesUtil.isSavedMyPetInformation()){
             PetInfo.getInstance().setPet(SharedPreferencesUtil.readMyPetInformation());
@@ -120,7 +128,7 @@ public class DataInitManager {
     /**
      * 初始化用户的种族信息
      */
-    public static void initRaceInfo() {
+    private static void initRaceInfo() {
         // 种族信息已从服务器缓存到本地，直接读取到RaceInfo
         if(SharedPreferencesUtil.isSavedRaceInformation()){
             RaceInfo.getInstance().setRace(SharedPreferencesUtil.readRaceInformation());
@@ -167,28 +175,28 @@ public class DataInitManager {
     /**
      * 初始化用户的好友信息
      */
-    public static void initUserMoonFriendsInfo() {
+    private static void initUserMoonFriendsInfo() {
         MoonFriendInfo.getInstance().initMoonFriends();
     }
 
     /**
      * 初始化用户权限信息
      */
-    public static void initUserAuthority() {
+    private static void initUserAuthority() {
 
     }
 
     /**
      * 初始化离线消息
      */
-    public static void initOfflineMessage() {
+    private static void initOfflineMessage() {
 
     }
 
     /**
      * 新开线程，初始化图片
      */
-    public static void initImages() {
+    private static void initImages() {
         imageThread = new Thread(()-> {
             synchronized (imageThread) {
                 try {

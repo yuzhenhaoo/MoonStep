@@ -44,6 +44,8 @@ public class LoginDataRequestDAO {
     private static final String PARSE_ERROR_0 = "error0";
     private static final String PARSE_ERROR_1 = "error1";
 
+    public static boolean isLoggedInBefore = false;
+
     private static final String URL = UrlBase.LOGIN_SERVLET_URL;
 
     private static final String URL2 = UrlBase.CHANGE_PASSWORD_SERVLET_URL;
@@ -79,7 +81,8 @@ public class LoginDataRequestDAO {
                                 if (Application.startEmServer) {
                                     loginEMServer(loginListener, phoneNumber, inputPassword);
                                 } else {
-                                    loginListener.LoginSuccess();
+                                    saveData(phoneNumber, inputPassword);
+                                    getUserInformation(loginListener, phoneNumber, inputPassword);
                                 }
                             } else{
                                 loginListener.LoginFail(ErrorCodeEnum.PHONE_NUMBER_OR_PASSWORD_IS_WRONG);
@@ -109,13 +112,8 @@ public class LoginDataRequestDAO {
         EMClient.getInstance().login(MOONSTEP + phoneNumber,inputPassword,new EMCallBack() {
             @Override
             public void onSuccess() {
-                // 只有当环信服务器也登陆成功的时候才触发回调方法
-                loginListener.LoginSuccess();
                 LogUtil.d(TAG, "登录聊天服务器成功！");
-                saveData(phoneNumber, inputPassword);
-                getUserInformation(loginListener, phoneNumber);
-                // FIXME(张晓翼，2019/3/14，环信服务器登陆无响应，同时设置startEmServer为解耦即时通讯模块做准备)
-                startMessageService();
+                getUserInformation(loginListener, phoneNumber, inputPassword);
             }
 
             @Override
@@ -133,27 +131,28 @@ public class LoginDataRequestDAO {
     /**
      * 获取用户个人信息
      */
-    private void getUserInformation(final OnLoginListener loginListener,String phoneNumber){
-        boolean isLoginResult = SharedPreferencesUtil.isSuccessLogin();
-        if (isLoginResult){
+    private void getUserInformation(final OnLoginListener loginListener,String phoneNumber, String inputPassword){
             PullUserInfoDAO.getInstance().getUserInfo(new PullUserInfoDAO.Callback() {
                 @Override
                 public void onSuccess(User moonFriend) {
                     // 将用户个人信息存储进入缓存
+                    saveData(phoneNumber, inputPassword);
                     SharedPreferencesUtil.saveMySelfInformation(moonFriend);
                     // 将用户个人信息存储进入UserSelfInfo的实例对象中
                     DataInitManager.initUserSelfInfo(moonFriend);
                     // 只有到这个地方，才会返回login中的UserBiz的回调，才能跳入MainActivity中
+                    LogUtil.d(TAG, "获取个人信息成功");
+
                     loginListener.LoginSuccess();
                 }
 
                 @Override
                 public void onFail(ErrorCodeEnum errorCode) {
-                    loginListener.LoginFail(ErrorCodeEnum.USER_DATA_REQUEST_FAIL);
                     LogUtil.d(TAG, "获取个人信息失败");
+                    loginListener.LoginFail(ErrorCodeEnum.USER_DATA_REQUEST_FAIL);
                 }
             }, SharedConstant.MOONSTEP + phoneNumber);
-        }
+
     }
 
 
@@ -169,11 +168,6 @@ public class LoginDataRequestDAO {
     private void setLoginFailTagToCache(){
         SharedPreferencesUtil.setFailLoginInfo();
     }
-
-    private void startMessageService(){
-        Application.getContext().startService(new Intent(Application.getContext(), MessageReceiverService.class));
-    }
-
 
 
     public void changePassword(final CallBack callback, final String phoneNumber, final String password){

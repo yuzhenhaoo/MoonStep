@@ -20,12 +20,14 @@ import org.litepal.LitePalApplication;
 import java.util.Iterator;
 import java.util.List;
 
+import priv.zxy.moonstep.DAO.LoginDataRequestDAO;
 import priv.zxy.moonstep.executor.ExecutorManager;
 import priv.zxy.moonstep.framework.message.MessageOnline;
 import priv.zxy.moonstep.login.view.StartActivity;
 import priv.zxy.moonstep.helper.EMHelper;
 import priv.zxy.moonstep.data.bean.EMBase;
 import priv.zxy.moonstep.manager.DataInitManager;
+import priv.zxy.moonstep.service.MessageReceiverService;
 import priv.zxy.moonstep.util.LogUtil;
 import priv.zxy.moonstep.util.SharedPreferencesUtil;
 import priv.zxy.moonstep.helper.MoonStepHelper;
@@ -55,7 +57,7 @@ public class Application extends LitePalApplication {
     private static boolean isBackground;
 
     // 是否开启环信服务器
-    public static boolean startEmServer = false;
+    public static boolean startEmServer = true;
 
     /**
      * 与EM服务器交互的token值
@@ -74,11 +76,12 @@ public class Application extends LitePalApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        /// 暂时不使用LeakCanary
         // 初始化LeakCanary
-        if (LeakCanary.isInAnalyzerProcess(this)){
-            return;
-        }
-        mRefWatcher = LeakCanary.install(this);
+//        if (LeakCanary.isInAnalyzerProcess(this)){
+//            return;
+//        }
+//        mRefWatcher = LeakCanary.install(this);
 
         context = getApplicationContext();
 
@@ -262,6 +265,10 @@ public class Application extends LitePalApplication {
         }
     }
 
+    private void startMessageService(){
+        Application.getContext().startService(new Intent(Application.getContext(), MessageReceiverService.class));
+    }
+
     /**
      * 通过EM获取好友的消息队列
      */
@@ -337,29 +344,13 @@ public class Application extends LitePalApplication {
             if (activity.getClass() == MainActivity.class) {
                 // 实施消息的监听
                 EMClient.getInstance().chatManager().addMessageListener(msgListener);
-                // 初始化用户物品信息
-                DataInitManager.initGoodSelfInfo();
-                // 初始化用户地图坐标信息
-                DataInitManager.initMapDotData();
-                // 初始化地图宝藏信息
-                DataInitManager.initUserMapTreasures();
-                // 初始化用户离线消息
-                DataInitManager.initOfflineMessage();
-                // 初始化用户的宠物信息
-                DataInitManager.initPetInfo();
-                // 初始化用户好友信息
-                DataInitManager.initUserMoonFriendsInfo();
-                // 初始化用户权限信息
-                DataInitManager.initUserAuthority();
-                // 初始化用户种族信息
-                DataInitManager.initRaceInfo();
-                // 初始化图片
-                DataInitManager.initImages();
                 //保证进入主页面后本地会话和群组都 load 完毕。
                 ExecutorManager.getInstance().execute(() -> {
                     EMClient.getInstance().groupManager().loadAllGroups();
                     EMClient.getInstance().chatManager().loadAllConversations();
                 });
+                startMessageService();
+                LoginDataRequestDAO.isLoggedInBefore = true;
             }
             if (activity.getClass() == ChattingActivity.class){
                 // 移除Listener
