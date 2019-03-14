@@ -19,6 +19,8 @@ import com.squareup.leakcanary.RefWatcher;
 import org.litepal.LitePalApplication;
 import java.util.Iterator;
 import java.util.List;
+
+import priv.zxy.moonstep.executor.ExecutorManager;
 import priv.zxy.moonstep.framework.message.MessageOnline;
 import priv.zxy.moonstep.login.view.StartActivity;
 import priv.zxy.moonstep.helper.EMHelper;
@@ -51,6 +53,9 @@ public class Application extends LitePalApplication {
     private static Context context;
 
     private static boolean isBackground;
+
+    // 是否开启环信服务器
+    public static boolean startEmServer = false;
 
     /**
      * 与EM服务器交互的token值
@@ -350,6 +355,11 @@ public class Application extends LitePalApplication {
                 DataInitManager.initRaceInfo();
                 // 初始化图片
                 DataInitManager.initImages();
+                //保证进入主页面后本地会话和群组都 load 完毕。
+                ExecutorManager.getInstance().execute(() -> {
+                    EMClient.getInstance().groupManager().loadAllGroups();
+                    EMClient.getInstance().chatManager().loadAllConversations();
+                });
             }
             if (activity.getClass() == ChattingActivity.class){
                 // 移除Listener

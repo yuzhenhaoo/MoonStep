@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+import priv.zxy.moonstep.executor.ExecutorManager;
 import priv.zxy.moonstep.service.MessageReceiverService;
 import priv.zxy.moonstep.util.LogUtil;
 
@@ -29,11 +30,11 @@ public class BootReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(final Context context, final Intent intent) {
-        //在这里开启我们的一个后台Service默默加载一些消息。
+        // 在这里开启我们的一个后台Service默默加载一些消息。
         if (intent.getAction() != null && intent.getAction().equals(ACTION) && SharedPreferencesUtil.isFirstLogin()){
             //同时应该在这里登录环信服务器
-            final Map<String, String> LogUtilinInfo = SharedPreferencesUtil.readLoginInfo();
-            new Thread(() -> EMClient.getInstance().login("moonstep" + LogUtilinInfo.get("UserName"), LogUtilinInfo.get("PassWd"), new EMCallBack() {//回调
+            final Map<String, String> LoginInfo = SharedPreferencesUtil.readLoginInfo();
+            ExecutorManager.getInstance().execute(() -> EMClient.getInstance().login("moonstep" + LoginInfo.get("UserName"), LoginInfo.get("PassWd"), new EMCallBack() {
                 @Override
                 public void onSuccess() {
                     EMClient.getInstance().groupManager().loadAllGroups();
@@ -52,7 +53,7 @@ public class BootReceiver extends BroadcastReceiver {
                 public void onError(int code, String message) {
                     LogUtil.d(TAG, "后台登录服务器失败!" + code);
                 }
-            })).start();
+            }));
         }
     }
 }

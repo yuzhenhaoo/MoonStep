@@ -73,11 +73,14 @@ public class LoginDataRequestDAO {
                             JSONObject jsonObject = (JSONObject) new JSONObject(response.toString()).get(DaoConstant.PARAMS);
                             String result = jsonObject.getString(DaoConstant.RESULT);
                             if (result.equals(DaoConstant.SUCCESS)) {
-                                loginListener.LoginSuccess();
                                 /*
                                  * 登录环信服务器
                                  */
-                                loginEMServer(loginListener, phoneNumber, inputPassword);
+                                if (Application.startEmServer) {
+                                    loginEMServer(loginListener, phoneNumber, inputPassword);
+                                } else {
+                                    loginListener.LoginSuccess();
+                                }
                             } else{
                                 loginListener.LoginFail(ErrorCodeEnum.PHONE_NUMBER_OR_PASSWORD_IS_WRONG);
                                 setLoginFailTagToCache();
@@ -106,18 +109,12 @@ public class LoginDataRequestDAO {
         EMClient.getInstance().login(MOONSTEP + phoneNumber,inputPassword,new EMCallBack() {
             @Override
             public void onSuccess() {
-                //保证进入主页面后本地会话和群组都 load 完毕。
-                ExecutorManager.getInstance().execute(() -> {
-                    EMClient.getInstance().groupManager().loadAllGroups();
-                    EMClient.getInstance().chatManager().loadAllConversations();
-                });
-
-                /// 注释原因：必须当用户信息也请求成功的时候，才能触发成功的回调
                 // 只有当环信服务器也登陆成功的时候才触发回调方法
                 loginListener.LoginSuccess();
                 LogUtil.d(TAG, "登录聊天服务器成功！");
                 saveData(phoneNumber, inputPassword);
                 getUserInformation(loginListener, phoneNumber);
+                // FIXME(张晓翼，2019/3/14，环信服务器登陆无响应，同时设置startEmServer为解耦即时通讯模块做准备)
                 startMessageService();
             }
 

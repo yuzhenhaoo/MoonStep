@@ -189,7 +189,10 @@ public class MainActivity extends BaseActivity{
                 if (error == EMError.USER_LOGIN_ANOTHER_DEVICE) {
                     userLoginInAnotherDevice();
                 } else {
-                    userCanNotConnectWithChatServer();
+                    // FIXME(张晓翼，2019/3/14，环信服务器登陆无响应，同时设置startEmServer为解耦即时通讯模块做准备)
+                    if (Application.startEmServer) {
+                        userCanNotConnectWithChatServer();
+                    }
                 }
             });
         }
