@@ -26,7 +26,7 @@ public class MapDotsInfo {
     /**
      * 检测并初始化地图坐标
      */
-    public boolean initMapDots(double latitude, double longitude) {
+    public List<MapDot> initMapDots(double latitude, double longitude) {
         long millis = System.currentTimeMillis();
         int days = (int)(millis/1000/60/60);
         if (SharedPreferencesUtil.checkMapTime(days)){
@@ -34,10 +34,14 @@ public class MapDotsInfo {
             DotChooseContext context = new DotChooseContext(ChooseTypeEnum.SQUARE_CHOOSE);
             dots = context.listMapDots(latitude, longitude, MAP_DOT_NUMBER);
             saveMapDots(dots);
-            return true;
+            return dots;
         } else {
             dots = LitePal.findAll(MapDot.class);
-            return false;
+            if (dots.size() == 0) {
+                DotChooseContext context = new DotChooseContext(ChooseTypeEnum.SQUARE_CHOOSE);
+                dots = context.listMapDots(latitude, longitude, MAP_DOT_NUMBER);
+            }
+            return dots;
         }
     }
 

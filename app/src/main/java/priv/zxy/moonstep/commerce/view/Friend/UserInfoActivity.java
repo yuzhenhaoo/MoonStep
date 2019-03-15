@@ -69,7 +69,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
 
     @Override
     public void onClick(View v) {
-        if (v == backBt) {
+        if (v.equals(backBt)) {
             finish();
         }
         // 道具使用按钮

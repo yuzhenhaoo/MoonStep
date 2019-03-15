@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,10 +20,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps.AMap;
+import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.BitmapDescriptor;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
@@ -43,6 +46,8 @@ import priv.zxy.moonstep.algorithm.MinimumDISTDectation.MinDistanceDetectionCont
 import priv.zxy.moonstep.algorithm.MinimumDISTDectation.MinDistanceTypeEnum;
 import priv.zxy.moonstep.constant.SharedConstant;
 import priv.zxy.moonstep.data.application.Application;
+import priv.zxy.moonstep.data.bean.BaseFragment;
+import priv.zxy.moonstep.executor.ExecutorManager;
 import priv.zxy.moonstep.framework.good.bean.Good;
 import priv.zxy.moonstep.framework.stroage.GoodTreasureInfo;
 import priv.zxy.moonstep.framework.stroage.MapDotsInfo;
@@ -51,13 +56,14 @@ import priv.zxy.moonstep.helper.FileHelper;
 import priv.zxy.moonstep.util.LogUtil;
 import priv.zxy.moonstep.util.SharedPreferencesUtil;
 import priv.zxy.moonstep.library.animate.ElasticityAnimation;
+import priv.zxy.moonstep.util.ToastUtil;
 
 /**
  * 地图这里可以加上权限功能：
  *     我们利用百度地图的特性，可以显示出来不同类别的地图，把地图的类别和权限相互对应，更高等级的权限可以看到不同视野的地图
  *     不同的地图可以得到的奖励也有所不同。
  */
-public class MapFragment extends Fragment implements View.OnClickListener{
+public class MapFragment extends BaseFragment implements View.OnClickListener, AMapLocationListener {
 
     private static final String TAG = "MapFragment";
     private static final String TUYA = "tuya.data";
@@ -69,7 +75,6 @@ public class MapFragment extends Fragment implements View.OnClickListener{
     private static final int RADIUS = 10000;
 
     private View view;
-    private Button pack;
     private Button radar;
 
     private MapView map = null;
@@ -114,33 +119,31 @@ public class MapFragment extends Fragment implements View.OnClickListener{
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView(savedInstanceState);
+        initData();
+        initEvent();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        // 在activity执行onResume时执行map.onResume(),重新绘制加载地图
-        map.onResume();
+    private void initView(Bundle savedInstanceState) {
+        // 动态的申请权限
+        applyForPermissions();
+        radar = view.findViewById(R.id.radar);
+        map = view.findViewById(R.id.map);
+        // 在activity执行onCreate时执行mMapView.onCreate(savedInstanceState)，创建地图
+        map.onCreate(savedInstanceState);
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        // 在activity执行onPause时执行map.onPause()，暂停地图的绘制
-        // 停止定位后，本地定位服务并不会被销毁
-        mLocationClient.stopLocation();
-        map.onPause();
+    private void initData() {
+        initGoodTreasure();
+        initLocationStyle();
+        initAmapSetting();
+        initMapDots();
+        initMarkers();
+        initLocationClient();
+        initLocationOption();
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        // 销毁定位客户端，同时销毁本地定位服务。
-        mLocationClient.onDestroy();
-        map.onDestroy();
-        allMapDots = null;
-        markers = null;
-        treasures = null;
+    private void initEvent(){
+        radar.setOnClickListener(this);
     }
 
     @Override
@@ -173,44 +176,6 @@ public class MapFragment extends Fragment implements View.OnClickListener{
     }
 
     /**
-     * 动态申请权限
-     */
-    private void applyForPermissions() {
-        List<String> permissionList = new ArrayList<>();
-        if (ContextCompat.checkSelfPermission(Application.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            permissionList.add(Manifest.permission.ACCESS_FINE_LOCATION);
-        }
-        if (ContextCompat.checkSelfPermission(Application.getContext(), Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-            permissionList.add(Manifest.permission.READ_PHONE_STATE);
-        }
-        if (ContextCompat.checkSelfPermission(Application.getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            permissionList.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        }
-        if (!permissionList.isEmpty()) {
-            String[] permissions = permissionList.toArray(new String[permissionList.size()]);
-            ActivityCompat.requestPermissions(this.getActivity(), permissions, 1);
-        }
-    }
-
-    private void initView(Bundle savedInstanceState) {
-        // 动态的申请权限
-        applyForPermissions();
-        pack = view.findViewById(R.id.pack);
-        radar = view.findViewById(R.id.radar);
-        map = view.findViewById(R.id.map);
-        // 在activity执行onCreate时执行mMapView.onCreate(savedInstanceState)，创建地图
-        map.onCreate(savedInstanceState);
-
-        initGoodTreasure();
-        initAmapSetting();
-        initMapDots();
-        initMarkers();
-        initLocationStyle();
-        initLocationClient();
-        initLocationOption();
-    }
-
-    /**
      * 初始化宝物信息
      */
     private void initGoodTreasure() {
@@ -226,68 +191,13 @@ public class MapFragment extends Fragment implements View.OnClickListener{
         // 设置自定义地图 tuya
         aMap.setCustomMapStylePath(FileHelper.setMapCustomFile(Application.getContext(), CUSTOM_MAP_DIR, TUYA));
 //      aMap.setCustomMapStylePath(FileHelper.setMapCustomFile(Application.getContext(), "customConfigFile", night));//设置自定义地图night
-    }
 
-    private void initMapDots(){
-        allMapDots = MapDotsInfo.getInstance().getDots();
-    }
-
-    private void initEvent(){
-        pack.setOnClickListener(this);
-        radar.setOnClickListener(this);
-    }
-
-    @Override
-    public void onClick(View v) {
-        if (v.equals(pack)) {
-            ElasticityAnimation.getInstance(pack).show();
-            toPackActivity();
-        }
-
-        if (v.equals(radar)) {
-            /*
-             * 一件事就是找到精度半径范围内的寻宝地点
-             * 第二件事就是把探索过的地点去除。
-             */
-            new Thread(() -> {
-                List<MapDot> results = new MinDistanceDetectionContext(myDot, allMapDots, RADIUS, MinDistanceTypeEnum.MIN_DIST_TYPE).listResult();
-                for (MapDot result : results) {
-                    LogUtil.d(TAG, "result:" + result.getLatitude() + result.getLongitude());
-                }
-                Log.d(TAG, String.valueOf(allMapDots.size()));
-                // 删除所有的范围内的标记点
-                deleteGaugePointInMapDots(results);
-                // 重新展示界面标记点
-                updateDotsInMap();
-            }).start();
-        }
-    }
-
-    /**
-     * 从所有点中删除经度范围内的标记点
-     * @param gaugePoints 待删除点
-     */
-    private void deleteGaugePointInMapDots(List<MapDot> gaugePoints){
-        Iterator<MapDot> it = allMapDots.iterator();
-        while (it.hasNext()){
-            MapDot item = it.next();
-            if (gaugePoints.contains(item)){
-                LogUtil.d(TAG, "eleteGaugePointInMapDots-->" + item.getLongitude() + item.getLongitude());
-                it.remove();
-                // 从数据库中删除标记点
-                item.delete();
-            }
-        }
-    }
-
-    /**
-     * 跳转到背包页面
-     */
-    private void toPackActivity(){
-        if (this.getContext() != null){
-            Intent intent = new Intent(this.getContext(), PackActivity.class);
-            this.getContext().startActivity(intent);
-        }
+        // 设置定位蓝点的Style
+        aMap.setMyLocationStyle(myLocationStyle);
+        // 设置默认定位按钮是否显示，非必需设置
+        // aMap.getUiSettings().setMyLocationButtonEnabled(true);
+        // 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false。
+        aMap.setMyLocationEnabled(true);
     }
 
     /**
@@ -299,7 +209,7 @@ public class MapFragment extends Fragment implements View.OnClickListener{
         // 连续定位、且将视角移动到地图中心点，定位点依照设备方向旋转，并且会跟随设备移动。（1秒1次定位）如果不设置myLocationType，默认也会执行此种模式。
 //       myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE);
         // 设置连续定位模式下的定位间隔，只在连续定位模式下生效，单次定位模式下不会生效。单位为毫秒。
-        myLocationStyle.interval(3000);
+        myLocationStyle.interval(20000);
         // 设置显示定位蓝点
         myLocationStyle.showMyLocation(true);
         myLocationStyle.myLocationIcon(BitmapDescriptorFactory.fromResource(R.drawable.location_icon));
@@ -311,21 +221,20 @@ public class MapFragment extends Fragment implements View.OnClickListener{
         myLocationStyle.radiusFillColor(Color.parseColor("#64FFC800"));
         // 设置定位圆点边框宽度的方法
         myLocationStyle.strokeWidth(1);
-        // 设置定位蓝点的Style
-        aMap.setMyLocationStyle(myLocationStyle);
-        // 设置默认定位按钮是否显示，非必需设置
-        // aMap.getUiSettings().setMyLocationButtonEnabled(true);
-        // 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false。
-        aMap.setMyLocationEnabled(true);
+    }
+
+    private void initMapDots(){
+        allMapDots = MapDotsInfo.getInstance().getDots();
     }
 
     /**
      * 地图客户端设置
      */
     private void initLocationClient(){
+        // 初始化定位
         mLocationClient = new AMapLocationClient(Application.getContext());
         //设置定位回调监听
-        mLocationClient.setLocationListener(mLocationListener);
+        mLocationClient.setLocationListener(this);
     }
 
     /**
@@ -334,6 +243,10 @@ public class MapFragment extends Fragment implements View.OnClickListener{
     private void initLocationOption(){
         // 初始化AMapLocationClientOption对象
         mLocationOption = new AMapLocationClientOption();
+        // 开启定位缓存机制
+        mLocationOption.setLocationCacheEnable(true);
+        // 设置定位请求超时时间
+        mLocationOption.setHttpTimeOut(100000);
         // 设置定位间隔，单位毫秒
         mLocationOption.setInterval(3000);
         // 给定位客户端对象设置定位参数
@@ -367,45 +280,140 @@ public class MapFragment extends Fragment implements View.OnClickListener{
                 markers.add(marker);
             }
         }
+        map.invalidate();
     }
 
-    private AMapLocationListener mLocationListener = location -> {
-        if (location != null){
-            String address = location.getAddress();//获得地址
-            double latitude = location.getLatitude();//获取维度
-            double longitude = location.getLongitude();//获取经度
-            float accuracy = location.getAccuracy();//获取精度
-            String floor = location.getFloor();//获取当前室内定位的楼层
-            int status = location.getGpsAccuracyStatus();//获取GPS的当前状态
-            // 获取定位时间
-//            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            myDot.setLatitude(latitude);
-            myDot.setLongitude(longitude);
-
+    @Override
+    public void onClick(View v) {
+        if (v.equals(radar)) {
             /*
-             * 这里出现了一个错误，是由于dots本身不能将context中获得的结果引用过来导致的，但是context.getMapDots的确是获得了结果，只是对于dots而言结果却是not avaliable的
-             * 所以只要解决dots=context.getMapDots的问题就好了
+             * 一件事就是找到精度半径范围内的寻宝地点
+             * 第二件事就是把探索过的地点去除。
              */
-
-            LogUtil.d(TAG, "当前地址为:" + address);
-            LogUtil.d(TAG, "当前维度为:" + latitude);
-            LogUtil.d(TAG, "当前经度为:" + longitude);
-
-            // 初始化地图坐标
-            if (MapDotsInfo.getInstance().initMapDots(latitude, longitude)) {
-                allMapDots = MapDotsInfo.getInstance().getDots();
-            }
-
-            String phoneNumber = SharedPreferencesUtil.readLoginInfo().get(SharedConstant.PHONE_NUMBER);
-            PushLocationInfoDAO.getInstance().LocationServlet(phoneNumber, address, String.valueOf(latitude), String.valueOf(longitude));
-
-        }else{
-            /*
-             * 同时使用日志处理工具，对错误和异常进行记录
-             */
-            LogUtil.e("AmapError","location Error, ErrCode:"
-                    + location.getErrorCode() + ", errInfo:"
-                    + location.getErrorInfo());
+            ExecutorManager.getInstance().execute(() -> {
+                List<MapDot> results = new MinDistanceDetectionContext(myDot, allMapDots, RADIUS, MinDistanceTypeEnum.MIN_DIST_TYPE).listResult();
+                for (MapDot result : results) {
+                    LogUtil.d(TAG, "result:" + result.getLatitude() + result.getLongitude());
+                }
+                Log.d(TAG, String.valueOf(allMapDots.size()));
+                // 删除所有的范围内的标记点
+                deleteGaugePointInMapDots(results);
+                // 重新展示界面标记点
+                updateDotsInMap();
+            });
+            ToastUtil.getInstance(this.getContext(),this.getActivity()).showToast("已经检测了当前的最近坐标");
         }
-    };
+    }
+
+    /**
+     * 从所有点中删除经度范围内的标记点
+     * @param gaugePoints 待删除点
+     */
+    private void deleteGaugePointInMapDots(List<MapDot> gaugePoints){
+        Iterator<MapDot> it = allMapDots.iterator();
+        while (it.hasNext()){
+            MapDot item = it.next();
+            if (gaugePoints.contains(item)){
+                LogUtil.d(TAG, "eleteGaugePointInMapDots-->" + item.getLongitude() + item.getLongitude());
+                it.remove();
+                // 从数据库中删除标记点
+                item.delete();
+            }
+        }
+    }
+
+    /**
+     * 动态申请权限
+     */
+    private void applyForPermissions() {
+        List<String> permissionList = new ArrayList<>();
+        if (ContextCompat.checkSelfPermission(Application.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            permissionList.add(Manifest.permission.ACCESS_FINE_LOCATION);
+        }
+        if (ContextCompat.checkSelfPermission(Application.getContext(), Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            permissionList.add(Manifest.permission.READ_PHONE_STATE);
+        }
+        if (ContextCompat.checkSelfPermission(Application.getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            permissionList.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }
+        if (!permissionList.isEmpty()) {
+            String[] permissions = permissionList.toArray(new String[permissionList.size()]);
+            ActivityCompat.requestPermissions(this.getActivity(), permissions, 1);
+        }
+    }
+
+    @Override
+    public void onLocationChanged(AMapLocation location) {
+        if (location != null){
+            if (location.getErrorCode() == 0) {
+                // 获得地址
+                String address = location.getAddress();
+                // 获取维度
+                double latitude = location.getLatitude();
+                // 获取经度
+                double longitude = location.getLongitude();
+                // 获取精度
+                float accuracy = location.getAccuracy();
+                // 获取当前室内定位的楼层
+                String floor = location.getFloor();
+                // 获取GPS的当前状态
+                int status = location.getGpsAccuracyStatus();
+                // 获取定位时间
+                // SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                myDot.setLatitude(latitude);
+                myDot.setLongitude(longitude);
+
+                LogUtil.d(TAG, "当前地址为:" + address);
+                LogUtil.d(TAG, "当前维度为:" + latitude);
+                LogUtil.d(TAG, "当前经度为:" + longitude);
+
+                // 初始化地图坐标
+                if (allMapDots.size() == 0 ) {
+                    allMapDots = MapDotsInfo.getInstance().initMapDots(latitude, longitude);
+                    // 修改地图显示
+                    initMarkers();
+                    map.invalidate();
+                }
+                LogUtil.d(TAG, allMapDots.toString());
+
+                String phoneNumber = SharedPreferencesUtil.readLoginInfo().get(SharedConstant.PHONE_NUMBER);
+                PushLocationInfoDAO.getInstance().LocationServlet(phoneNumber, address, String.valueOf(latitude), String.valueOf(longitude));
+            } else {
+                /*
+                 * 同时使用日志处理工具，对错误和异常进行记录
+                 */
+                LogUtil.e("AmapError","location Error, ErrCode:"
+                        + location.getErrorCode() + ", errInfo:"
+                        + location.getErrorInfo());
+            }
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // 在activity执行onResume时执行map.onResume(),重新绘制加载地图
+        map.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        // 在activity执行onPause时执行map.onPause()，暂停地图的绘制
+        // 停止定位后，本地定位服务并不会被销毁
+        mLocationClient.stopLocation();
+        map.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        // 销毁定位客户端，同时销毁本地定位服务。
+        mLocationClient.onDestroy();
+        map.onDestroy();
+        allMapDots = null;
+        markers = null;
+        treasures = null;
+    }
+
 }

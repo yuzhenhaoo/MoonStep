@@ -266,6 +266,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener{
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         LogUtil.d(TAG, "请求码" + requestCode);
+        if (data == null) return;
         Uri mDestinationUri = Uri.fromFile(new File(mActivity.getCacheDir(), CACHE_HEAD_NAME));
         switch (requestCode) {
             case ALBUM_RESULT_CODE:
