@@ -9,9 +9,11 @@
 
     <ImageView
         android:id="@+id/itemBackground"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:background="@drawable/package_item"/>
+        android:layout_width="85dp"
+        android:layout_height="85dp"
+        android:background="@mipmap/activity_pack_item"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"/>
 
     <ImageView
         android:id="@+id/itemSrc"
@@ -28,7 +30,6 @@
         android:layout_height="18dp"
         android:text="3"
         android:gravity="center"
-        android:layout_margin="2dp"
         android:background="@drawable/pack_item_dot_background"
         android:textColor="@color/white"
         android:fontFamily="@font/fontfamily1"

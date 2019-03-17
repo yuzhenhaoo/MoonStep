@@ -3,41 +3,45 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background6">
+    android:background="@drawable/activity_pet_background">
 
   <Button
-      android:id="@+id/backBt"
-      android:layout_width="50dp"
-      android:layout_height="50dp"
-      android:layout_margin="5dp"
-      android:background="@mipmap/back0"
-      app:layout_constraintTop_toTopOf="parent"
-      app:layout_constraintLeft_toLeftOf="parent"/>
+      android:id="@+id/back"
+      android:layout_width="24dp"
+      android:layout_height="34dp"
+      android:layout_marginTop="16dp"
+      android:layout_marginStart="16dp"
+      android:background="@mipmap/activity_pet_back"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
 
   <ImageView
+      android:id="@+id/background_1"
       android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:background="@drawable/ui9" />
+      android:layout_height="300dp"
+      android:layout_marginStart="40dp"
+      android:layout_marginTop="60dp"
+      android:layout_marginEnd="20dp"
+      android:background="@drawable/activity_pet_background1"
+      app:layout_constraintTop_toTopOf="parent" />
 
   <ImageView
       android:id="@+id/raceHeadPortrait"
-      android:layout_width="190dp"
-      android:layout_height="240dp"
-      android:layout_marginStart="20dp"
-      android:layout_marginTop="90dp"
-      android:background="@color/white"
+      android:layout_width="140dp"
+      android:layout_height="200dp"
+      android:background="@drawable/my_photo"
       android:contentDescription="@string/nothing"
       android:scaleType="fitXY"
-      android:src="@drawable/ui8"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent" />
+      android:layout_margin="30dp"
+      app:layout_constraintTop_toTopOf="@id/background_1"
+      app:layout_constraintLeft_toLeftOf="@id/background_1"/>
 
   <ImageView
       android:id="@+id/raceIcon"
       android:layout_width="30dp"
       android:layout_height="30dp"
-      android:layout_margin="10dp"
-      android:background="@color/Gold"
+      android:layout_margin="6dp"
+      android:background="@mipmap/icon_foreground"
       app:layout_constraintLeft_toLeftOf="@id/raceHeadPortrait"
       app:layout_constraintTop_toTopOf="@id/raceHeadPortrait" />
 
@@ -47,108 +51,101 @@
       android:layout_height="30dp"
       android:layout_marginBottom="8dp"
       android:layout_marginEnd="8dp"
-      android:background="@color/Black"
+      android:background="@drawable/pack_item_dot_background"
       app:layout_constraintBottom_toBottomOf="@+id/raceHeadPortrait"
       app:layout_constraintEnd_toEndOf="@+id/raceHeadPortrait" />
 
   <TextView
-      android:id="@+id/raceTextView"
+      android:id="@+id/user_race"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginStart="10dp"
-      android:fontFamily="@font/fontfamily5"
-      android:text="@string/User_Race"
-      android:textSize="25sp"
+      android:layout_marginStart="8dp"
+      android:background="@drawable/activity_pet_background4"
+      android:fontFamily="@font/fontfamily7"
+      android:gravity="center"
+      android:paddingStart="12dp"
+      android:paddingEnd="8dp"
+      android:text="种族"
+      android:layout_marginTop="10dp"
+      android:textColor="#00E8FF"
+      android:textSize="16sp"
       android:textStyle="bold"
-      app:layout_constraintLeft_toRightOf="@id/raceHeadPortrait"
-      app:layout_constraintTop_toTopOf="@id/raceHeadPortrait" />
+      app:layout_constraintTop_toTopOf="@+id/raceHeadPortrait"
+      app:layout_constraintLeft_toRightOf="@+id/raceHeadPortrait"/>
 
   <TextView
-      android:id="@+id/raceNameTV"
+      android:id="@+id/user_race_value"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginEnd="30dp"
-      android:fontFamily="@font/fontfamily5"
-      android:textSize="25sp"
+      android:layout_marginStart="8dp"
+      android:background="@drawable/activity_pet_background5"
+      android:fontFamily="@font/fontfamily7"
+      android:gravity="center"
+      android:paddingStart="8dp"
+      android:paddingEnd="8dp"
+      android:text="月阴族"
+      android:textColor="#9BEAF1"
+      android:textSize="14sp"
       android:textStyle="bold"
-      app:layout_constraintLeft_toRightOf="@id/raceTextView"
-      app:layout_constraintTop_toTopOf="@id/raceHeadPortrait" />
+      app:layout_constraintBottom_toBottomOf="@+id/user_race"
+      app:layout_constraintStart_toEndOf="@+id/user_race"
+      app:layout_constraintTop_toTopOf="@id/user_race" />
 
   <TextView
-      android:id="@+id/raceDescriptionTextView"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginStart="10dp"
-      android:layout_marginTop="40dp"
-      android:fontFamily="@font/fontfamily5"
-      android:text="@string/Race_Description"
-      android:textSize="17sp"
-      android:textStyle="bold"
-      app:layout_constraintLeft_toRightOf="@+id/raceHeadPortrait"
-      app:layout_constraintTop_toBottomOf="@+id/raceNameTV" />
-
-  <TextView
-      android:id="@+id/raceDescriptionTV"
+      android:id="@+id/user_race_description"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
-      android:layout_marginEnd="30dp"
-      android:layout_marginStart="10dp"
-      android:layout_marginTop="20dp"
-      android:fontFamily="@font/fontfamily5"
-      android:textSize="15sp"
+      android:layout_marginStart="8dp"
+      android:background="@drawable/activity_pet_background5"
+      android:fontFamily="@font/fontfamily7"
+      android:gravity="left"
+      android:paddingStart="8dp"
+      android:paddingEnd="8dp"
+      android:text="月辉滑落，点点荧光总是会恰巧的照亮他的侧脸，整洁的衣衫泛起点点星芒，深邃的眼眸中..."
+      android:textColor="#9BEAF1"
+      android:textSize="14sp"
       android:textStyle="bold"
-      app:layout_constraintLeft_toRightOf="@+id/raceHeadPortrait"
-      app:layout_constraintRight_toRightOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/raceDescriptionTextView" />
+      android:layout_marginEnd="26dp"
+      android:layout_marginTop="20dp"
+      app:layout_constraintStart_toEndOf="@+id/raceHeadPortrait"
+      app:layout_constraintTop_toBottomOf="@+id/user_race"
+      app:layout_constraintEnd_toEndOf="@id/background_1"/>
 
-  <ImageView
-      android:id="@+id/cardViewBackground1"
-      android:layout_width="match_parent"
-      android:layout_height="100dp"
-      android:layout_margin="20dp"
-      android:background="@drawable/ui10"
-      android:contentDescription="@string/nothing"
-      app:layout_constraintLeft_toLeftOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/raceHeadPortrait" />
 
   <TextView
-      android:id="@+id/levelName"
+      android:id="@+id/user_level"
       android:layout_width="wrap_content"
       android:layout_height="0dp"
-      android:layout_marginStart="20dp"
+      android:layout_marginStart="8dp"
+      android:layout_marginEnd="8dp"
+      android:background="@drawable/activity_race_background1"
       android:ems="1"
       android:fontFamily="@font/fontfamily4"
-      android:gravity="center"
-      android:text="大月师"
+      android:text="大月师:天之道，取人之不足补己之余力，人之道，取天之有余奉己之顾。"
+      android:padding="8dp"
       android:textSize="20sp"
-      app:layout_constraintBottom_toBottomOf="@id/cardViewBackground1"
-      app:layout_constraintLeft_toLeftOf="@+id/cardViewBackground1"
-      app:layout_constraintTop_toTopOf="@id/cardViewBackground1" />
+      android:textColor="#fff"
+      android:layout_marginTop="20dp"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/background_1" />
 
   <TextView
-      android:id="@+id/levelDiscription"
-      android:layout_width="0dp"
+      android:id="@+id/user_description"
+      android:layout_width="wrap_content"
       android:layout_height="0dp"
+      android:layout_marginStart="8dp"
+      android:layout_marginEnd="8dp"
+      android:background="@drawable/activity_race_background1"
+      android:ems="1"
       android:fontFamily="@font/fontfamily4"
-      android:gravity="center"
-      android:text="我不知道该怎么说，只是我好想你啊!"
-      android:textSize="18sp"
-      app:layout_constraintBottom_toBottomOf="@id/cardViewBackground1"
-      app:layout_constraintLeft_toRightOf="@id/levelName"
-      app:layout_constraintRight_toRightOf="@id/cardViewBackground1"
-      app:layout_constraintTop_toTopOf="@id/cardViewBackground1" />
-
-  <TextView
-      android:id="@+id/userSignature"
-      android:layout_width="match_parent"
-      android:layout_height="90dp"
-      android:layout_margin="20dp"
-      android:background="@drawable/ui10"
-      android:elevation="8dp"
-      android:fontFamily="@font/fontfamily4"
-      android:gravity="center"
-      android:text="我想踏碎这山河，走上星空，变强的意义，不是为了活上千年，只是为了等你回来。"
-      android:textSize="18sp"
-      app:layout_constraintTop_toBottomOf="@id/cardViewBackground1" />
+      android:text="我想踏碎这山河，走上星空，变强的意义，不是为了活上千年，而是为了等你归来。"
+      android:padding="8dp"
+      android:textSize="20sp"
+      android:textColor="#fff"
+      android:layout_marginTop="40dp"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/user_level" />
 
 </android.support.constraint.ConstraintLayout>
